@@ -1,0 +1,155 @@
+Recipe ID,Recipe Name,Category,Unlocked By Skill,Station,Inputs,Output,Output Asset Path,Tier,Notes
+craft_torch,Torch,utility,(default),none,"branch_b ×1, duct_tape ×1",torch ×1,—,0,Already-shipped baseline recipe.
+craft_bandage,Bandage,utility,(default),none,duct_tape ×1,bandage ×2,—,0,Already-shipped.
+craft_arrow,Arrows (flint),ammo,(default),none,"branch_a ×2, rock ×1",arrow ×5,—,0,Already-shipped — basic flint arrow.
+craft_bow,Recurve Bow (basic),weapon,(default),none,"branch_b ×3, duct_tape ×2",bow ×1,—,0,Already-shipped baseline.
+craft_knife,Knife,weapon,(default),workbench,"branch_a ×1, iron_ore ×1",knife ×1,—,0,Already-shipped.
+craft_fishing_rod,Fishing Rod,tool,hunting.fishing.1,workbench,"branch_b ×2, silk ×1",fishing_rod ×1,—,1,
+craft_bait_worm,Bait (worm jar),tool,hunting.fishing.2,none,"bio ×2, bottle_empty ×1",bait_worm ×3,—,1,
+craft_fishing_net,Fishing Net,tool,hunting.fishing.3,workbench,"silk ×4, branch_b ×2",fishing_net ×1,—,2,Casts wider — multi-fish per pull.
+craft_harpoon,Harpoon,weapon,hunting.fishing.4,workbench,"iron_ore ×3, wood_plank ×2, leather ×1",harpoon ×1,public/models/weapons/medieval/FBX/Spear.fbx,2,Reuse Spear mesh as harpoon.
+craft_deepsea_net,Deep-Sea Net,tool,hunting.fishing.4,workbench,"silk ×8, leather ×4, iron_ore ×2",deepsea_net ×1,—,3,For Whale/Shark tier.
+craft_skinning_knife,Skinning Knife,tool,hunting.animals.1,workbench,"iron_ore ×2, wood_plank ×1, leather ×1",skinning_knife ×1,public/models/weapons/medieval/FBX/Dagger.fbx,1,Reuse Dagger mesh.
+craft_snare_trap,Snare Trap,trap,hunting.animals.2,workbench,"silk ×3, branch_a ×4",snare_trap ×1,—,1,Catches small game (Rat/Frog).
+craft_bear_trap,Steel Bear Trap,trap,hunting.animals.3,workbench,"iron_ore ×6, wood_plank ×2, fang ×2",bear_trap ×1,—,2,Catches large mammals.
+craft_taxidermy_kit,Taxidermy Kit,tool,hunting.animals.3,workbench,"leather ×4, silk ×2, herb_common ×4",taxidermy_kit ×1,—,2,Required for trophy mounts.
+craft_tracking_arrow,Tracking Arrow,ammo,hunting.animals.4,workbench,"branch_a ×2, iron_ore ×1, herb_rare ×1",tracking_arrow ×5,public/models/weapons/medieval/FBX/Arrow.fbx,3,Marks target on minimap.
+craft_trophy_mount,Trophy Mount,decoration,hunting.animals.4,workbench,"taxidermy_kit ×1, bone ×4, wood_plank ×4",trophy_mount ×1,—,3,Camp morale buff when displayed.
+craft_bounty_poster,Bounty Poster,mission,hunting.bounty.1,workbench,"paper ×1, ink ×1",bounty_poster ×1,—,1,Place at camp to spawn an animal contract.
+craft_wanted_dossier,Wanted Dossier,mission,hunting.bounty.2,workbench,"paper ×3, ink ×2, leather ×1",wanted_dossier ×1,—,2,Reveals contract target on map.
+craft_capture_net,Capture Net,trap,hunting.bounty.3,workbench,"silk ×6, branch_a ×2, fang ×1",capture_net ×1,—,2,Non-lethal capture for live-bounty contracts.
+craft_bounty_lockbox,Bounty Lockbox,container,hunting.bounty.3,workbench,"iron_ore ×4, wood_plank ×2",bounty_lockbox ×1,—,2,Stores contract reward gold safely at camp.
+craft_villain_trophy,Villain Trophy,decoration,hunting.bounty.4,workbench,"taxidermy_kit ×1, bone ×4, silk ×4, gem_rare ×1",villain_trophy ×1,—,4,Camp morale buff; only craftable from villain-NPC contract drops.
+craft_manacles,Manacles,tool,hunting.bounty.4,workbench,"iron_ore ×4, leather ×1",manacles ×1,—,3,Required to bring villain bounties in alive.
+craft_pickaxe,Pickaxe,tool,crafting.equipment.1,workbench,"iron_ore ×3, wood_plank ×2",pickaxe ×1,public/models/props/quaternius/Pickaxe_Bronze.gltf,1,Required for rock + crystal mining.
+craft_hammer_tool,Carpenter Hammer,tool,crafting.equipment.1,workbench,"iron_ore ×2, wood_plank ×1",hammer_tool ×1,—,1,Required for building placement.
+craft_bucket_metal,Metal Bucket,tool,crafting.equipment.1,workbench,iron_ore ×3,bucket_metal ×1,public/models/props/quaternius/Bucket_Metal.gltf,1,Carries water/oil.
+craft_repair_kit,Repair Kit,tool,crafting.equipment.2,workbench,"iron_ore ×2, leather ×1, duct_tape ×2",repair_kit ×1,—,2,Restores 50% durability.
+craft_whetstone,Whetstone,tool,crafting.equipment.2,workbench,stone ×4,whetstone ×1,public/models/props/quaternius/Whetstone.gltf,2,+10% melee damage for 10 min after use.
+craft_torch_metal,Metal Torch,utility,crafting.equipment.2,workbench,"iron_ore ×2, wax ×2, branch_b ×1",torch_metal ×1,public/models/props/quaternius/Torch_Metal.gltf,2,Permanent — wall-mountable.
+craft_shield_round,Round Shield,shield,crafting.equipment.3,workbench,"wood_plank ×6, leather ×3, iron_ore ×2",shield_round ×1,public/models/weapons/medieval/FBX/Shield_Round.fbx,2,
+craft_shield_round_2,Round Shield (reinforced),shield,crafting.equipment.3,workbench,"wood_plank ×6, leather ×4, iron_ore ×4",shield_round_2 ×1,public/models/weapons/medieval/FBX/Shield_Round_2.fbx,2,
+craft_workbench,Workbench,station,crafting.equipment.4,none,"wood_plank ×8, iron_ore ×4",workbench ×1,public/models/props/quaternius/Workbench.gltf,3,Unlocks all workbench recipes.
+craft_anvil,Anvil,station,crafting.equipment.4,workbench,iron_ore ×12,anvil ×1,public/models/props/quaternius/Anvil.gltf,3,Required station for higher-tier metalwork.
+craft_weapon_stand,Weapon Stand,decoration,crafting.equipment.4,workbench,"wood_plank ×6, iron_ore ×2",weapon_stand ×1,public/models/props/quaternius/WeaponStand.gltf,3,Display rack — camp morale.
+craft_shield_celtic_golden,Celtic Shield (Golden),shield,crafting.master,anvil,"iron_ore ×8, gold ×4, mineral_crystal ×2",shield_celtic_golden ×1,public/models/weapons/medieval/FBX/Shield_Celtic_Golden.fbx,4,Legendary — quest reward style.
+craft_workbench_drawers,Workbench (Drawers),station,crafting.equipment.4,workbench,"wood_plank ×12, iron_ore ×6",workbench_drawers ×1,public/models/props/quaternius/Workbench_Drawers.gltf,4,+1 inventory bag slot near station.
+craft_dagger,Iron Dagger,weapon-melee,crafting.bladesmith.1,workbench,"iron_ore ×2, wood_plank ×1",dagger ×1,public/models/weapons/medieval/FBX/Dagger.fbx,1,
+craft_iron_sword,Iron Sword,weapon-melee,crafting.bladesmith.1,workbench,"iron_ore ×4, wood_plank ×2, leather ×1",iron_sword ×1,public/models/weapons/medieval/FBX/Sword.fbx,1,
+craft_sword_2,Steel Sword,weapon-melee,crafting.bladesmith.2,anvil,"iron_ore ×6, wood_plank ×2, leather ×1",sword_2 ×1,public/models/weapons/medieval/FBX/Sword_2.fbx,2,
+craft_dagger_2,Steel Dagger,weapon-melee,crafting.bladesmith.2,anvil,"iron_ore ×3, wood_plank ×1",dagger_2 ×1,public/models/weapons/medieval/FBX/Dagger_2.fbx,2,
+craft_axe_small,Hatchet,weapon-melee,crafting.bladesmith.2,anvil,"iron_ore ×3, wood_plank ×2",axe_small ×1,public/models/weapons/medieval/FBX/Axe_Small.fbx,2,Doubles as tree-chopping tool.
+craft_axe,Battle Axe,weapon-melee,crafting.bladesmith.3,anvil,"iron_ore ×5, wood_plank ×2, leather ×1",axe ×1,public/models/weapons/medieval/FBX/Axe.fbx,3,
+craft_hammer_small,War Hammer,weapon-melee,crafting.bladesmith.3,anvil,"iron_ore ×6, wood_plank ×2, leather ×1",hammer_small ×1,public/models/weapons/medieval/FBX/Hammer_Small.fbx,3,
+craft_spear,Spear,weapon-melee,crafting.bladesmith.3,workbench,"iron_ore ×3, wood_plank ×3",spear ×1,public/models/weapons/medieval/FBX/Spear.fbx,3,Two-hand reach.
+craft_sword_big,Greatsword,weapon-melee,crafting.bladesmith.4,anvil,"iron_ore ×8, wood_plank ×3, leather ×2",sword_big ×1,public/models/weapons/medieval/FBX/Sword_Big.fbx,4,
+craft_axe_double,Double Axe,weapon-melee,crafting.bladesmith.4,anvil,"iron_ore ×8, wood_plank ×3, leather ×1",axe_double ×1,public/models/weapons/medieval/FBX/Axe_Double.fbx,4,
+craft_hammer_double,Double Hammer,weapon-melee,crafting.bladesmith.4,anvil,"iron_ore ×10, wood_plank ×3, leather ×1",hammer_double ×1,public/models/weapons/medieval/FBX/Hammer_Double.fbx,4,
+craft_claymore,Claymore,weapon-melee,crafting.bladesmith.4,anvil,"iron_ore ×10, wood_plank ×4, mineral_crystal ×1",claymore ×1,public/models/weapons/medieval/FBX/Claymore.fbx,5,
+craft_sword_golden,Golden Sword,weapon-melee,crafting.master,anvil,"gold ×6, iron_ore ×4, mineral_crystal ×2",sword_golden ×1,public/models/weapons/medieval/FBX/Sword_Golden.fbx,5,Legendary tier.
+craft_scythe,Scythe,weapon-melee,crafting.bladesmith.4,anvil,"iron_ore ×6, wood_plank ×4, leather ×1",scythe ×1,public/models/weapons/medieval/FBX/Scythe.fbx,5,Doubles as harvest tool.
+craft_bow_wooden,Wooden Bow,weapon-ranged,crafting.gunsmith.1,workbench,"wood_plank ×4, silk ×1",bow_wooden ×1,public/models/weapons/medieval/FBX/Bow_Wooden.fbx,1,
+craft_arrow_iron,Iron Arrow,ammo,crafting.gunsmith.1,workbench,"branch_a ×2, iron_ore ×1",arrow_iron ×10,public/models/weapons/medieval/FBX/Arrow.fbx,1,
+craft_pistol_1,Pistol Mk I,weapon-ranged,crafting.gunsmith.1,workbench,"iron_ore ×4, wood_plank ×1, copper_ore ×1",pistol_1 ×1,public/models/weapons/ultimate_gun_pack/FBX/Pistol_1.fbx,1,
+craft_bow_wooden_2,Wooden Bow (Compound),weapon-ranged,crafting.gunsmith.2,workbench,"wood_plank ×6, silk ×2, iron_ore ×1",bow_wooden_2 ×1,public/models/weapons/medieval/FBX/Bow_Wooden2.fbx,2,
+craft_pistol_2,Pistol Mk II,weapon-ranged,crafting.gunsmith.2,anvil,"iron_ore ×6, wood_plank ×1, copper_ore ×2",pistol_2 ×1,public/models/weapons/ultimate_gun_pack/FBX/Pistol_2.fbx,2,
+craft_pistol_3,Pistol Mk III,weapon-ranged,crafting.gunsmith.2,anvil,"iron_ore ×7, copper_ore ×2",pistol_3 ×1,public/models/weapons/ultimate_gun_pack/FBX/Pistol_3.fbx,2,
+craft_revolver_1,Revolver,weapon-ranged,crafting.gunsmith.2,anvil,"iron_ore ×8, wood_plank ×1, copper_ore ×2",revolver_1 ×1,public/models/weapons/ultimate_gun_pack/FBX/Revolver_1.fbx,2,
+craft_smg_1,Submachine Gun,weapon-ranged,crafting.gunsmith.2,anvil,"iron_ore ×8, copper_ore ×3",smg_1 ×1,public/models/weapons/ultimate_gun_pack/FBX/SubmachineGun_1.fbx,2,
+craft_smg_2,Submachine Gun II,weapon-ranged,crafting.gunsmith.3,anvil,"iron_ore ×9, copper_ore ×3, leather ×1",smg_2 ×1,public/models/weapons/ultimate_gun_pack/FBX/SubmachineGun_2.fbx,3,
+craft_smg_3,Submachine Gun III,weapon-ranged,crafting.gunsmith.3,anvil,"iron_ore ×10, copper_ore ×4",smg_3 ×1,public/models/weapons/ultimate_gun_pack/FBX/SubmachineGun_3.fbx,3,
+craft_shotgun_1,Shotgun,weapon-ranged,crafting.gunsmith.3,anvil,"iron_ore ×10, wood_plank ×3",shotgun_1 ×1,public/models/weapons/ultimate_gun_pack/FBX/Shotgun_1.fbx,3,
+craft_shotgun_2,Shotgun II,weapon-ranged,crafting.gunsmith.3,anvil,"iron_ore ×11, wood_plank ×3, copper_ore ×2",shotgun_2 ×1,public/models/weapons/ultimate_gun_pack/FBX/Shotgun_2.fbx,3,
+craft_bow_evil,Cursed Bow,weapon-ranged,crafting.gunsmith.3,anvil,"wood_plank ×6, snake_skin ×4, herb_rare ×2",bow_evil ×1,public/models/weapons/medieval/FBX/Bow_Evil.fbx,3,Dark/cursed variant.
+craft_attach_silencer_1,Silencer Mk I,attachment,crafting.tinkering.1,workbench,"iron_ore ×3, copper_ore ×2",attach_silencer_1 ×1,public/models/weapons/ultimate_gun_pack/FBX/Accessories/Silencer_1.fbx,3,
+craft_attach_scope_1,Scope Mk I,attachment,crafting.tinkering.1,workbench,"iron_ore ×3, copper_ore ×1, mineral_crystal ×1",attach_scope_1 ×1,public/models/weapons/ultimate_gun_pack/FBX/Accessories/Scope_1.fbx,3,
+craft_assault_rifle_1,Assault Rifle,weapon-ranged,crafting.gunsmith.4,anvil,"iron_ore ×12, copper_ore ×4, ancient_ore ×1",assault_rifle_1 ×1,public/models/weapons/ultimate_gun_pack/FBX/AssaultRifle_1.fbx,4,
+craft_assault_rifle_2,Assault Rifle II,weapon-ranged,crafting.gunsmith.4,anvil,"iron_ore ×13, copper_ore ×5",assault_rifle_2 ×1,public/models/weapons/ultimate_gun_pack/FBX/AssaultRifle_2.fbx,4,
+craft_assault_rifle_3,Assault Rifle III,weapon-ranged,crafting.gunsmith.4,anvil,"iron_ore ×14, copper_ore ×5, leather ×2",assault_rifle_3 ×1,public/models/weapons/ultimate_gun_pack/FBX/AssaultRifle_3.fbx,4,
+craft_shotgun_sawedoff,Sawed-Off Shotgun,weapon-ranged,crafting.gunsmith.4,anvil,"iron_ore ×8, wood_plank ×2",shotgun_sawedoff ×1,public/models/weapons/ultimate_gun_pack/FBX/Shotgun_SawedOff.fbx,4,
+craft_shotgun_3,Shotgun III,weapon-ranged,crafting.gunsmith.4,anvil,"iron_ore ×12, wood_plank ×3, copper_ore ×3",shotgun_3 ×1,public/models/weapons/ultimate_gun_pack/FBX/Shotgun_3.fbx,4,
+craft_bullpup_1,Bullpup Rifle,weapon-ranged,crafting.gunsmith.4,anvil,"iron_ore ×14, copper_ore ×6",bullpup_1 ×1,public/models/weapons/ultimate_gun_pack/FBX/Bullpup_1.fbx,4,
+craft_sniper_1,Sniper Rifle,weapon-ranged,crafting.gunsmith.4,anvil,"iron_ore ×16, copper_ore ×4, mineral_crystal ×1",sniper_1 ×1,public/models/weapons/ultimate_gun_pack/FBX/SniperRifle_1.fbx,4,
+craft_attach_bipod,Bipod,attachment,crafting.tinkering.3,workbench,"iron_ore ×4, copper_ore ×2",attach_bipod ×1,public/models/weapons/ultimate_gun_pack/FBX/Accessories/Bipod.fbx,4,
+craft_attach_grip,Grip,attachment,crafting.tinkering.2,workbench,"iron_ore ×2, leather ×1",attach_grip ×1,public/models/weapons/ultimate_gun_pack/FBX/Accessories/Grip.fbx,4,
+craft_sniper_5,Sniper Rifle V,weapon-ranged,crafting.gunsmith.4,anvil,"iron_ore ×18, copper_ore ×6, mineral_crystal ×2",sniper_5 ×1,public/models/weapons/ultimate_gun_pack/FBX/SniperRifle_5.fbx,5,
+craft_sniper_6,Rift-Hunter Sniper,weapon-ranged,crafting.master,anvil,"iron_ore ×20, copper_ore ×6, crystal_of_x ×1",sniper_6 ×1,public/models/weapons/ultimate_gun_pack/FBX/SniperRifle_6.fbx,5,Endgame.
+craft_bow_golden,Golden Bow,weapon-ranged,crafting.master,anvil,"gold ×6, wood_plank ×4, mineral_crystal ×2",bow_golden ×1,public/models/weapons/medieval/FBX/Bow_Golden.fbx,5,Legendary.
+craft_assault_rifle2_4,Assault Rifle (Rift-Spec),weapon-ranged,crafting.gunsmith.4,anvil,"iron_ore ×16, copper_ore ×6, crystal_of_x ×1",assault_rifle2_4 ×1,public/models/weapons/ultimate_gun_pack/FBX/AssaultRifle2_4.fbx,5,
+craft_bullpup_3,Bullpup (Rift-Spec),weapon-ranged,crafting.gunsmith.4,anvil,"iron_ore ×16, copper_ore ×6, crystal_of_x ×1",bullpup_3 ×1,public/models/weapons/ultimate_gun_pack/FBX/Bullpup_3.fbx,5,
+craft_attach_silencer_long,Silencer (Long),attachment,crafting.tinkering.3,workbench,"iron_ore ×5, copper_ore ×3",attach_silencer_long ×1,public/models/weapons/ultimate_gun_pack/FBX/Accessories/Silencer_long.fbx,5,
+craft_attach_scope_3,Scope Mk III,attachment,crafting.tinkering.3,workbench,"iron_ore ×4, copper_ore ×2, mineral_crystal ×2",attach_scope_3 ×1,public/models/weapons/ultimate_gun_pack/FBX/Accessories/Scope_3.fbx,5,
+craft_attach_tripod,Tripod,attachment,crafting.tinkering.3,workbench,"iron_ore ×6, copper_ore ×3",attach_tripod ×1,public/models/weapons/ultimate_gun_pack/FBX/Accessories/Tripod.fbx,5,
+craft_gun_scifi_pistol,Sci-Fi Pistol,weapon-ranged,crafting.master,anvil,"iron_ore ×8, copper_ore ×4, crystal_of_x ×1",gun_scifi_pistol ×1,public/models/scifi/essentials_kit/FBX/Gun_Pistol.fbx,5,Energy sidearm — gateway to sci-fi tier.
+craft_armour_peasant_chest,Peasant Tunic,armour-chest,crafting.armour.1,workbench,"silk ×4, leather ×1",armour_peasant_chest ×1,public/models/gear/chest/peasant_male.fbx,1,Use peasant_female.fbx for female slot.
+craft_armour_peasant_legs,Peasant Trousers,armour-legs,crafting.armour.1,workbench,"silk ×3, leather ×1",armour_peasant_legs ×1,public/models/gear/legs/peasant_male.fbx,1,
+craft_armour_peasant_feet,Peasant Boots,armour-feet,crafting.armour.1,workbench,leather ×3,armour_peasant_feet ×1,public/models/gear/feet/peasant_male.fbx,1,
+craft_armour_peasant_arms,Peasant Sleeves,armour-arms,crafting.armour.1,workbench,silk ×2,armour_peasant_arms ×1,public/models/gear/arms/peasant_male.fbx,1,
+craft_armour_leather_set,Leather Armour Set,armour-set,crafting.armour.2,workbench,"leather ×12, silk ×2, iron_ore ×2",armour_leather_set ×1,—,2,Set bonus when all 4 pieces equipped.
+craft_helmet_open,Open Helmet,armour-head,crafting.armour.2,anvil,"iron_ore ×3, leather ×1",helmet_open ×1,—,2,
+craft_armour_mail_set,Chain Mail Set,armour-set,crafting.armour.3,anvil,"iron_ore ×16, leather ×4",armour_mail_set ×1,—,3,
+craft_shield_heater,Heater Shield,shield,crafting.armour.3,anvil,"wood_plank ×4, iron_ore ×4, leather ×2",shield_heater ×1,public/models/weapons/medieval/FBX/Shield_Heater.fbx,3,
+craft_armour_plate_set,Plate Armour Set,armour-set,crafting.armour.4,anvil,"iron_ore ×24, leather ×4, silk ×2",armour_plate_set ×1,—,4,
+craft_shield_heater_2,Heater Shield (Reinforced),shield,crafting.armour.4,anvil,"wood_plank ×4, iron_ore ×6, leather ×2",shield_heater_2 ×1,public/models/weapons/medieval/FBX/Shield_Heater_2.fbx,4,
+craft_helmet_full,Great Helm,armour-head,crafting.armour.4,anvil,"iron_ore ×6, leather ×2",helmet_full ×1,—,4,
+craft_armour_ranger_chest,Ranger Cuirass,armour-chest,crafting.armour.4,anvil,"iron_ore ×8, leather ×6, mineral_crystal ×1",armour_ranger_chest ×1,public/models/gear/chest/ranger_male.fbx,5,
+craft_armour_ranger_legs,Ranger Greaves,armour-legs,crafting.armour.4,anvil,"iron_ore ×6, leather ×4",armour_ranger_legs ×1,public/models/gear/legs/ranger_male.fbx,5,
+craft_armour_ranger_feet,Ranger Boots,armour-feet,crafting.armour.4,anvil,"iron_ore ×4, leather ×4",armour_ranger_feet ×1,public/models/gear/feet/ranger_male.fbx,5,
+craft_armour_ranger_arms,Ranger Bracers,armour-arms,crafting.armour.4,anvil,"iron_ore ×4, leather ×3",armour_ranger_arms ×1,public/models/gear/arms/ranger_male.fbx,5,
+craft_armour_ranger_head,Ranger Hood,armour-head,crafting.armour.4,anvil,"iron_ore ×3, leather ×3, silk ×2",armour_ranger_head ×1,public/models/gear/head/ranger_male.fbx,5,
+craft_armour_ranger_shoulders,Ranger Pauldrons,armour-shoulders,crafting.armour.4,anvil,"iron_ore ×6, leather ×4",armour_ranger_shoulders ×1,public/models/gear/shoulders/ranger_male.fbx,5,
+build_floor_modular,Floor (modular),building-floor,township.buildings.1,hammer_tool,"wood_plank ×4, stone ×2",floor_modular ×1,public/models/environment/medieval_village/FBX/Floor_WoodDark.fbx,1,
+build_wall_modular,Wall (modular),building-wall,township.buildings.1,hammer_tool,"wood_plank ×6, stone ×3",wall_modular ×1,public/models/environment/medieval_village/FBX/Wall_Brick.fbx,1,
+build_door_round,Door (round),building-door,township.buildings.1,hammer_tool,"wood_plank ×4, iron_ore ×2",door_round ×1,public/models/environment/medieval_village/FBX/Door_1_Round.fbx,1,
+build_floor_brick,Floor (brick),building-floor,township.buildings.2,hammer_tool,"stone ×6, wood_plank ×2",floor_brick ×1,public/models/environment/medieval_village/FBX/Floor_Brick.fbx,2,
+build_floor_wood_dark,Floor (dark wood),building-floor,township.buildings.2,hammer_tool,wood_plank ×6,floor_wood_dark ×1,public/models/environment/medieval_village/FBX/Floor_WoodDark.fbx,2,
+build_window,Window,building-window,township.buildings.2,hammer_tool,"wood_plank ×3, stone ×2",window ×1,public/models/environment/medieval_village/FBX/Window_Round.fbx,2,Path approximate — pick by variant.
+build_window_shutters,Window Shutters,building-window,township.buildings.2,hammer_tool,"wood_plank ×4, iron_ore ×1",window_shutters ×1,public/models/environment/medieval_village/FBX/WindowShutters_Round.fbx,2,Path approximate.
+build_doorframe_round,Door Frame (round),building-door,township.buildings.2,hammer_tool,"wood_plank ×3, stone ×3",doorframe_round ×1,public/models/environment/medieval_village/FBX/DoorFrame_Round_Brick.fbx,2,
+build_roof_tile,Roof Tile (round),building-roof,township.buildings.3,hammer_tool,"stone ×8, wood_plank ×3",roof_tile ×1,public/models/environment/medieval_village/FBX/Roof_RoundTile.fbx,3,Path approximate.
+build_overhang_plaster,Overhang (plaster),building-roof,township.buildings.3,hammer_tool,"wood_plank ×4, stone ×2",overhang_plaster ×1,public/models/environment/medieval_village/FBX/Overhang_Plaster_Long.fbx,3,
+build_balcony_simple,Balcony (simple),building-floor,township.buildings.3,hammer_tool,"wood_plank ×6, iron_ore ×2",balcony_simple ×1,public/models/environment/medieval_village/FBX/Balcony_Simple_Straight.fbx,3,
+build_stairs_modular,Stairs (modular),building-floor,township.buildings.3,hammer_tool,"wood_plank ×6, stone ×4",stairs_modular ×1,public/models/environment/modular_dungeon/FBX/Stairs_Modular.fbx,3,
+build_workbench_drawers,Workbench (Drawers),building-station,township.buildings.4,hammer_tool,"wood_plank ×12, iron_ore ×6",workbench_drawers ×1,public/models/props/quaternius/Workbench_Drawers.gltf,4,Same node as crafting recipe — placed building.
+build_armory_chest,Armoury Chest,building-storage,township.buildings.4,hammer_tool,"wood_plank ×8, iron_ore ×6",armory_chest ×1,public/models/props/quaternius/Chest_Wood.gltf,4,Stores weapons/armour with a tag filter.
+build_metal_fence,Metal Fence,building-fence,township.buildings.4,hammer_tool,"iron_ore ×6, wood_plank ×2",metal_fence ×1,public/models/environment/medieval_village/FBX/Prop_MetalFence_Simple.fbx,4,
+build_overhang_uneven_brick,Overhang (uneven brick),building-roof,township.buildings.4,hammer_tool,"stone ×8, wood_plank ×3",overhang_uneven_brick ×1,public/models/environment/medieval_village/FBX/Overhang_UnevenBrick_Long.fbx,5,
+build_balcony_cross,Balcony (cross),building-floor,township.buildings.4,hammer_tool,"wood_plank ×8, iron_ore ×4",balcony_cross ×1,public/models/environment/medieval_village/FBX/Balcony_Cross_Straight.fbx,5,
+build_keep_chimney,Chimney,building-prop,township.buildings.4,hammer_tool,"stone ×12, iron_ore ×2",keep_chimney ×1,public/models/environment/medieval_village/FBX/Prop_Chimney.fbx,5,
+build_market_complex,Market Complex,building-station,township.master,hammer_tool,"wood_plank ×16, stone ×12, iron_ore ×6",market_complex ×1,—,5,Multi-stall market — Boomtown unlock.
+build_banner,Camp Banner,decoration,township.leadership.2,hammer_tool,"silk ×4, wood_plank ×2",banner ×1,public/models/environment/modular_dungeon/FBX/Banner.fbx,1,Camp morale +5 in radius.
+build_recruit_post,Recruit Post,building-station,township.leadership.3,hammer_tool,"wood_plank ×6, iron_ore ×2",recruit_post ×1,—,2,NPCs from town pool can be hired here.
+build_banner_2,Decorated Banner,decoration,township.leadership.4,hammer_tool,"silk ×6, wood_plank ×3, gold ×1",banner_2 ×1,—,3,
+build_market_stall,Market Stall,building-station,township.leadership.4,hammer_tool,"wood_plank ×8, silk ×3",market_stall ×1,public/models/props/quaternius/Stall_Empty.gltf,3,Trade post for ambient NPCs.
+build_war_banner,War Banner,decoration,township.leadership.4,hammer_tool,"silk ×8, wood_plank ×4, gold ×2",war_banner ×1,—,4,Combat morale buff to allied NPCs.
+build_command_tent,Command Tent,building-station,township.master,hammer_tool,"wood_plank ×12, silk ×8, iron_ore ×4",command_tent ×1,—,5,Issue squad orders.
+cook_meat,Cook Meat,food,chemistry.growth.1,campfire,meat_raw ×1,meat_cooked ×1,—,0,Already-shipped baseline.
+cook_fish,Cook Fish,food,chemistry.growth.1,campfire,fish_raw ×1,fish_cooked ×1,—,0,Already-shipped baseline.
+cook_berry_jam,Berry Jam,food,chemistry.growth.1,cooking_rack,"berries ×4, bottle_empty ×1",berry_jam ×1,—,1,
+cook_stew,Hearty Stew,food,chemistry.growth.2,cooking_rack,"meat_raw ×2, herb_common ×2, mushroom_a ×1",stew ×2,—,2,Buff stacks with rank 2 duration boost.
+cook_grain_porridge,Grain Porridge,food,chemistry.growth.2,cooking_rack,"grain ×3, ice_water ×1",grain_porridge ×2,—,2,
+cook_roast_corn,Roast Corn,food,chemistry.growth.2,campfire,corn ×2,roast_corn ×1,—,2,
+cook_roast_meat,Roast Meat,food,chemistry.growth.3,cooking_rack,"meat_raw ×3, herb_common ×1",roast_meat ×1,—,3,
+cook_fish_filet_grilled,Grilled Fish Filet,food,chemistry.growth.3,cooking_rack,"fish_filet ×2, herb_common ×1",fish_filet_grilled ×2,—,3,
+cook_mushroom_skewer,Mushroom Skewer,food,chemistry.growth.3,campfire,"mushroom_a ×2, mushroom_b ×1, branch_a ×1",mushroom_skewer ×1,—,3,
+cook_hunters_pie,Hunter's Pie,food,chemistry.growth.4,cooking_rack,"meat_raw ×3, grain ×3, mushroom_b ×2",hunters_pie ×1,—,4,Long-duration combat buff.
+cook_camp_feast,Camp Feast,food,chemistry.growth.4,cooking_rack,"meat_raw ×6, fish_raw ×3, grain ×4, herb_rare ×2",camp_feast ×4,—,4,Group buff — feeds nearby NPCs.
+cook_kings_table,King's Table,food,chemistry.master,cooking_rack,"meat_raw ×8, fish_raw ×4, grain ×6, fruit ×4, herb_rare ×4",kings_table ×6,—,5,Set-piece buff.
+cook_stratocolony_ration,Stratocolony Ration,food,chemistry.growth.4,cooking_rack,"meat_raw ×4, mineral_crystal ×1, herb_rare ×2",stratocolony_ration ×4,—,5,Lore-flavour endgame food.
+brew_minor_health,Minor Health Potion,potion,chemistry.goos.1,workbench,"herb_common ×2, ice_water ×1, bottle_empty ×1",minor_health ×1,—,1,Heals 25 HP.
+brew_water_purified,Purified Water,potion,chemistry.goos.1,workbench,"ice_water ×1, herb_common ×1, bottle_empty ×1",water_purified ×1,—,1,Removes 'Sick' debuff.
+brew_stamina_potion,Stamina Potion,potion,chemistry.goos.2,workbench,"herb_common ×3, fang ×1, bottle_empty ×1",stamina_potion ×1,—,2,+50% stamina regen for 60 s.
+brew_minor_antidote,Minor Antidote,potion,chemistry.goos.2,workbench,"herb_rare ×1, snake_skin ×1, bottle_empty ×1",minor_antidote ×1,—,2,Cures poison.
+brew_poison_vial,Poison Vial,potion,chemistry.tox.1,workbench,"venom ×1, herb_rare ×1, bottle_empty ×1",poison_vial ×1,—,3,Coat melee weapon — DoT. Moved to Toxicology branch.
+brew_health_potion,Health Potion,potion,chemistry.goos.3,workbench,"herb_rare ×2, ice_water ×1, bottle_empty ×1",health_potion ×1,—,3,Heals 80 HP.
+brew_speed_tonic,Speed Tonic,potion,chemistry.goos.3,workbench,"wax ×2, herb_rare ×2, bottle_empty ×1",speed_tonic ×1,—,3,+30% move speed for 30 s.
+brew_greater_health,Greater Health Potion,potion,chemistry.goos.4,workbench,"herb_rare ×4, mineral_crystal ×1, bottle_empty ×1",greater_health ×1,—,4,Heals 200 HP.
+brew_radiation_resist,Radiation Resist,potion,chemistry.goos.4,workbench,"mineral_crystal ×2, herb_rare ×2, bottle_empty ×1",radiation_resist ×1,—,4,Required to enter Crystal-of-X zones.
+brew_invisibility_draught,Invisibility Draught,potion,chemistry.goos.4,workbench,"silk ×4, herb_rare ×3, mineral_crystal ×1, bottle_empty ×1",invisibility_draught ×1,—,4,30 s invis — broken by attack.
+brew_elixir_eternity,Elixir of Eternity,potion,chemistry.master,workbench,"crystal_of_x ×1, herb_rare ×6, mineral_crystal ×2, bottle_empty ×1",elixir_eternity ×1,—,5,Doubles all potion potencies for 5 min.
+brew_crystal_x_essence,Crystal-X Essence,potion,chemistry.goos.4,workbench,"crystal_of_x ×2, ice_water ×4, bottle_empty ×1",crystal_x_essence ×1,—,5,Reagent for legendary recipes.
+craft_legendary_trophy,Apex Trophy,decoration,hunting.master,workbench,"taxidermy_kit ×2, bone ×8, wood_plank ×6, gold ×2",legendary_trophy ×1,—,M,Apex Predator master unlock — biggest morale aura in the game.
+build_campfire,Campfire,building-station,(default),hammer_tool,"branch_a ×4, stone ×3",campfire ×1,—,0,"Baseline buildable. Cooking station. Required component of any camp that hosts NPC hires (one campfire serves the whole camp)."
+build_tent_personal,Personal Tent,building-station,(default),hammer_tool,"silk ×3, branch_a ×4, leather ×1",tent_personal ×1,—,0,"Baseline buildable. Sleeping spot for ONE camp resident (player or hire). Recruitment requires one tent per recruited NPC. NPC without an assigned tent will refuse to settle and walk off at dawn."
+build_storage_crate,Storage Crate,building-storage,(default),hammer_tool,"wood_plank ×4",storage_crate ×1,public/models/props/quaternius/Chest_Wood.gltf,0,"Baseline buildable. 24-slot shared storage. Required component of any camp that hosts NPC hires (one crate serves the whole camp; NPCs deposit harvested goods here)."
+craft_claim_flag,Claim Flag,utility,(default),workbench,"silk ×4, wood_plank ×2, dye_a ×1",claim_flag ×1,public/models/props/quaternius/Banner.gltf,1,"Player-drawn 64×64 image painted onto silk + raised on a 3m pole. Doubles as guild logo. Placing the flag stakes a CLAIM on the surrounding 80m radius — required for recruiting NPCs into that camp. Visible on the world map to all players and NPCs. Attracts raid attention proportional to camp size and faction tension."

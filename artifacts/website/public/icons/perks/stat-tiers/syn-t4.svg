@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80">
+  <defs>
+    <radialGradient id="bgsyn4" cx="50%" cy="45%" r="60%">
+      <stop offset="0%" stop-color="#2196f3" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#0d1a26" stop-opacity="1"/>
+    </radialGradient>
+    <radialGradient id="glowsyn4" cx="50%" cy="45%" r="40%">
+      <stop offset="0%" stop-color="#64b5f6" stop-opacity="0.14"/>
+      <stop offset="100%" stop-color="#64b5f6" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="blursyn4">
+      <feGaussianBlur stdDeviation="2.5"/>
+    </filter>
+  </defs>
+  <rect width="80" height="80" rx="6" fill="url(#bgsyn4)"/>
+  <rect width="80" height="80" rx="6" fill="url(#glowsyn4)"/>
+  <rect width="80" height="80" rx="6" fill="none" stroke="#2196f3" stroke-width="0.8" opacity="0.41000000000000003"/>
+  
+    <line x1="4" y1="4" x2="12" y2="4" stroke="#2196f3" stroke-width="1.5" opacity="0.8200000000000001"/>
+    <line x1="4" y1="4" x2="4" y2="12" stroke="#2196f3" stroke-width="1.5" opacity="0.8200000000000001"/>
+    <line x1="76" y1="4" x2="68" y2="4" stroke="#2196f3" stroke-width="1.5" opacity="0.8200000000000001"/>
+    <line x1="76" y1="4" x2="76" y2="12" stroke="#2196f3" stroke-width="1.5" opacity="0.8200000000000001"/>
+    <line x1="4" y1="76" x2="12" y2="76" stroke="#2196f3" stroke-width="1.5" opacity="0.8200000000000001"/>
+    <line x1="4" y1="76" x2="4" y2="68" stroke="#2196f3" stroke-width="1.5" opacity="0.8200000000000001"/>
+    <line x1="76" y1="76" x2="68" y2="76" stroke="#2196f3" stroke-width="1.5" opacity="0.8200000000000001"/>
+    <line x1="76" y1="76" x2="76" y2="68" stroke="#2196f3" stroke-width="1.5" opacity="0.8200000000000001"/>
+  
+  
+    <rect x="30" y="30" width="20" height="16" rx="2" fill="#2196f3" opacity="0.25" stroke="#2196f3" stroke-width="1"/>
+    <line x1="22" y1="34" x2="30" y2="34" stroke="#2196f3" stroke-width="1.5" opacity="0.6"/>
+    <line x1="22" y1="42" x2="30" y2="42" stroke="#2196f3" stroke-width="1.5" opacity="0.6"/>
+    <line x1="50" y1="34" x2="58" y2="34" stroke="#2196f3" stroke-width="1.5" opacity="0.6"/>
+    <line x1="50" y1="42" x2="58" y2="42" stroke="#2196f3" stroke-width="1.5" opacity="0.6"/>
+    <line x1="36" y1="22" x2="36" y2="30" stroke="#2196f3" stroke-width="1.5" opacity="0.5"/>
+    <line x1="44" y1="22" x2="44" y2="30" stroke="#2196f3" stroke-width="1.5" opacity="0.5"/>
+    <line x1="36" y1="46" x2="36" y2="54" stroke="#2196f3" stroke-width="1.5" opacity="0.5"/>
+    <line x1="44" y1="46" x2="44" y2="54" stroke="#2196f3" stroke-width="1.5" opacity="0.5"/>
+    <circle cx="40" cy="38" r="4" fill="#64b5f6" opacity="0.8"/>
+  
+  <circle cx="24" cy="71" r="1.6" fill="#2196f3" opacity="0.5"/><circle cx="32" cy="71" r="1.6" fill="#2196f3" opacity="0.5"/><circle cx="40" cy="71" r="1.6" fill="#2196f3" opacity="0.5"/><circle cx="48" cy="71" r="1.6" fill="#2196f3" opacity="0.5"/><circle cx="56" cy="71" r="2.2" fill="#64b5f6" opacity="1"/>
+</svg>

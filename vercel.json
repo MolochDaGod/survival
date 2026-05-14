@@ -1,0 +1,39 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "pnpm run build",
+  "installCommand": "pnpm install --frozen-lockfile",
+  "outputDirectory": "artifacts/website/dist/public",
+  "rewrites": [
+    { "source": "/api/:path*", "destination": "https://api.grudge-studio.com/api/:path*" },
+
+    { "source": "/arpg-game", "destination": "/arpg-game/index.html" },
+    { "source": "/arpg-game/", "destination": "/arpg-game/index.html" },
+    { "source": "/arpg-game/:path*", "destination": "/arpg-game/:path*" },
+
+    { "source": "/admin", "destination": "/admin/index.html" },
+    { "source": "/admin/", "destination": "/admin/index.html" },
+    { "source": "/admin/:path*", "destination": "/admin/:path*" },
+
+    { "source": "/asset-studio", "destination": "/asset-studio/index.html" },
+    { "source": "/asset-studio/", "destination": "/asset-studio/index.html" },
+    { "source": "/asset-studio/:path*", "destination": "/asset-studio/:path*" },
+
+    { "source": "/info.html", "destination": "/info.html" },
+    { "source": "/lore.html", "destination": "/lore.html" },
+    { "source": "/stats-guide.html", "destination": "/stats-guide.html" }
+  ],
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-store" }
+      ]
+    },
+    {
+      "source": "/(.*)\\.(?:js|css|woff2?|png|jpg|svg|glb|gltf|bin)$",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    }
+  ]
+}

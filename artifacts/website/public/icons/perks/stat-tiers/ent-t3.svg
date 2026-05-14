@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80">
+  <defs>
+    <radialGradient id="bgent3" cx="50%" cy="45%" r="60%">
+      <stop offset="0%" stop-color="#f44336" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#261010" stop-opacity="1"/>
+    </radialGradient>
+    <radialGradient id="glowent3" cx="50%" cy="45%" r="40%">
+      <stop offset="0%" stop-color="#ef9a9a" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#ef9a9a" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="blurent3">
+      <feGaussianBlur stdDeviation="2.5"/>
+    </filter>
+  </defs>
+  <rect width="80" height="80" rx="6" fill="url(#bgent3)"/>
+  <rect width="80" height="80" rx="6" fill="url(#glowent3)"/>
+  <rect width="80" height="80" rx="6" fill="none" stroke="#f44336" stroke-width="0.8" opacity="0.37"/>
+  
+    <line x1="4" y1="4" x2="12" y2="4" stroke="#f44336" stroke-width="1.5" opacity="0.74"/>
+    <line x1="4" y1="4" x2="4" y2="12" stroke="#f44336" stroke-width="1.5" opacity="0.74"/>
+    <line x1="76" y1="4" x2="68" y2="4" stroke="#f44336" stroke-width="1.5" opacity="0.74"/>
+    <line x1="76" y1="4" x2="76" y2="12" stroke="#f44336" stroke-width="1.5" opacity="0.74"/>
+    <line x1="4" y1="76" x2="12" y2="76" stroke="#f44336" stroke-width="1.5" opacity="0.74"/>
+    <line x1="4" y1="76" x2="4" y2="68" stroke="#f44336" stroke-width="1.5" opacity="0.74"/>
+    <line x1="76" y1="76" x2="68" y2="76" stroke="#f44336" stroke-width="1.5" opacity="0.74"/>
+    <line x1="76" y1="76" x2="76" y2="68" stroke="#f44336" stroke-width="1.5" opacity="0.74"/>
+  
+  
+    <path d="M40 20 L46 30 L34 30Z" fill="#f44336" opacity="0.8"/>
+    <path d="M34 30 L22 50 L34 50 L34 44 L46 44 L46 50 L58 50 L46 30Z" fill="#f44336" opacity="0.4"/>
+    <path d="M22 50 L34 50 L34 44" fill="#f44336" opacity="0.6" stroke="#f44336" stroke-width="1"/>
+    <path d="M46 44 L46 50 L58 50" fill="#f44336" opacity="0.6" stroke="#f44336" stroke-width="1"/>
+    <circle cx="40" cy="40" r="4" fill="#ef9a9a" opacity="0.8"/>
+  
+  <circle cx="28" cy="71" r="1.6" fill="#f44336" opacity="0.5"/><circle cx="36" cy="71" r="1.6" fill="#f44336" opacity="0.5"/><circle cx="44" cy="71" r="1.6" fill="#f44336" opacity="0.5"/><circle cx="52" cy="71" r="2.2" fill="#ef9a9a" opacity="1"/>
+</svg>

@@ -1,0 +1,505 @@
+uploads = []
+
+[[generated]]
+id = "u8syjBRyYYIuOCI-iZCc4"
+uri = "file://attached_assets/generated_images/enemy_cravel.png"
+type = "image"
+title = "cravel bestiary card"
+
+[[generated]]
+id = "8R8g_hH37ge-odwgKrP5p"
+uri = "file://attached_assets/generated_images/enemy_crocodile.png"
+type = "image"
+title = "crocodile bestiary card"
+
+[[generated]]
+id = "1NR55B7UeekIZxt6AFlOS"
+uri = "file://attached_assets/generated_images/enemy_bear.png"
+type = "image"
+title = "bear bestiary card"
+
+[[generated]]
+id = "RjhD85Y3PMZnVN1qPI-qv"
+uri = "file://attached_assets/generated_images/enemy_sleeve.png"
+type = "image"
+title = "sleeve bestiary card"
+
+[[generated]]
+id = "LS5FodqLtRHJZ2H0H9epj"
+uri = "file://attached_assets/generated_images/enemy_stoneform.png"
+type = "image"
+title = "stoneform sleeve bestiary card"
+
+[[generated]]
+id = "Npxcf7NYsg2UkBI_DUPdT"
+uri = "file://attached_assets/generated_images/enemy_lava_corps_sancho.png"
+type = "image"
+title = "lava corps sancho bestiary"
+
+[[generated]]
+id = "CtThdPY_PbQICmqFBUUGr"
+uri = "file://attached_assets/generated_images/enemy_stealth_wasp.png"
+type = "image"
+title = "stealth wasp bestiary"
+
+[[generated]]
+id = "E7_8-DTzKYwqbGaHrVeXS"
+uri = "file://attached_assets/generated_images/enemy_glow_whale.png"
+type = "image"
+title = "glow whale bestiary"
+
+[[generated]]
+id = "ao4q8mWGOK1PakeocsuZ5"
+uri = "file://attached_assets/generated_images/enemy_amplectobelua.png"
+type = "image"
+title = "amplectobelua bestiary"
+
+[[generated]]
+id = "f1T8CDOY3L8qgNc8oH8UD"
+uri = "file://attached_assets/generated_images/enemy_lava_monster.png"
+type = "image"
+title = "lava monster bestiary"
+
+[[generated]]
+id = "SyW-BPeuAMBNh49C9WMoS"
+uri = "file://attached_assets/generated_images/enemy_terrorist.png"
+type = "image"
+title = "masked combatant bestiary"
+
+[[generated]]
+id = "cRHE4KSxK5MhxUDWenkde"
+uri = "file://attached_assets/generated_images/enemy_enemy1.png"
+type = "image"
+title = "generic enemy soldier bestiary"
+
+[[generated]]
+id = "f0QUWMMmEVZHl6_4P3NpV"
+uri = "file://attached_assets/generated_images/enemy_neutral_bandit.png"
+type = "image"
+title = "neutral bandit bestiary"
+
+[[generated]]
+id = "avX6ce8ASrjEpDdU-ygc5"
+uri = "file://attached_assets/generated_images/enemy_skeleton_lord.png"
+type = "image"
+title = "skeleton lord bestiary"
+
+[[generated]]
+id = "HCDdFWL1NVOxUnCOdiE4K"
+uri = "file://attached_assets/generated_images/enemy_skeleton.png"
+type = "image"
+title = "skeleton bestiary"
+
+[[generated]]
+id = "C8Cm2RQlTovGxwBmtPFEa"
+uri = "file://attached_assets/generated_images/enemy_game_ready_crow.png"
+type = "image"
+title = "crow bestiary"
+
+[[generated]]
+id = "EanbnP0APIJCE9SFd951a"
+uri = "file://attached_assets/generated_images/enemy_distortus_rex.png"
+type = "image"
+title = "distortus rex bestiary"
+
+[[generated]]
+id = "-G-r_6pAfd8vxSl1pxEac"
+uri = "file://artifacts/website/public/images/hero-cathedral.png"
+type = "image"
+title = "Ruined cathedral interior with candlelight"
+
+[[generated]]
+id = "bBTAgjjY2zLE6XH3DUG5n"
+uri = "file://artifacts/website/public/images/foggy-town.png"
+type = "image"
+title = "Foggy medieval town square at dusk"
+
+[[generated]]
+id = "II9Ok_zX1rOYAT8x3UxT6"
+uri = "file://artifacts/website/public/images/blood-moon-monster.png"
+type = "image"
+title = "Monstrous silhouette under blood moon"
+
+[[generated]]
+id = "oc6MKwYUeeAOzw8fcomaG"
+uri = "file://artifacts/website/public/images/forge-interior.png"
+type = "image"
+title = "Ember-lit forge interior"
+
+[[generated]]
+id = "VpIKJ_0L3-97Q4oHUXnBz"
+uri = "file://artifacts/website/public/images/distant-church.png"
+type = "image"
+title = "Distant church across misty river"
+
+[[generated]]
+id = "OVCrmQjPOFiUKdgICfo43"
+uri = "file://artifacts/arpg-game/public/bestiary/clown.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "6HdINVV3ol1NJb750rkQ_"
+uri = "file://artifacts/arpg-game/public/bestiary/doctor.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "dTHOqjTaYptnF-PX20hyJ"
+uri = "file://artifacts/arpg-game/public/bestiary/masked.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "3Jnm5xtvejDVdlU6oe5DB"
+uri = "file://artifacts/arpg-game/public/bestiary/miner.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "COrDe1B1mymxkR1NvVs0d"
+uri = "file://artifacts/arpg-game/public/bestiary/scarecrow.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "En1EyiDqeCEsMhlNtSvWy"
+uri = "file://artifacts/arpg-game/public/bestiary/seaexplorer.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "Suix_dOliJGaHZhCS8zPF"
+uri = "file://artifacts/website/public/icons/factions/keepers.png"
+type = "image"
+title = "keepers faction crest"
+
+[[generated]]
+id = "AVo5B9tXzpySaNHuR1Ygu"
+uri = "file://artifacts/website/public/icons/factions/scavengers.png"
+type = "image"
+title = "scavengers faction crest"
+
+[[generated]]
+id = "MoDDPIHbQWvN_68KIrFQ0"
+uri = "file://artifacts/website/public/icons/factions/hollow.png"
+type = "image"
+title = "hollow lords faction crest"
+
+[[generated]]
+id = "izL8dM0Z_CSVHWkY40laM"
+uri = "file://artifacts/website/public/icons/factions/network.png"
+type = "image"
+title = "network faction crest"
+
+[[generated]]
+id = "CX2ON1PEWtThJ2iMU3Nde"
+uri = "file://artifacts/website/public/icons/factions/forgotten.png"
+type = "image"
+title = "forgotten faction crest"
+
+[[outputs]]
+id = "mTSIgUP8jjqivbIW59zOi"
+uri = "file://attached_assets/generated_images/enemy_cravel.png"
+type = "image"
+title = "Cravel — quadruped predator (concept)"
+
+[[outputs]]
+id = "JsQmrJ5F72eOoLa9vGGXM"
+uri = "file://attached_assets/generated_images/enemy_crocodile.png"
+type = "image"
+title = "Crocodile — water ambush (concept)"
+
+[[outputs]]
+id = "PKkIiTBCLYgjdHDUiOwPn"
+uri = "file://attached_assets/generated_images/enemy_bear.png"
+type = "image"
+title = "Bear — heavy melee (concept)"
+
+[[outputs]]
+id = "LlwNHDnLFZqzcImkhgYuB"
+uri = "file://attached_assets/generated_images/enemy_sleeve.png"
+type = "image"
+title = "Sleeve — fleshy biped brute (concept)"
+
+[[outputs]]
+id = "0sI--o2bT-LMuuZZagc0L"
+uri = "file://attached_assets/generated_images/enemy_stoneform.png"
+type = "image"
+title = "Stoneform Sleeve — biped tank (concept)"
+
+[[outputs]]
+id = "kkZLN38md3YIR4ZlfnqR6"
+uri = "file://attached_assets/generated_images/enemy_distortus_rex.png"
+type = "image"
+title = "Distortus Rex (CC-BY-4.0)"
+
+[[outputs]]
+id = "9lBOaJr4lWkXhKNevl5cX"
+uri = "file://attached_assets/generated_images/enemy_lava_corps_sancho.png"
+type = "image"
+title = "Lava Corps Sancho (CC-BY-4.0)"
+
+[[outputs]]
+id = "dSmtDEUOo2T14k8w9ll-Q"
+uri = "file://attached_assets/generated_images/enemy_stealth_wasp.png"
+type = "image"
+title = "Stealth Wasp ⚠ NC-SA"
+
+[[outputs]]
+id = "Bc3f218YhdyHyb0kSHjgs"
+uri = "file://attached_assets/generated_images/enemy_glow_whale.png"
+type = "image"
+title = "Glow Whale ★ 20 anims (CC-BY-4.0)"
+
+[[outputs]]
+id = "I4PBL4j1LtjCpk4IakuA2"
+uri = "file://attached_assets/generated_images/enemy_amplectobelua.png"
+type = "image"
+title = "Amplectobelua ⚠ NC"
+
+[[outputs]]
+id = "Vw-kbJ6KYrbnKBgahfsSf"
+uri = "file://attached_assets/generated_images/enemy_lava_monster.png"
+type = "image"
+title = "Lava Monster (CC-BY-4.0)"
+
+[[outputs]]
+id = "iFmg1Muf_lKNNzOAiskMJ"
+uri = "file://attached_assets/generated_images/enemy_terrorist.png"
+type = "image"
+title = "Masked Combatant (CC-BY-4.0)"
+
+[[outputs]]
+id = "WatYD1AWh2_o_skKlYTO3"
+uri = "file://attached_assets/generated_images/enemy_enemy1.png"
+type = "image"
+title = "Enemy1 — generic soldier (CC-BY-4.0)"
+
+[[outputs]]
+id = "UNMxegWHJJX61StKS6W1_"
+uri = "file://attached_assets/generated_images/enemy_neutral_bandit.png"
+type = "image"
+title = "Neutral Bandit (CC-BY-4.0)"
+
+[[outputs]]
+id = "Tv-hOTEloVeKZCc7frJwF"
+uri = "file://attached_assets/generated_images/enemy_skeleton_lord.png"
+type = "image"
+title = "Skeleton Lord (CC-BY-4.0)"
+
+[[outputs]]
+id = "tZS9P-sq4GHktcXlNAYxw"
+uri = "file://attached_assets/generated_images/enemy_skeleton.png"
+type = "image"
+title = "Skeleton (CC-BY-4.0)"
+
+[[outputs]]
+id = "1vk6ZYDcGtb0LtlnVSu3X"
+uri = "file://attached_assets/generated_images/enemy_game_ready_crow.png"
+type = "image"
+title = "Game Ready Crow ⚠ Sketchfab Std"
+
+[[outputs]]
+id = "nFrcwfASF9XR3Xx8juqoz"
+uri = "file://attached_assets/exports/male_survivor_1_tpose.zip"
+type = "unspecified"
+title = "male_survivor_1_tpose.obj (zipped) — ready for Mixamo upload"
+
+[[outputs]]
+id = "oXG2_DexxdFKRzq4tuZlJ"
+uri = "file://attached_assets/exports/screenshots/01_login.jpg"
+type = "image"
+title = "01 — Login (Sign in / Guest)"
+
+[[outputs]]
+id = "HL8VNfo8_SzOxAtxaFFPH"
+uri = "file://attached_assets/exports/screenshots/02_creation_identity.jpg"
+type = "image"
+title = "02 — Creation · Identity (name, gender, body, gear)"
+
+[[outputs]]
+id = "KgOnuGEaUnIGInTxtw54u"
+uri = "file://attached_assets/exports/screenshots/03_creation_looks.jpg"
+type = "image"
+title = "03 — Creation · Looks (face, height, build, skin/hair/eye color)"
+
+[[outputs]]
+id = "tyeIiFeYzio2cF0Up4cd8"
+uri = "file://attached_assets/exports/screenshots/04_creation_hair.jpg"
+type = "image"
+title = "04 — Creation · Hair (18 styles)"
+
+[[outputs]]
+id = "ifGfv0PgqRjlC1fCfSRYk"
+uri = "file://attached_assets/exports/screenshots/05_creation_outfit.jpg"
+type = "image"
+title = "05 — Creation · Outfit (12 outfits)"
+
+[[outputs]]
+id = "gyM8KHz0nAMulLJ8vjxEP"
+uri = "file://attached_assets/exports/screenshots/06_creation_stats.jpg"
+type = "image"
+title = "06 — Creation · Stats (8 grudge stats + radar + biometrics)"
+
+[[outputs]]
+id = "evUz2EA0XcTiGMcwHBntE"
+uri = "file://attached_assets/exports/screenshots/07_creation_origin.jpg"
+type = "image"
+title = "07 — Creation · Origin (background classes)"
+
+[[outputs]]
+id = "ZnCcUNpyuas1yQR2Jp7TZ"
+uri = "file://artifacts/arpg-game/docs/inventory/modular-parts.csv"
+type = "table"
+title = "Modular Parts (20 pieces, slot-keyed)"
+
+[[outputs]]
+id = "eABGDr2kYGIroZhDgCpGa"
+uri = "file://artifacts/arpg-game/docs/inventory/animations.csv"
+type = "table"
+title = "animations — unchanged"
+
+[[outputs]]
+id = "Smlxy_QXCVwSgcUocJoq9"
+uri = "file://artifacts/arpg-game/docs/inventory/character-customization-parts.csv"
+type = "table"
+title = "Customization Parts (Low-Poly modular pack — 65 entries)"
+
+[[outputs]]
+id = "pkoal53jDyjAgYigjMFPv"
+uri = "file://artifacts/arpg-game/docs/inventory/npcs-medieval.csv"
+type = "table"
+title = "Medieval NPCs (14 characters × 2 export flavors)"
+
+[[outputs]]
+id = "mq2DTGp5H5Cn605pPuHzo"
+uri = "file://artifacts/arpg-game/docs/inventory/weapons-ultimate-gun-pack.csv"
+type = "table"
+title = "Quaternius Ultimate Gun Pack — 55 weapons + accessories"
+
+[[outputs]]
+id = "fb3PFYkBnMQf1tH_XxAaj"
+uri = "file://artifacts/arpg-game/docs/inventory/enemies-easy-animated.csv"
+type = "table"
+title = "Easy Animated Enemies — 6 pre-rigged critters"
+
+[[outputs]]
+id = "s3Dy8cxo0lgcUhqutDUBk"
+uri = "file://artifacts/arpg-game/docs/inventory/scifi-essentials-kit.csv"
+type = "table"
+title = "Sci-Fi Essentials Kit — 37 models (3 enemies, 6 guns, 28 props)"
+
+[[outputs]]
+id = "OZzth0WKUNRaD-my67xRO"
+uri = "file://artifacts/arpg-game/docs/inventory/environment-modular-dungeon.csv"
+type = "table"
+title = "Modular Dungeon — 48 environment pieces"
+
+[[outputs]]
+id = "-8HezOH3HF1cGLkxtawyt"
+uri = "file://artifacts/arpg-game/public/lore/grudges-compendium.md"
+type = "text"
+title = "Grudges Compendium — canonical lore (518 lines, 15 chapters + appendices)"
+
+[[outputs]]
+id = "3qvsGwBLfv6Lrwg6sb2hk"
+uri = "file://artifacts/arpg-game/docs/inventory/lore.csv"
+type = "table"
+title = "lore — unchanged"
+
+[[outputs]]
+id = "HmkMu4SmE8CjfWqF1N1gF"
+uri = "file://artifacts/arpg-game/docs/inventory/animals-farm.csv"
+type = "table"
+title = "Farm animals (huntable, with drop tables)"
+
+[[outputs]]
+id = "RObBwo_TWVvHzUgRglOoi"
+uri = "file://artifacts/arpg-game/docs/inventory/animals-fish.csv"
+type = "table"
+title = "Fish (deferred to fishing pass)"
+
+[[outputs]]
+id = "W15SZ3UsTs7qqDwEjAZeA"
+uri = "file://artifacts/arpg-game/docs/inventory/nature.csv"
+type = "table"
+title = "Nature pack — trees / plants / rocks (harvest tool + drops)"
+
+[[outputs]]
+id = "B3WMTUr6x9kGK5IGBfg1a"
+uri = "file://artifacts/arpg-game/docs/inventory/resources-crystals.csv"
+type = "table"
+title = "Crystal harvestables (gem pack + Crystals of X)"
+
+[[outputs]]
+id = "Lft3Zubm6DMQNNVg-0OEV"
+uri = "file://artifacts/arpg-game/docs/inventory/creatures.csv"
+type = "table"
+title = "creatures — animals + NPCs + enemies + mechs (Role column)"
+
+[[outputs]]
+id = "mChJeIa3KbW4jdRZooKOJ"
+uri = "file://artifacts/arpg-game/docs/inventory/weapons.csv"
+type = "table"
+title = "weapons — melee + ranged + firearms + attachments (Class column)"
+
+[[outputs]]
+id = "Idq2KIqTm-GBfhCte7iSP"
+uri = "file://artifacts/arpg-game/docs/inventory/harvestables.csv"
+type = "table"
+title = "harvestables — nature + crystals (chop / mine / forage)"
+
+[[outputs]]
+id = "STlGTus3mwrGXkYPrYr8f"
+uri = "file://artifacts/arpg-game/docs/inventory/environment.csv"
+type = "table"
+title = "environment — dungeon + village + sci-fi kits (set dressing)"
+
+[[outputs]]
+id = "s7dA6gdF2CsBcHeHLkFgX"
+uri = "file://artifacts/arpg-game/docs/inventory/character-parts.csv"
+type = "table"
+title = "character-parts — player customization + hair (FBX + glTF paired)"
+
+[[outputs]]
+id = "KEEUJ4kSVWO4RV1bCXxAu"
+uri = "file://artifacts/arpg-game/docs/inventory/gear.csv"
+type = "table"
+title = "gear — modular slot wearables (renamed from modular-parts)"
+
+[[outputs]]
+id = "6UUo-uiMkyHwJyk0k8thT"
+uri = "file://artifacts/arpg-game/docs/inventory/professions.csv"
+type = "table"
+title = "professions — hires wired into Township (and 2 cross-profession unlocks)"
+
+[[outputs]]
+id = "nsjUZy8vhrX5hktskS8Ou"
+uri = "file://artifacts/arpg-game/docs/inventory/recipes.csv"
+type = "table"
+title = "recipes — attachments moved to Tinkering; poison_vial moved to Toxicology"
+
+[[outputs]]
+id = "ysZ6kSseSDpBUC4gX6YjM"
+uri = "file://artifacts/arpg-game/docs/inventory/xp-sources.csv"
+type = "table"
+title = "xp-sources — signature rule updated for new branches"
+
+[[outputs]]
+id = "F2K8_tI4XLOoKY3Vp5aTA"
+uri = "file://artifacts/arpg-game/docs/inventory/npc-hires.csv"
+type = "table"
+title = "npc-hires — 15 hires across Harvester / Vendor / Ally Fighter families"
+
+[[outputs]]
+id = "I7YrhwBjgDp1eEfBPoh53"
+uri = "file://artifacts/arpg-game/docs/inventory/perks.csv"
+type = "table"
+title = "Grudge Nexus — All Perks (147)"
+
+[[outputs]]
+id = "PrMklkx5RrhxozoMgJkV_"
+uri = "file://artifacts/arpg-game/docs/stat_perks.csv"
+type = "table"
+title = "Grudge Stat Perks — Spreadsheet"

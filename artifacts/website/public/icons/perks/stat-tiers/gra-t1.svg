@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80">
+  <defs>
+    <radialGradient id="bggra1" cx="50%" cy="45%" r="60%">
+      <stop offset="0%" stop-color="#009688" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#0d2220" stop-opacity="1"/>
+    </radialGradient>
+    <radialGradient id="glowgra1" cx="50%" cy="45%" r="40%">
+      <stop offset="0%" stop-color="#4db6ac" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#4db6ac" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="blurgra1">
+      <feGaussianBlur stdDeviation="2.5"/>
+    </filter>
+  </defs>
+  <rect width="80" height="80" rx="6" fill="url(#bggra1)"/>
+  <rect width="80" height="80" rx="6" fill="url(#glowgra1)"/>
+  <rect width="80" height="80" rx="6" fill="none" stroke="#009688" stroke-width="0.8" opacity="0.29"/>
+  
+    <line x1="4" y1="4" x2="12" y2="4" stroke="#009688" stroke-width="1.5" opacity="0.58"/>
+    <line x1="4" y1="4" x2="4" y2="12" stroke="#009688" stroke-width="1.5" opacity="0.58"/>
+    <line x1="76" y1="4" x2="68" y2="4" stroke="#009688" stroke-width="1.5" opacity="0.58"/>
+    <line x1="76" y1="4" x2="76" y2="12" stroke="#009688" stroke-width="1.5" opacity="0.58"/>
+    <line x1="4" y1="76" x2="12" y2="76" stroke="#009688" stroke-width="1.5" opacity="0.58"/>
+    <line x1="4" y1="76" x2="4" y2="68" stroke="#009688" stroke-width="1.5" opacity="0.58"/>
+    <line x1="76" y1="76" x2="68" y2="76" stroke="#009688" stroke-width="1.5" opacity="0.58"/>
+    <line x1="76" y1="76" x2="76" y2="68" stroke="#009688" stroke-width="1.5" opacity="0.58"/>
+  
+  
+    <path d="M40 18 Q54 26 52 42 Q50 54 40 58 Q40 48 36 40 Q34 34 40 18Z" fill="#009688" opacity="0.5"/>
+    <path d="M40 18 Q40 32 40 58" stroke="#4db6ac" stroke-width="1.5" fill="none"/>
+    <path d="M46 28 Q40 32 34 30" stroke="#009688" stroke-width="1" fill="none" opacity="0.5"/>
+    <path d="M50 36 Q40 40 32 36" stroke="#009688" stroke-width="1" fill="none" opacity="0.4"/>
+    <path d="M50 44 Q40 48 32 44" stroke="#009688" stroke-width="1" fill="none" opacity="0.3"/>
+  
+  <circle cx="36" cy="71" r="1.6" fill="#009688" opacity="0.5"/><circle cx="44" cy="71" r="2.2" fill="#4db6ac" opacity="1"/>
+</svg>

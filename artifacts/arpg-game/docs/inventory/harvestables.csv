@@ -1,0 +1,27 @@
+Resource Type,Variants,Path Pattern,Harvest Tool,Drops,Spawn Biomes,Notes
+tree-birch (live),5,public/models/nature/FBX/BirchTree_{1..5}.fbx,axe,"wood, bio, sticks, seeds",temperate / forest,Chop animation = a few hits then fall.
+tree-birch (autumn),5,public/models/nature/FBX/BirchTree_Autumn_{1..5}.fbx,axe,"wood, bio, sticks, seeds, leaves",autumn forest,Seasonal palette swap.
+tree-birch (snow),5,public/models/nature/FBX/BirchTree_Snow_{1..5}.fbx,axe,"wood, bio, sticks, seeds",winter,
+tree-birch (dead / dead+snow),5 + 5,"public/models/nature/FBX/BirchTree_Dead{,_Snow}_{1..5}.fbx",axe,"wood, sticks (no seeds, less bio)",any,Reduced drops.
+tree-common (live),5,public/models/nature/FBX/CommonTree_{1..5}.fbx,axe,"wood, bio, sticks, seeds, fruit",temperate / forest,Default forest fill — main tree replacement target.
+tree-common (autumn),5,public/models/nature/FBX/CommonTree_Autumn_{1..5}.fbx,axe,"wood, bio, sticks, seeds, fruit, leaves",autumn forest,
+tree-common (snow),5,public/models/nature/FBX/CommonTree_Snow_{1..5}.fbx,axe,"wood, bio, sticks, seeds",winter,
+tree-common (dead / dead+snow),5 + 5,"public/models/nature/FBX/CommonTree_Dead{,_Snow}_{1..5}.fbx",axe,"wood, sticks",any,Reduced drops.
+tree-pine,5 + 5 + 5,"public/models/nature/FBX/PineTree{,_Autumn,_Snow}_{1..5}.fbx",axe,"wood, bio, sticks, pine seeds",conifer / mountain / winter,
+tree-willow,5 × 5 (live + autumn + snow + dead + dead+snow),public/models/nature/FBX/Willow_*_{1..5}.fbx,axe,"wood, bio, sticks, seeds (less for dead)",riverbank / wetland,
+tree-palm,4,public/models/nature/FBX/PalmTree_{1..4}.fbx,axe,"wood, bio, sticks, fruit (coconut), seeds",tropical / coastal,
+stump,3,"public/models/nature/FBX/TreeStump{,_Moss,_Snow}.fbx",axe,"wood, sticks",any,Post-chop placeholder OR pre-existing stump.
+log,3,"public/models/nature/FBX/WoodLog{,_Moss,_Snow}.fbx",axe / hand,"wood, sticks",any,Already-felled — quick gather.
+bush,2 + 2 (incl. snow),"public/models/nature/FBX/Bush{,_Snow}_{1..2}.fbx",hand / sickle,"sticks, bio",temperate / winter,
+bush-berries,2,public/models/nature/FBX/BushBerries_{1..2}.fbx,hand,"berries, bio, seeds",temperate,Food source.
+cactus,5,public/models/nature/FBX/Cactus_{1..5}.fbx,knife,"cactus flesh (water source), bio",desert,
+cactus-flower,1 + 4,"public/models/nature/FBX/CactusFlower{,s}_{1..5}.fbx",hand,"bio, flower (alchemy)",desert,
+plant,5,public/models/nature/FBX/Plant_{1..5}.fbx,hand,"bio, seeds",any,Generic foliage.
+flowers,1,public/models/nature/FBX/Flowers.fbx,hand,"bio, flower (alchemy)",any,
+grass,3,"public/models/nature/FBX/Grass{,_2,_Short}.fbx",sickle / hand,"bio, seeds",any,Ground cover — non-blocking.
+lilypad,1,public/models/nature/FBX/Lilypad.fbx,hand,bio,water surface,
+crop-wheat,1,public/models/nature/FBX/Wheat.fbx,sickle,"grain, bio, seeds",farms,
+crop-corn,2,public/models/nature/FBX/Corn_{1..2}.fbx,sickle,"corn, bio, seeds",farms,
+rock,7 + 7 + 7 (plain / moss / snow),"public/models/nature/FBX/Rock{,_Moss,_Snow}_{1..7}.fbx",pickaxe,"stone, ore (chance: iron / copper / tin), moss (on Moss variant)","any (Moss=forest/damp, Snow=winter)",Mineable boulder; 21 visual variants.
+crystal-mineral (gem pack),4 distinct meshes (sized via runtime scale),public/models/resources/crystals/gem_pack_handpainted.glb,pickaxe,"mineral crystal (gem variant), bio (trace), stone","caves, rocky outcrops, mountains, dungeon side rooms","Load GLB and instantiate the 4 gem meshes (gem / gem004 / gem005 / gem006) as separate pickable nodes — sizing via per-instance scale, the mesh split is for visual variety."
+crystal-of-x (rare),6 unique cluster shapes (Mesh_0 instances 0-5),public/models/resources/crystals/crystals_of_x_viii.glb,pickaxe (high-tier),"crystal of X (endgame), high-tier energy core component","high-radiation zones, deep underwater, dungeon end chambers","27 MB, ~65K verts each. Use instanced rendering when spawning multiples. Single material — recolor per biome (radiation=green-glow / underwater=blue / dungeon=violet)."

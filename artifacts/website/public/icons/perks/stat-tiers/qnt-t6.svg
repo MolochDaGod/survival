@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80">
+  <defs>
+    <radialGradient id="bgqnt6" cx="50%" cy="45%" r="60%">
+      <stop offset="0%" stop-color="#9c27b0" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#1a0d22" stop-opacity="1"/>
+    </radialGradient>
+    <radialGradient id="glowqnt6" cx="50%" cy="45%" r="40%">
+      <stop offset="0%" stop-color="#ce93d8" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#ce93d8" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="blurqnt6">
+      <feGaussianBlur stdDeviation="2.5"/>
+    </filter>
+  </defs>
+  <rect width="80" height="80" rx="6" fill="url(#bgqnt6)"/>
+  <rect width="80" height="80" rx="6" fill="url(#glowqnt6)"/>
+  <rect width="80" height="80" rx="6" fill="none" stroke="#9c27b0" stroke-width="0.8" opacity="0.49"/>
+  
+    <line x1="4" y1="4" x2="12" y2="4" stroke="#9c27b0" stroke-width="1.5" opacity="0.98"/>
+    <line x1="4" y1="4" x2="4" y2="12" stroke="#9c27b0" stroke-width="1.5" opacity="0.98"/>
+    <line x1="76" y1="4" x2="68" y2="4" stroke="#9c27b0" stroke-width="1.5" opacity="0.98"/>
+    <line x1="76" y1="4" x2="76" y2="12" stroke="#9c27b0" stroke-width="1.5" opacity="0.98"/>
+    <line x1="4" y1="76" x2="12" y2="76" stroke="#9c27b0" stroke-width="1.5" opacity="0.98"/>
+    <line x1="4" y1="76" x2="4" y2="68" stroke="#9c27b0" stroke-width="1.5" opacity="0.98"/>
+    <line x1="76" y1="76" x2="68" y2="76" stroke="#9c27b0" stroke-width="1.5" opacity="0.98"/>
+    <line x1="76" y1="76" x2="76" y2="68" stroke="#9c27b0" stroke-width="1.5" opacity="0.98"/>
+  
+  
+    <path d="M28 20 L52 20 L40 38 L52 56 L28 56 L40 38Z" fill="#9c27b0" opacity="0.35" stroke="#9c27b0" stroke-width="1.5"/>
+    <path d="M28 20 L52 20 L40 36Z" fill="#9c27b0" opacity="0.5"/>
+    <path d="M40 40 L28 56 L52 56Z" fill="#ce93d8" opacity="0.4"/>
+    <line x1="26" y1="20" x2="54" y2="20" stroke="#ce93d8" stroke-width="2" opacity="0.7"/>
+    <line x1="26" y1="56" x2="54" y2="56" stroke="#ce93d8" stroke-width="2" opacity="0.7"/>
+    <circle cx="40" cy="38" r="2" fill="#ce93d8" opacity="0.9"/>
+  
+  <circle cx="16" cy="71" r="1.6" fill="#9c27b0" opacity="0.5"/><circle cx="24" cy="71" r="1.6" fill="#9c27b0" opacity="0.5"/><circle cx="32" cy="71" r="1.6" fill="#9c27b0" opacity="0.5"/><circle cx="40" cy="71" r="1.6" fill="#9c27b0" opacity="0.5"/><circle cx="48" cy="71" r="1.6" fill="#9c27b0" opacity="0.5"/><circle cx="56" cy="71" r="1.6" fill="#9c27b0" opacity="0.5"/><circle cx="64" cy="71" r="2.2" fill="#ce93d8" opacity="1"/>
+</svg>

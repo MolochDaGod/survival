@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Grudges — Bind a grudge. Bear it forward.</title>
+<meta name="description" content="A sci-fi survival ARPG. Build your camp, hire AI survivors, defend against the Hollow Lords, and choose your faction in the ruins of a poisoned Earth." />
+<meta property="og:title" content="Grudges — Survival ARPG" />
+<meta property="og:description" content="Bind a grudge. Bear it forward. A sci-fi survival ARPG of camps, factions, and reckonings." />
+<meta property="og:image" content="/opengraph.jpg" />
+<meta property="og:type" content="website" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=EB+Garamond:ital,wght@0,400;0,500;0,700;1,400&display=swap" />
+<style>
+  :root {
+    --bg-deep:     #0a0604;
+    --bg:          #14100a;
+    --panel:       #1c1610;
+    --panel-2:     #221a12;
+    --gold:        #c5a059;
+    --gold-bright: #f0d088;
+    --parchment:   #e8d8a8;
+    --ink:         #2a1810;
+    --ember:       #d4602a;
+    --blood:       #8a2020;
+    --moss:        #6e8a3a;
+    --chill:       #5a9ad8;
+    --bone:        #c8b890;
+    --shade:       rgba(0,0,0,0.55);
+    --rule:        rgba(197,160,89,0.25);
+    --rule-strong: rgba(197,160,89,0.55);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg-deep); color: var(--parchment); font-family: 'EB Garamond', Georgia, serif; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  a { color: var(--gold-bright); text-decoration: none; transition: color .15s; }
+  a:hover { color: var(--ember); }
+  h1, h2, h3, h4 { font-family: 'Cinzel', serif; color: var(--gold-bright); letter-spacing: .03em; margin: 0 0 .6rem; line-height: 1.15; }
+  h1 { font-size: clamp(2.4rem, 5vw, 4.5rem); font-weight: 900; }
+  h2 { font-size: clamp(1.8rem, 3vw, 2.6rem); font-weight: 700; }
+  h3 { font-size: 1.3rem; font-weight: 700; }
+  h4 { font-size: 1.05rem; font-weight: 500; color: var(--gold); text-transform: uppercase; letter-spacing: .15em; }
+  p { margin: 0 0 1rem; }
+  hr { border: 0; border-top: 1px solid var(--rule); margin: 2.5rem 0; }
+  .container { max-width: 1180px; margin: 0 auto; padding: 0 1.5rem; }
+
+  /* ── NAVBAR ──────────────────────────────────────── */
+  nav.site {
+    position: sticky; top: 0; z-index: 50;
+    background: linear-gradient(to bottom, rgba(10,6,4,0.96), rgba(10,6,4,0.85));
+    border-bottom: 1px solid var(--rule);
+    backdrop-filter: blur(8px);
+  }
+  nav.site .inner { display: flex; align-items: center; justify-content: space-between; padding: .85rem 1.5rem; max-width: 1180px; margin: 0 auto; gap: 1rem; }
+  nav.site .brand { display: flex; align-items: center; gap: .65rem; font-family: 'Cinzel', serif; font-weight: 700; font-size: 1.2rem; color: var(--gold-bright); }
+  nav.site .brand img { width: 32px; height: 32px; }
+  nav.site ul { list-style: none; display: flex; gap: 1.4rem; margin: 0; padding: 0; flex-wrap: wrap; }
+  nav.site ul a { color: var(--parchment); font-family: 'Cinzel', serif; font-size: .85rem; letter-spacing: .12em; text-transform: uppercase; }
+  nav.site ul a.active { color: var(--gold-bright); }
+  nav.site ul a:hover { color: var(--ember); }
+  nav.site .play {
+    background: linear-gradient(to bottom, var(--gold), #8a6a30);
+    color: var(--ink); font-family: 'Cinzel', serif; font-weight: 700;
+    padding: .55rem 1.1rem; border-radius: 2px; letter-spacing: .15em;
+    text-transform: uppercase; font-size: .8rem;
+    border: 1px solid var(--gold-bright);
+  }
+  nav.site .play:hover { background: linear-gradient(to bottom, var(--gold-bright), var(--gold)); color: var(--ink); }
+
+  /* ── HERO ────────────────────────────────────────── */
+  .hero {
+    position: relative;
+    min-height: 88vh;
+    display: flex; align-items: center; justify-content: center;
+    text-align: center;
+    background:
+      linear-gradient(to bottom, rgba(10,6,4,0.45) 0%, rgba(10,6,4,0.85) 65%, var(--bg-deep) 100%),
+      url('/grudges-bg-city.png') center/cover no-repeat;
+    border-bottom: 1px solid var(--rule);
+    padding: 4rem 1.5rem 5rem;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.6) 90%);
+    pointer-events: none;
+  }
+  .hero-inner { position: relative; max-width: 880px; }
+  .hero img.logo { width: clamp(180px, 22vw, 260px); height: auto; margin: 0 auto 1rem; display: block; filter: drop-shadow(0 8px 28px rgba(0,0,0,0.7)); }
+  .hero .tagline { font-family: 'Cinzel', serif; font-size: clamp(1.05rem, 1.6vw, 1.25rem); color: var(--gold); letter-spacing: .25em; text-transform: uppercase; margin: .25rem 0 1.6rem; }
+  .hero .blurb { font-size: clamp(1.05rem, 1.4vw, 1.2rem); color: var(--parchment); max-width: 640px; margin: 0 auto 2rem; opacity: .92; }
+  .hero .ctas { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+  .btn {
+    display: inline-block; padding: .85rem 1.8rem; border-radius: 2px;
+    font-family: 'Cinzel', serif; font-weight: 700; font-size: .95rem;
+    letter-spacing: .15em; text-transform: uppercase; transition: all .2s;
+    border: 1px solid var(--gold);
+  }
+  .btn-primary {
+    background: linear-gradient(to bottom, var(--gold), #8a6a30);
+    color: var(--ink);
+  }
+  .btn-primary:hover { background: linear-gradient(to bottom, var(--gold-bright), var(--gold)); transform: translateY(-1px); color: var(--ink); }
+  .btn-ghost {
+    background: rgba(20, 16, 10, 0.7);
+    color: var(--parchment); border: 1px solid var(--rule-strong);
+  }
+  .btn-ghost:hover { background: rgba(40, 32, 20, 0.9); border-color: var(--gold); color: var(--gold-bright); }
+
+  /* ── SECTIONS ────────────────────────────────────── */
+  section.band { padding: 4rem 0; border-bottom: 1px solid var(--rule); position: relative; }
+  section.band.dark { background: var(--bg); }
+  section.band.darker { background: var(--bg-deep); }
+  .eyebrow { font-family: 'Cinzel', serif; color: var(--ember); letter-spacing: .25em; text-transform: uppercase; font-size: .8rem; margin-bottom: .5rem; display: inline-block; }
+  .lead { font-size: 1.15rem; max-width: 720px; opacity: .92; }
+
+  /* Pillars grid */
+  .pillars { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.4rem; margin-top: 2rem; }
+  .pillar {
+    background: linear-gradient(to bottom, var(--panel), var(--panel-2));
+    border: 1px solid var(--rule); border-radius: 4px;
+    padding: 1.6rem 1.4rem; transition: border-color .15s, transform .15s;
+  }
+  .pillar:hover { border-color: var(--gold); transform: translateY(-2px); }
+  .pillar .icon-wrap {
+    width: 56px; height: 56px; margin-bottom: 1rem;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(197,160,89,0.08); border: 1px solid var(--rule-strong); border-radius: 50%;
+  }
+  .pillar .icon-wrap img { width: 38px; height: 38px; image-rendering: pixelated; }
+  .pillar h3 { color: var(--gold-bright); margin-bottom: .4rem; }
+  .pillar p { font-size: .98rem; opacity: .88; margin: 0; }
+
+  /* Split (image / text) */
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; align-items: center; }
+  .split.reverse { grid-template-columns: 1fr 1fr; }
+  .split.reverse .split-text { order: 2; }
+  .split.reverse .split-img { order: 1; }
+  .split-img {
+    border: 1px solid var(--rule-strong); border-radius: 4px; overflow: hidden;
+    box-shadow: 0 12px 36px rgba(0,0,0,0.5);
+  }
+  .split-img img { width: 100%; height: auto; display: block; }
+  @media (max-width: 800px) {
+    .split, .split.reverse { grid-template-columns: 1fr; }
+    .split.reverse .split-text, .split.reverse .split-img { order: 0; }
+  }
+
+  /* Faction strip */
+  .faction-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 2rem; }
+  .faction-card {
+    background: var(--panel); border: 1px solid var(--rule);
+    border-top: 3px solid var(--gold);
+    padding: 1.2rem 1rem; border-radius: 0 0 4px 4px;
+    text-align: center; transition: border-color .15s, transform .15s;
+  }
+  .faction-card:hover { transform: translateY(-2px); border-color: var(--gold); }
+  .faction-card.keepers   { border-top-color: var(--moss); }
+  .faction-card.scavs     { border-top-color: var(--ember); }
+  .faction-card.hollow    { border-top-color: var(--blood); }
+  .faction-card.network   { border-top-color: var(--chill); }
+  .faction-card.forgotten { border-top-color: var(--bone); }
+  .faction-card .crest {
+    width: 56px; height: 56px; margin: 0 auto .8rem;
+    background: rgba(0,0,0,0.4); border: 1px solid var(--rule-strong); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .faction-card .crest img { width: 38px; height: 38px; image-rendering: pixelated; }
+  .faction-card h4 { font-family: 'Cinzel', serif; color: var(--gold-bright); font-size: .95rem; margin: 0 0 .4rem; letter-spacing: .08em; }
+  .faction-card p { font-size: .9rem; opacity: .85; margin: 0; }
+
+  /* Footer */
+  footer.site {
+    background: var(--bg-deep);
+    padding: 3rem 0 2rem; text-align: center; color: rgba(232,216,168,0.55);
+    font-size: .9rem; border-top: 1px solid var(--rule);
+  }
+  footer.site .brand-row { display: flex; align-items: center; justify-content: center; gap: .8rem; margin-bottom: 1rem; }
+  footer.site .brand-row img { width: 36px; height: 36px; }
+  footer.site .brand-row span { font-family: 'Cinzel', serif; font-weight: 700; color: var(--gold); letter-spacing: .15em; }
+  footer.site .links { margin: 1rem 0; }
+  footer.site .links a { color: var(--parchment); margin: 0 .8rem; font-family: 'Cinzel', serif; font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; }
+
+  /* Quotes / blockquotes */
+  blockquote {
+    border-left: 3px solid var(--gold); padding: .25rem 0 .25rem 1rem;
+    margin: 1.4rem 0; font-style: italic; color: var(--parchment); opacity: .9;
+  }
+  blockquote cite { display: block; margin-top: .4rem; font-style: normal; color: var(--gold); font-size: .85rem; letter-spacing: .1em; }
+
+  .center { text-align: center; }
+  .mt-2 { margin-top: 2rem; }
+  .mt-3 { margin-top: 3rem; }
+</style>
+</head>
+<body>
+
+<nav class="site">
+  <div class="inner">
+    <a href="/gameplay.html" class="brand"><img src="/grudges-logo.png" alt="" /> GRUDGES</a>
+    <ul>
+      <li><a href="/gameplay.html" class="active">Home</a></li>
+      <li><a href="/info.html">Gameplay</a></li>
+      <li><a href="/lore.html">Lore &amp; Factions</a></li>
+    </ul>
+    <a href="/" class="play">▶ Play Now</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-inner">
+    <img src="/grudges-logo.png" alt="Grudges" class="logo" />
+    <p class="tagline">Bind a grudge. Bear it forward.</p>
+    <p class="blurb">
+      A sci-fi survival ARPG of camps, factions, and reckonings.
+      Earth is poisoned. The colonies above watch and do nothing.
+      What you build, you defend. What you swore, you keep.
+    </p>
+    <div class="ctas">
+      <a href="/" class="btn btn-primary">▶ Enter the Surface</a>
+      <a href="/info.html" class="btn btn-ghost">How It Plays</a>
+    </div>
+  </div>
+</section>
+
+<section class="band">
+  <div class="container">
+    <span class="eyebrow">A Survivor's Game</span>
+    <h2>You don't conquer the wasteland. You hold a corner of it.</h2>
+    <p class="lead">
+      You're a survivor. So is everyone you meet. Recruit them, pledge to a faction, found a guild, and grow your camp from a fire-pit into a town.
+      Five allies makes you a Tribe. Ten makes you a Village. Twenty makes you a Town — and a target.
+    </p>
+    <div class="pillars">
+      <div class="pillar">
+        <div class="icon-wrap"><img src="/icons/perks/warrior/29.png" alt="" /></div>
+        <h3>Action Combat</h3>
+        <p>Pistols, rifles, blades, hammers, theft. Five weapon paths in the Combat tree, each with its own master capstone and signature item that grants +25% XP when wielded.</p>
+      </div>
+      <div class="pillar">
+        <div class="icon-wrap"><img src="/icons/perks/maker/14.png" alt="" /></div>
+        <h3>Survival Crafting</h3>
+        <p>Seven professions, 35 branches. Forestry. Mining. Cooking. Bladesmithing. Alchemy. Tinkering. Every road to mastery costs the same — every road matters.</p>
+      </div>
+      <div class="pillar">
+        <div class="icon-wrap"><img src="/icons/perks/smarts/13.png" alt="" /></div>
+        <h3>Modular Camp</h3>
+        <p>Snap walls, doors, stairs, and roofs into your own keep. Place workbenches, palisades, watchtowers, and turrets. Defend it from raids.</p>
+      </div>
+      <div class="pillar">
+        <div class="icon-wrap"><img src="/icons/perks/hero/28.png" alt="" /></div>
+        <h3>Living NPCs</h3>
+        <p>Every NPC — your hires, wandering survivors, faction raiders — runs the same stats, perks, and XP system you do. They harvest, craft, and level up on their own. Friend or foe.</p>
+      </div>
+      <div class="pillar">
+        <div class="icon-wrap"><img src="/icons/perks/warrior/34.png" alt="" /></div>
+        <h3>Faction Warfare</h3>
+        <p>Five factions claw for the surface. Pledge to one and earn its gear, contracts, and territory bonuses — at the cost of every other crown.</p>
+      </div>
+      <div class="pillar">
+        <div class="icon-wrap"><img src="/icons/perks/hero/30.png" alt="" /></div>
+        <h3>Build a Network</h3>
+        <p>Trade caravans. Embassies. Diplomatic envoys. The surface has no government — only the people you choose to call allies.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band dark">
+  <div class="container">
+    <div class="split">
+      <div class="split-text">
+        <span class="eyebrow">The World</span>
+        <h2>The Way left. We didn't.</h2>
+        <p>
+          A century ago, the colonial mining consortium known as <strong>The Way</strong> stripped Earth of everything that could be lifted to orbit.
+          When the last shaft collapsed, they sealed the elevators behind them. The colonies kept the satellites, the medicine, the clean water.
+        </p>
+        <p>
+          Down here, the wells are radioactive. The trees grow strange. The Hollow Lords own the deep mines — what's left of them.
+          The Tech-Scavengers own the wreckage. The Keepers own the rituals. The Network owns the wires. The Forgotten own the silence.
+        </p>
+        <p>
+          You own a grudge. That's enough to start.
+        </p>
+        <a href="/lore.html" class="btn btn-ghost mt-2">Read the Lore →</a>
+      </div>
+      <div class="split-img">
+        <img src="/grudges-bg-city.png" alt="The ruined city under colonial sky" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band">
+  <div class="container">
+    <div class="split reverse">
+      <div class="split-text">
+        <span class="eyebrow">Build &amp; Defend</span>
+        <h2>A camp is a promise. A turret is the proof.</h2>
+        <p>
+          Snap together modular walls, gates, balconies, and roofs to raise the keep that anchors your survivors. Place workbenches, beds, banners, and chests.
+          Then ring it: palisades and an iron gate first, watchtowers manned by Sentries, auto-turrets backed by hired Gunners, and finally a Fortress Keep led by your own Captain.
+        </p>
+        <p>
+          Every building can take damage. Every wall can fall. Every NPC you hire eats food and draws upkeep.
+          Defend well, or watch your stockpiles vanish in a Hollow Lord raid.
+        </p>
+        <a href="/info.html#camp" class="btn btn-ghost">Camp &amp; Defense Details →</a>
+      </div>
+      <div class="split-img">
+        <img src="/grudges-bg-banner.png" alt="A surface settlement at dusk" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band darker">
+  <div class="container">
+    <span class="eyebrow">The Five Banners</span>
+    <h2>Choose one. The rest become enemies.</h2>
+    <p class="lead">
+      The surface answers to no single power. Five factions hold the ruins between them. Pledge yourself to one to unlock its territory, gear, and contracts — and to set the other four against you.
+    </p>
+    <div class="faction-strip">
+      <a href="/lore.html#keepers" class="faction-card keepers">
+        <div class="crest"><img src="/icons/perks/maker/14.png" alt="" /></div>
+        <h4>Keepers of the Old Faith</h4>
+        <p>Earth is alive. The Way was a parasite. Heal the land.</p>
+      </a>
+      <a href="/lore.html#scavengers" class="faction-card scavs">
+        <div class="crest"><img src="/icons/perks/smarts/3.png" alt="" /></div>
+        <h4>The Tech-Scavengers</h4>
+        <p>Nomads, mechanics, hackers. The ruins are a market.</p>
+      </a>
+      <a href="/lore.html#hollow" class="faction-card hollow">
+        <div class="crest"><img src="/icons/perks/warrior/34.png" alt="" /></div>
+        <h4>The Hollow Lords</h4>
+        <p>They own the mines. Shelter is the only currency.</p>
+      </a>
+      <a href="/lore.html#network" class="faction-card network">
+        <div class="crest"><img src="/icons/perks/hero/30.png" alt="" /></div>
+        <h4>The Network</h4>
+        <p>A loose coalition wired through old fiber. The closest thing to law.</p>
+      </a>
+      <a href="/lore.html#forgotten" class="faction-card forgotten">
+        <div class="crest"><img src="/icons/perks/hero/33.png" alt="" /></div>
+        <h4>The Forgotten</h4>
+        <p>Pre-industrial subsistence. Their gods do not answer to ours.</p>
+      </a>
+    </div>
+    <div class="center mt-3">
+      <a href="/lore.html" class="btn btn-primary">Choose a Faction →</a>
+    </div>
+  </div>
+</section>
+
+<section class="band">
+  <div class="container center">
+    <span class="eyebrow">A Game About Keeping Your Word</span>
+    <h2>Bind a grudge. Bear it forward.</h2>
+    <p class="lead" style="margin-left: auto; margin-right: auto;">
+      Every NPC remembers. Every faction keeps a ledger. Every wall you raise will be tested.
+      The surface is small enough that nothing is forgotten.
+    </p>
+    <blockquote style="max-width: 600px; margin: 2rem auto;">
+      "We don't make oaths anymore. We make grudges. They keep better."
+      <cite>— Old Network proverb</cite>
+    </blockquote>
+    <a href="/" class="btn btn-primary mt-2">▶ Enter the Surface</a>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="container">
+    <div class="brand-row">
+      <img src="/grudges-logo.png" alt="" />
+      <span>GRUDGES</span>
+    </div>
+    <div class="links">
+      <a href="/gameplay.html">Home</a>
+      <a href="/info.html">Gameplay</a>
+      <a href="/lore.html">Lore &amp; Factions</a>
+      <a href="/">Play</a>
+    </div>
+    <p>A single-player sci-fi survival ARPG. Bind a grudge. Bear it forward.</p>
+  </div>
+</footer>
+
+</body>
+</html>

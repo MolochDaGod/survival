@@ -1,0 +1,46 @@
+Class,Variant,Name,Path,Source Pack,Notes
+melee-sword,Sword,Sword,public/models/weapons/medieval/FBX/Sword.fbx,Quaternius Medieval,Standard one-hander.
+melee-sword,Sword,Sword_2,public/models/weapons/medieval/FBX/Sword_2.fbx,Quaternius Medieval,Variant.
+melee-sword,Sword,Sword_Big,public/models/weapons/medieval/FBX/Sword_Big.fbx,Quaternius Medieval,Two-handed.
+melee-sword,Sword,Sword_Golden,public/models/weapons/medieval/FBX/Sword_Golden.fbx,Quaternius Medieval,Rare/quest tier.
+melee-sword,Claymore,Claymore,public/models/weapons/medieval/FBX/Claymore.fbx,Quaternius Medieval,Two-hand greatsword.
+melee-axe,Axe,Axe,public/models/weapons/medieval/FBX/Axe.fbx,Quaternius Medieval,Standard battle-axe + harvest tool.
+melee-axe,Axe,Axe_Double,public/models/weapons/medieval/FBX/Axe_Double.fbx,Quaternius Medieval,Two-handed.
+melee-axe,Axe,Axe_Small,public/models/weapons/medieval/FBX/Axe_Small.fbx,Quaternius Medieval,Hatchet — chop trees.
+melee-hammer,Hammer,Hammer_Double,public/models/weapons/medieval/FBX/Hammer_Double.fbx,Quaternius Medieval,Two-handed warhammer.
+melee-hammer,Hammer,Hammer_Small,public/models/weapons/medieval/FBX/Hammer_Small.fbx,Quaternius Medieval,One-hand mallet.
+melee-dagger,Dagger,Dagger,public/models/weapons/medieval/FBX/Dagger.fbx,Quaternius Medieval,Skinning candidate.
+melee-dagger,Dagger,Dagger_2,public/models/weapons/medieval/FBX/Dagger_2.fbx,Quaternius Medieval,Variant.
+melee-spear,Spear,Spear,public/models/weapons/medieval/FBX/Spear.fbx,Quaternius Medieval,Two-hand reach weapon.
+melee-scythe,Scythe,Scythe,public/models/weapons/medieval/FBX/Scythe.fbx,Quaternius Medieval,Doubles as wheat/grass harvest.
+melee-knife,Knife (animated),knife,public/models/weapons/animated/knife/,Animated set,Pre-animated FPV knife. Has BaseColor/Normal in textures/.
+ranged-bow,Bow,Bow_Wooden,public/models/weapons/medieval/FBX/Bow_Wooden.fbx,Quaternius Medieval,Standard.
+ranged-bow,Bow,Bow_Wooden2,public/models/weapons/medieval/FBX/Bow_Wooden2.fbx,Quaternius Medieval,Variant.
+ranged-bow,Bow,Bow_Golden,public/models/weapons/medieval/FBX/Bow_Golden.fbx,Quaternius Medieval,Rare/quest tier.
+ranged-bow,Bow,Bow_Evil,public/models/weapons/medieval/FBX/Bow_Evil.fbx,Quaternius Medieval,Dark/cursed variant.
+ranged-bow,Arrow,Arrow,public/models/weapons/medieval/FBX/Arrow.fbx,Quaternius Medieval,Projectile mesh — load once and clone.
+shield,Shield,Shield_Round,public/models/weapons/medieval/FBX/Shield_Round.fbx,Quaternius Medieval,Buckler.
+shield,Shield,Shield_Round_2,public/models/weapons/medieval/FBX/Shield_Round_2.fbx,Quaternius Medieval,Variant.
+shield,Shield,Shield_Heater,public/models/weapons/medieval/FBX/Shield_Heater.fbx,Quaternius Medieval,Standard kite.
+shield,Shield,Shield_Heater_2,public/models/weapons/medieval/FBX/Shield_Heater_2.fbx,Quaternius Medieval,Variant.
+shield,Shield,Shield_Celtic_Golden,public/models/weapons/medieval/FBX/Shield_Celtic_Golden.fbx,Quaternius Medieval,Rare/quest tier.
+firearm-pistol,Pistol_1..6,Pistol_{1..6},public/models/weapons/ultimate_gun_pack/FBX/Pistol_{1..6}.fbx,Ultimate Gun Pack,6 modern pistol variants. Also OBJ + Blends.
+firearm-pistol,Revolver_1..5,Revolver_{1..5},public/models/weapons/ultimate_gun_pack/FBX/Revolver_{1..5}.fbx,Ultimate Gun Pack,5 revolvers.
+firearm-pistol,Pistol (animated),pistol,public/models/weapons/animated/pistol/,Animated set,Pre-animated FPV pistol with textures.
+firearm-pistol,Gun_Pistol (sci-fi),Gun_Pistol,public/models/scifi/essentials_kit/FBX/Gun_Pistol.fbx,Sci-Fi Essentials,Sci-fi sidearm; glTF/OBJ/Unity-FBX siblings.
+firearm-pistol,Gun_Revolver (sci-fi),Gun_Revolver,public/models/scifi/essentials_kit/FBX/Gun_Revolver.fbx,Sci-Fi Essentials,Sci-fi revolver.
+firearm-rifle,AssaultRifle_1..5,AssaultRifle_{1..5},public/models/weapons/ultimate_gun_pack/FBX/AssaultRifle_{1..5}.fbx,Ultimate Gun Pack,5 assault-rifle variants.
+firearm-rifle,AssaultRifle2_1..4,AssaultRifle2_{1..4},public/models/weapons/ultimate_gun_pack/FBX/AssaultRifle2_{1..4}.fbx,Ultimate Gun Pack,4 alt-style assault rifles.
+firearm-rifle,Bullpup_1..3,Bullpup_{1..3},public/models/weapons/ultimate_gun_pack/FBX/Bullpup_{1..3}.fbx,Ultimate Gun Pack,3 bullpup rifles.
+firearm-rifle,Rifle (animated),rifle,public/models/weapons/animated/rifle/,Animated set,Pre-animated FPV rifle with textures.
+firearm-rifle,Gun_Rifle (sci-fi),Gun_Rifle,public/models/scifi/essentials_kit/FBX/Gun_Rifle.fbx,Sci-Fi Essentials,Sci-fi rifle.
+firearm-shotgun,Shotgun_1..4 / SawedOff / ShortStock,Shotgun_*,public/models/weapons/ultimate_gun_pack/FBX/Shotgun_*.fbx,Ultimate Gun Pack,6 shotguns incl. sawed-off + short-stock.
+firearm-smg,SubmachineGun_1..5,SubmachineGun_{1..5},public/models/weapons/ultimate_gun_pack/FBX/SubmachineGun_{1..5}.fbx,Ultimate Gun Pack,5 SMG variants.
+firearm-smg,Gun_SMG_Ammo (sci-fi),Gun_SMG_Ammo,public/models/scifi/essentials_kit/FBX/Gun_SMG_Ammo.fbx,Sci-Fi Essentials,Sci-fi SMG with ammo mesh.
+firearm-sniper,SniperRifle_1..6,SniperRifle_{1..6},public/models/weapons/ultimate_gun_pack/FBX/SniperRifle_{1..6}.fbx,Ultimate Gun Pack,6 sniper rifles.
+firearm-sniper,Gun_Sniper / Gun_Sniper_Ammo (sci-fi),Gun_Sniper*,public/models/scifi/essentials_kit/FBX/Gun_Sniper*.fbx,Sci-Fi Essentials,Sci-fi sniper + magazined variant.
+attachment,Bayonet / Bayonet_2,Bayonet*,public/models/weapons/ultimate_gun_pack/FBX/Accessories/Bayonet*.fbx,Ultimate Gun Pack,Mounts under barrel.
+attachment,Bipod / Tripod / Stock / Grip,(various),public/models/weapons/ultimate_gun_pack/FBX/Accessories/{Bipod,Tripod,Stock,Grip}.fbx,Ultimate Gun Pack,Stability/ergonomics mounts.
+attachment,Scope_1..3,Scope_{1..3},public/models/weapons/ultimate_gun_pack/FBX/Accessories/Scope_{1..3}.fbx,Ultimate Gun Pack,Optics — 3 variants.
+attachment,Silencer_1..3 / long / Short,Silencer_*,public/models/weapons/ultimate_gun_pack/FBX/Accessories/Silencer_*.fbx,Ultimate Gun Pack,Suppressors — 5 variants.
+attachment,Flashlight,Flashlight,public/models/weapons/ultimate_gun_pack/FBX/Accessories/Flashlight.fbx,Ultimate Gun Pack,Light mount.

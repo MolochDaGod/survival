@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80">
+  <defs>
+    <radialGradient id="bgent1" cx="50%" cy="45%" r="60%">
+      <stop offset="0%" stop-color="#f44336" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#261010" stop-opacity="1"/>
+    </radialGradient>
+    <radialGradient id="glowent1" cx="50%" cy="45%" r="40%">
+      <stop offset="0%" stop-color="#ef9a9a" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#ef9a9a" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="blurent1">
+      <feGaussianBlur stdDeviation="2.5"/>
+    </filter>
+  </defs>
+  <rect width="80" height="80" rx="6" fill="url(#bgent1)"/>
+  <rect width="80" height="80" rx="6" fill="url(#glowent1)"/>
+  <rect width="80" height="80" rx="6" fill="none" stroke="#f44336" stroke-width="0.8" opacity="0.29"/>
+  
+    <line x1="4" y1="4" x2="12" y2="4" stroke="#f44336" stroke-width="1.5" opacity="0.58"/>
+    <line x1="4" y1="4" x2="4" y2="12" stroke="#f44336" stroke-width="1.5" opacity="0.58"/>
+    <line x1="76" y1="4" x2="68" y2="4" stroke="#f44336" stroke-width="1.5" opacity="0.58"/>
+    <line x1="76" y1="4" x2="76" y2="12" stroke="#f44336" stroke-width="1.5" opacity="0.58"/>
+    <line x1="4" y1="76" x2="12" y2="76" stroke="#f44336" stroke-width="1.5" opacity="0.58"/>
+    <line x1="4" y1="76" x2="4" y2="68" stroke="#f44336" stroke-width="1.5" opacity="0.58"/>
+    <line x1="76" y1="76" x2="68" y2="76" stroke="#f44336" stroke-width="1.5" opacity="0.58"/>
+    <line x1="76" y1="76" x2="76" y2="68" stroke="#f44336" stroke-width="1.5" opacity="0.58"/>
+  
+  
+    <path d="M30 50 L24 42 L28 30 L38 22 L50 24 L56 34 L52 50Z" fill="#f44336" opacity="0.5" stroke="#f44336" stroke-width="1.5"/>
+    <path d="M32 48 L26 40 L30 30 L38 24 L48 26 L54 36 L50 48Z" fill="#f44336" opacity="0.2"/>
+    <line x1="38" y1="22" x2="36" y2="32" stroke="#ef9a9a" stroke-width="1.2" opacity="0.5"/>
+    <line x1="50" y1="24" x2="46" y2="34" stroke="#ef9a9a" stroke-width="1.2" opacity="0.4"/>
+    <line x1="56" y1="34" x2="50" y2="40" stroke="#ef9a9a" stroke-width="1.2" opacity="0.4"/>
+  
+  <circle cx="36" cy="71" r="1.6" fill="#f44336" opacity="0.5"/><circle cx="44" cy="71" r="2.2" fill="#ef9a9a" opacity="1"/>
+</svg>

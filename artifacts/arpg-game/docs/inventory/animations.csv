@@ -1,0 +1,60 @@
+Clip Name,File Path,In-Game Name,Category,Loop Mode,Duration (s),Trigger Type,Hotkey / Event,Wired,Source,Notes
+Idle,public/models/animations/idle.glb,Idle,locomotion,loop,—,state,no movement keys held,yes,Mixamo,Authoritative skeleton — first file loaded; provides the SkinnedMesh used for every other clip.
+Walk,public/models/animations/walking.glb,Walk,locomotion,loop,—,input,W/A/S/D held — weight rises as velocity reaches walk band,yes,Mixamo,Forward locomotion. Crossfaded by velocity magnitude in LocomotionAnimator.
+Run,public/models/animations/run.glb,Run,locomotion,loop,—,input,W/A/S/D held with full move speed (no held sprint key — driven by moveSpeed/equipment),yes,Mixamo,Crossfaded above Walk by velocity magnitude. Reduced to 50% by isBlocking; +30% by berserker.
+Jump,public/models/animations/jump.glb,Jump,traversal,once,~0.6,hotkey,Space (KEYBINDS.JUMP) — only when isGrounded,yes,Mixamo,PlayerController.jump() → playAnimation('Jump').
+StrafeLeft,public/models/animations/left_strafe.glb,StrafeLeft,locomotion,loop,—,input,A held with forward motion at run speed,yes,Mixamo,Sprint-speed left strafe.
+StrafeRight,public/models/animations/right_strafe.glb,StrafeRight,locomotion,loop,—,input,D held with forward motion at run speed,yes,Mixamo,Sprint-speed right strafe.
+StrafeLeftWalk,public/models/animations/left_strafe_walk.glb,StrafeLeftWalk,locomotion,loop,—,input,A held with forward motion at walk speed,yes,Mixamo,Walk-speed left strafe.
+StrafeRightWalk,public/models/animations/right_strafe_walk.glb,StrafeRightWalk,locomotion,loop,—,input,D held with forward motion at walk speed,yes,Mixamo,Walk-speed right strafe.
+TurnLeft,public/models/animations/left_turn.glb,TurnLeft,locomotion,once,—,state,in-place yaw delta exceeds threshold (mouse-look / camera turn while stationary),yes,Mixamo,90° left turn.
+TurnRight,public/models/animations/right_turn.glb,TurnRight,locomotion,once,—,state,in-place yaw delta exceeds threshold (mouse-look / camera turn while stationary),yes,Mixamo,90° right turn.
+Attack,(resolved per weapon — see PRIMARY_ATTACK_CLIP),Attack,combat,once,~0.45,mouse,Left Mouse Button (button 0) while pointer-locked,yes,Mixamo / Quaternius,PlayerController.startAttack() → playAnimation('Attack'). Step 0/1/2 cycles through combo within 1.2s.
+Block,(resolved per weapon — see BLOCK_CLIP),Block,combat,once,~0.40,unbound,startBlock() callable but no key listener wired (legacy comment mentions B key),no,Mixamo / Quaternius,PlayerController.startBlock(); not bound — call site needs hotkey.
+DodgeBackward,public/models/animations/mixamo/dodge_backward.glb,—,traversal,once,—,unbound,never wired to dodge system,no,Mixamo,Available; ROLL (LeftShift) currently uses code-driven motion without this clip.
+UAL1_Standard,public/models/animations/UAL1_Standard.glb,(multi-clip),—,—,—,—,clips merged into mixer at load (see Quaternius rows below),registered,Universal Animation Library,Multi-clip GLB; individual clips listed below.
+UAL2_Standard,public/models/animations/UAL2_Standard.glb,(multi-clip),—,—,—,—,clips merged into mixer at load (see Quaternius rows below),registered,Universal Animation Library,Multi-clip GLB; individual clips listed below.
+UAL1_Standard (universal/),public/models/animations/universal/UAL1_Standard.glb,(duplicate),—,—,—,—,—,no,Universal Animation Library,Duplicate of top-level UAL1 — redundant; safe to remove.
+UAL2_Standard (universal/),public/models/animations/universal/UAL2_Standard.glb,(duplicate),—,—,—,—,—,no,Universal Animation Library,Duplicate of top-level UAL2 — redundant; safe to remove.
+WALK_CARRY,UAL?_Standard.glb,walk_carry,locomotion,loop,1.20,state,carrying flag set on LocomotionAnimator,registered,Universal Animation Library,Replaces Walk while hands are full; flag not yet driven by inventory.
+IDLE_FOLD ARMS,UAL?_Standard.glb,idle_arms_folded,idle_variant,loop,2.00,—,not bound to any input,registered,Universal Animation Library,Downtime / out-of-combat idle variant.
+IDLE_LANTERN,UAL?_Standard.glb,idle_lantern,idle_variant,loop,2.00,equipment,auto when lantern equipped (weaponTypes: lantern),registered,Universal Animation Library,Equipment-driven idle.
+IDLE_NO,UAL?_Standard.glb,idle_no,idle_variant,once,1.10,event,dialogue / NPC interaction (no input binding),registered,Universal Animation Library,Head-shake "no".
+IDLE_RAIL CALL,UAL?_Standard.glb,idle_rail_call,idle_variant,loop,2.00,—,not bound,registered,Universal Animation Library,Hailing while on railing.
+IDLE_RAIL,UAL?_Standard.glb,idle_rail,idle_variant,loop,2.00,—,not bound,registered,Universal Animation Library,Leaning on rail.
+IDLE_TALKING PHONE,UAL?_Standard.glb,idle_phone,idle_variant,loop,2.00,—,NPC flavor only,registered,Universal Animation Library,Talking on phone.
+YES,UAL?_Standard.glb,idle_yes,idle_variant,once,1.00,event,dialogue accept (no input binding),registered,Universal Animation Library,Nodding "yes".
+LAYTOIDLE,UAL?_Standard.glb,lay_to_idle,idle_variant,once,1.20,state,recovery from knockdown (after KNOCKBACK),registered,Universal Animation Library,Get-up transition.
+IDLE_SHIELD,UAL?_Standard.glb,idle_shield,combat_shield,loop,1.50,state,active block stance with shield equipped,registered,Universal Animation Library,Used by BLOCK_CLIP for shield/sword_shield.
+IDLE_SHIELD BREAK,UAL?_Standard.glb,shield_break,combat_shield,once,0.60,event,guard-broken event from incoming damage,registered,Universal Animation Library,Shield shatter reaction.
+MELEE_HOOK,UAL?_Standard.glb,unarmed_hook,combat_unarmed,once,0.50,mouse,Left Mouse Button while unarmed/fists/gloves equipped (PRIMARY_ATTACK_CLIP),registered,Universal Animation Library,Recovery: MELEE_HOOK_REC.
+MELEE_HOOK_REC,UAL?_Standard.glb,unarmed_hook_recovery,combat_unarmed,once,0.30,state,auto after MELEE_HOOK ends,registered,Universal Animation Library,Recovery clip.
+KNOCKBACK,UAL?_Standard.glb,hit_knockback,combat_unarmed,once,0.40,event,player takes damage (any weapon type),registered,Universal Animation Library,Recovery: KNOCKBACK_RM.
+KNOCKBACK_RM,UAL?_Standard.glb,hit_knockback_recovery,combat_unarmed,once,0.28,state,auto after KNOCKBACK ends,registered,Universal Animation Library,Recovery clip.
+SWORD_REGULAR_A,UAL?_Standard.glb,sword_attack_a,combat_sword,once,0.58,mouse,Left Mouse Button (combo step 0) with sword/dagger/knife/sword_shield,registered,Universal Animation Library,Recovery: SWORD_REGULAR_A_REC. Combo window 600ms.
+SWORD_REGULAR_A_REC,UAL?_Standard.glb,sword_attack_a_recovery,combat_sword,once,0.28,state,auto after SWORD_REGULAR_A,registered,Universal Animation Library,Recovery clip.
+SWORD_REGULAR_B,UAL?_Standard.glb,sword_attack_b,combat_sword,once,0.55,mouse,Left Mouse Button (combo step 1) within 600ms of step A,registered,Universal Animation Library,Recovery: SWORD_REGULAR_B_REC. Combo window 650ms.
+SWORD_REGULAR_B_REC,UAL?_Standard.glb,sword_attack_b_recovery,combat_sword,once,0.28,state,auto after SWORD_REGULAR_B,registered,Universal Animation Library,Recovery clip.
+SWORD_REGULAR_C,UAL?_Standard.glb,sword_attack_c,combat_sword,once,0.60,mouse,Left Mouse Button (combo step 2) within 650ms of step B,registered,Universal Animation Library,Combo window 700ms before finisher.
+SWORD_REGULAR_COMBO,UAL?_Standard.glb,sword_combo_finisher,combat_sword,once,1.00,mouse,Left Mouse Button (combo step 3) within 700ms of step C — finisher,registered,Universal Animation Library,Big finisher hit.
+SWORD_BLOCK,UAL?_Standard.glb,sword_block,combat_sword,once,0.50,unbound,startBlock() with sword/sword_shield/dagger — no key listener,registered,Universal Animation Library,BLOCK_CLIP target.
+SWORD_DASH,UAL?_Standard.glb,sword_dash_attack,combat_sword,once,0.55,—,sprint + LMB (not yet wired),registered,Universal Animation Library,Lunging dash attack.
+SHIELD_DASH,UAL?_Standard.glb,shield_dash,combat_shield,once,0.55,—,sprint + LMB with shield (not yet wired),registered,Universal Animation Library,Shield bash dash.
+SHIELD_ONESHOT,UAL?_Standard.glb,shield_bash,combat_shield,once,0.60,mouse,Left Mouse Button with shield equipped (PRIMARY_ATTACK_CLIP),registered,Universal Animation Library,Stagger attack.
+OVERHAND THROW,UAL?_Standard.glb,throw_overhand,combat_throw,once,0.70,mouse,Left Mouse Button with throwable/javelin/grenade equipped,registered,Universal Animation Library,Overhand throw.
+CLIMBUP 1M,UAL?_Standard.glb,climbup_1m,traversal,once,1.20,event,vault/mantle on short obstacle (INTERACT_CLIP['climbup']),registered,Universal Animation Library,1m ledge climb.
+NINJAJUMP_START,UAL?_Standard.glb,wall_jump_start,traversal,once,0.32,—,wall-run kickoff (not yet wired),registered,Universal Animation Library,Wall jump start.
+NINJAJUMP_IDLE,UAL?_Standard.glb,wall_hang_idle,traversal,loop,1.00,—,wall hang state (not yet wired),registered,Universal Animation Library,Mid-air wall contact hover.
+NINJAJUMP_LAND,UAL?_Standard.glb,wall_jump_land,traversal,once,0.45,—,wall jump / high fall landing (not yet wired),registered,Universal Animation Library,High-fall landing.
+SLIDE_START,UAL?_Standard.glb,slide_start,traversal,once,0.30,combo,Sprint (Run speed) + Crouch — SLIDE_TRANSITIONS.enter,wired,Universal Animation Library,LocomotionAnimator.playOneShot consumed.
+SLIDE_LOOP,UAL?_Standard.glb,slide_loop,traversal,loop,0.80,state,sustained slide — SLIDE_TRANSITIONS.loop,wired,Universal Animation Library,Plays until speed drops or slide ends.
+SLIDE_EXIT,UAL?_Standard.glb,slide_exit,traversal,once,0.38,state,slide ends — SLIDE_TRANSITIONS.exit,wired,Universal Animation Library,Back to idle/walk.
+CONSUME,UAL?_Standard.glb,consume,survival,once,1.80,event,inventory "use" on consumable (INTERACT_CLIP['consumable']),registered,Universal Animation Library,Eat / drink.
+HARVEST,UAL?_Standard.glb,harvest,survival,once,1.50,hotkey,E (KEYBINDS.INTERACT) on plant_node (INTERACT_CLIP['plant_node']),registered,Universal Animation Library,Berry / hide harvesting.
+PLANT SEED,UAL?_Standard.glb,plant_seed,survival,once,2.00,hotkey,E on soil_plot (INTERACT_CLIP['soil_plot']),registered,Universal Animation Library,Farming / base-building.
+WATERING,UAL?_Standard.glb,watering,survival,once,1.80,hotkey,E on crop with watering can (INTERACT_CLIP['crop_watering']),registered,Universal Animation Library,Crop watering.
+TREECHOPPING,UAL?_Standard.glb,chop_tree,survival,once,1.30,mouse,Left Mouse Button on tree with axe/hatchet (PRIMARY_ATTACK_CLIP + INTERACT_CLIP['tree']),registered,Universal Animation Library,Wood harvesting.
+CHEST OPEN,UAL?_Standard.glb,open_chest,interaction,once,1.50,hotkey,E (KEYBINDS.INTERACT) on chest (INTERACT_CLIP['chest']),registered,Universal Animation Library,Container loot.
+ZOMBIE_IDLE,UAL?_Standard.glb,enemy_zombie_idle,enemy,loop,2.00,state,EnemyManager state === 'idle' on undead,registered,Universal Animation Library,Used by EnemyManager crossFadeTo path.
+ZOMBIE_SCRATCH,UAL?_Standard.glb,enemy_zombie_attack,enemy,once,0.90,state,EnemyManager state === 'attack' on undead (attack timer),registered,Universal Animation Library,Melee swipe.
+ZOMBIE_WALK_FWD,UAL?_Standard.glb,enemy_zombie_walk,enemy,loop,1.20,state,EnemyManager state === 'chase' on undead,registered,Universal Animation Library,Shuffling locomotion.

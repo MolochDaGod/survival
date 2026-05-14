@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80">
+  <defs>
+    <radialGradient id="bgneu6" cx="50%" cy="45%" r="60%">
+      <stop offset="0%" stop-color="#00bcd4" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#0d2126" stop-opacity="1"/>
+    </radialGradient>
+    <radialGradient id="glowneu6" cx="50%" cy="45%" r="40%">
+      <stop offset="0%" stop-color="#4dd0e1" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#4dd0e1" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="blurneu6">
+      <feGaussianBlur stdDeviation="2.5"/>
+    </filter>
+  </defs>
+  <rect width="80" height="80" rx="6" fill="url(#bgneu6)"/>
+  <rect width="80" height="80" rx="6" fill="url(#glowneu6)"/>
+  <rect width="80" height="80" rx="6" fill="none" stroke="#00bcd4" stroke-width="0.8" opacity="0.49"/>
+  
+    <line x1="4" y1="4" x2="12" y2="4" stroke="#00bcd4" stroke-width="1.5" opacity="0.98"/>
+    <line x1="4" y1="4" x2="4" y2="12" stroke="#00bcd4" stroke-width="1.5" opacity="0.98"/>
+    <line x1="76" y1="4" x2="68" y2="4" stroke="#00bcd4" stroke-width="1.5" opacity="0.98"/>
+    <line x1="76" y1="4" x2="76" y2="12" stroke="#00bcd4" stroke-width="1.5" opacity="0.98"/>
+    <line x1="4" y1="76" x2="12" y2="76" stroke="#00bcd4" stroke-width="1.5" opacity="0.98"/>
+    <line x1="4" y1="76" x2="4" y2="68" stroke="#00bcd4" stroke-width="1.5" opacity="0.98"/>
+    <line x1="76" y1="76" x2="68" y2="76" stroke="#00bcd4" stroke-width="1.5" opacity="0.98"/>
+    <line x1="76" y1="76" x2="76" y2="68" stroke="#00bcd4" stroke-width="1.5" opacity="0.98"/>
+  
+  
+    <ellipse cx="40" cy="36" rx="14" ry="12" fill="#00bcd4" opacity="0.2"/>
+    <path d="M40 24 Q32 28 30 36 Q32 44 40 48 Q48 44 50 36 Q48 28 40 24Z" fill="#00bcd4" opacity="0.5"/>
+    <path d="M34 30 Q36 34 40 34 Q44 34 46 30" fill="none" stroke="#4dd0e1" stroke-width="1.2" opacity="0.6"/>
+    <path d="M34 42 Q36 38 40 38 Q44 38 46 42" fill="none" stroke="#4dd0e1" stroke-width="1.2" opacity="0.6"/>
+    <circle cx="40" cy="36" r="4" fill="#4dd0e1" opacity="0.9"/>
+    <line x1="40" y1="24" x2="40" y2="20" stroke="#00bcd4" stroke-width="1.5" opacity="0.5"/>
+    <line x1="40" y1="48" x2="40" y2="52" stroke="#00bcd4" stroke-width="1.5" opacity="0.5"/>
+  
+  <circle cx="16" cy="71" r="1.6" fill="#00bcd4" opacity="0.5"/><circle cx="24" cy="71" r="1.6" fill="#00bcd4" opacity="0.5"/><circle cx="32" cy="71" r="1.6" fill="#00bcd4" opacity="0.5"/><circle cx="40" cy="71" r="1.6" fill="#00bcd4" opacity="0.5"/><circle cx="48" cy="71" r="1.6" fill="#00bcd4" opacity="0.5"/><circle cx="56" cy="71" r="1.6" fill="#00bcd4" opacity="0.5"/><circle cx="64" cy="71" r="2.2" fill="#4dd0e1" opacity="1"/>
+</svg>

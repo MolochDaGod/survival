@@ -1,0 +1,21 @@
+Slot,Set,Gender,FBX Path,Source Part Name,BaseColor Texture,Normal Texture,ORM Texture
+chest,peasant,male,public/models/gear/chest/peasant_male.fbx,Body,public/models/gear/textures/peasant/BaseColor.png,public/models/gear/textures/peasant/Normal.png,public/models/gear/textures/peasant/ORM.png
+chest,peasant,female,public/models/gear/chest/peasant_female.fbx,Body,public/models/gear/textures/peasant/BaseColor.png,public/models/gear/textures/peasant/Normal.png,public/models/gear/textures/peasant/ORM.png
+chest,ranger,male,public/models/gear/chest/ranger_male.fbx,Body,public/models/gear/textures/ranger/BaseColor.png,public/models/gear/textures/ranger/Normal.png,public/models/gear/textures/ranger/ORM.png
+chest,ranger,female,public/models/gear/chest/ranger_female.fbx,Body,public/models/gear/textures/ranger/BaseColor.png,public/models/gear/textures/ranger/Normal.png,public/models/gear/textures/ranger/ORM.png
+arms,peasant,male,public/models/gear/arms/peasant_male.fbx,Arms,public/models/gear/textures/peasant/BaseColor.png,public/models/gear/textures/peasant/Normal.png,public/models/gear/textures/peasant/ORM.png
+arms,peasant,female,public/models/gear/arms/peasant_female.fbx,Arms,public/models/gear/textures/peasant/BaseColor.png,public/models/gear/textures/peasant/Normal.png,public/models/gear/textures/peasant/ORM.png
+arms,ranger,male,public/models/gear/arms/ranger_male.fbx,Arms,public/models/gear/textures/ranger/BaseColor.png,public/models/gear/textures/ranger/Normal.png,public/models/gear/textures/ranger/ORM.png
+arms,ranger,female,public/models/gear/arms/ranger_female.fbx,Arms,public/models/gear/textures/ranger/BaseColor.png,public/models/gear/textures/ranger/Normal.png,public/models/gear/textures/ranger/ORM.png
+legs,peasant,male,public/models/gear/legs/peasant_male.fbx,Legs,public/models/gear/textures/peasant/BaseColor.png,public/models/gear/textures/peasant/Normal.png,public/models/gear/textures/peasant/ORM.png
+legs,peasant,female,public/models/gear/legs/peasant_female.fbx,Legs,public/models/gear/textures/peasant/BaseColor.png,public/models/gear/textures/peasant/Normal.png,public/models/gear/textures/peasant/ORM.png
+legs,ranger,male,public/models/gear/legs/ranger_male.fbx,Legs,public/models/gear/textures/ranger/BaseColor.png,public/models/gear/textures/ranger/Normal.png,public/models/gear/textures/ranger/ORM.png
+legs,ranger,female,public/models/gear/legs/ranger_female.fbx,Legs,public/models/gear/textures/ranger/BaseColor.png,public/models/gear/textures/ranger/Normal.png,public/models/gear/textures/ranger/ORM.png
+feet,peasant,male,public/models/gear/feet/peasant_male.fbx,Feet,public/models/gear/textures/peasant/BaseColor.png,public/models/gear/textures/peasant/Normal.png,public/models/gear/textures/peasant/ORM.png
+feet,peasant,female,public/models/gear/feet/peasant_female.fbx,Feet,public/models/gear/textures/peasant/BaseColor.png,public/models/gear/textures/peasant/Normal.png,public/models/gear/textures/peasant/ORM.png
+feet,ranger,male,public/models/gear/feet/ranger_male.fbx,Feet_Boots,public/models/gear/textures/ranger/BaseColor.png,public/models/gear/textures/ranger/Normal.png,public/models/gear/textures/ranger/ORM.png
+feet,ranger,female,public/models/gear/feet/ranger_female.fbx,Feet,public/models/gear/textures/ranger/BaseColor.png,public/models/gear/textures/ranger/Normal.png,public/models/gear/textures/ranger/ORM.png
+head,ranger,male,public/models/gear/head/ranger_male.fbx,Head_Hood,public/models/gear/textures/ranger/BaseColor.png,public/models/gear/textures/ranger/Normal.png,public/models/gear/textures/ranger/ORM.png
+head,ranger,female,public/models/gear/head/ranger_female.fbx,Head_Hood,public/models/gear/textures/ranger/BaseColor.png,public/models/gear/textures/ranger/Normal.png,public/models/gear/textures/ranger/ORM.png
+shoulders,ranger,male,public/models/gear/shoulders/ranger_male.fbx,Acc_Pauldron,public/models/gear/textures/ranger/BaseColor.png,public/models/gear/textures/ranger/Normal.png,public/models/gear/textures/ranger/ORM.png
+shoulders,ranger,female,public/models/gear/shoulders/ranger_female.fbx,Acc_Pauldrons,public/models/gear/textures/ranger/BaseColor.png,public/models/gear/textures/ranger/Normal.png,public/models/gear/textures/ranger/ORM.png

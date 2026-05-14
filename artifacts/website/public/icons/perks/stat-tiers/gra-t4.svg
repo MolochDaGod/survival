@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80">
+  <defs>
+    <radialGradient id="bggra4" cx="50%" cy="45%" r="60%">
+      <stop offset="0%" stop-color="#009688" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#0d2220" stop-opacity="1"/>
+    </radialGradient>
+    <radialGradient id="glowgra4" cx="50%" cy="45%" r="40%">
+      <stop offset="0%" stop-color="#4db6ac" stop-opacity="0.14"/>
+      <stop offset="100%" stop-color="#4db6ac" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="blurgra4">
+      <feGaussianBlur stdDeviation="2.5"/>
+    </filter>
+  </defs>
+  <rect width="80" height="80" rx="6" fill="url(#bggra4)"/>
+  <rect width="80" height="80" rx="6" fill="url(#glowgra4)"/>
+  <rect width="80" height="80" rx="6" fill="none" stroke="#009688" stroke-width="0.8" opacity="0.41000000000000003"/>
+  
+    <line x1="4" y1="4" x2="12" y2="4" stroke="#009688" stroke-width="1.5" opacity="0.8200000000000001"/>
+    <line x1="4" y1="4" x2="4" y2="12" stroke="#009688" stroke-width="1.5" opacity="0.8200000000000001"/>
+    <line x1="76" y1="4" x2="68" y2="4" stroke="#009688" stroke-width="1.5" opacity="0.8200000000000001"/>
+    <line x1="76" y1="4" x2="76" y2="12" stroke="#009688" stroke-width="1.5" opacity="0.8200000000000001"/>
+    <line x1="4" y1="76" x2="12" y2="76" stroke="#009688" stroke-width="1.5" opacity="0.8200000000000001"/>
+    <line x1="4" y1="76" x2="4" y2="68" stroke="#009688" stroke-width="1.5" opacity="0.8200000000000001"/>
+    <line x1="76" y1="76" x2="68" y2="76" stroke="#009688" stroke-width="1.5" opacity="0.8200000000000001"/>
+    <line x1="76" y1="76" x2="76" y2="68" stroke="#009688" stroke-width="1.5" opacity="0.8200000000000001"/>
+  
+  
+    <circle cx="40" cy="38" r="6" fill="#009688" opacity="0.5"/>
+    <circle cx="40" cy="38" r="3" fill="#4db6ac" opacity="0.9"/>
+    <ellipse cx="40" cy="38" rx="18" ry="6" fill="none" stroke="#009688" stroke-width="1.5" opacity="0.6" transform="rotate(-30 40 38)"/>
+    <ellipse cx="40" cy="38" rx="18" ry="6" fill="none" stroke="#009688" stroke-width="1.5" opacity="0.4" transform="rotate(30 40 38)"/>
+    <circle cx="56" cy="33" r="3" fill="#4db6ac" opacity="0.8"/>
+    <circle cx="24" cy="43" r="2.5" fill="#009688" opacity="0.6"/>
+  
+  <circle cx="24" cy="71" r="1.6" fill="#009688" opacity="0.5"/><circle cx="32" cy="71" r="1.6" fill="#009688" opacity="0.5"/><circle cx="40" cy="71" r="1.6" fill="#009688" opacity="0.5"/><circle cx="48" cy="71" r="1.6" fill="#009688" opacity="0.5"/><circle cx="56" cy="71" r="2.2" fill="#4db6ac" opacity="1"/>
+</svg>

@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80">
+  <defs>
+    <radialGradient id="bgkin4" cx="50%" cy="45%" r="60%">
+      <stop offset="0%" stop-color="#ff9800" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#261b0d" stop-opacity="1"/>
+    </radialGradient>
+    <radialGradient id="glowkin4" cx="50%" cy="45%" r="40%">
+      <stop offset="0%" stop-color="#ffb74d" stop-opacity="0.14"/>
+      <stop offset="100%" stop-color="#ffb74d" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="blurkin4">
+      <feGaussianBlur stdDeviation="2.5"/>
+    </filter>
+  </defs>
+  <rect width="80" height="80" rx="6" fill="url(#bgkin4)"/>
+  <rect width="80" height="80" rx="6" fill="url(#glowkin4)"/>
+  <rect width="80" height="80" rx="6" fill="none" stroke="#ff9800" stroke-width="0.8" opacity="0.41000000000000003"/>
+  
+    <line x1="4" y1="4" x2="12" y2="4" stroke="#ff9800" stroke-width="1.5" opacity="0.8200000000000001"/>
+    <line x1="4" y1="4" x2="4" y2="12" stroke="#ff9800" stroke-width="1.5" opacity="0.8200000000000001"/>
+    <line x1="76" y1="4" x2="68" y2="4" stroke="#ff9800" stroke-width="1.5" opacity="0.8200000000000001"/>
+    <line x1="76" y1="4" x2="76" y2="12" stroke="#ff9800" stroke-width="1.5" opacity="0.8200000000000001"/>
+    <line x1="4" y1="76" x2="12" y2="76" stroke="#ff9800" stroke-width="1.5" opacity="0.8200000000000001"/>
+    <line x1="4" y1="76" x2="4" y2="68" stroke="#ff9800" stroke-width="1.5" opacity="0.8200000000000001"/>
+    <line x1="76" y1="76" x2="68" y2="76" stroke="#ff9800" stroke-width="1.5" opacity="0.8200000000000001"/>
+    <line x1="76" y1="76" x2="76" y2="68" stroke="#ff9800" stroke-width="1.5" opacity="0.8200000000000001"/>
+  
+  
+    <circle cx="40" cy="38" r="5" fill="#ffb74d" opacity="0.9"/>
+    <path d="M40 20 L41 33 L40 33Z" fill="#ff9800" opacity="0.7"/>
+    <path d="M40 56 L39 43 L40 43Z" fill="#ff9800" opacity="0.7"/>
+    <path d="M22 38 L35 39 L35 38Z" fill="#ff9800" opacity="0.7"/>
+    <path d="M58 38 L45 37 L45 38Z" fill="#ff9800" opacity="0.7"/>
+    <path d="M26 24 L35 34" stroke="#ff9800" stroke-width="2" opacity="0.6"/>
+    <path d="M54 52 L45 42" stroke="#ff9800" stroke-width="2" opacity="0.6"/>
+    <path d="M54 24 L45 34" stroke="#ff9800" stroke-width="2" opacity="0.6"/>
+    <path d="M26 52 L35 42" stroke="#ff9800" stroke-width="2" opacity="0.6"/>
+    <circle cx="40" cy="38" r="12" fill="none" stroke="#ff9800" stroke-width="1" opacity="0.25"/>
+  
+  <circle cx="24" cy="71" r="1.6" fill="#ff9800" opacity="0.5"/><circle cx="32" cy="71" r="1.6" fill="#ff9800" opacity="0.5"/><circle cx="40" cy="71" r="1.6" fill="#ff9800" opacity="0.5"/><circle cx="48" cy="71" r="1.6" fill="#ff9800" opacity="0.5"/><circle cx="56" cy="71" r="2.2" fill="#ffb74d" opacity="1"/>
+</svg>

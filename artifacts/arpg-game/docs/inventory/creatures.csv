@@ -1,0 +1,40 @@
+Role,Name,Path,Animated,Spawn Locations,Drops / Loot,Notes
+huntable-farm,Cow,public/models/animals/farm/FBX/Cow.fbx,Yes,grasslands / farms,"meat (beef), bio, leather, bone",Heaviest drops; slow.
+huntable-farm,Horse,public/models/animals/farm/FBX/Horse.fbx,Yes,plains / steppe,"meat (horse), bio, leather, bone",Fast — flee behaviour candidate.
+huntable-farm,Llama,public/models/animals/farm/FBX/Llama.fbx,Yes,highlands / dry,"meat, bio, leather, bone",Mid drops.
+huntable-farm,Pig,public/models/animals/farm/FBX/Pig.fbx,Yes,farms / forest edge,"meat (pork), bio, leather, bone",Common low-tier hunt.
+huntable-farm,Pug,public/models/animals/farm/FBX/Pug.fbx,Yes,city / settlement,"bio, leather, bone (no meat)",Settlement pet by default — only drops if killed.
+huntable-farm,Sheep,public/models/animals/farm/FBX/Sheep.fbx,Yes,grasslands,"meat (mutton), bio, leather, bone, wool",Adds wool drop.
+huntable-farm,Zebra,public/models/animals/farm/FBX/Zebra.fbx,Yes,savanna,"meat, bio, leather, bone",Same as Horse; different palette.
+huntable-fish (deferred),Dolphin,public/models/animals/fish/FBX/Dolphin.fbx,Yes,water,"meat (fish), bio, fat",Harpoon-tier; deferred until fishing pass.
+huntable-fish (deferred),Fish1-3,public/models/animals/fish/FBX/Fish{1..3}.fbx,Yes,water,"meat (fish), bio",Small generic fish.
+huntable-fish (deferred),Manta ray,public/models/animals/fish/FBX/Manta ray.fbx,Yes,water,"meat (fish), bio, leather",Large flat — leather candidate.
+huntable-fish (deferred),Shark,public/models/animals/fish/FBX/Shark.fbx,Yes,water,"meat (fish), bio, leather, bone",Predator AI later.
+huntable-fish (deferred),Whale,public/models/animals/fish/FBX/Whale.fbx,Yes,deep water,"meat (fish), bio, fat, bone",Largest; deep-water spawn.
+hostile-enemy (easy),Frog,public/models/enemies/easy_animated/FBX/Frog.fbx,Yes,swamp / pond,"bio (small), hide (small)",Pre-rigged + animated.
+hostile-enemy (easy),Rat,public/models/enemies/easy_animated/FBX/Rat.fbx,Yes,sewers / dungeons / city,"bio (small), hide (small), tail",Vermin tier.
+hostile-enemy (easy),Snake,public/models/enemies/easy_animated/FBX/Snake.fbx,Yes,grass / desert / dungeons,"bio, snake skin, venom (rare)",Calm version.
+hostile-enemy (easy),Snake_Angry,public/models/enemies/easy_animated/FBX/Snake_Angry.fbx,Yes,grass / desert / dungeons,"bio, snake skin, venom",Aggro variant — combat AI.
+hostile-enemy (easy),Spider,public/models/enemies/easy_animated/FBX/Spider.fbx,Yes,caves / dungeons,"bio, silk, fang",Wall-walk candidate.
+hostile-enemy (easy),Wasp,public/models/enemies/easy_animated/FBX/Wasp.fbx,Yes,forest / hive,"bio, stinger, wax",Flying.
+hostile-enemy (sci-fi),Enemy_EyeDrone,public/models/scifi/essentials_kit/FBX/Enemy_EyeDrone.fbx,Yes,sci-fi facilities / Stratocolonies,"scrap (electronic), optic core, energy cell","Pre-rigged. Also at glTF / OBJ / FBX (Unity)."
+hostile-enemy (sci-fi),Enemy_QuadShell,public/models/scifi/essentials_kit/FBX/Enemy_QuadShell.fbx,Yes,sci-fi facilities,"scrap (electronic), armour plate, energy cell",Heavier ground unit.
+hostile-enemy (sci-fi),Enemy_Trilobite,public/models/scifi/essentials_kit/FBX/Enemy_Trilobite.fbx,Yes,labs / radiation zones,"bio (alien), chitin, energy cell",Low-slung swarm unit.
+hostile-enemy (mech),Stan,public/models/enemies/mechs/Textured/FBX/Stan.fbx,Yes,sci-fi battlefield / endgame,"scrap (heavy), armour plate, energy cell, rare alloy","Quaternius Mech — Textured + Flat Colors variants in FBX/glTF/Blends/OBJ."
+hostile-enemy (mech),Mike,public/models/enemies/mechs/Textured/FBX/Mike.fbx,Yes,sci-fi battlefield / endgame,"scrap (heavy), armour plate, energy cell, rare alloy",Same.
+hostile-enemy (mech),Leela,public/models/enemies/mechs/Textured/FBX/Leela.fbx,Yes,sci-fi battlefield / endgame,"scrap (heavy), armour plate, energy cell, rare alloy",Same.
+hostile-enemy (mech),George,public/models/enemies/mechs/Textured/FBX/George.fbx,Yes,sci-fi battlefield / endgame,"scrap (heavy), armour plate, energy cell, rare alloy",Same.
+hostile-enemy (other),Clown,public/models/enemies/clown/clown.fbx,?,city / cult,quest-specific,Standalone single-file enemy.
+hostile-enemy (other),Doctor,public/models/enemies/doctor/doctor.fbx,?,labs / city,quest-specific,Standalone single-file enemy.
+hostile-enemy (other),Masked,public/models/enemies/masked/,?,city / cult,quest-specific,
+hostile-enemy (other),Miner,public/models/enemies/miner/,?,mines / dungeons,quest-specific,
+hostile-enemy (other),Scarecrow,public/models/enemies/scarecrow/,?,farms,quest-specific,
+hostile-enemy (other),SeaExplorer,public/models/enemies/seaexplorer/,?,coastal / underwater,quest-specific,
+NPC,city_dwellers_1,public/models/npcs/medieval/fbx/people_unity/city_dwellers_1.fbx,?,city,—,"Use the people_unity export for three.js (FBXLoader)."
+NPC,city_dwellers_2,public/models/npcs/medieval/fbx/people_unity/city_dwellers_2.fbx,?,city,—,
+NPC,king,public/models/npcs/medieval/fbx/people_unity/king.fbx,?,castle / quest,—,Royal NPC.
+NPC,queen,public/models/npcs/medieval/fbx/people_unity/queen.fbx,?,castle / quest,—,Royal NPC.
+NPC,peasant_1..6,public/models/npcs/medieval/fbx/people_unity/peasant_{1..6}.fbx,?,village / farms,—,6 peasant variants.
+NPC,rich_citizens_1..4,public/models/npcs/medieval/fbx/people_unity/rich_citizens_{1..4}.fbx,?,city,—,4 wealthy variants.
+NPC,rich_citizzens_1..4,public/models/npcs/medieval/fbx/people_unity/rich_citizzens_{1..4}.fbx,?,city,—,Source-pack typo preserved — 4 alt-export variants.
+NPC,(shared texture),public/models/npcs/medieval/texture/people_texture_map.png,—,—,—,Atlas texture shared by all medieval NPCs.

@@ -1,0 +1,27 @@
+Slot,Name,FBX Path,glTF Path,Notes
+base,Character,public/models/character_parts/customization/Character.fbx,—,Single rigged base mesh — all variant parts skin to this rig.
+base-anims,CharacterAnimations,public/models/character_parts/customization/CharacterAnimations.fbx,—,Skeleton + bundled animation clips for the base mesh.
+hair-main (monolithic),MainHair,public/models/character_parts/customization/MainHair.fbx,—,All main hairstyles in one FBX — pick by mesh name at runtime.
+hair-secondary (monolithic),SecondaryHair,public/models/character_parts/customization/SecondaryHair.fbx,—,All secondary / under-hair styles in one FBX.
+hair-beard (monolithic),Beards,public/models/character_parts/customization/Beards.fbx,—,All beard styles in one FBX.
+hair-individual,Hair_Beard,public/models/hairstyles/fbx/Hair_Beard.fbx,public/models/hairstyles/Hair_Beard.gltf,glTF + .bin already present.
+hair-individual,Hair_Buns,public/models/hairstyles/fbx/Hair_Buns.fbx,public/models/hairstyles/Hair_Buns.gltf,glTF + .bin already present.
+hair-individual,Hair_Buzzed,public/models/hairstyles/fbx/Hair_Buzzed.fbx,public/models/hairstyles/Hair_Buzzed.gltf,glTF + .bin already present.
+hair-individual,Hair_BuzzedFemale,public/models/hairstyles/fbx/Hair_BuzzedFemale.fbx,public/models/hairstyles/Hair_BuzzedFemale.gltf,glTF + .bin already present.
+hair-individual,Hair_Long,public/models/hairstyles/fbx/Hair_Long.fbx,public/models/hairstyles/Hair_Long.gltf,glTF + .bin already present.
+hair-individual,Hair_SimpleParted,public/models/hairstyles/fbx/Hair_SimpleParted.fbx,public/models/hairstyles/Hair_SimpleParted.gltf,glTF + .bin already present.
+eyebrows-individual,Eyebrows_Female,public/models/hairstyles/fbx/Eyebrows_Female.fbx,public/models/hairstyles/Eyebrows_Female.gltf,glTF + .bin already present.
+eyebrows-individual,Eyebrows_Regular,public/models/hairstyles/fbx/Eyebrows_Regular.fbx,public/models/hairstyles/Eyebrows_Regular.gltf,glTF + .bin already present.
+hair-textures,T_Hair_1 / T_Hair_2,—,—,public/models/hairstyles/T_Hair_{1,2}_{BaseColor,Normal}.png — shared hair atlas.
+head-accessories (monolithic),HeadAccessories,public/models/character_parts/customization/HeadAccessories.fbx,—,Hats / helmets / circlets — pick by mesh name.
+other-accessories (monolithic),OtherAccessories,public/models/character_parts/customization/OtherAccessories.fbx,—,Earrings / glasses / etc.
+faces,(19 face FBX),public/models/character_parts/customization/Faces/*.fbx,—,19 facial variants.
+clothes-up,(12 ClothesUp FBX),public/models/character_parts/customization/ClothesUp/*.fbx,—,12 torso garment variants.
+clothes-bottom,(14 ClothesBottom FBX),public/models/character_parts/customization/ClothesBottom/*.fbx,—,14 leg garment variants.
+shoes,(7 Shoes FBX),public/models/character_parts/customization/Shoes/*.fbx,—,7 footwear variants.
+icons,(reference PNGs),public/models/character_parts/customization/Icons/*.png,—,UI thumbnails for each part — wire into the customization picker.
+infos,(reference PDFs/docs),public/models/character_parts/customization/Infos/*,—,Source-pack reference / part lists.
+ref,(5 reference renders),public/models/character_parts/customization/Reference/,—,Reference imagery from source pack.
+character-presets-female,"adventurer / casual / formal / medieval / punk / scifi / soldier / suit (gltf), athletic / lean (glb)",public/models/characters/female/,—,10 pre-built female character variants.
+character-presets-male,"adventurer / beach / casual / casual-hoodie / farmer / king / punk / spacesuit (gltf), athletic / lean (glb)",public/models/characters/male/,—,10 pre-built male character variants.
+character-base,base,—,public/models/characters/base/,Shared base mesh + textures used by the presets.

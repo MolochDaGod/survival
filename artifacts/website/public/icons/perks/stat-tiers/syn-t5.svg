@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80">
+  <defs>
+    <radialGradient id="bgsyn5" cx="50%" cy="45%" r="60%">
+      <stop offset="0%" stop-color="#2196f3" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#0d1a26" stop-opacity="1"/>
+    </radialGradient>
+    <radialGradient id="glowsyn5" cx="50%" cy="45%" r="40%">
+      <stop offset="0%" stop-color="#64b5f6" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#64b5f6" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="blursyn5">
+      <feGaussianBlur stdDeviation="2.5"/>
+    </filter>
+  </defs>
+  <rect width="80" height="80" rx="6" fill="url(#bgsyn5)"/>
+  <rect width="80" height="80" rx="6" fill="url(#glowsyn5)"/>
+  <rect width="80" height="80" rx="6" fill="none" stroke="#2196f3" stroke-width="0.8" opacity="0.45"/>
+  
+    <line x1="4" y1="4" x2="12" y2="4" stroke="#2196f3" stroke-width="1.5" opacity="0.9"/>
+    <line x1="4" y1="4" x2="4" y2="12" stroke="#2196f3" stroke-width="1.5" opacity="0.9"/>
+    <line x1="76" y1="4" x2="68" y2="4" stroke="#2196f3" stroke-width="1.5" opacity="0.9"/>
+    <line x1="76" y1="4" x2="76" y2="12" stroke="#2196f3" stroke-width="1.5" opacity="0.9"/>
+    <line x1="4" y1="76" x2="12" y2="76" stroke="#2196f3" stroke-width="1.5" opacity="0.9"/>
+    <line x1="4" y1="76" x2="4" y2="68" stroke="#2196f3" stroke-width="1.5" opacity="0.9"/>
+    <line x1="76" y1="76" x2="68" y2="76" stroke="#2196f3" stroke-width="1.5" opacity="0.9"/>
+    <line x1="76" y1="76" x2="76" y2="68" stroke="#2196f3" stroke-width="1.5" opacity="0.9"/>
+  
+  
+    <polygon points="40,22 47,26 47,34 40,38 33,34 33,26" fill="#2196f3" opacity="0.5" stroke="#2196f3" stroke-width="1"/>
+    <polygon points="47,34 54,38 54,46 47,50 40,46 40,38" fill="#2196f3" opacity="0.4" stroke="#2196f3" stroke-width="1"/>
+    <polygon points="33,34 40,38 40,46 33,50 26,46 26,38" fill="#2196f3" opacity="0.35" stroke="#2196f3" stroke-width="1"/>
+    <circle cx="40" cy="30" r="3" fill="#64b5f6" opacity="0.9"/>
+    <circle cx="47" cy="42" r="2.5" fill="#64b5f6" opacity="0.7"/>
+    <circle cx="33" cy="42" r="2.5" fill="#64b5f6" opacity="0.7"/>
+  
+  <circle cx="20" cy="71" r="1.6" fill="#2196f3" opacity="0.5"/><circle cx="28" cy="71" r="1.6" fill="#2196f3" opacity="0.5"/><circle cx="36" cy="71" r="1.6" fill="#2196f3" opacity="0.5"/><circle cx="44" cy="71" r="1.6" fill="#2196f3" opacity="0.5"/><circle cx="52" cy="71" r="1.6" fill="#2196f3" opacity="0.5"/><circle cx="60" cy="71" r="2.2" fill="#64b5f6" opacity="1"/>
+</svg>

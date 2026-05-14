@@ -1,0 +1,49 @@
+Stat,Abbr,Color,Domain,Pip,Pip Cost,Cumulative Cost,Perk Icon,Perk Name,Perk Effect
+Biomass,BIO,#4caf50,"Max health, natural healing, toxin resistance & implant compatibility",1,1,1,🩸,Iron Constitution,+5 Max HP. Minor bleed resistance.
+Biomass,BIO,#4caf50,"Max health, natural healing, toxin resistance & implant compatibility",2,2,3,🔄,Cellular Regen,+10 Max HP. Toxin Resist I. Natural regen 0.5 HP/s.
+Biomass,BIO,#4caf50,"Max health, natural healing, toxin resistance & implant compatibility",3,4,7,🔩,Augment Compatibility,+20 Max HP. Implant Slot unlocked. Toxin Resist II.
+Biomass,BIO,#4caf50,"Max health, natural healing, toxin resistance & implant compatibility",4,8,15,🧬,Nanoflesh Matrix,+35 Max HP. Rapid Heal I. Disease Immunity.
+Biomass,BIO,#4caf50,"Max health, natural healing, toxin resistance & implant compatibility",5,16,31,💪,Apex Physiology,+55 Max HP. Rapid Heal II. Combat Regen.
+Biomass,BIO,#4caf50,"Max health, natural healing, toxin resistance & implant compatibility",6,20,51,☠️,Undying Protocol,+80 Max HP. Death Defiance: survive one lethal blow once per mission.
+Neural Integrity,NEU,#00bcd4,"Sanity, psionic defense, AI co-processor cap & neural hack resistance",1,1,1,📡,Signal Clarity,+5 Sanity. Psionic Shielding I.
+Neural Integrity,NEU,#00bcd4,"Sanity, psionic defense, AI co-processor cap & neural hack resistance",2,2,3,🧱,Neural Firewall,Hack Resist I. AI Co-Processor Tier I unlocked.
+Neural Integrity,NEU,#00bcd4,"Sanity, psionic defense, AI co-processor cap & neural hack resistance",3,4,7,🎯,Deep Focus,Psionic Shielding II. Neural Overclock (temp INT +20%).
+Neural Integrity,NEU,#00bcd4,"Sanity, psionic defense, AI co-processor cap & neural hack resistance",4,8,15,⚡,Synaptic Overdrive,Hack Resist II. AI Co-Proc Tier II. Mind Link with allies.
+Neural Integrity,NEU,#00bcd4,"Sanity, psionic defense, AI co-processor cap & neural hack resistance",5,16,31,🌐,Transcendent Logic,Psionic Mastery. Reality Anchor. Neural Dominance.
+Neural Integrity,NEU,#00bcd4,"Sanity, psionic defense, AI co-processor cap & neural hack resistance",6,20,51,🧠,Enlightened Architecture,Full Psionic Immunity. Quantum Cognition. AI Symbiosis.
+Kinetic Efficiency,KIN,#ff9800,"Movement speed, melee damage, stamina regen & zero-G combat",1,1,1,🏃,Fleet Footed,+5% movement speed. Minor fall damage resist.
+Kinetic Efficiency,KIN,#ff9800,"Movement speed, melee damage, stamina regen & zero-G combat",2,2,3,⚔️,Combat Cadence,+10% melee damage. Stamina Regen +0.5/s.
+Kinetic Efficiency,KIN,#ff9800,"Movement speed, melee damage, stamina regen & zero-G combat",3,4,7,🚀,Zero-G Trained,+15% movement. Zero-G combat unlock. Dodge window +20ms.
+Kinetic Efficiency,KIN,#ff9800,"Movement speed, melee damage, stamina regen & zero-G combat",4,8,15,💥,Kinetic Amplifier,+25% melee damage. Momentum Strikes (combo chain bonus).
+Kinetic Efficiency,KIN,#ff9800,"Movement speed, melee damage, stamina regen & zero-G combat",5,16,31,🐆,Apex Predator,Sprint never drains stamina. Aerial assault unlocked.
+Kinetic Efficiency,KIN,#ff9800,"Movement speed, melee damage, stamina regen & zero-G combat",6,20,51,🌪️,Unstoppable Force,Immune to knockback. Ground slam ability. +40% melee damage total.
+Quantum Aptitude,QNT,#9c27b0,"Tech comprehension, quantum device operation & probability manipulation",1,1,1,🔭,Tech Intuition,Quantum devices recognized on scan. +5 tech comprehension.
+Quantum Aptitude,QNT,#9c27b0,"Tech comprehension, quantum device operation & probability manipulation",2,2,3,🎲,Probability Sense,Hazard pre-detection. +1 quantum device slot.
+Quantum Aptitude,QNT,#9c27b0,"Tech comprehension, quantum device operation & probability manipulation",3,4,7,🧪,Field Theorist,Quantum shield modulator. +2 device slots. Exotic material crafting.
+Quantum Aptitude,QNT,#9c27b0,"Tech comprehension, quantum device operation & probability manipulation",4,8,15,🌀,Phase Manipulator,Phase-step dodge (short blink). Quantum grenade fabrication.
+Quantum Aptitude,QNT,#9c27b0,"Tech comprehension, quantum device operation & probability manipulation",5,16,31,🕸️,Reality Weaver,Probability bubble (slow projectiles near you). +3 device slots.
+Quantum Aptitude,QNT,#9c27b0,"Tech comprehension, quantum device operation & probability manipulation",6,20,51,⏳,Quantum Sovereign,"Temporal suspension (stop time for 2s, 1×/mission). Max device slots."
+Synthetic Affinity,SYN,#2196f3,"Hacking skill, drone control, AI negotiation & swarm intelligence",1,1,1,📶,Network Aware,Nearby devices show on minimap. +1 drone slot.
+Synthetic Affinity,SYN,#2196f3,"Hacking skill, drone control, AI negotiation & swarm intelligence",2,2,3,👻,Ghost Protocol,Hack speed +30%. Basic AI negotiation unlocked.
+Synthetic Affinity,SYN,#2196f3,"Hacking skill, drone control, AI negotiation & swarm intelligence",3,4,7,🤖,Swarm Link,+2 drone slots. Swarm intel (area scan). Firewall bypass I.
+Synthetic Affinity,SYN,#2196f3,"Hacking skill, drone control, AI negotiation & swarm intelligence",4,8,15,🕹️,Neural Mesh,Passive drone repair. AI faction trust +20. Firewall bypass II.
+Synthetic Affinity,SYN,#2196f3,"Hacking skill, drone control, AI negotiation & swarm intelligence",5,16,31,🧿,Hive Mind Conduit,Direct AI faction diplomacy. Drones inherit combat skills.
+Synthetic Affinity,SYN,#2196f3,"Hacking skill, drone control, AI negotiation & swarm intelligence",6,20,51,💎,Synthetic Ascension,Become machine-recognized ally. Full drone autonomous control.
+Chronal Stability,CHR,#ffeb3b,"Temporal anomaly resistance, time perception & causality protection",1,1,1,⏱️,Temporal Grounding,Anomaly resistance +10%. Chronal sickness immunity.
+Chronal Stability,CHR,#ffeb3b,"Temporal anomaly resistance, time perception & causality protection",2,2,3,👁️,Echo Perception,See 2s into future (danger sense). Causality shield I.
+Chronal Stability,CHR,#ffeb3b,"Temporal anomaly resistance, time perception & causality protection",3,4,7,⚓,Phase Anchor,Cannot be displaced by temporal events. Rewind I (undo last action).
+Chronal Stability,CHR,#ffeb3b,"Temporal anomaly resistance, time perception & causality protection",4,8,15,🔮,Paradox Engine,Duplicate self for 5s. Causality shield II. Chrono gear unlock.
+Chronal Stability,CHR,#ffeb3b,"Temporal anomaly resistance, time perception & causality protection",5,16,31,🌊,Timeline Bender,Rewind II (15s window). Temporal stasis projectile.
+Chronal Stability,CHR,#ffeb3b,"Temporal anomaly resistance, time perception & causality protection",6,20,51,♾️,Eternal Observer,Outside timeline during death (1×/mission). Perfect chronal immunity.
+Entropic Resistance,ENT,#f44336,"Equipment durability, resource preservation & decay resistance",1,1,1,🪨,Hardy Materials,Equipment durability +20%. Salvage yield +10%.
+Entropic Resistance,ENT,#f44336,"Equipment durability, resource preservation & decay resistance",2,2,3,🛡️,Decay Shield,Resource spoilage -30%. Corrosion resist I.
+Entropic Resistance,ENT,#f44336,"Equipment durability, resource preservation & decay resistance",3,4,7,♻️,Reclamation Expert,Craft from degraded materials. Gear repair costs -25%.
+Entropic Resistance,ENT,#f44336,"Equipment durability, resource preservation & decay resistance",4,8,15,🌀,Entropy Sink,Absorb environmental decay as energy. Gear never breaks below 10%.
+Entropic Resistance,ENT,#f44336,"Equipment durability, resource preservation & decay resistance",5,16,31,🫙,Void Preservation,Slow entropy field (debuffs enemies in range). Full corrosion immunity.
+Entropic Resistance,ENT,#f44336,"Equipment durability, resource preservation & decay resistance",6,20,51,⚙️,Eternal Engine,Gear is indestructible. Entropy absorption heals 1 HP/s passively.
+Gravitic Harmony,GRA,#009688,"Fall damage reduction, zero-G adaptation & spatial force manipulation",1,1,1,🪶,Light Footed,Fall damage -25%. Minor zero-G stability.
+Gravitic Harmony,GRA,#009688,"Fall damage reduction, zero-G adaptation & spatial force manipulation",2,2,3,🌙,Grav Adapted,Fall damage -50%. Zero-G navigation unlock. +5% spatial awareness.
+Gravitic Harmony,GRA,#009688,"Fall damage reduction, zero-G adaptation & spatial force manipulation",3,4,7,🎯,Force Sense,Detect gravitational anomalies. Grav-pulse push (short range).
+Gravitic Harmony,GRA,#009688,"Fall damage reduction, zero-G adaptation & spatial force manipulation",4,8,15,🛸,Orbital Mastery,Full zero-G combat. Grav anchor (pin enemies). Wall-running.
+Gravitic Harmony,GRA,#009688,"Fall damage reduction, zero-G adaptation & spatial force manipulation",5,16,31,🌌,Graviton Weave,Personal gravity manipulation. Launch enemies skyward.
+Gravitic Harmony,GRA,#009688,"Fall damage reduction, zero-G adaptation & spatial force manipulation",6,20,51,🕳️,Event Horizon Body,Micro singularity ability. Total fall immunity. Gravity reversal field.

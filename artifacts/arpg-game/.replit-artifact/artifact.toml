@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "ARPG Game"
+version = "1.0.0"
+id = "artifacts/arpg-game"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 25172
+
+[services.development]
+run = "pnpm --filter @workspace/arpg-game run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/arpg-game", "run", "build" ]
+publicDir = "artifacts/arpg-game/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "25172"
+BASE_PATH = "/"

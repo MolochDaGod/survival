@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Grudges — Stats &amp; Attributes Guide</title>
+<meta name="description" content="Complete reference for the Grudges character system: 8 attributes, 37 derived stats, diminishing returns, stat caps, combat math, 6 gear tiers, and perk trees." />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=EB+Garamond:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap" />
+<style>
+  :root {
+    --bg-deep:#0a0604; --bg:#14100a; --panel:#1c1610; --panel-2:#221a12;
+    --gold:#c5a059; --gold-bright:#f0d088; --gold-dim:rgba(197,160,89,0.4);
+    --parchment:#e8d8a8; --ink:#2a1810; --muted:#9a8a6a; --dim:#6a5a3a;
+    --ember:#d4602a; --blood:#8a2020; --moss:#6e8a3a; --chill:#5a9ad8; --bone:#c8b890;
+    --green:#7ac874; --cyan:#6abdc5;
+    --rule:rgba(197,160,89,0.25); --rule-strong:rgba(197,160,89,0.55);
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+    --display:'Cinzel',serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg-deep);color:var(--parchment);font-family:'EB Garamond',Georgia,serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+  a{color:var(--gold-bright);text-decoration:none;transition:color .15s}
+  a:hover{color:var(--ember)}
+  h1,h2,h3,h4{font-family:var(--display);color:var(--gold-bright);letter-spacing:.03em;margin:0 0 .6rem;line-height:1.2}
+  h1{font-size:clamp(2rem,3.6vw,3rem);font-weight:900}
+  h2{font-size:clamp(1.4rem,2.2vw,1.9rem);font-weight:700;color:var(--gold)}
+  h3{font-size:1.05rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.12em}
+
+  nav.site{position:sticky;top:0;z-index:50;background:linear-gradient(to bottom,rgba(10,6,4,0.96),rgba(10,6,4,0.85));border-bottom:1px solid var(--rule);backdrop-filter:blur(8px)}
+  nav.site .inner{display:flex;align-items:center;justify-content:space-between;padding:.85rem 1.5rem;max-width:1180px;margin:0 auto;gap:1rem}
+  nav.site .brand{display:flex;align-items:center;gap:.65rem;font-family:var(--display);font-weight:700;font-size:1.2rem;color:var(--gold-bright)}
+  nav.site .brand img{width:32px;height:32px}
+  nav.site ul{list-style:none;display:flex;gap:1.4rem;margin:0;padding:0;flex-wrap:wrap}
+  nav.site ul a{color:var(--parchment);font-family:var(--display);font-size:.85rem;letter-spacing:.12em;text-transform:uppercase}
+  nav.site ul a.active{color:var(--gold-bright)}
+  nav.site ul a:hover{color:var(--ember)}
+  nav.site .play{background:linear-gradient(to bottom,var(--gold),#8a6a30);color:var(--ink);font-family:var(--display);font-weight:700;padding:.55rem 1.1rem;border-radius:2px;letter-spacing:.15em;text-transform:uppercase;font-size:.8rem;border:1px solid var(--gold-bright)}
+  nav.site .play:hover{background:linear-gradient(to bottom,var(--gold-bright),var(--gold));color:var(--ink)}
+
+  .container{max-width:1180px;margin:0 auto;padding:0 1.5rem}
+  .page-hero{padding:3.4rem 1.5rem 2.6rem;text-align:center;background:linear-gradient(to bottom,rgba(10,6,4,0.10),rgba(10,6,4,0.55));border-bottom:1px solid var(--rule)}
+  .page-hero .eyebrow{font-family:var(--display);color:var(--ember);letter-spacing:.25em;text-transform:uppercase;font-size:.85rem}
+  .page-hero p.lead{font-size:1.05rem;max-width:760px;margin:.8rem auto 0;opacity:.9}
+
+  .level-info{display:flex;justify-content:center;gap:2rem;margin-top:1.5rem;flex-wrap:wrap}
+  .level-info .li-item{text-align:center;min-width:90px}
+  .level-info .li-val{color:var(--gold-bright);font-size:1.5rem;font-weight:700;font-family:var(--mono)}
+  .level-info .li-lbl{color:var(--muted);font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;margin-top:.2rem}
+
+  .section{padding:2.4rem 0;border-bottom:1px solid var(--rule)}
+  .section:last-child{border-bottom:0}
+  .section .lead-sm{color:var(--muted);font-size:.95rem;margin:-.2rem 0 1.4rem;max-width:780px}
+
+  /* attributes */
+  .attr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:1.1rem}
+  .attr-card{background:linear-gradient(to bottom,var(--panel),var(--panel-2));border:1px solid var(--rule);border-left:4px solid var(--gold);border-radius:0 4px 4px 0;padding:1.2rem 1.3rem;transition:transform .15s, border-color .15s}
+  .attr-card:hover{transform:translateY(-2px);border-left-color:var(--gold-bright)}
+  .attr-head{display:flex;align-items:center;gap:.7rem;margin-bottom:.3rem}
+  .attr-head .ico{font-size:1.55rem;line-height:1;filter:drop-shadow(0 1px 3px rgba(0,0,0,.6))}
+  .attr-head h3{margin:0;font-size:1.15rem;color:var(--gold-bright);text-transform:none;letter-spacing:.04em}
+  .attr-card .role{display:inline-block;font-family:var(--display);font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;padding:2px 8px;border-radius:2px;background:rgba(197,160,89,0.12);color:var(--gold);margin-bottom:.6rem}
+  .attr-card .desc{color:var(--parchment);opacity:.85;font-size:.9rem;margin:.1rem 0 .8rem}
+  .gains{list-style:none;padding:0;margin:0;border-top:1px solid var(--rule)}
+  .gains li{display:flex;justify-content:space-between;gap:.8rem;padding:.32rem 0;font-size:.84rem;border-bottom:1px dashed rgba(197,160,89,0.10)}
+  .gains li:last-child{border-bottom:0}
+  .gains .gl{color:var(--muted)}
+  .gains .gv{color:var(--green);font-family:var(--mono);font-size:.78rem}
+  .uuid{font-family:var(--mono);font-size:.62rem;color:var(--dim);margin-top:.7rem;word-break:break-all}
+
+  /* derived stats grid */
+  .stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:.55rem}
+  .stat-item{background:rgba(0,0,0,0.32);border:1px solid var(--rule);border-radius:3px;padding:.55rem .8rem;display:flex;justify-content:space-between;gap:.6rem;font-size:.84rem}
+  .stat-item .sk{color:var(--gold);font-family:var(--display);font-size:.78rem;letter-spacing:.05em}
+  .stat-item .sv{color:var(--muted);font-size:.78rem;text-align:right}
+
+  /* tables */
+  table.fmt{width:100%;border-collapse:collapse;font-size:.88rem;margin-top:.6rem}
+  table.fmt th{text-align:left;color:var(--gold);padding:.55rem .7rem;border-bottom:2px solid var(--gold-dim);font-family:var(--display);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase}
+  table.fmt td{padding:.55rem .7rem;border-bottom:1px solid rgba(197,160,89,0.08)}
+  table.fmt td:first-child{color:var(--parchment);font-weight:600}
+  table.fmt td.mono{font-family:var(--mono);color:var(--cyan);font-size:.82rem}
+  table.fmt td.gold{color:var(--gold-bright);font-family:var(--mono);font-size:.82rem}
+  table.fmt td.muted{color:var(--muted);font-size:.84rem}
+
+  /* formula box */
+  .formula{background:rgba(0,0,0,0.4);border:1px solid var(--rule);border-left:3px solid var(--ember);border-radius:3px;padding:.95rem 1.1rem;margin:.8rem 0 1rem;font-family:var(--mono);font-size:.86rem;color:var(--gold-bright);line-height:1.7}
+
+  ol.pipeline{list-style:none;counter-reset:step;padding:0;margin:.6rem 0 0;display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:.6rem}
+  ol.pipeline li{counter-increment:step;background:rgba(0,0,0,0.3);border:1px solid var(--rule);border-radius:3px;padding:.7rem .85rem .7rem 2.6rem;position:relative;font-size:.86rem}
+  ol.pipeline li::before{content:counter(step);position:absolute;left:.7rem;top:.62rem;width:1.6rem;height:1.6rem;display:flex;align-items:center;justify-content:center;background:var(--ember);color:#0a0604;font-family:var(--display);font-weight:700;border-radius:50%;font-size:.78rem}
+  ol.pipeline li b{color:var(--gold-bright);display:block;font-family:var(--display);letter-spacing:.04em;font-size:.92rem;margin-bottom:.15rem}
+  ol.pipeline li span{color:var(--muted);font-size:.82rem}
+
+  /* tiers */
+  .tier-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.9rem}
+  .tier{background:linear-gradient(to bottom,var(--panel),var(--panel-2));border:1px solid var(--rule);border-left:5px solid;border-radius:0 4px 4px 0;padding:1rem 1.1rem}
+  .tier h3{font-family:var(--display);font-size:1rem;margin:0 0 .25rem;letter-spacing:.06em;text-transform:none}
+  .tier .tag{font-family:var(--mono);font-size:.7rem;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;margin-bottom:.4rem}
+  .tier p{margin:.2rem 0 0;font-size:.86rem;color:var(--parchment);opacity:.85;line-height:1.5}
+
+  /* perks */
+  .perk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}
+  .perk{background:linear-gradient(to bottom,var(--panel),var(--panel-2));border:1px solid var(--rule);border-radius:4px;padding:1.1rem 1.2rem 1rem;display:flex;flex-direction:column;gap:.5rem}
+  .perk-head{display:flex;align-items:center;gap:.8rem}
+  .perk-head img{width:48px;height:48px;border:1px solid var(--rule-strong);border-radius:4px;background:rgba(0,0,0,0.5);padding:4px;image-rendering:pixelated}
+  .perk-head h3{margin:0;font-size:1rem;text-transform:none;letter-spacing:.04em;color:var(--gold-bright)}
+  .perk-head .role{font-family:var(--display);font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+  .perk p{margin:0;font-size:.88rem;opacity:.9}
+  .perk ul{margin:.2rem 0 0;padding-left:1.1rem;font-size:.82rem;color:var(--muted)}
+  .perk ul li{margin:.15rem 0}
+  .perk ul li b{color:var(--parchment);font-weight:600}
+
+  .back-link{display:inline-block;margin-bottom:.4rem;color:var(--gold);font-size:.85rem;font-family:var(--display);letter-spacing:.1em;text-transform:uppercase}
+  .loading{padding:1.4rem;text-align:center;color:var(--muted);font-style:italic;font-size:.9rem}
+
+  footer{padding:2.5rem 1.5rem;text-align:center;color:var(--muted);font-size:.82rem;border-top:1px solid var(--rule)}
+
+  @media(max-width:640px){
+    nav.site ul{display:none}
+    .level-info{gap:1.1rem}
+    .level-info .li-val{font-size:1.2rem}
+  }
+</style>
+<script src="/the-way-bg.js" defer></script>
+</head>
+<body>
+
+<nav class="site">
+  <div class="inner">
+    <a href="./" class="brand"><img src="grudges-logo.png" alt="" /> GRUDGES</a>
+    <ul>
+      <li><a href="./">Home</a></li>
+      <li><a href="info.html">Gameplay</a></li>
+      <li><a href="lore.html">Lore &amp; Factions</a></li>
+      <li><a href="stats-guide.html" class="active">Stats</a></li>
+    </ul>
+    <a href="/arpg-game/" class="play">▶ Play Now</a>
+  </div>
+</nav>
+
+<header class="page-hero">
+  <div class="container">
+    <a class="back-link" href="./">← Back to Hub</a>
+    <div class="eyebrow">Combat Reference</div>
+    <h1>Stats &amp; Attributes Guide</h1>
+    <p class="lead">Every number in <em>Grudges</em> traces back to one source of truth: <b>eight primary stats</b> — <span style="color:#4caf50">BIO</span>, <span style="color:#00bcd4">NEU</span>, <span style="color:#ff9800">KIN</span>, <span style="color:#9c27b0">QNT</span>, <span style="color:#2196f3">SYN</span>, <span style="color:#ffeb3b">CHR</span>, <span style="color:#f44336">ENT</span>, <span style="color:#009688">GRA</span> — that drive every affinity effect, perk tree, and derived combat number in the game.</p>
+    <div class="level-info">
+      <div class="li-item"><div class="li-val">1–60</div><div class="li-lbl">Level Range</div></div>
+      <div class="li-item"><div class="li-val">24</div><div class="li-lbl">Starting Pts</div></div>
+      <div class="li-item"><div class="li-val">+5</div><div class="li-lbl">Per Level</div></div>
+      <div class="li-item"><div class="li-val">8</div><div class="li-lbl">Attributes</div></div>
+      <div class="li-item"><div class="li-val" id="hdrDerived">37</div><div class="li-lbl">Derived Stats</div></div>
+      <div class="li-item"><div class="li-val">6</div><div class="li-lbl">Gear Tiers</div></div>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+
+  <section class="section" id="attributes">
+    <h2>The 8 Primary Stats</h2>
+    <p class="lead-sm">Each primary stat owns a slice of the world: combat, biology, perception, salvage, automation, and the three reserved chronal/entropic/gravitic domains. Every point you spend feeds a list of <em>affinity effects</em> that perks, gear, and food consume.</p>
+    <div class="attr-grid" id="primaryGrid"><div class="loading">Loading primary stats…</div></div>
+  </section>
+
+  <section class="section" id="legacy-attributes">
+    <h2>Legacy 8 Attributes (Combat Sheet)</h2>
+    <p class="lead-sm">The combat sheet still resolves through the original eight attributes (Strength, Vitality, Endurance, Intellect, Wisdom, Dexterity, Agility, Tactics). They're what the derived stats and perk trees below actually consume.</p>
+    <div class="attr-grid" id="attrGrid"><div class="loading">Loading attributes…</div></div>
+  </section>
+
+  <section class="section" id="derived">
+    <h2>All 37 Derived Stats</h2>
+    <p class="lead-sm">These are the values that actually drive combat. Hover any item to see its source attributes and where it sits in the pipeline.</p>
+    <div class="stat-grid" id="derivedGrid"><div class="loading">Loading derived stats…</div></div>
+  </section>
+
+  <section class="section" id="dr">
+    <h2>Diminishing Returns</h2>
+    <p class="lead-sm">Spending past 25 points in a single attribute scales down. Past 50 it scales down again. This stops single-stat power builds from running away and rewards diversifying.</p>
+    <div class="formula">
+      Effective&nbsp;Points = Full&nbsp;(1–25) + Half&nbsp;(26–50) × 0.5 + Quarter&nbsp;(51+) × 0.25<br>
+      Total&nbsp;Bonus = (Per-Point&nbsp;Gain × Effective&nbsp;Points) + Base
+    </div>
+    <table class="fmt">
+      <thead><tr><th>Actual Points</th><th>Calculation</th><th>Effective</th><th>Efficiency</th></tr></thead>
+      <tbody id="drTable"></tbody>
+    </table>
+  </section>
+
+  <section class="section" id="caps">
+    <h2>Stat Caps</h2>
+    <p class="lead-sm">Hard ceilings prevent any single stat from breaking the math. Anything you stack past the cap is wasted budget that should go to a different stat.</p>
+    <table class="fmt">
+      <thead><tr><th>Stat</th><th>Cap</th><th>Rationale</th></tr></thead>
+      <tbody id="capsTable"><tr><td colspan="3" class="muted">Loading…</td></tr></tbody>
+    </table>
+  </section>
+
+  <section class="section" id="combat">
+    <h2>Combat Math</h2>
+    <p class="lead-sm">Every hit in <em>Grudges</em> walks the same eight steps. Knowing the order matters — block resolves <em>before</em> crit, drain procs only on damage actually dealt.</p>
+
+    <h3 style="margin-top:1.2rem">Damage Reduction (Defense)</h3>
+    <div class="formula">Damage Taken = Incoming × (100 − √Defense) / 100</div>
+    <table class="fmt">
+      <thead><tr><th>Defense</th><th>√Defense</th><th>Reduction</th><th>100 dmg →</th></tr></thead>
+      <tbody>
+        <tr><td>100</td><td class="mono">10</td><td>10%</td><td class="gold">90</td></tr>
+        <tr><td>400</td><td class="mono">20</td><td>20%</td><td class="gold">80</td></tr>
+        <tr><td>900</td><td class="mono">30</td><td>30%</td><td class="gold">70</td></tr>
+        <tr><td>1600</td><td class="mono">40</td><td>40%</td><td class="gold">60</td></tr>
+        <tr><td>2500</td><td class="mono">50</td><td>50%</td><td class="gold">50</td></tr>
+        <tr><td>3600</td><td class="mono">60</td><td>60%</td><td class="gold">40</td></tr>
+      </tbody>
+    </table>
+
+    <h3 style="margin-top:1.6rem">Block &amp; Critical</h3>
+    <div class="formula">
+      Block:  IF rand &lt; blockChance → dmg ×= (1 − blockEffect)<br>
+      Crit:   IF rand &lt; critChance  → dmg ×= critDamage<br><br>
+      Block resolves <b>before</b> crit. A blocked attack cannot crit.
+    </div>
+
+    <h3 style="margin-top:1.6rem">Drain · Reflect · Absorb</h3>
+    <div class="formula">
+      Health Restored = Damage Dealt × Drain Health     (cap 50%)<br>
+      Damage Reflected = Damage Received × Reflect      (cap 50%)<br>
+      Damage Absorbed  = Damage Received × Absorb       (cap 50%)<br><br>
+      Reflect does <b>not</b> proc on a fully blocked hit.
+    </div>
+
+    <h3 style="margin-top:1.6rem">Full Pipeline</h3>
+    <ol class="pipeline" id="pipelineList"></ol>
+  </section>
+
+  <section class="section" id="tiers">
+    <h2>Gear Tiers (T1–T6)</h2>
+    <p class="lead-sm">Loot in <em>Grudges</em> climbs through six tiers. Every tier roughly doubles affix budget and unlocks an additional rolled property. T6 gear is bound to faction reputation and the rifts at the edge of the map.</p>
+    <div class="tier-grid">
+      <div class="tier" style="border-left-color:#7a6a4a"><h3 style="color:#a8956a">T1 Scrap</h3><div class="tag">Surface salvage</div><p>Bent rebar, charred plate, anything you pried loose with a multitool. Found in the first wreck you crack open. Two affixes max, low rolls.</p></div>
+      <div class="tier" style="border-left-color:#a8a8a8"><h3 style="color:#c8c8c8">T2 Salvaged</h3><div class="tag">Workshop-grade</div><p>Re-shafted, re-bored, re-zeroed by a Tech-Scavenger who knew what they were doing. Three affixes, mid-range rolls. The first gear most players actually rely on.</p></div>
+      <div class="tier" style="border-left-color:#5a9ad8"><h3 style="color:#88bce8">T3 Refined</h3><div class="tag">Faction-armoury</div><p>Standard-issue gear from any faction quartermaster who likes you enough. Four affixes, one of them faction-flavoured. The midgame plateau.</p></div>
+      <div class="tier" style="border-left-color:#9d4dff"><h3 style="color:#bf86f0">T4 Forged</h3><div class="tag">Master-crafted</div><p>Hand-built by a named smith using a recipe paid for in someone else's blood. Five affixes, one guaranteed prefix slot. End of the crafting track for most players.</p></div>
+      <div class="tier" style="border-left-color:#d4602a"><h3 style="color:#e8884a">T5 Relic</h3><div class="tag">Pre-collapse tech</div><p>Pulled from a sealed orbital cache, a dead consortium vault, or worse. Six affixes including a unique implicit. Cannot be crafted — only found.</p></div>
+      <div class="tier" style="border-left-color:#f0d088"><h3 style="color:#f8e0a0">T6 Ascendant</h3><div class="tag">Rift-binding</div><p>Bound to a faction reputation track <em>and</em> a rift kill. Seven affixes, an ascendant suffix that scales with your highest-rep faction, and one corruption mod. Apex-tier — drops are public-event news.</p></div>
+    </div>
+  </section>
+
+  <section class="section" id="perks">
+    <h2>Perk Trees</h2>
+    <p class="lead-sm">Four parallel trees, one perk point per level (60 total). Every tree has gateway perks that unlock at certain attribute thresholds — you can't slot the deep <em>Warrior</em> nodes until your Strength is high enough to actually swing the weapon.</p>
+    <div class="perk-grid">
+
+      <div class="perk">
+        <div class="perk-head">
+          <img src="icons/perks/warrior/14.png" alt="" />
+          <div>
+            <h3>Warrior</h3>
+            <div class="role">Strength · Vitality</div>
+          </div>
+        </div>
+        <p>Frontline melee. Trade nothing for raw stopping power. Shield-and-axe builds, two-handed cleavers, anything that wants to be hit.</p>
+        <ul>
+          <li><b>Iron Stance</b> — gain block chance based on missing health.</li>
+          <li><b>Pulverize</b> — heavy attacks ignore a flat amount of armor.</li>
+          <li><b>Grudge</b> <i>(gateway)</i> — first hit each fight crits if the target attacked you last.</li>
+          <li><b>Bulwark</b> — converts excess Defense into Resistance once capped.</li>
+        </ul>
+      </div>
+
+      <div class="perk">
+        <div class="perk-head">
+          <img src="icons/perks/hero/12.png" alt="" />
+          <div>
+            <h3>Hero</h3>
+            <div class="role">Tactics · Wisdom</div>
+          </div>
+        </div>
+        <p>Captain-class. Make your party hit harder, hit more often, and not die on your watch. Aura-based — most nodes affect everyone within range.</p>
+        <ul>
+          <li><b>Standard Bearer</b> — allies in 12m gain accuracy and crit chance.</li>
+          <li><b>Field Surgeon</b> — your heals also scrub one debuff stack.</li>
+          <li><b>Last Stand</b> <i>(gateway)</i> — ally drops below 20% HP, you gain attack speed for 6s.</li>
+          <li><b>Banner of the Forgotten</b> — boss kills mark the area; allies who die there respawn faster.</li>
+        </ul>
+      </div>
+
+      <div class="perk">
+        <div class="perk-head">
+          <img src="icons/perks/smarts/3.png" alt="" />
+          <div>
+            <h3>Smarts</h3>
+            <div class="role">Intellect · Wisdom</div>
+          </div>
+        </div>
+        <p>Spellcasters and tinker-mystics. Mana economy, spell penetration, and the long combos that brick a fight before it starts.</p>
+        <ul>
+          <li><b>Conduit</b> — overhealing converts to a temporary mana shield.</li>
+          <li><b>Sequencer</b> — every third cast has reduced cooldown.</li>
+          <li><b>Annul</b> <i>(gateway)</i> — interrupts grant 8% mana refund and 1s of spell-immunity.</li>
+          <li><b>Black Page</b> — kills with a damage-over-time apply a stack of vulnerability to nearby enemies.</li>
+        </ul>
+      </div>
+
+      <div class="perk">
+        <div class="perk-head">
+          <img src="icons/perks/maker/14.png" alt="" />
+          <div>
+            <h3>Maker</h3>
+            <div class="role">Endurance · Dexterity</div>
+          </div>
+        </div>
+        <p>Crafters, scavengers, and trap-layers. Out-of-combat power: better salvage rolls, faster repairs, deployables that fight for you.</p>
+        <ul>
+          <li><b>Scrapper's Eye</b> — salvage yields one extra rare component on T3+ items.</li>
+          <li><b>Field Repair</b> — restore 5% durability in combat once per fight.</li>
+          <li><b>Drone Pack</b> <i>(gateway)</i> — deploy a turret-drone with your weapon stats.</li>
+          <li><b>Cold Workshop</b> — recipes you craft for allies cost 25% less and bind to them on use.</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div>Numbers are embedded directly in this file — works offline from <code style="font-family:var(--mono);color:var(--gold)">file://</code>. When served from the live site, fresh data from <code style="font-family:var(--mono);color:var(--gold)">/api/stats/catalog</code> overrides the snapshot. To refresh the embedded data, re-run the build.</div>
+</footer>
+
+<script>
+  const PERCENT_STATS = new Set([
+    'block','blockEffect','evasion','accuracy','criticalChance','criticalDamage',
+    'attackSpeed','movementSpeed','resistance','cdrResist','defenseBreakResist',
+    'armorPenetration','blockPenetration','defenseBreak','drainHealth','drainMana',
+    'cooldownReduction','abilityCost','spellAccuracy','stagger','ccResistance',
+    'damageReduction','bleedResist','statusEffect','spellblock','dodge',
+    'reflexTime','criticalEvasion','fallDamage','comboCooldownRed'
+  ]);
+
+  // attribute → accent color
+  const ATTR_COLOR = {
+    strength:'#d46050', vitality:'#d83a4a', endurance:'#a89060',
+    intellect:'#5a9ad8', wisdom:'#a87fd8', dexterity:'#7ac874',
+    agility:'#f0d088',  tactics:'#e88858'
+  };
+
+  const CAP_RATIONALE = {
+    block:           'Prevents permanent immunity through pure block stacking.',
+    criticalChance:  'Balanced against Critical Evasion; keeps non-crit hits relevant.',
+    blockEffect:     'A 100% block would invalidate every attacker — leave 10% bleed-through.',
+    criticalDamage:  'Caps multiplier at 3×; further crit budget goes to chance, not damage.',
+    accuracy:        'Some attacks must miss; supports dodge/evasion as a counterplay.',
+    resistance:      'Magic damage stays a real threat past gear plateaus.',
+    drainHealth:     'Lifesteal cap stops infinite-sustain DPS builds.',
+    drainMana:       'Manasteal cap stops permanent uptime on big spenders.',
+    reflectDamage:   'Reflect with no cap punishes attackers for existing.',
+    absorbHealth:    'Damage shields cannot fully negate a hit.',
+    absorbMana:      'Mana shields cannot fully negate a hit.'
+  };
+
+  function pct(n) { return (Math.round(n * 1000) / 10) + '%'; }
+
+  function effective(actual) {
+    if (actual <= 25) return actual;
+    if (actual <= 50) return 25 + (actual - 25) * 0.5;
+    return 25 + 12.5 + (actual - 50) * 0.25;
+  }
+
+  function fmtBonus(b, key) {
+    const isPct = PERCENT_STATS.has(key);
+    const parts = [];
+    if (b.flat)     parts.push(`+${b.flat}${isPct ? '%' : ''} flat`);
+    if (b.pctOfBase) parts.push(`+${b.pctOfBase}% base`);
+    return parts.join(' / ') || '+0';
+  }
+
+  function sourcesFor(statKey, attrs) {
+    return attrs
+      .filter(a => a.bonuses.some(b => b.stat === statKey))
+      .map(a => {
+        const b = a.bonuses.find(x => x.stat === statKey);
+        const isPct = PERCENT_STATS.has(statKey);
+        const bits = [];
+        if (b.flat)     bits.push(`+${b.flat}${isPct ? '%' : ''}`);
+        if (b.pctOfBase) bits.push(`+${b.pctOfBase}%b`);
+        return `${a.name}: ${bits.join(', ')}`;
+      });
+  }
+
+  // ── Embedded snapshot — keeps this file standalone (file:// works offline) ─
+  // Auto-generated from /api/stats/{catalog,caps,primary,effects}. To refresh:
+  //   curl -s localhost:80/api/stats/catalog
+  //   curl -s localhost:80/api/stats/caps
+  //   curl -s localhost:80/api/stats/primary
+  //   curl -s localhost:80/api/stats/effects
+  // and paste the JSON below.
+  const EMBEDDED_PRIMARY = {"primaryStats":[{"key":"bio","abbr":"BIO","label":"Biomass","color":"#4caf50","icon":"/icons/stats/bio.png","description":"Max health, natural healing, toxin resistance, implant compatibility, food and harvest yields.","archetype":"Survivor / Forager / Field Medic","affinityEffects":["maxHpBonus","oocHealRate","allyAuraHealRate","foodBuffDurationBonus","foodEffectBonus","cookingYieldBonus","harvestYieldBonus","harvestRareBonus","harvestSpeedBonus","skinningYieldBonus","fishingYieldBonus","baitDurationBonus","treeRegrowSpeedBonus","coldResistBonus","heatResistBonus","radResistBonus","weaponPoisonOnHit","poisonArmourPenetration","potionPotencyBonus","distillYieldBonus","biomeDamageBonus"]},{"key":"neu","abbr":"NEU","label":"Neural Integrity","color":"#00bcd4","icon":"/icons/stats/neu.png","description":"Sanity, psionic defense, AI co-processor cap, neural-hack resistance — drives gadgets, stealth, and perception.","archetype":"Hacker / Scout / Sniper","affinityEffects":["gadgetCooldownReduction","gadgetCritBonus","gadgetCritChance","gadgetEffectBonus","trapRareDropBonus","trapTriggerBonus","passiveTrapXpRate","stealthBonus","lockpickSpeedBonus","pickpocketYieldBonus","backstabDamageBonus","nightHerbVisionRange","fogRevealRange","spyglassZoomBonus","crystalDetectRange","minimapEnemyRange","permafrostMinimapRange","npcAlertRange","rifleAccuracyBonus","rifleHeadshotBonus"]},{"key":"kin","abbr":"KIN","label":"Kinetic Efficiency","color":"#ff9800","icon":"/icons/stats/kin.png","description":"Movement speed, melee damage, stamina regen, zero-G combat — the warrior stat.","archetype":"Bladesman / Gunfighter / Sprinter","affinityEffects":["bladeAttackSpeedBonus","bladeCritDamageBonus","bladeUseDamageBonus","bladesmithDamageBonus","hammerUseDamageBonus","gunsmithDamageBonus","pistolCritBonus","pistolDamageBonus","pistolReloadSpeedBonus","rifleDamageBonus","explosionDamageBonus","explosionRadiusBonus","staggerChanceBonus","parryStaminaBonus","sprintCostReduction","staminaRegenBonus","oocSpeedBonus","shieldBreakBonus","damageReductionBonus","armourDefenseBonus","bloodTrailDuration"]},{"key":"qnt","abbr":"QNT","label":"Quantum Aptitude","color":"#9c27b0","icon":"/icons/stats/qnt.png","description":"Tech comprehension, quantum-device operation, probability manipulation — biases rare-drop chance.","archetype":"Salvager / Anomaly Hunter / Probability Engineer","affinityEffects":["anomalyShardBonus","crystalYieldBonus","derelictDoubleDropChance","veinDoubleYieldChance","ironYieldBonus","copperYieldBonus","salvageYieldBonus","smeltYieldBonus","permafrostYieldBonus"]},{"key":"syn","abbr":"SYN","label":"Synthetic Affinity","color":"#2196f3","icon":"/icons/stats/syn.png","description":"Hacking skill, drone control, AI negotiation, swarm intelligence — drives turrets, building, and hires.","archetype":"Architect / Drone Master / Quartermaster","affinityEffects":["turretDamageBonus","buildingHpBonus","wallHpBonus","buildCostReduction","craftCostReduction","craftQualityBonus","recruitCapBonus","followerSlots","campMoraleBonus","bountyContractSlots","bountyGoldBonus","bountyXpBonus","bountyMissionXpBonus","bountyRareContractBonus","sellGoldBonus","passiveGoldRate","reputationGainBonus"]},{"key":"chr","abbr":"CHR","label":"Chronal Stability","color":"#ffeb3b","icon":"/icons/stats/chr.png","description":"Temporal anomaly resistance, time perception, causality protection — content reserved for chronal perks.","archetype":"Chrono-Operative / Echo Reader","affinityEffects":[]},{"key":"ent","abbr":"ENT","label":"Entropic Resistance","color":"#f44336","icon":"/icons/stats/ent.png","description":"Equipment durability, resource preservation, decay resistance — content reserved for entropy perks.","archetype":"Reclaimer / Preserver","affinityEffects":[]},{"key":"gra","abbr":"GRA","label":"Gravitic Harmony","color":"#009688","icon":"/icons/stats/gra.png","description":"Fall damage reduction, zero-G adaptation, spatial force manipulation — content reserved for gravitic perks.","archetype":"Orbital Specialist","affinityEffects":[]}]};
+  const EMBEDDED_EFFECTS = {"effects":[{"key":"maxHpBonus","domain":"bio","label":"Max Hp Bonus","kind":"pct"},{"key":"oocHealRate","domain":"bio","label":"Ooc Heal Rate","kind":"pct"},{"key":"allyAuraHealRate","domain":"bio","label":"Ally Aura Heal Rate","kind":"pct"},{"key":"foodBuffDurationBonus","domain":"bio","label":"Food Buff Duration Bonus","kind":"pct"},{"key":"foodEffectBonus","domain":"bio","label":"Food Effect Bonus","kind":"pct"},{"key":"cookingYieldBonus","domain":"bio","label":"Cooking Yield Bonus","kind":"pct"},{"key":"harvestYieldBonus","domain":"bio","label":"Harvest Yield Bonus","kind":"pct"},{"key":"harvestRareBonus","domain":"bio","label":"Harvest Rare Bonus","kind":"pct"},{"key":"harvestSpeedBonus","domain":"bio","label":"Harvest Speed Bonus","kind":"pct"},{"key":"skinningYieldBonus","domain":"bio","label":"Skinning Yield Bonus","kind":"pct"},{"key":"fishingYieldBonus","domain":"bio","label":"Fishing Yield Bonus","kind":"pct"},{"key":"baitDurationBonus","domain":"bio","label":"Bait Duration Bonus","kind":"pct"},{"key":"treeRegrowSpeedBonus","domain":"bio","label":"Tree Regrow Speed Bonus","kind":"pct"},{"key":"coldResistBonus","domain":"bio","label":"Cold Resist Bonus","kind":"pct"},{"key":"heatResistBonus","domain":"bio","label":"Heat Resist Bonus","kind":"pct"},{"key":"radResistBonus","domain":"bio","label":"Rad Resist Bonus","kind":"pct"},{"key":"weaponPoisonOnHit","domain":"bio","label":"Weapon Poison On Hit","kind":"flat"},{"key":"poisonArmourPenetration","domain":"bio","label":"Poison Armour Penetration","kind":"flat"},{"key":"potionPotencyBonus","domain":"bio","label":"Potion Potency Bonus","kind":"pct"},{"key":"distillYieldBonus","domain":"bio","label":"Distill Yield Bonus","kind":"pct"},{"key":"biomeDamageBonus","domain":"bio","label":"Biome Damage Bonus","kind":"pct"},{"key":"gadgetCooldownReduction","domain":"neu","label":"Gadget Cooldown Reduction","kind":"pct"},{"key":"gadgetCritBonus","domain":"neu","label":"Gadget Crit Bonus","kind":"pct"},{"key":"gadgetCritChance","domain":"neu","label":"Gadget Crit Chance","kind":"pct"},{"key":"gadgetEffectBonus","domain":"neu","label":"Gadget Effect Bonus","kind":"pct"},{"key":"trapRareDropBonus","domain":"neu","label":"Trap Rare Drop Bonus","kind":"pct"},{"key":"trapTriggerBonus","domain":"neu","label":"Trap Trigger Bonus","kind":"pct"},{"key":"passiveTrapXpRate","domain":"neu","label":"Passive Trap Xp Rate","kind":"pct"},{"key":"stealthBonus","domain":"neu","label":"Stealth Bonus","kind":"pct"},{"key":"lockpickSpeedBonus","domain":"neu","label":"Lockpick Speed Bonus","kind":"pct"},{"key":"pickpocketYieldBonus","domain":"neu","label":"Pickpocket Yield Bonus","kind":"pct"},{"key":"backstabDamageBonus","domain":"neu","label":"Backstab Damage Bonus","kind":"pct"},{"key":"nightHerbVisionRange","domain":"neu","label":"Night Herb Vision Range","kind":"pct"},{"key":"fogRevealRange","domain":"neu","label":"Fog Reveal Range","kind":"pct"},{"key":"spyglassZoomBonus","domain":"neu","label":"Spyglass Zoom Bonus","kind":"pct"},{"key":"crystalDetectRange","domain":"neu","label":"Crystal Detect Range","kind":"pct"},{"key":"minimapEnemyRange","domain":"neu","label":"Minimap Enemy Range","kind":"pct"},{"key":"permafrostMinimapRange","domain":"neu","label":"Permafrost Minimap Range","kind":"pct"},{"key":"npcAlertRange","domain":"neu","label":"Npc Alert Range","kind":"pct"},{"key":"rifleAccuracyBonus","domain":"neu","label":"Rifle Accuracy Bonus","kind":"pct"},{"key":"rifleHeadshotBonus","domain":"neu","label":"Rifle Headshot Bonus","kind":"pct"},{"key":"bladeAttackSpeedBonus","domain":"kin","label":"Blade Attack Speed Bonus","kind":"pct"},{"key":"bladeCritDamageBonus","domain":"kin","label":"Blade Crit Damage Bonus","kind":"pct"},{"key":"bladeUseDamageBonus","domain":"kin","label":"Blade Use Damage Bonus","kind":"pct"},{"key":"bladesmithDamageBonus","domain":"kin","label":"Bladesmith Damage Bonus","kind":"pct"},{"key":"hammerUseDamageBonus","domain":"kin","label":"Hammer Use Damage Bonus","kind":"pct"},{"key":"gunsmithDamageBonus","domain":"kin","label":"Gunsmith Damage Bonus","kind":"pct"},{"key":"pistolCritBonus","domain":"kin","label":"Pistol Crit Bonus","kind":"pct"},{"key":"pistolDamageBonus","domain":"kin","label":"Pistol Damage Bonus","kind":"pct"},{"key":"pistolReloadSpeedBonus","domain":"kin","label":"Pistol Reload Speed Bonus","kind":"pct"},{"key":"rifleDamageBonus","domain":"kin","label":"Rifle Damage Bonus","kind":"pct"},{"key":"explosionDamageBonus","domain":"kin","label":"Explosion Damage Bonus","kind":"pct"},{"key":"explosionRadiusBonus","domain":"kin","label":"Explosion Radius Bonus","kind":"pct"},{"key":"staggerChanceBonus","domain":"kin","label":"Stagger Chance Bonus","kind":"pct"},{"key":"parryStaminaBonus","domain":"kin","label":"Parry Stamina Bonus","kind":"pct"},{"key":"sprintCostReduction","domain":"kin","label":"Sprint Cost Reduction","kind":"pct"},{"key":"staminaRegenBonus","domain":"kin","label":"Stamina Regen Bonus","kind":"pct"},{"key":"oocSpeedBonus","domain":"kin","label":"Ooc Speed Bonus","kind":"pct"},{"key":"shieldBreakBonus","domain":"kin","label":"Shield Break Bonus","kind":"pct"},{"key":"damageReductionBonus","domain":"kin","label":"Damage Reduction Bonus","kind":"pct"},{"key":"armourDefenseBonus","domain":"kin","label":"Armour Defense Bonus","kind":"pct"},{"key":"bloodTrailDuration","domain":"kin","label":"Blood Trail Duration","kind":"pct"},{"key":"anomalyShardBonus","domain":"qnt","label":"Anomaly Shard Bonus","kind":"pct"},{"key":"crystalYieldBonus","domain":"qnt","label":"Crystal Yield Bonus","kind":"pct"},{"key":"derelictDoubleDropChance","domain":"qnt","label":"Derelict Double Drop Chance","kind":"pct"},{"key":"veinDoubleYieldChance","domain":"qnt","label":"Vein Double Yield Chance","kind":"pct"},{"key":"ironYieldBonus","domain":"qnt","label":"Iron Yield Bonus","kind":"pct"},{"key":"copperYieldBonus","domain":"qnt","label":"Copper Yield Bonus","kind":"pct"},{"key":"salvageYieldBonus","domain":"qnt","label":"Salvage Yield Bonus","kind":"pct"},{"key":"smeltYieldBonus","domain":"qnt","label":"Smelt Yield Bonus","kind":"pct"},{"key":"permafrostYieldBonus","domain":"qnt","label":"Permafrost Yield Bonus","kind":"pct"},{"key":"turretDamageBonus","domain":"syn","label":"Turret Damage Bonus","kind":"pct"},{"key":"buildingHpBonus","domain":"syn","label":"Building Hp Bonus","kind":"pct"},{"key":"wallHpBonus","domain":"syn","label":"Wall Hp Bonus","kind":"pct"},{"key":"buildCostReduction","domain":"syn","label":"Build Cost Reduction","kind":"pct"},{"key":"craftCostReduction","domain":"syn","label":"Craft Cost Reduction","kind":"pct"},{"key":"craftQualityBonus","domain":"syn","label":"Craft Quality Bonus","kind":"pct"},{"key":"recruitCapBonus","domain":"syn","label":"Recruit Cap Bonus","kind":"pct"},{"key":"followerSlots","domain":"syn","label":"Follower Slots","kind":"flat"},{"key":"campMoraleBonus","domain":"syn","label":"Camp Morale Bonus","kind":"pct"},{"key":"bountyContractSlots","domain":"syn","label":"Bounty Contract Slots","kind":"flat"},{"key":"bountyGoldBonus","domain":"syn","label":"Bounty Gold Bonus","kind":"pct"},{"key":"bountyXpBonus","domain":"syn","label":"Bounty Xp Bonus","kind":"pct"},{"key":"bountyMissionXpBonus","domain":"syn","label":"Bounty Mission Xp Bonus","kind":"pct"},{"key":"bountyRareContractBonus","domain":"syn","label":"Bounty Rare Contract Bonus","kind":"pct"},{"key":"sellGoldBonus","domain":"syn","label":"Sell Gold Bonus","kind":"pct"},{"key":"passiveGoldRate","domain":"syn","label":"Passive Gold Rate","kind":"pct"},{"key":"reputationGainBonus","domain":"syn","label":"Reputation Gain Bonus","kind":"pct"}]};
+  const EMBEDDED_CATALOG = {"version":1,"attributes":[{"key":"strength","name":"Strength","icon":"💪","archetype":"Tank / Melee DPS","description":"High health, damage, and defense with strong combat modifiers. Warriors and Barbarians benefit most.","uuid":"ATTR-20260421195547-000573-66282B62","bonuses":[{"stat":"health","flat":26,"pctOfBase":0.8},{"stat":"damage","flat":3,"pctOfBase":2},{"stat":"defense","flat":12,"pctOfBase":1.5},{"stat":"block","flat":0.5,"pctOfBase":5},{"stat":"criticalChance","flat":0.32,"pctOfBase":7},{"stat":"blockEffect","flat":0.85,"pctOfBase":26.3},{"stat":"criticalDamage","flat":1.1,"pctOfBase":1.5}]},{"key":"vitality","name":"Vitality","icon":"❤️","archetype":"Tank / Survivability","description":"Maximum health, defense, and damage mitigation. Important for all frontline fighters.","uuid":"ATTR-20260421195547-000574-2255EA41","bonuses":[{"stat":"health","flat":25,"pctOfBase":0.5},{"stat":"mana","flat":2,"pctOfBase":0.2},{"stat":"stamina","flat":5,"pctOfBase":0.1},{"stat":"damage","flat":2,"pctOfBase":0.1},{"stat":"defense","flat":12},{"stat":"blockEffect","flat":0.3,"pctOfBase":17},{"stat":"resistance","flat":0.5}]},{"key":"endurance","name":"Endurance","icon":"🛡️","archetype":"Defensive Specialist","description":"Defense, block mechanics, and critical evasion. Dwarves excel here.","uuid":"ATTR-20260421195547-000575-354644ED","bonuses":[{"stat":"health","flat":10,"pctOfBase":0.1},{"stat":"stamina","flat":1,"pctOfBase":0.3},{"stat":"defense","flat":12,"pctOfBase":12},{"stat":"block","flat":0.11,"pctOfBase":73.5},{"stat":"blockEffect","flat":0.27},{"stat":"resistance","flat":0.46}]},{"key":"intellect","name":"Intellect","icon":"🧠","archetype":"Mage / Caster","description":"Mana, magic damage, and spell accuracy. Essential for Mage Priests.","uuid":"ATTR-20260421195547-000576-0FCEF523","bonuses":[{"stat":"mana","flat":5,"pctOfBase":5},{"stat":"damage","flat":4,"pctOfBase":2.5},{"stat":"defense","flat":2},{"stat":"criticalChance","flat":0.23,"pctOfBase":0.1},{"stat":"accuracy","flat":0.12,"pctOfBase":33.8},{"stat":"resistance","flat":0.38,"pctOfBase":17}]},{"key":"wisdom","name":"Wisdom","icon":"✨","archetype":"Healer / Support / Mana Efficiency","description":"Mana efficiency, survivability, and spell effectiveness. Heal power and mana regeneration.","uuid":"ATTR-20260421195547-000577-917DEB6E","bonuses":[{"stat":"health","flat":10},{"stat":"mana","flat":20,"pctOfBase":3},{"stat":"damage","flat":2,"pctOfBase":1.5},{"stat":"defense","flat":2},{"stat":"criticalChance","flat":0.5,"pctOfBase":0.15},{"stat":"resistance","flat":0.5}]},{"key":"dexterity","name":"Dexterity","icon":"🎯","archetype":"Rogue / Precision Fighter","description":"Critical strikes, accuracy, and evasion. Key stat for Rangers.","uuid":"ATTR-20260421195547-000578-07F9BBCD","bonuses":[{"stat":"damage","flat":3,"pctOfBase":1.8},{"stat":"defense","flat":10,"pctOfBase":1},{"stat":"block","flat":0.41,"pctOfBase":1},{"stat":"criticalChance","flat":0.5,"pctOfBase":1.2},{"stat":"accuracy","flat":0.7,"pctOfBase":1.5}]},{"key":"agility","name":"Agility","icon":"⚡","archetype":"Mobile DPS / Dodge Tank","description":"Mobility, critical strikes, and defensive capabilities. Determines action order.","uuid":"ATTR-20260421195547-000579-6D61846A","bonuses":[{"stat":"health","flat":2,"pctOfBase":0.6},{"stat":"stamina","flat":5,"pctOfBase":0.5},{"stat":"damage","flat":3,"pctOfBase":1.6},{"stat":"defense","flat":5,"pctOfBase":0.8},{"stat":"criticalChance","flat":0.42,"pctOfBase":1}]},{"key":"tactics","name":"Tactics","icon":"📜","archetype":"Strategic Fighter / Commander","description":"Balanced combat stats with penetration abilities. Buff/debuff effectiveness.","uuid":"ATTR-20260421195547-00057A-0501E75B","bonuses":[{"stat":"health","flat":10,"pctOfBase":8.4},{"stat":"mana","pctOfBase":8.2},{"stat":"stamina","flat":1},{"stat":"damage","flat":3,"pctOfBase":0.2},{"stat":"defense","flat":5,"pctOfBase":0.5},{"stat":"block","flat":0.27,"pctOfBase":0.8}]}],"derivedStats":[{"key":"health","label":"Health","description":"Maximum Health Points"},{"key":"mana","label":"Mana","description":"Maximum Mana Points"},{"key":"stamina","label":"Stamina","description":"Maximum Stamina Points"},{"key":"damage","label":"Damage","description":"Base Attack Damage"},{"key":"defense","label":"Defense","description":"Physical Defense Rating"},{"key":"magicDefense","label":"Magic Defense","description":"Magic Defense Rating"},{"key":"healPower","label":"Heal Power","description":"Healing Output Bonus"},{"key":"block","label":"Block","description":"Block Chance"},{"key":"blockEffect","label":"Block Effect","description":"Block Damage Reduction Factor"},{"key":"evasion","label":"Evasion","description":"Evasion Chance"},{"key":"accuracy","label":"Accuracy","description":"Hit / Debuff Accuracy"},{"key":"criticalChance","label":"Critical Chance","description":"Critical Strike Chance"},{"key":"criticalDamage","label":"Critical Damage","description":"Critical Strike Multiplier"},{"key":"attackSpeed","label":"Attack Speed","description":"Attack Speed Bonus"},{"key":"movementSpeed","label":"Movement Speed","description":"Movement Speed Bonus"},{"key":"resistance","label":"Resistance","description":"Debuff Resistance"},{"key":"cdrResist","label":"CDR Resist","description":"Cooldown Reduction Resistance"},{"key":"defenseBreakResist","label":"Defense Break Resist","description":"Defense Break Resistance"},{"key":"armorPenetration","label":"Armor Penetration","description":"Armor Penetration"},{"key":"blockPenetration","label":"Block Penetration","description":"Block Penetration"},{"key":"defenseBreak","label":"Defense Break","description":"Defense Break Factor"},{"key":"drainHealth","label":"Drain Health","description":"Health Drain (Lifesteal)"},{"key":"drainMana","label":"Drain Mana","description":"Mana Drain (Manasteal)"},{"key":"cooldownReduction","label":"Cooldown Reduction","description":"Cooldown Reduction"},{"key":"abilityCost","label":"Ability Cost","description":"Ability Cost Reduction"},{"key":"spellAccuracy","label":"Spell Accuracy","description":"Spell Hit Accuracy"},{"key":"stagger","label":"Stagger","description":"Stagger Chance"},{"key":"ccResistance","label":"CC Resistance","description":"Crowd Control Resistance"},{"key":"damageReduction","label":"Damage Reduction","description":"Flat Damage Reduction"},{"key":"bleedResist","label":"Bleed Resist","description":"Bleed Resistance"},{"key":"statusEffect","label":"Status Effect","description":"Status Effect Amplification"},{"key":"spellblock","label":"Spellblock","description":"Spell Block Chance"},{"key":"dodge","label":"Dodge","description":"Dodge Chance"},{"key":"reflexTime","label":"Reflex Time","description":"Reflex Time Bonus"},{"key":"criticalEvasion","label":"Critical Evasion","description":"Critical Evasion Chance"},{"key":"fallDamage","label":"Fall Damage","description":"Fall Damage Reduction"},{"key":"comboCooldownRed","label":"Combo Cooldown Red","description":"Combo Cooldown Reduction"}],"diminishingReturns":{"fullCap":25,"halfCap":50,"halfMultiplier":0.5,"quarterMultiplier":0.25},"statCaps":{"block":75,"criticalChance":75,"blockEffect":90,"criticalDamage":300,"accuracy":95,"resistance":95,"drainHealth":50,"drainMana":50,"reflectDamage":50,"absorbHealth":50,"absorbMana":50},"combatPipeline":[{"step":1,"name":"Calculate Base Damage","detail":"Level + Attributes + Equipment + Traits"},{"step":2,"name":"Apply Defense Break","detail":"Reduce target defense by attacker's Defense Break Factor"},{"step":3,"name":"Calculate Mitigation","detail":"Apply defense formula (√defense reduction)"},{"step":4,"name":"Apply Random Variance","detail":"±25% deviation (if enabled)"},{"step":5,"name":"Check Block","detail":"Roll vs effective block chance (modified by Block Break)"},{"step":6,"name":"Check Critical","detail":"Roll vs effective crit chance (modified by Crit Evasion) if not blocked"},{"step":7,"name":"Apply Damage","detail":"Subtract from target HP"},{"step":8,"name":"Trigger Effects","detail":"Drain, Reflect, Absorb factors activate"}]};
+  const EMBEDDED_CAPS    = {"statCaps":{"block":75,"criticalChance":75,"blockEffect":90,"criticalDamage":300,"accuracy":95,"resistance":95,"drainHealth":50,"drainMana":50},"extraCaps":{"reflectDamage":50,"absorbHealth":50,"absorbMana":50}};
+
+  async function tryLive() {
+    if (location.protocol === 'file:') return null;
+    try {
+      const [c, k, p, e] = await Promise.all([
+        fetch('/api/stats/catalog').then(r => r.ok ? r.json() : null),
+        fetch('/api/stats/caps').then(r => r.ok ? r.json() : null),
+        fetch('/api/stats/primary').then(r => r.ok ? r.json() : null),
+        fetch('/api/stats/effects').then(r => r.ok ? r.json() : null),
+      ]);
+      return (c && k && p && e) ? [c, k, p, e] : null;
+    } catch { return null; }
+  }
+
+  async function init() {
+    const live = await tryLive();
+    const [catalog, capsResp, primaryResp, effectsResp] =
+      live || [EMBEDDED_CATALOG, EMBEDDED_CAPS, EMBEDDED_PRIMARY, EMBEDDED_EFFECTS];
+
+    const attrs = catalog.attributes || [];
+    const derived = catalog.derivedStats || [];
+    const pipeline = catalog.combatPipeline || [];
+
+    document.getElementById('hdrDerived').textContent = derived.length;
+
+    // ── Primary stats (BIO/NEU/KIN/QNT/SYN/CHR/ENT/GRA) ────────────────────
+    const primary = (primaryResp && primaryResp.primaryStats) || [];
+    const effectList = (effectsResp && effectsResp.effects) || [];
+    const effectsByDomain = {};
+    for (const ef of effectList) (effectsByDomain[ef.domain] = effectsByDomain[ef.domain] || []).push(ef);
+
+    document.getElementById('primaryGrid').innerHTML = primary.map(s => {
+      const myEffects = effectsByDomain[s.key] || [];
+      const reserved = (s.affinityEffects || []).length === 0;
+      const chips = reserved
+        ? '<span style="font-style:italic;color:var(--muted);font-size:.82rem">No perks reference this stat yet — reserved for future content.</span>'
+        : myEffects.slice(0, 18).map(ef =>
+            `<span style="display:inline-block;background:${s.color}18;border:1px solid ${s.color}44;color:${s.color};font-family:var(--mono);font-size:.7rem;padding:2px 7px;border-radius:2px;margin:2px 3px 2px 0">${ef.label}${ef.kind==='pct'?' %':''}</span>`
+          ).join('') + (myEffects.length > 18 ? ` <span style="color:var(--muted);font-size:.78rem">+${myEffects.length-18} more</span>` : '');
+      return `
+        <div class="attr-card" style="border-left-color:${s.color}">
+          <div class="attr-head">
+            <div class="ico" style="width:1.55rem;height:1.55rem;border-radius:50%;background:${s.color};color:#0a0604;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:900;font-size:.72rem">${s.abbr}</div>
+            <h3 style="color:${s.color}">${s.label}</h3>
+          </div>
+          <span class="role" style="background:${s.color}22;color:${s.color}">${s.archetype}</span>
+          <p class="desc">${s.description}</p>
+          <div style="border-top:1px solid var(--rule);padding-top:.5rem;margin-top:.4rem">
+            <div style="font-family:var(--display);font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem">Affinity Effects ${reserved ? '' : '('+myEffects.length+')'}</div>
+            ${chips}
+          </div>
+        </div>`;
+    }).join('');
+
+    // Attributes
+    document.getElementById('attrGrid').innerHTML = attrs.map(a => {
+      const color = ATTR_COLOR[a.key] || '#c5a059';
+      const gains = a.bonuses.map(b => {
+        const stat = derived.find(d => d.key === b.stat);
+        return `<li><span class="gl">${stat ? stat.label : b.stat}</span><span class="gv">${fmtBonus(b, b.stat)}</span></li>`;
+      }).join('');
+      return `
+        <div class="attr-card" style="border-left-color:${color}">
+          <div class="attr-head">
+            <div class="ico">${a.icon || ''}</div>
+            <h3 style="color:${color}">${a.name}</h3>
+          </div>
+          <span class="role" style="background:${color}22;color:${color}">${a.archetype}</span>
+          <p class="desc">${a.description}</p>
+          <ul class="gains">${gains}</ul>
+          <div class="uuid">${a.uuid}</div>
+        </div>`;
+    }).join('');
+
+    // Derived stats
+    document.getElementById('derivedGrid').innerHTML = derived.map(d => {
+      const sources = sourcesFor(d.key, attrs);
+      const sub = sources.length ? sources.join(' · ') : 'Base stat';
+      return `<div class="stat-item" title="${sub.replace(/"/g,'&quot;')}">
+        <span class="sk">${d.label}</span>
+        <span class="sv">${d.description}</span>
+      </div>`;
+    }).join('');
+
+    // DR table
+    const drRows = [
+      [20, '20 (no DR)',                                20],
+      [25, '25 (full threshold)',                       25],
+      [35, '25 + (10 × 0.5)',                           30],
+      [50, '25 + (25 × 0.5)',                           37.5],
+      [60, '25 + 12.5 + (10 × 0.25)',                   40],
+      [80, '25 + 12.5 + (30 × 0.25)',                   45],
+      [120,'25 + 12.5 + (70 × 0.25)',                   55],
+    ];
+    document.getElementById('drTable').innerHTML = drRows.map(([pts, calc, eff]) =>
+      `<tr><td>${pts}</td><td class="mono">${calc}</td><td class="gold">${eff}</td><td class="muted">${((eff/pts)*100).toFixed(1)}%</td></tr>`
+    ).join('');
+
+    // Caps
+    const allCaps = { ...(capsResp.statCaps || {}), ...(capsResp.extraCaps || {}) };
+    const capLabels = {
+      block:'Block Chance', criticalChance:'Critical Chance', blockEffect:'Block Effect',
+      criticalDamage:'Critical Damage', accuracy:'Accuracy', resistance:'Resistance',
+      drainHealth:'Drain Health', drainMana:'Drain Mana',
+      reflectDamage:'Reflect Damage', absorbHealth:'Absorb Health', absorbMana:'Absorb Mana'
+    };
+    document.getElementById('capsTable').innerHTML = Object.entries(allCaps).map(([k, v]) => {
+      const label = capLabels[k] || k.replace(/([A-Z])/g, ' $1').replace(/^./, c => c.toUpperCase());
+      const rationale = CAP_RATIONALE[k] || '—';
+      const display = (k === 'criticalDamage') ? `${v}%` : `${v}%`;
+      return `<tr><td>${label}</td><td class="gold">${display}</td><td class="muted">${rationale}</td></tr>`;
+    }).join('');
+
+    // Pipeline
+    document.getElementById('pipelineList').innerHTML = pipeline.map(s =>
+      `<li><b>${s.name}</b><span>${s.detail}</span></li>`
+    ).join('');
+  }
+
+  init();
+</script>
+</body>
+</html>

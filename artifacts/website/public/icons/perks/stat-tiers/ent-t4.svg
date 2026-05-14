@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80">
+  <defs>
+    <radialGradient id="bgent4" cx="50%" cy="45%" r="60%">
+      <stop offset="0%" stop-color="#f44336" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#261010" stop-opacity="1"/>
+    </radialGradient>
+    <radialGradient id="glowent4" cx="50%" cy="45%" r="40%">
+      <stop offset="0%" stop-color="#ef9a9a" stop-opacity="0.14"/>
+      <stop offset="100%" stop-color="#ef9a9a" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="blurent4">
+      <feGaussianBlur stdDeviation="2.5"/>
+    </filter>
+  </defs>
+  <rect width="80" height="80" rx="6" fill="url(#bgent4)"/>
+  <rect width="80" height="80" rx="6" fill="url(#glowent4)"/>
+  <rect width="80" height="80" rx="6" fill="none" stroke="#f44336" stroke-width="0.8" opacity="0.41000000000000003"/>
+  
+    <line x1="4" y1="4" x2="12" y2="4" stroke="#f44336" stroke-width="1.5" opacity="0.8200000000000001"/>
+    <line x1="4" y1="4" x2="4" y2="12" stroke="#f44336" stroke-width="1.5" opacity="0.8200000000000001"/>
+    <line x1="76" y1="4" x2="68" y2="4" stroke="#f44336" stroke-width="1.5" opacity="0.8200000000000001"/>
+    <line x1="76" y1="4" x2="76" y2="12" stroke="#f44336" stroke-width="1.5" opacity="0.8200000000000001"/>
+    <line x1="4" y1="76" x2="12" y2="76" stroke="#f44336" stroke-width="1.5" opacity="0.8200000000000001"/>
+    <line x1="4" y1="76" x2="4" y2="68" stroke="#f44336" stroke-width="1.5" opacity="0.8200000000000001"/>
+    <line x1="76" y1="76" x2="68" y2="76" stroke="#f44336" stroke-width="1.5" opacity="0.8200000000000001"/>
+    <line x1="76" y1="76" x2="76" y2="68" stroke="#f44336" stroke-width="1.5" opacity="0.8200000000000001"/>
+  
+  
+    <circle cx="40" cy="38" r="14" fill="#f44336" opacity="0.15" stroke="#f44336" stroke-width="1.5"/>
+    <circle cx="40" cy="38" r="9" fill="#f44336" opacity="0.12" stroke="#f44336" stroke-width="1" stroke-dasharray="6 3"/>
+    <circle cx="40" cy="38" r="4" fill="#f44336" opacity="0.3"/>
+    <path d="M40 24 Q44 28 52 26 Q56 34 52 40" stroke="#f44336" stroke-width="1.5" fill="none" opacity="0.5"/>
+    <path d="M28 52 Q24 44 28 36" stroke="#f44336" stroke-width="1.5" fill="none" opacity="0.4"/>
+    <circle cx="40" cy="38" r="2" fill="#ef9a9a" opacity="0.9"/>
+  
+  <circle cx="24" cy="71" r="1.6" fill="#f44336" opacity="0.5"/><circle cx="32" cy="71" r="1.6" fill="#f44336" opacity="0.5"/><circle cx="40" cy="71" r="1.6" fill="#f44336" opacity="0.5"/><circle cx="48" cy="71" r="1.6" fill="#f44336" opacity="0.5"/><circle cx="56" cy="71" r="2.2" fill="#ef9a9a" opacity="1"/>
+</svg>

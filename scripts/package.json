@@ -1,0 +1,23 @@
+{
+  "name": "@workspace/scripts",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "hello": "tsx ./src/hello.ts",
+    "seed-prefabs": "tsx ./src/seed-prefabs.ts",
+    "generate-prefab-icons": "tsx ./src/generate-prefab-icons.ts",
+    "upload-gameplay-assets": "tsx ./src/upload-gameplay-assets.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.1038.0",
+    "@workspace/db": "workspace:*",
+    "mime-types": "^3.0.2"
+  },
+  "devDependencies": {
+    "@types/mime-types": "^3.0.1",
+    "@types/node": "catalog:",
+    "tsx": "catalog:"
+  }
+}

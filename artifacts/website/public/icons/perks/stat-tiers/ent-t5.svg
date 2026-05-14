@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80">
+  <defs>
+    <radialGradient id="bgent5" cx="50%" cy="45%" r="60%">
+      <stop offset="0%" stop-color="#f44336" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#261010" stop-opacity="1"/>
+    </radialGradient>
+    <radialGradient id="glowent5" cx="50%" cy="45%" r="40%">
+      <stop offset="0%" stop-color="#ef9a9a" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#ef9a9a" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="blurent5">
+      <feGaussianBlur stdDeviation="2.5"/>
+    </filter>
+  </defs>
+  <rect width="80" height="80" rx="6" fill="url(#bgent5)"/>
+  <rect width="80" height="80" rx="6" fill="url(#glowent5)"/>
+  <rect width="80" height="80" rx="6" fill="none" stroke="#f44336" stroke-width="0.8" opacity="0.45"/>
+  
+    <line x1="4" y1="4" x2="12" y2="4" stroke="#f44336" stroke-width="1.5" opacity="0.9"/>
+    <line x1="4" y1="4" x2="4" y2="12" stroke="#f44336" stroke-width="1.5" opacity="0.9"/>
+    <line x1="76" y1="4" x2="68" y2="4" stroke="#f44336" stroke-width="1.5" opacity="0.9"/>
+    <line x1="76" y1="4" x2="76" y2="12" stroke="#f44336" stroke-width="1.5" opacity="0.9"/>
+    <line x1="4" y1="76" x2="12" y2="76" stroke="#f44336" stroke-width="1.5" opacity="0.9"/>
+    <line x1="4" y1="76" x2="4" y2="68" stroke="#f44336" stroke-width="1.5" opacity="0.9"/>
+    <line x1="76" y1="76" x2="68" y2="76" stroke="#f44336" stroke-width="1.5" opacity="0.9"/>
+    <line x1="76" y1="76" x2="76" y2="68" stroke="#f44336" stroke-width="1.5" opacity="0.9"/>
+  
+  
+    <rect x="30" y="26" width="20" height="28" rx="4" fill="#f44336" opacity="0.25" stroke="#f44336" stroke-width="1.5"/>
+    <rect x="32" y="22" width="16" height="6" rx="2" fill="#f44336" opacity="0.5"/>
+    <ellipse cx="40" cy="40" rx="8" ry="6" fill="#ef9a9a" opacity="0.2"/>
+    <path d="M34 36 Q40 42 46 36" fill="none" stroke="#ef9a9a" stroke-width="1.5" opacity="0.6"/>
+    <path d="M33 42 Q40 48 47 42" fill="none" stroke="#ef9a9a" stroke-width="1.2" opacity="0.5"/>
+    <circle cx="40" cy="38" r="2.5" fill="#ef9a9a" opacity="0.8"/>
+  
+  <circle cx="20" cy="71" r="1.6" fill="#f44336" opacity="0.5"/><circle cx="28" cy="71" r="1.6" fill="#f44336" opacity="0.5"/><circle cx="36" cy="71" r="1.6" fill="#f44336" opacity="0.5"/><circle cx="44" cy="71" r="1.6" fill="#f44336" opacity="0.5"/><circle cx="52" cy="71" r="1.6" fill="#f44336" opacity="0.5"/><circle cx="60" cy="71" r="2.2" fill="#ef9a9a" opacity="1"/>
+</svg>
