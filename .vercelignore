@@ -21,6 +21,15 @@ Lore-Weaver/
 .agents/
 .canvas/
 .config/
+.npmrc
+skills-lock.json
+01_login.png
+02_creation_identity.png
+03_creation_looks.png
+04_creation_hair.png
+05_creation_outfit.png
+06_creation_stats.png
+07_creation_origin.png
 
 # ── Screenshots / design docs ──────────────────────────────────────────
 *.png
