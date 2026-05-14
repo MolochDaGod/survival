@@ -1,0 +1,43 @@
+# ── Binary assets (served from R2 CDN, not bundled into Vercel) ──────────
+artifacts/arpg-game/public/models/
+artifacts/arpg-game/public/icons/
+artifacts/arpg-game/public/textures/
+artifacts/arpg-game/public/locations/
+artifacts/arpg-game/public/books/
+artifacts/arpg-game/public/bestiary/
+artifacts/arpg-game/public/assets/
+artifacts/arpg-game/public/decoders/
+artifacts/arpg-game/public/vendor/
+artifacts/website/public/icons/
+artifacts/website/public/images/
+artifacts/website/dist/
+
+# ── Large non-deployable directories ────────────────────────────────────
+attached_assets/
+Lore-Weaver/
+.git/
+.local/
+.cache/
+.agents/
+.canvas/
+.config/
+
+# ── Screenshots / design docs ──────────────────────────────────────────
+*.png
+*.jpg
+!artifacts/website/public/grudges-logo.png
+!artifacts/website/public/grudges-bg-city.png
+!artifacts/website/public/grudges-bg-banner.png
+!artifacts/website/public/grudges-landing.png
+!artifacts/website/public/opengraph.jpg
+!artifacts/website/public/favicon.svg
+!artifacts/arpg-game/public/grudges-logo.png
+!artifacts/arpg-game/public/grudges-landing.png
+!artifacts/arpg-game/public/grudges-loading-1.png
+!artifacts/arpg-game/public/grudges-loading-2.png
+!artifacts/arpg-game/public/bosslogo.png
+
+# ── Build artifacts ────────────────────────────────────────────────────
+node_modules/
+dist/
+*.tsbuildinfo
