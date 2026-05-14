@@ -1,0 +1,18 @@
+{
+  "name": "@workspace/game-systems",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./attributes": "./src/attributes.ts",
+    "./perks": "./src/perks.ts",
+    "./professions": "./src/professions.ts",
+    "./combat": "./src/combat.ts",
+    "./creatures": "./src/creatures.ts",
+    "./items": "./src/items.ts",
+    "./tiers": "./src/tiers.ts",
+    "./types": "./src/types.ts"
+  },
+  "dependencies": {}
+}
