@@ -20,17 +20,39 @@ console.log('[prebuilt] Copying website build → .vercel/output/static');
 if (existsSync(dest)) rmSync(dest, { recursive: true });
 mkdirSync(dest, { recursive: true });
 
-// Copy website, skipping large asset dirs via filter
-const SKIP_DIRS = new Set(['icons', 'images']);
+// Copy website, skipping large dirs (images/) but keeping icons/ selectively
+const SKIP_DIRS = new Set(['images']);
 cpSync(src, dest, {
   recursive: true,
   filter: (s) => {
     const rel = s.replace(src, '').replace(/\\/g, '/').replace(/^\//, '');
     const top = rel.split('/')[0];
-    return !SKIP_DIRS.has(top);
+    if (SKIP_DIRS.has(top)) return false;
+    // For icons/, only include factions + the specific perk icons the HTML references
+    if (top === 'icons') {
+      const parts = rel.split('/');
+      // Allow the directory entries themselves (needed for recursive copy)
+      if (parts.length <= 1) return true;  // icons/
+      if (parts[1] === 'factions') return true;  // all faction crests
+      if (parts[1] === 'perks') {
+        if (parts.length <= 2) return true;  // icons/perks/
+        if (parts.length <= 3) return true;  // icons/perks/warrior/
+        // Only allow the specific icon files referenced in HTML
+        const NEEDED = new Set([
+          'hero/9.png','hero/12.png','hero/21.png','hero/28.png','hero/30.png','hero/33.png',
+          'maker/14.png',
+          'smarts/1.png','smarts/3.png','smarts/13.png','smarts/23.png',
+          'warrior/4.png','warrior/14.png','warrior/29.png','warrior/34.png',
+        ]);
+        const iconPath = parts.slice(2).join('/');
+        return NEEDED.has(iconPath);
+      }
+      return false;  // skip other icon subdirs
+    }
+    return true;
   },
 });
-console.log('[prebuilt] Website copied (icons/images excluded — served from R2)');
+console.log('[prebuilt] Website copied (images excluded, icons cherry-picked)');
 
 // Copy arpg-game build output into /arpg-game/ subpath
 const gameSrc = resolve(root, 'artifacts/arpg-game/dist/public');

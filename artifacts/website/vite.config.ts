@@ -28,6 +28,7 @@ export default defineConfig({
         main: path.resolve(import.meta.dirname, "index.html"),
         info: path.resolve(import.meta.dirname, "info.html"),
         lore: path.resolve(import.meta.dirname, "lore.html"),
+        stats: path.resolve(import.meta.dirname, "stats-guide.html"),
       },
     },
   },
