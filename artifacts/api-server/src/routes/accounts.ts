@@ -9,29 +9,74 @@
  */
 import { Router } from "express";
 import { z } from "zod";
+import { randomUUID } from "node:crypto";
 import { db, accountsTable } from "@workspace/db";
-import { eq, sql } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 
 const upsertSchema = z.object({
   grudgeId: z.string().min(3).max(128),
   displayName: z.string().max(64).nullable().optional(),
+  puterUuid: z.string().max(128).optional(),
+  puterUsername: z.string().max(128).optional(),
+  email: z.string().max(255).optional(),
+  authType: z.string().max(64).optional(),
 });
 
 export const accountsRouter = Router();
 
+/**
+ * POST /api/accounts/upsert — get-or-create by grudgeId.
+ *
+ * The grudge-id comes from the client's Puter identity
+ * (e.g. `puter_<uuid>` or `guest_<uuid>`). On first call this creates
+ * the account row; subsequent calls update displayName/puterUsername.
+ *
+ * Compatible with the GrudgeBuilder schema (varchar id, bigint timestamps).
+ */
 accountsRouter.post("/upsert", async (req, res) => {
   const parsed = upsertSchema.safeParse(req.body);
   if (!parsed.success) {
     res.status(400).json({ error: parsed.error.message });
     return;
   }
-  const { grudgeId, displayName } = parsed.data;
+  const { grudgeId, displayName, puterUuid, puterUsername, email, authType } = parsed.data;
+
+  // Check if account already exists by grudge_id
+  const existing = await db.query.accountsTable.findFirst({
+    where: eq(accountsTable.grudgeId, grudgeId),
+  });
+
+  if (existing) {
+    // Update display name and puter fields
+    const [updated] = await db
+      .update(accountsTable)
+      .set({
+        displayName: displayName ?? existing.displayName,
+        puterUuid: puterUuid ?? existing.puterUuid,
+        puterUsername: puterUsername ?? existing.puterUsername,
+        updatedAt: Date.now(),
+      })
+      .where(eq(accountsTable.id, existing.id))
+      .returning();
+    res.json(updated);
+    return;
+  }
+
+  // Create new account
+  const now = Date.now();
   const [row] = await db
     .insert(accountsTable)
-    .values({ grudgeId, displayName: displayName ?? null })
-    .onConflictDoUpdate({
-      target: accountsTable.grudgeId,
-      set: { displayName: displayName ?? null, updatedAt: sql`now()` },
+    .values({
+      id: randomUUID(),
+      grudgeId,
+      displayName: displayName ?? null,
+      puterUuid: puterUuid ?? null,
+      puterUsername: puterUsername ?? null,
+      email: email ?? null,
+      authType: authType ?? (grudgeId.startsWith('puter_') ? 'puter' : 'guest'),
+      isGuest: grudgeId.startsWith('guest_'),
+      createdAt: now,
+      updatedAt: now,
     })
     .returning();
   res.json(row);
