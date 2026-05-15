@@ -45,30 +45,87 @@ export interface AffixDef {
  * list automatically. Weight controls how common each affix is.
  */
 export const AFFIX_POOL: AffixDef[] = [
-  // ── PREFIXES (offensive) ────────────────────────────────────────────────
+  // ── PREFIXES: BASE COMBAT ────────────────────────────────────────────
   { id: 'sharp',       name: 'Sharp',        type: 'prefix', stat: 'damage',         format: 'flat', minBase: 2,  maxBase: 8,   minTier: 1, weight: 20, desc: '+{value} Damage' },
   { id: 'fierce',      name: 'Fierce',       type: 'prefix', stat: 'damage',         format: 'flat', minBase: 6,  maxBase: 18,  minTier: 3, weight: 12, desc: '+{value} Damage' },
   { id: 'quick',       name: 'Quick',        type: 'prefix', stat: 'attackSpeed',    format: 'pct',  minBase: 2,  maxBase: 8,   minTier: 1, weight: 15, desc: '+{value}% Attack Speed' },
   { id: 'precise',     name: 'Precise',      type: 'prefix', stat: 'critChance',     format: 'pct',  minBase: 1,  maxBase: 5,   minTier: 2, weight: 12, desc: '+{value}% Critical Chance' },
   { id: 'brutal',      name: 'Brutal',       type: 'prefix', stat: 'critDamage',     format: 'pct',  minBase: 5,  maxBase: 20,  minTier: 3, weight: 10, desc: '+{value}% Critical Damage' },
   { id: 'piercing',    name: 'Piercing',     type: 'prefix', stat: 'armorPen',       format: 'pct',  minBase: 2,  maxBase: 10,  minTier: 3, weight: 8,  desc: '+{value}% Armor Penetration' },
-  { id: 'vampiric',    name: 'Vampiric',     type: 'prefix', stat: 'drainHealth',    format: 'pct',  minBase: 1,  maxBase: 4,   minTier: 4, weight: 6,  desc: '+{value}% Life Steal' },
-  { id: 'arcane',      name: 'Arcane',       type: 'prefix', stat: 'magicDamage',    format: 'flat', minBase: 3,  maxBase: 12,  minTier: 2, weight: 10, desc: '+{value} Magic Damage' },
   { id: 'staggering',  name: 'Staggering',   type: 'prefix', stat: 'stagger',        format: 'pct',  minBase: 2,  maxBase: 8,   minTier: 3, weight: 8,  desc: '+{value}% Stagger Chance' },
-  { id: 'nexus',       name: 'Nexus-Forged',  type: 'prefix', stat: 'allDamage',     format: 'pct',  minBase: 2,  maxBase: 6,   minTier: 5, weight: 3,  desc: '+{value}% All Damage' },
 
-  // ── SUFFIXES (defensive / utility) ──────────────────────────────────────
+  // ── PREFIXES: DAMAGE TYPES (elemental) ───────────────────────────────
+  { id: 'blazing',     name: 'Blazing',      type: 'prefix', stat: 'fireDamage',     format: 'flat', minBase: 3,  maxBase: 12,  minTier: 2, weight: 8,  desc: '+{value} Fire Damage' },
+  { id: 'frozen',      name: 'Frozen',       type: 'prefix', stat: 'iceDamage',      format: 'flat', minBase: 3,  maxBase: 12,  minTier: 2, weight: 8,  desc: '+{value} Ice Damage' },
+  { id: 'shocking',    name: 'Shocking',     type: 'prefix', stat: 'lightningDamage',format: 'flat', minBase: 3,  maxBase: 12,  minTier: 2, weight: 8,  desc: '+{value} Lightning Damage' },
+  { id: 'arcane',      name: 'Arcane',       type: 'prefix', stat: 'arcaneDamage',   format: 'flat', minBase: 3,  maxBase: 12,  minTier: 3, weight: 7,  desc: '+{value} Arcane Damage' },
+  { id: 'holy',        name: 'Blessed',      type: 'prefix', stat: 'holyDamage',     format: 'flat', minBase: 3,  maxBase: 12,  minTier: 3, weight: 6,  desc: '+{value} Holy Damage' },
+  { id: 'toxic',       name: 'Venomous',     type: 'prefix', stat: 'natureDamage',   format: 'flat', minBase: 3,  maxBase: 10,  minTier: 2, weight: 7,  desc: '+{value} Nature/Poison Damage' },
+
+  // ── PREFIXES: PROC EFFECTS (chance-on-hit) ────────────────────────────
+  { id: 'vampiric',    name: 'Vampiric',     type: 'prefix', stat: 'drainHealth',    format: 'pct',  minBase: 1,  maxBase: 4,   minTier: 4, weight: 6,  desc: '+{value}% Life Steal' },
+  { id: 'igniting',    name: 'Igniting',     type: 'prefix', stat: 'procBurn',       format: 'pct',  minBase: 3,  maxBase: 12,  minTier: 3, weight: 6,  desc: '{value}% chance to Burn on hit (3s)' },
+  { id: 'freezing',    name: 'Chilling',     type: 'prefix', stat: 'procFreeze',     format: 'pct',  minBase: 2,  maxBase: 8,   minTier: 3, weight: 5,  desc: '{value}% chance to Slow on hit (2s)' },
+  { id: 'shocking_p',  name: 'Arcing',       type: 'prefix', stat: 'procChainLightning', format: 'pct', minBase: 2, maxBase: 6, minTier: 4, weight: 4,  desc: '{value}% chance to Chain Lightning (2 targets)' },
+  { id: 'bleeding',    name: 'Serrated',     type: 'prefix', stat: 'procBleed',      format: 'pct',  minBase: 4,  maxBase: 15,  minTier: 2, weight: 8,  desc: '{value}% chance to Bleed on hit (4s)' },
+  { id: 'poisoning',   name: 'Toxic',        type: 'prefix', stat: 'procPoison',     format: 'pct',  minBase: 3,  maxBase: 10,  minTier: 3, weight: 6,  desc: '{value}% chance to Poison on hit (5s)' },
+  { id: 'exploding',   name: 'Volatile',     type: 'prefix', stat: 'procExplode',    format: 'pct',  minBase: 1,  maxBase: 4,   minTier: 5, weight: 3,  desc: '{value}% chance to Explode on kill (AoE)' },
+
+  // ── PREFIXES: NEXUS ATTRIBUTE BONUSES (+1 to +4 on the 8 stats) ───────
+  { id: 'bio_boost',   name: 'Vital',        type: 'prefix', stat: 'bio',            format: 'flat', minBase: 1,  maxBase: 1,   minTier: 4, weight: 5,  desc: '+{value} Biomass (BIO)' },
+  { id: 'neu_boost',   name: 'Focused',      type: 'prefix', stat: 'neu',            format: 'flat', minBase: 1,  maxBase: 1,   minTier: 4, weight: 5,  desc: '+{value} Neural Integrity (NEU)' },
+  { id: 'kin_boost',   name: 'Kinetic',      type: 'prefix', stat: 'kin',            format: 'flat', minBase: 1,  maxBase: 1,   minTier: 4, weight: 5,  desc: '+{value} Kinetic Efficiency (KIN)' },
+  { id: 'qnt_boost',   name: 'Quantum',      type: 'prefix', stat: 'qnt',            format: 'flat', minBase: 1,  maxBase: 1,   minTier: 4, weight: 4,  desc: '+{value} Quantum Aptitude (QNT)' },
+  { id: 'syn_boost',   name: 'Synthetic',    type: 'prefix', stat: 'syn',            format: 'flat', minBase: 1,  maxBase: 1,   minTier: 4, weight: 4,  desc: '+{value} Synthetic Affinity (SYN)' },
+  { id: 'chr_boost',   name: 'Chronal',      type: 'prefix', stat: 'chr',            format: 'flat', minBase: 1,  maxBase: 1,   minTier: 5, weight: 3,  desc: '+{value} Chronal Stability (CHR)' },
+  { id: 'ent_boost',   name: 'Entropic',     type: 'prefix', stat: 'ent',            format: 'flat', minBase: 1,  maxBase: 1,   minTier: 5, weight: 3,  desc: '+{value} Entropic Resistance (ENT)' },
+  { id: 'gra_boost',   name: 'Gravitic',     type: 'prefix', stat: 'gra',            format: 'flat', minBase: 1,  maxBase: 1,   minTier: 5, weight: 3,  desc: '+{value} Gravitic Harmony (GRA)' },
+
+  // ── PREFIXES: PERK LEVEL BONUSES ─────────────────────────────────────
+  { id: 'hero_perk',   name: 'Heroic',       type: 'prefix', stat: 'perkHero',       format: 'flat', minBase: 1,  maxBase: 1,   minTier: 5, weight: 2,  desc: '+{value} Hero Perk Level' },
+  { id: 'warrior_perk',name: 'Warlord\'s',   type: 'prefix', stat: 'perkWarrior',    format: 'flat', minBase: 1,  maxBase: 1,   minTier: 5, weight: 2,  desc: '+{value} Warrior Perk Level' },
+  { id: 'smarts_perk', name: 'Sage\'s',      type: 'prefix', stat: 'perkSmarts',     format: 'flat', minBase: 1,  maxBase: 1,   minTier: 5, weight: 2,  desc: '+{value} Smarts Perk Level' },
+  { id: 'maker_perk',  name: 'Artisan\'s',   type: 'prefix', stat: 'perkMaker',      format: 'flat', minBase: 1,  maxBase: 1,   minTier: 5, weight: 2,  desc: '+{value} Maker Perk Level' },
+
+  // ── PREFIXES: SPELL & ABILITY ───────────────────────────────────────
+  { id: 'cdr',         name: 'Swift',        type: 'prefix', stat: 'cooldownReduction', format: 'pct', minBase: 2, maxBase: 8,  minTier: 3, weight: 8,  desc: '+{value}% Cooldown Reduction' },
+  { id: 'spellpower',  name: 'Empowered',    type: 'prefix', stat: 'spellDamage',    format: 'pct',  minBase: 3,  maxBase: 12,  minTier: 3, weight: 7,  desc: '+{value}% Spell Damage' },
+  { id: 'manacost',    name: 'Efficient',    type: 'prefix', stat: 'abilityCostRed',  format: 'pct', minBase: 2,  maxBase: 8,   minTier: 3, weight: 6,  desc: '-{value}% Ability Cost' },
+  { id: 'nexus',       name: 'Nexus-Forged', type: 'prefix', stat: 'allDamage',      format: 'pct',  minBase: 2,  maxBase: 6,   minTier: 5, weight: 3,  desc: '+{value}% All Damage' },
+
+  // ── SUFFIXES: DEFENSE & SURVIVAL ────────────────────────────────────
   { id: 'sturdy',      name: 'of Fortitude',  type: 'suffix', stat: 'health',        format: 'flat', minBase: 5,  maxBase: 25,  minTier: 1, weight: 20, desc: '+{value} Health' },
   { id: 'iron',        name: 'of Iron',       type: 'suffix', stat: 'armor',         format: 'flat', minBase: 3,  maxBase: 15,  minTier: 1, weight: 18, desc: '+{value} Armor' },
   { id: 'agile',       name: 'of the Wind',   type: 'suffix', stat: 'moveSpeed',     format: 'pct',  minBase: 1,  maxBase: 5,   minTier: 1, weight: 12, desc: '+{value}% Movement Speed' },
   { id: 'wise',        name: 'of Wisdom',     type: 'suffix', stat: 'mana',          format: 'flat', minBase: 5,  maxBase: 20,  minTier: 1, weight: 12, desc: '+{value} Mana' },
   { id: 'blocking',    name: 'of the Shield', type: 'suffix', stat: 'blockChance',   format: 'pct',  minBase: 1,  maxBase: 5,   minTier: 2, weight: 10, desc: '+{value}% Block Chance' },
   { id: 'dodging',     name: 'of Evasion',    type: 'suffix', stat: 'evasion',       format: 'pct',  minBase: 1,  maxBase: 5,   minTier: 2, weight: 10, desc: '+{value}% Evasion' },
-  { id: 'resilient',   name: 'of Resilience',  type: 'suffix', stat: 'resistance',   format: 'pct',  minBase: 2,  maxBase: 8,   minTier: 3, weight: 8,  desc: '+{value}% Resistance' },
-  { id: 'regenerating',name: 'of Renewal',     type: 'suffix', stat: 'hpRegen',      format: 'flat', minBase: 1,  maxBase: 4,   minTier: 3, weight: 8,  desc: '+{value} HP/sec Regen' },
-  { id: 'enduring',    name: 'of Endurance',   type: 'suffix', stat: 'stamina',      format: 'flat', minBase: 5,  maxBase: 15,  minTier: 2, weight: 10, desc: '+{value} Stamina' },
-  { id: 'eternal',     name: 'of Eternity',    type: 'suffix', stat: 'durability',   format: 'pct',  minBase: 10, maxBase: 30,  minTier: 4, weight: 6,  desc: '+{value}% Durability' },
-  { id: 'quantum',     name: 'of the Rift',    type: 'suffix', stat: 'rareFind',     format: 'pct',  minBase: 2,  maxBase: 8,   minTier: 5, weight: 3,  desc: '+{value}% Rare Find' },
+  { id: 'resilient',   name: 'of Resilience', type: 'suffix', stat: 'resistance',    format: 'pct',  minBase: 2,  maxBase: 8,   minTier: 3, weight: 8,  desc: '+{value}% Resistance' },
+  { id: 'regenerating',name: 'of Renewal',    type: 'suffix', stat: 'hpRegen',       format: 'flat', minBase: 1,  maxBase: 4,   minTier: 3, weight: 8,  desc: '+{value} HP/sec Regen' },
+  { id: 'enduring',    name: 'of Endurance',  type: 'suffix', stat: 'stamina',       format: 'flat', minBase: 5,  maxBase: 15,  minTier: 2, weight: 10, desc: '+{value} Stamina' },
+
+  // ── SUFFIXES: ELEMENTAL RESISTANCE ──────────────────────────────────
+  { id: 'fireproof',   name: 'of the Flame',  type: 'suffix', stat: 'fireResist',    format: 'pct',  minBase: 3,  maxBase: 12,  minTier: 2, weight: 7,  desc: '+{value}% Fire Resistance' },
+  { id: 'frostproof',  name: 'of Winter',     type: 'suffix', stat: 'iceResist',     format: 'pct',  minBase: 3,  maxBase: 12,  minTier: 2, weight: 7,  desc: '+{value}% Ice Resistance' },
+  { id: 'insulated',   name: 'of Grounding',  type: 'suffix', stat: 'lightningResist',format: 'pct', minBase: 3,  maxBase: 12,  minTier: 2, weight: 7,  desc: '+{value}% Lightning Resistance' },
+  { id: 'warded',      name: 'of Warding',    type: 'suffix', stat: 'arcaneResist',  format: 'pct',  minBase: 3,  maxBase: 10,  minTier: 3, weight: 5,  desc: '+{value}% Arcane Resistance' },
+
+  // ── SUFFIXES: ATTRIBUTE BONUSES (+1 to +4 on the 8 stats) ─────────────
+  { id: 'of_bio',      name: 'of Biomass',    type: 'suffix', stat: 'bio',           format: 'flat', minBase: 1,  maxBase: 2,   minTier: 4, weight: 4,  desc: '+{value} Biomass (BIO)' },
+  { id: 'of_neu',      name: 'of Clarity',    type: 'suffix', stat: 'neu',           format: 'flat', minBase: 1,  maxBase: 2,   minTier: 4, weight: 4,  desc: '+{value} Neural Integrity (NEU)' },
+  { id: 'of_kin',      name: 'of Momentum',   type: 'suffix', stat: 'kin',           format: 'flat', minBase: 1,  maxBase: 2,   minTier: 4, weight: 4,  desc: '+{value} Kinetic Efficiency (KIN)' },
+  { id: 'of_qnt',      name: 'of Probability',type: 'suffix', stat: 'qnt',           format: 'flat', minBase: 1,  maxBase: 2,   minTier: 4, weight: 3,  desc: '+{value} Quantum Aptitude (QNT)' },
+  { id: 'of_syn',      name: 'of Synthesis',  type: 'suffix', stat: 'syn',           format: 'flat', minBase: 1,  maxBase: 2,   minTier: 4, weight: 3,  desc: '+{value} Synthetic Affinity (SYN)' },
+  { id: 'of_chr',      name: 'of the Timeline', type: 'suffix', stat: 'chr',         format: 'flat', minBase: 1,  maxBase: 1,   minTier: 5, weight: 2,  desc: '+{value} Chronal Stability (CHR)' },
+  { id: 'of_ent',      name: 'of Preservation', type: 'suffix', stat: 'ent',         format: 'flat', minBase: 1,  maxBase: 1,   minTier: 5, weight: 2,  desc: '+{value} Entropic Resistance (ENT)' },
+  { id: 'of_gra',      name: 'of Orbit',      type: 'suffix', stat: 'gra',           format: 'flat', minBase: 1,  maxBase: 1,   minTier: 5, weight: 2,  desc: '+{value} Gravitic Harmony (GRA)' },
+
+  // ── SUFFIXES: RARE UTILITY ─────────────────────────────────────────
+  { id: 'eternal',     name: 'of Eternity',   type: 'suffix', stat: 'durability',    format: 'pct',  minBase: 10, maxBase: 30,  minTier: 4, weight: 6,  desc: '+{value}% Durability' },
+  { id: 'quantum_f',   name: 'of the Rift',   type: 'suffix', stat: 'rareFind',      format: 'pct',  minBase: 2,  maxBase: 8,   minTier: 5, weight: 3,  desc: '+{value}% Rare Find' },
+  { id: 'xp_boost',    name: 'of Learning',   type: 'suffix', stat: 'xpBonus',       format: 'pct',  minBase: 3,  maxBase: 10,  minTier: 3, weight: 6,  desc: '+{value}% Experience Gain' },
+  { id: 'gold_boost',  name: 'of Prosperity', type: 'suffix', stat: 'goldFind',      format: 'pct',  minBase: 5,  maxBase: 15,  minTier: 2, weight: 8,  desc: '+{value}% Gold Find' },
+  { id: 'harvest_b',   name: 'of the Harvest',type: 'suffix', stat: 'harvestYield',  format: 'pct',  minBase: 3,  maxBase: 10,  minTier: 3, weight: 5,  desc: '+{value}% Harvest Yield' },
 ];
 
 // ── Tier → Affix Count ──────────────────────────────────────────────────────
