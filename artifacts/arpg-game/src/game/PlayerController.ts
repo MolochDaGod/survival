@@ -4,7 +4,7 @@ import type RAPIER from '@dimforge/rapier3d-compat';
 import { CameraMode, PlayerStats, WeaponStats } from './types';
 import { WEAPONS, KEYBINDS } from './constants';
 import { AssetManager } from './AssetManager';
-import { ANIM, PRIMARY_ATTACK_CLIP, BLOCK_CLIP } from './AnimationRegistry';
+import { ANIM, PRIMARY_ATTACK_CLIP, BLOCK_CLIP, DASH_ATTACK_CLIP, RELOAD_CLIP, AIM_CLIP, getComboChain, IDLE_OVERRIDE_CLIP } from './AnimationRegistry';
 import { Inventory } from './Inventory';
 import { ThirdPersonCamera, TUNING_THIRD_PERSON, TUNING_ARPG } from './ThirdPersonCamera';
 import { groundY as groundFloor } from './GroundSampler';
@@ -397,25 +397,26 @@ export class PlayerController {
 
   private playAnimation(name: string) {
     // Route named actions through the locomotion blender's one-shot layer.
-    // For weapon-aware actions (Attack/Block) we first try to resolve the
-    // clip from AnimationRegistry using the equipped weapon type so the
-    // correct Quaternius clip plays. Falls back to the literal name if no
-    // registry match or clip not found.
+    // For weapon-aware actions we resolve the clip from AnimationRegistry
+    // using the equipped weapon type so the correct animation plays.
     if (this.locomotion) {
       let clipName = name;
       const weaponType = this.equippedWeapons[this.activeWeaponIndex]?.type ?? 'unarmed';
 
-      if (name === 'Attack') {
-        clipName = PRIMARY_ATTACK_CLIP[weaponType] ?? name;
-      } else if (name === 'Block') {
-        clipName = BLOCK_CLIP[weaponType] ?? name;
+      // Weapon-aware clip resolution for every action type
+      switch (name) {
+        case 'Attack':    clipName = PRIMARY_ATTACK_CLIP[weaponType] ?? name; break;
+        case 'Block':     clipName = BLOCK_CLIP[weaponType] ?? name; break;
+        case 'Reload':    clipName = RELOAD_CLIP[weaponType] ?? name; break;
+        case 'Aim':       clipName = AIM_CLIP[weaponType] ?? name; break;
+        case 'DashAttack':clipName = DASH_ATTACK_CLIP[weaponType] ?? PRIMARY_ATTACK_CLIP[weaponType] ?? name; break;
       }
 
       const hasClip = !!THREE.AnimationClip.findByName(this.modelAnimations, clipName)
         || !!THREE.AnimationClip.findByName(this.modelAnimations, clipName.toLowerCase());
       if (hasClip) {
         const def = ANIM.byClip.get(clipName);
-        const dur = def?.duration ?? (name === 'Jump' ? 0.6 : name === 'Block' ? 0.4 : 0.45);
+        const dur = def?.duration ?? (name === 'Jump' ? 0.6 : name === 'Block' ? 0.4 : name === 'Reload' ? 1.4 : 0.45);
         this.locomotion.playOneShot(clipName, this.modelAnimations, dur);
         return;
       }
@@ -664,6 +665,7 @@ export class PlayerController {
       if (e.code === KEYBINDS.SWAP_WEAPON && !e.repeat) this.swapWeapon();
       if (e.code === KEYBINDS.JUMP && this.isGrounded) this.jump();
       if (e.code === KEYBINDS.ROLL && !e.repeat && !this.isRolling) this.startRoll();
+      if (e.code === 'KeyR' && !e.repeat) this.startReload();
     });
 
     document.addEventListener('keyup', (e) => { this.keys[e.code] = false; });
@@ -745,7 +747,10 @@ export class PlayerController {
     }
 
     const weapon = this.equippedWeapons[this.activeWeaponIndex];
-    if (weapon.type === 'gun') {
+    const isRanged = weapon.type === 'gun' || weapon.type === 'rifle' || weapon.type === 'shotgun'
+      || weapon.type === 'smg' || weapon.type === 'bow' || weapon.type === 'crossbow';
+
+    if (isRanged) {
       const fireCooldown = 0.6 / weapon.speed;
       this.isAttacking = true;
       this.attackTimer = fireCooldown;
@@ -753,14 +758,17 @@ export class PlayerController {
       this.gunFirePending = true;
       this.gunRecoilTimer = 0.12;
       // Camera kick. ADS halves the recoil so aimed shots stay on
-      // target — matches the expected "ironsights = controllable, hip
-      // fire = sprayy" feel. Value is in radians (~2.3° hip, ~1.1° ADS).
-      this.recoilPitch += this.isAiming ? 0.020 : 0.040;
+      // target. Rifles/shotguns have heavier kick than pistols.
+      const baseKick = (weapon.type === 'rifle' || weapon.type === 'shotgun') ? 0.055 : 0.040;
+      this.recoilPitch += this.isAiming ? baseKick * 0.5 : baseKick;
       return;
     }
-    // Combo window: if you don't follow up within 1.2s, start the chain over.
+
+    // Melee combo: use weapon-specific combo chain from AnimationRegistry
+    const combo = getComboChain(weapon.type);
     const now = performance.now();
-    if (now - this.lastAttackTime > 1200) this.comboStep = 0;
+    const comboWindow = combo.steps[this.comboStep]?.windowMs ?? 1200;
+    if (now - this.lastAttackTime > comboWindow) this.comboStep = 0;
     this.lastAttackTime = now;
 
     const attackDuration = 0.5 / weapon.speed * (this.berserkerActive ? 0.5 : 1);
@@ -770,12 +778,11 @@ export class PlayerController {
     this.comboTimer = attackDuration + 0.3;
     this.meleeHitPending = true;
 
-    // Forward lunge in the windup. Heavy weapons lunge further but slower
-    // (matches the GS feel in the reference). Decayed by friction in update().
-    const isHeavy = weapon.type === 'axe' || weapon.type === 'mace' || weapon.range >= 3;
+    // Forward lunge in the windup. Heavy 2H weapons lunge further but slower.
+    const isHeavy = weapon.type === 'axe' || weapon.type === 'mace' || weapon.type === 'hammer'
+      || weapon.type === 'greatsword' || weapon.type === 'greataxe' || weapon.type === 'spear'
+      || weapon.range >= 3;
     const lungeSpeed = isHeavy ? 9 : 6;
-    // getForwardDir() now returns true forward (camera-into-screen),
-    // so just multiply by +lungeSpeed.
     this.lungeVelocity.copy(this.getForwardDir()).multiplyScalar(lungeSpeed);
     this.lungeTimer = attackDuration * 0.4;
 
@@ -811,10 +818,23 @@ export class PlayerController {
 
   startAiming() {
     this.isAiming = true;
+    // Play weapon-specific aim pose if available
+    const weaponType = this.equippedWeapons[this.activeWeaponIndex]?.type ?? 'unarmed';
+    if (AIM_CLIP[weaponType]) {
+      this.playAnimation('Aim');
+    }
   }
 
   stopAiming() {
     this.isAiming = false;
+  }
+
+  /** Trigger reload animation for the equipped ranged weapon. */
+  startReload() {
+    const weaponType = this.equippedWeapons[this.activeWeaponIndex]?.type ?? 'unarmed';
+    if (RELOAD_CLIP[weaponType]) {
+      this.playAnimation('Reload');
+    }
   }
 
   private loadFPHands() {
