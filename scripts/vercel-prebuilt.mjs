@@ -57,7 +57,7 @@ console.log('[prebuilt] Website copied (images excluded, icons cherry-picked)');
 // Copy arpg-game build output into /arpg-game/ subpath
 const gameSrc = resolve(root, 'artifacts/arpg-game/dist/public');
 const gameDest = resolve(dest, 'arpg-game');
-const GAME_SKIP = new Set(['models', 'icons', 'textures', 'locations', 'books', 'bestiary', 'assets', 'decoders', 'vendor', 'lore']);
+const GAME_SKIP = new Set(['models', 'icons', 'textures', 'locations', 'books', 'bestiary', 'decoders', 'vendor', 'lore']);
 if (existsSync(gameSrc)) {
   cpSync(gameSrc, gameDest, {
     recursive: true,
