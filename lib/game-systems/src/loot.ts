@@ -120,12 +120,27 @@ export const AFFIX_POOL: AffixDef[] = [
   { id: 'of_ent',      name: 'of Preservation', type: 'suffix', stat: 'ent',         format: 'flat', minBase: 1,  maxBase: 1,   minTier: 5, weight: 2,  desc: '+1 Entropic Resistance (ENT)' },
   { id: 'of_gra',      name: 'of Orbit',      type: 'suffix', stat: 'gra',           format: 'flat', minBase: 1,  maxBase: 1,   minTier: 5, weight: 2,  desc: '+1 Gravitic Harmony (GRA)' },
 
+  // ── SUFFIXES: HEALTH / STAMINA / MANA GAINS ───────────────────────────
+  { id: 'healthOnKill', name: 'of Slaughter',  type: 'suffix', stat: 'healthOnKill',  format: 'flat', minBase: 3,  maxBase: 12,  minTier: 3, weight: 8,  desc: '+{value} Health on Kill' },
+  { id: 'manaOnKill',   name: 'of Siphoning',  type: 'suffix', stat: 'manaOnKill',    format: 'flat', minBase: 2,  maxBase: 8,   minTier: 3, weight: 7,  desc: '+{value} Mana on Kill' },
+  { id: 'staminaOnHit', name: 'of Vigor',      type: 'suffix', stat: 'staminaOnHit',  format: 'flat', minBase: 1,  maxBase: 4,   minTier: 2, weight: 8,  desc: '+{value} Stamina on Hit' },
+  { id: 'healthOnHit',  name: 'of Mending',    type: 'suffix', stat: 'healthOnHit',   format: 'flat', minBase: 1,  maxBase: 3,   minTier: 4, weight: 5,  desc: '+{value} Health on Hit' },
+  { id: 'manaRegen',    name: 'of Flow',       type: 'suffix', stat: 'manaRegen',     format: 'flat', minBase: 1,  maxBase: 3,   minTier: 3, weight: 7,  desc: '+{value} Mana/sec Regen' },
+  { id: 'staminaRegen', name: 'of Breath',     type: 'suffix', stat: 'staminaRegen',  format: 'pct',  minBase: 3,  maxBase: 10,  minTier: 2, weight: 8,  desc: '+{value}% Stamina Regen' },
+
+  // ── SUFFIXES: RESOURCE GATHERING ────────────────────────────────────
+  { id: 'harvest_b',    name: 'of the Harvest',type: 'suffix', stat: 'harvestYield',  format: 'pct',  minBase: 3,  maxBase: 10,  minTier: 2, weight: 8,  desc: '+{value}% Harvest Yield' },
+  { id: 'miningBonus',  name: 'of the Vein',   type: 'suffix', stat: 'miningYield',   format: 'pct',  minBase: 3,  maxBase: 12,  minTier: 2, weight: 6,  desc: '+{value}% Mining Yield' },
+  { id: 'woodBonus',    name: 'of the Grove',  type: 'suffix', stat: 'woodcutYield',  format: 'pct',  minBase: 3,  maxBase: 12,  minTier: 2, weight: 6,  desc: '+{value}% Woodcutting Yield' },
+  { id: 'fishBonus',    name: 'of the Depths', type: 'suffix', stat: 'fishingYield',  format: 'pct',  minBase: 3,  maxBase: 12,  minTier: 2, weight: 5,  desc: '+{value}% Fishing Yield' },
+  { id: 'skinBonus',    name: 'of the Hunt',   type: 'suffix', stat: 'skinningYield', format: 'pct',  minBase: 3,  maxBase: 10,  minTier: 2, weight: 5,  desc: '+{value}% Skinning Yield' },
+  { id: 'herbBonus',    name: 'of the Wilds',  type: 'suffix', stat: 'herbalismYield',format: 'pct',  minBase: 3,  maxBase: 10,  minTier: 2, weight: 5,  desc: '+{value}% Herbalism Yield' },
+
   // ── SUFFIXES: RARE UTILITY ─────────────────────────────────────────
-  { id: 'eternal',     name: 'of Eternity',   type: 'suffix', stat: 'durability',    format: 'pct',  minBase: 10, maxBase: 30,  minTier: 4, weight: 6,  desc: '+{value}% Durability' },
-  { id: 'quantum_f',   name: 'of the Rift',   type: 'suffix', stat: 'rareFind',      format: 'pct',  minBase: 2,  maxBase: 8,   minTier: 5, weight: 3,  desc: '+{value}% Rare Find' },
-  { id: 'xp_boost',    name: 'of Learning',   type: 'suffix', stat: 'xpBonus',       format: 'pct',  minBase: 3,  maxBase: 10,  minTier: 3, weight: 6,  desc: '+{value}% Experience Gain' },
-  { id: 'gold_boost',  name: 'of Prosperity', type: 'suffix', stat: 'goldFind',      format: 'pct',  minBase: 5,  maxBase: 15,  minTier: 2, weight: 8,  desc: '+{value}% Gold Find' },
-  { id: 'harvest_b',   name: 'of the Harvest',type: 'suffix', stat: 'harvestYield',  format: 'pct',  minBase: 3,  maxBase: 10,  minTier: 3, weight: 5,  desc: '+{value}% Harvest Yield' },
+  { id: 'eternal',      name: 'of Eternity',   type: 'suffix', stat: 'durability',    format: 'pct',  minBase: 10, maxBase: 30,  minTier: 4, weight: 6,  desc: '+{value}% Durability' },
+  { id: 'quantum_f',    name: 'of the Rift',   type: 'suffix', stat: 'rareFind',      format: 'pct',  minBase: 2,  maxBase: 8,   minTier: 5, weight: 3,  desc: '+{value}% Rare Find' },
+  { id: 'thorns',       name: 'of Thorns',     type: 'suffix', stat: 'reflectDamage', format: 'pct',  minBase: 2,  maxBase: 8,   minTier: 3, weight: 6,  desc: '+{value}% Damage Reflected' },
+  { id: 'absorb',       name: 'of Absorption', type: 'suffix', stat: 'damageAbsorb',  format: 'pct',  minBase: 1,  maxBase: 4,   minTier: 4, weight: 4,  desc: '+{value}% Damage Absorbed as Shield' },
 ];
 
 // ── Tier → Affix Count ──────────────────────────────────────────────────────
