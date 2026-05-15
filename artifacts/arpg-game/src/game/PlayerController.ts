@@ -347,19 +347,21 @@ export class PlayerController {
     this.rapierCollider = world.createCollider(colliderDesc, this.rapierBody);
 
     // Character controller — Rapier owns slope handling, autostep, and
-    // snap-to-ground. Tunings here are intentionally generous so player
-    // never feels "snagged" on city geometry, while still respecting walls.
-    const ctrl = world.createCharacterController(0.05);
-    ctrl.setMaxSlopeClimbAngle((50 * Math.PI) / 180);
-    ctrl.setMinSlopeSlideAngle((45 * Math.PI) / 180);
-    // Autostep: lift-and-step over kerbs / low ledges up to 0.4 m tall
-    // when there's at least 0.2 m of free width. The third arg = include
-    // dynamic colliders in the autostep query (safe — none today).
-    ctrl.enableAutostep(0.4, 0.2, true);
-    // Snap to ground within 0.5 m so walking down small slopes doesn't
-    // launch us into a jump arc.
-    ctrl.enableSnapToGround(0.5);
+    // snap-to-ground. Production-tuned for MMO feel: generous step-up
+    // so city kerbs/stairs never snag, strong snap-to-ground so downhill
+    // movement stays grounded, and 50° slope climb for rugged terrain.
+    const ctrl = world.createCharacterController(0.04); // 4cm skin width
+    ctrl.setMaxSlopeClimbAngle((50 * Math.PI) / 180);   // climb up to 50°
+    ctrl.setMinSlopeSlideAngle((35 * Math.PI) / 180);   // slide above 35°
+    // Autostep: step over obstacles up to 0.45m (stair height) with 0.15m
+    // min free width. Include dynamic colliders for future physics objects.
+    ctrl.enableAutostep(0.45, 0.15, true);
+    // Snap to ground within 0.6m — prevents bouncing on slopes and stairs.
+    // Slightly larger than autostep height so we stick after stepping up.
+    ctrl.enableSnapToGround(0.6);
     ctrl.setApplyImpulsesToDynamicBodies(false);
+    // Slide on walls instead of sticking — prevents getting stuck on corners.
+    ctrl.setSlideEnabled(true);
     this.rapierController = ctrl;
   }
 

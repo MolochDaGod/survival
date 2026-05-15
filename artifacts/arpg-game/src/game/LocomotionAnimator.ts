@@ -179,6 +179,27 @@ export class LocomotionAnimator {
     this.oneShotEndTime = performance.now() + duration * 1000;
   }
 
+  /**
+   * Sync a newly-activating clip's playhead to match the phase of the
+   * clip it's blending from. This prevents the "foot teleport" artifact
+   * when crossfading Walk↔Run — the foot that's forward stays forward.
+   *
+   * Sketchbook technique: current.time = old.time × (current.duration / old.duration)
+   */
+  private syncPhase(fromName: string, toName: string) {
+    const from = this.actions.get(fromName);
+    const to = this.actions.get(toName);
+    if (!from || !to) return;
+    const fromClip = from.getClip();
+    const toClip = to.getClip();
+    if (fromClip.duration <= 0 || toClip.duration <= 0) return;
+    // Map phase (0..1) from the source clip onto the destination
+    to.time = from.time * (toClip.duration / fromClip.duration);
+  }
+
+  /** Track which loco clip had the highest weight last frame for phase sync. */
+  private prevDominant: string = 'Idle';
+
   /** Tick weight smoothing every frame. Call after `setMovement`. */
   update(dt: number) {
     this.tickSlideExit();
@@ -190,6 +211,23 @@ export class LocomotionAnimator {
     // While a one-shot is active, mute locomotion layer.
     const oneShotActive = this.oneShotAction != null && performance.now() < this.oneShotEndTime;
     const damp = oneShotActive ? 0.0 : 1.0;
+
+    // Find new dominant clip (highest target weight) for phase sync
+    let newDominant = 'Idle';
+    let maxTarget = -1;
+    for (const name of this.LOCO) {
+      const tw = this.targetWeights.get(name) ?? 0;
+      if (tw > maxTarget) { maxTarget = tw; newDominant = name; }
+    }
+
+    // Phase-sync when the dominant clip changes (e.g. Walk→Run)
+    // Skip Idle transitions — those don't need phase matching
+    if (newDominant !== this.prevDominant
+        && newDominant !== 'Idle'
+        && this.prevDominant !== 'Idle') {
+      this.syncPhase(this.prevDominant, newDominant);
+    }
+    this.prevDominant = newDominant;
 
     for (const name of this.LOCO) {
       const action = this.actions.get(name);
