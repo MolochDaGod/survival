@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { InventoryItem, ITEM_DATABASE, RARITY_COLORS, rollItemFromTable, LOOT_TABLES } from './Items';
 import { Inventory } from './Inventory';
+import { rollDropTier, generateLootDrop } from '@workspace/game-systems';
 
 interface LootOrb {
   group: THREE.Group;
@@ -28,7 +29,7 @@ export class LootManager {
     this.inventory = inventory;
   }
 
-  dropFromEnemy(position: THREE.Vector3, tier: 'basic' | 'elite' | 'boss' = 'basic') {
+  dropFromEnemy(position: THREE.Vector3, tier: 'basic' | 'elite' | 'boss' = 'basic', luckBonus: number = 0) {
     // chance to drop
     const chance = tier === 'boss' ? 1.0 : tier === 'elite' ? 0.55 : 0.28;
     if (Math.random() > chance) return;
@@ -36,6 +37,17 @@ export class LootManager {
     const table = LOOT_TABLES[tier];
     const item = rollItemFromTable(table);
     if (!item) return;
+
+    // Roll affix tier and generate randomized affixes via game-systems
+    const dropTier = rollDropTier(tier, luckBonus);
+    const def = ITEM_DATABASE[item.defId];
+    if (def) {
+      const lootDrop = generateLootDrop(item.defId, def.name, dropTier);
+      item.affixes = lootDrop.affixes;
+      item.bonusStats = lootDrop.bonusStats;
+      item.generatedName = lootDrop.generatedName;
+      item.dropTier = dropTier;
+    }
 
     this.spawnOrb(position, item);
   }

@@ -39,6 +39,14 @@ export interface ItemDef {
 export interface InventoryItem {
   uid: string;
   defId: string;
+  /** Rolled affix data from the game-systems loot roller (if any). */
+  affixes?: import('@workspace/game-systems').RolledAffix[];
+  /** Aggregate bonus stats from rolled affixes, keyed by stat name. */
+  bonusStats?: Record<string, number>;
+  /** Generated display name including prefix/suffix (e.g. "Sharp Iron Helm of Fortitude"). */
+  generatedName?: string;
+  /** Tier of the drop (1-8). Determines affix count + value scaling. */
+  dropTier?: number;
 }
 
 export const RARITY_COLORS: Record<ItemRarity, number> = {
