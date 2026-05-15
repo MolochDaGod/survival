@@ -17,13 +17,16 @@
     "db:push": "pnpm --filter @workspace/db run push",
     "db:push:force": "pnpm --filter @workspace/db run push-force",
     "deploy:preview": "vercel deploy --yes --archive=tgz",
-    "deploy:prod": "pnpm run build:website && node scripts/vercel-prebuilt.mjs && vercel deploy --prebuilt --prod --yes"
+    "deploy:prod": "pnpm run build:website && node scripts/vercel-prebuilt.mjs && vercel deploy --prebuilt --prod --yes",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "private": true,
   "devDependencies": {
     "pg": "^8.20.0",
     "prettier": "^3.8.1",
     "sharp": "^0.33.5",
-    "typescript": "~5.9.2"
+    "typescript": "~5.9.2",
+    "vitest": "^4.1.6"
   }
 }
