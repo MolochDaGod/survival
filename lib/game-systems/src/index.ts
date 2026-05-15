@@ -38,3 +38,11 @@ export {
   RARITY_COLORS, RARITY_WEIGHT,
   type CraftingStation, type HarvestingProfession,
 } from './tiers.js';
+
+// Loot (Diablo-style affix generation, tier-scaled drops)
+export {
+  AFFIX_POOL, AFFIX_COUNT_BY_TIER,
+  generateLootDrop, rollDropTier, formatAffixTooltip,
+  tierValueMultiplier,
+  type AffixDef, type AffixSlotType, type RolledAffix, type LootDrop,
+} from './loot.js';

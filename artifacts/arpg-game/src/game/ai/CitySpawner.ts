@@ -21,6 +21,7 @@ import { NPCManager } from './NPCManager';
 import { NPCFaction } from './NPCBrain';
 import { FollowBrain } from './FollowBrain';
 import type { AssetManager } from '../AssetManager';
+import { computeTownshipState, canRecruit, isRoleUnlocked, type NPCRole, type TownshipState } from '../township/TownshipSystem';
 
 interface CityNPCRecord {
   brainId: string;
@@ -33,6 +34,8 @@ interface CityNPCRecord {
   /** When recruited, this NPC follows the player instead of wandering. */
   followBrain?: FollowBrain;
   clips: THREE.AnimationClip[];
+  /** Assigned role after recruitment (null = generic follower). */
+  role?: NPCRole;
 }
 
 const TALK_LINES = [
@@ -239,11 +242,26 @@ export class CitySpawner {
   }
 
   /**
-   * Recruit the nearest NPC as a follower. Called when player presses
-   * the interact key (F) while near an NPC. Returns true if recruited.
+   * Get the current township state (recruit cap, tier, morale, etc.).
+   */
+  getTownshipState(): TownshipState {
+    return computeTownshipState(this.followers.length);
+  }
+
+  /**
+   * Recruit the nearest NPC as a follower. Enforces Township recruit cap.
+   * Returns true if recruited, false if cap reached or no NPC nearby.
    */
   recruitNearest(playerPos: THREE.Vector3): boolean {
     if (!this.nearestId) return false;
+
+    // Enforce Township recruit cap
+    const state = this.getTownshipState();
+    if (!canRecruit(state)) {
+      this.onTalkPrompt?.('Recruit cap reached — invest in Township Leadership to hire more.');
+      return false;
+    }
+
     const idx = this.npcs.findIndex(n => n.brainId === this.nearestId);
     if (idx < 0) return false;
     const rec = this.npcs[idx];
@@ -270,8 +288,74 @@ export class CitySpawner {
     this.onTalkPrompt?.(null);
     this.onRecruit?.(rec.brainId);
 
-    console.log(`[CitySpawner] NPC ${rec.brainId} recruited as follower`);
+    const newState = this.getTownshipState();
+    console.log(
+      `[CitySpawner] NPC ${rec.brainId} recruited (${newState.population}/${newState.recruitCap} cap, tier: ${newState.tier})`,
+    );
     return true;
+  }
+
+  /**
+   * Assign a role to a recruited follower. Role must be unlocked via Township skills.
+   * Returns true if assignment succeeded.
+   */
+  assignRole(followerIndex: number, role: NPCRole): boolean {
+    if (followerIndex < 0 || followerIndex >= this.followers.length) return false;
+    const state = this.getTownshipState();
+    if (!isRoleUnlocked(state, role)) {
+      console.warn(`[CitySpawner] Role '${role}' not unlocked yet`);
+      return false;
+    }
+    const rec = this.followers[followerIndex];
+    rec.role = role;
+
+    // Adjust FollowBrain behavior based on role
+    if (rec.followBrain) {
+      switch (role) {
+        // Harvesters: stay near their workstation, slow patrol
+        case 'woodcutter':
+        case 'miner':
+        case 'farmer':
+        case 'forager':
+        case 'trapper':
+          rec.followBrain.setMode('station', { arriveRadius: 8, walkSpeed: 1.0, runSpeed: 2.0 });
+          break;
+        // Vendors: stay at their stall, barely move
+        case 'stall':
+        case 'caravan_master':
+        case 'fence':
+        case 'bazaar_merchant':
+          rec.followBrain.setMode('station', { arriveRadius: 2, walkSpeed: 0.5, runSpeed: 1.0 });
+          break;
+        // Fighters: patrol around the player at medium distance
+        case 'sentry':
+        case 'gate_guard':
+        case 'gunner':
+          rec.followBrain.setMode('guard', { arriveRadius: 6, walkSpeed: 1.5, runSpeed: 4.0 });
+          break;
+        // Captain + mercenary: close combat companion
+        case 'captain':
+        case 'mercenary':
+          rec.followBrain.setMode('follow', { arriveRadius: 3, walkSpeed: 2.0, runSpeed: 5.5 });
+          break;
+        // Diplomat: stays at embassy
+        case 'diplomat':
+          rec.followBrain.setMode('station', { arriveRadius: 3, walkSpeed: 0.8, runSpeed: 1.5 });
+          break;
+      }
+    }
+
+    console.log(`[CitySpawner] Assigned role '${role}' to follower #${followerIndex}`);
+    return true;
+  }
+
+  /** Get all recruited followers with their roles. */
+  getFollowers(): Array<{ id: string; role?: NPCRole; position: THREE.Vector3 }> {
+    return this.followers.map(f => ({
+      id: f.brainId,
+      role: f.role,
+      position: f.mesh.position.clone(),
+    }));
   }
 
   /** Number of currently recruited followers. */

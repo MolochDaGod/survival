@@ -38,6 +38,8 @@ const DEFAULT_CONFIG: Required<FollowBrainConfig> = {
   turnSpeed: 8,
 };
 
+export type BrainMode = 'follow' | 'guard' | 'station';
+
 export class FollowBrain {
   readonly vehicle: YUKA.Vehicle;
   readonly locomotion: LocomotionAnimator;
@@ -47,6 +49,13 @@ export class FollowBrain {
   private arrive: YUKA.ArriveBehavior;
   private targetPos: THREE.Vector3 = new THREE.Vector3();
   private _yukaTarget: YUKA.Vector3 = new YUKA.Vector3();
+
+  /** Current behavior mode — affects how the NPC moves relative to target. */
+  private mode: BrainMode = 'follow';
+  /** For 'station' mode: the fixed position the NPC works at. */
+  private stationPos: THREE.Vector3 | null = null;
+  /** For 'guard' mode: patrol offset angle that rotates over time. */
+  private guardAngle: number = Math.random() * Math.PI * 2;
 
   /** Quaternion used for smooth rotation via rotateTowards. */
   private targetQuat: THREE.Quaternion = new THREE.Quaternion();
@@ -82,10 +91,55 @@ export class FollowBrain {
     this.arrive.target = this._yukaTarget;
   }
 
+  /**
+   * Switch this NPC's behavior mode and update its movement parameters.
+   *
+   * Modes:
+   *   - 'follow': stays close to the player (default companion)
+   *   - 'guard': patrols a circle around the player at medium distance
+   *   - 'station': stays at a fixed position (workstation, stall, watchtower)
+   */
+  setMode(mode: BrainMode, overrides?: Partial<FollowBrainConfig>) {
+    this.mode = mode;
+    if (overrides) {
+      Object.assign(this.config, overrides);
+    }
+    if (mode === 'station') {
+      // Lock station position to wherever the NPC currently is
+      this.stationPos = this.group.position.clone();
+    }
+  }
+
+  /** Set the station position explicitly (e.g. to a building's work point). */
+  setStationPosition(pos: THREE.Vector3) {
+    this.stationPos = pos.clone();
+  }
+
   /** Call every frame. Updates steering, locomotion, and rotation. */
   update(dt: number) {
-    const dx = this.targetPos.x - this.group.position.x;
-    const dz = this.targetPos.z - this.group.position.z;
+    // Compute the effective target based on mode
+    let effectiveTarget = this.targetPos;
+
+    if (this.mode === 'station' && this.stationPos) {
+      // Station mode: NPC stays at their workstation, ignores player position
+      effectiveTarget = this.stationPos;
+    } else if (this.mode === 'guard') {
+      // Guard mode: patrol a circle around the player at the arrive radius
+      this.guardAngle += dt * 0.3; // slow orbit
+      const guardDist = this.config.arriveRadius + 2;
+      effectiveTarget = new THREE.Vector3(
+        this.targetPos.x + Math.cos(this.guardAngle) * guardDist,
+        this.targetPos.y,
+        this.targetPos.z + Math.sin(this.guardAngle) * guardDist,
+      );
+    }
+
+    // Update YUKA target
+    this._yukaTarget.set(effectiveTarget.x, effectiveTarget.y, effectiveTarget.z);
+    this.arrive.target = this._yukaTarget;
+
+    const dx = effectiveTarget.x - this.group.position.x;
+    const dz = effectiveTarget.z - this.group.position.z;
     const dist = Math.sqrt(dx * dx + dz * dz);
 
     // Decide speed based on distance
