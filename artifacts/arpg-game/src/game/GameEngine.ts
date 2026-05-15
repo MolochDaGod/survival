@@ -599,6 +599,15 @@ export class GameEngine {
         this._lastNpcLabel = label;
         this.resolveInteractionPrompt();
       };
+      // Wire recruit key (F) — when near an NPC, pressing interact recruits
+      // them as a follower using the FollowBrain system.
+      document.addEventListener('keydown', (e) => {
+        if (e.code === 'KeyF' && !e.repeat && this.gameState.gameStarted && !this.gameState.paused) {
+          if (this.citySpawner?.recruitNearest(this.player.position)) {
+            this.audio.play('pickup');
+          }
+        }
+      });
 
       // ── Breakable wall system ──────────────────────────────────────────────
       // Registers all wall/ceiling meshes already tagged by GLBLocationSystem.

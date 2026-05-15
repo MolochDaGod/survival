@@ -19,6 +19,7 @@ import * as THREE from 'three';
 import { clone as skeletonClone } from 'three/examples/jsm/utils/SkeletonUtils.js';
 import { NPCManager } from './NPCManager';
 import { NPCFaction } from './NPCBrain';
+import { FollowBrain } from './FollowBrain';
 import type { AssetManager } from '../AssetManager';
 
 interface CityNPCRecord {
@@ -29,6 +30,9 @@ interface CityNPCRecord {
   walkAction?: THREE.AnimationAction;
   talkLine: string;
   homePos: THREE.Vector3;
+  /** When recruited, this NPC follows the player instead of wandering. */
+  followBrain?: FollowBrain;
+  clips: THREE.AnimationClip[];
 }
 
 const TALK_LINES = [
@@ -52,6 +56,10 @@ export class CitySpawner {
   private nearestId: string | null = null;
   /** UI consumes this to render the floating talk hint. */
   onTalkPrompt: ((text: string | null) => void) | null = null;
+  /** Callback when an NPC is recruited as a follower. */
+  onRecruit: ((npcId: string) => void) | null = null;
+  /** Currently active followers (recruited NPCs). */
+  private followers: CityNPCRecord[] = [];
 
   constructor(
     private scene: THREE.Scene,
@@ -158,6 +166,7 @@ export class CitySpawner {
       walkAction,
       talkLine: TALK_LINES[Math.floor(Math.random() * TALK_LINES.length)],
       homePos: home,
+      clips,
     });
   }
 
@@ -212,25 +221,77 @@ export class CitySpawner {
     if (bestRec) {
       if (bestRec.brainId !== this.nearestId) {
         this.nearestId = bestRec.brainId;
-        this.onTalkPrompt?.(`Press T  ${bestRec.talkLine}`);
+        this.onTalkPrompt?.(`Press F to recruit  ·  ${bestRec.talkLine}`);
       }
     } else if (this.nearestId) {
       this.nearestId = null;
       this.onTalkPrompt?.(null);
     }
+
+    // Tick followers — they use FollowBrain which owns its own locomotion
+    for (const rec of this.followers) {
+      if (rec.followBrain) {
+        rec.followBrain.setTarget(playerPos);
+        rec.followBrain.update(dt);
+      }
+      rec.mixer.update(dt);
+    }
   }
+
+  /**
+   * Recruit the nearest NPC as a follower. Called when player presses
+   * the interact key (F) while near an NPC. Returns true if recruited.
+   */
+  recruitNearest(playerPos: THREE.Vector3): boolean {
+    if (!this.nearestId) return false;
+    const idx = this.npcs.findIndex(n => n.brainId === this.nearestId);
+    if (idx < 0) return false;
+    const rec = this.npcs[idx];
+
+    // Remove from NPCManager wander system
+    this.npcManager.despawn(rec.brainId);
+
+    // Create a FollowBrain that uses the same mesh + mixer
+    const followBrain = new FollowBrain(
+      rec.mesh as THREE.Group,
+      rec.clips,
+      rec.mixer,
+      { arriveRadius: 2.5, runThreshold: 6, walkSpeed: 2.0, runSpeed: 5.5 },
+    );
+    followBrain.setTarget(playerPos);
+    rec.followBrain = followBrain;
+
+    // Move from npcs array to followers array
+    this.npcs.splice(idx, 1);
+    this.followers.push(rec);
+
+    // Clear talk prompt
+    this.nearestId = null;
+    this.onTalkPrompt?.(null);
+    this.onRecruit?.(rec.brainId);
+
+    console.log(`[CitySpawner] NPC ${rec.brainId} recruited as follower`);
+    return true;
+  }
+
+  /** Number of currently recruited followers. */
+  get followerCount(): number { return this.followers.length; }
 
   dispose(): void {
     for (const rec of this.npcs) {
       rec.mixer.stopAllAction();
-      // Uncache the root so the mixer's internal action/clip cache for this
-      // skeleton is released; without this we leak a small map per spawn
-      // across long sessions with multiple level reloads.
       rec.mixer.uncacheRoot(rec.mesh);
       this.scene.remove(rec.mesh);
       this.npcManager.despawn(rec.brainId);
     }
+    for (const rec of this.followers) {
+      rec.followBrain?.dispose();
+      rec.mixer.stopAllAction();
+      rec.mixer.uncacheRoot(rec.mesh);
+      this.scene.remove(rec.mesh);
+    }
     this.npcs = [];
+    this.followers = [];
     this.nearestId = null;
     this.onTalkPrompt = null;
   }
