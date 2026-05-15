@@ -71,21 +71,21 @@ export const AFFIX_POOL: AffixDef[] = [
   { id: 'poisoning',   name: 'Toxic',        type: 'prefix', stat: 'procPoison',     format: 'pct',  minBase: 3,  maxBase: 10,  minTier: 3, weight: 6,  desc: '{value}% chance to Poison on hit (5s)' },
   { id: 'exploding',   name: 'Volatile',     type: 'prefix', stat: 'procExplode',    format: 'pct',  minBase: 1,  maxBase: 4,   minTier: 5, weight: 3,  desc: '{value}% chance to Explode on kill (AoE)' },
 
-  // ── PREFIXES: NEXUS ATTRIBUTE BONUSES (+1 to +4 on the 8 stats) ───────
-  { id: 'bio_boost',   name: 'Vital',        type: 'prefix', stat: 'bio',            format: 'flat', minBase: 1,  maxBase: 1,   minTier: 4, weight: 5,  desc: '+{value} Biomass (BIO)' },
-  { id: 'neu_boost',   name: 'Focused',      type: 'prefix', stat: 'neu',            format: 'flat', minBase: 1,  maxBase: 1,   minTier: 4, weight: 5,  desc: '+{value} Neural Integrity (NEU)' },
-  { id: 'kin_boost',   name: 'Kinetic',      type: 'prefix', stat: 'kin',            format: 'flat', minBase: 1,  maxBase: 1,   minTier: 4, weight: 5,  desc: '+{value} Kinetic Efficiency (KIN)' },
-  { id: 'qnt_boost',   name: 'Quantum',      type: 'prefix', stat: 'qnt',            format: 'flat', minBase: 1,  maxBase: 1,   minTier: 4, weight: 4,  desc: '+{value} Quantum Aptitude (QNT)' },
-  { id: 'syn_boost',   name: 'Synthetic',    type: 'prefix', stat: 'syn',            format: 'flat', minBase: 1,  maxBase: 1,   minTier: 4, weight: 4,  desc: '+{value} Synthetic Affinity (SYN)' },
-  { id: 'chr_boost',   name: 'Chronal',      type: 'prefix', stat: 'chr',            format: 'flat', minBase: 1,  maxBase: 1,   minTier: 5, weight: 3,  desc: '+{value} Chronal Stability (CHR)' },
-  { id: 'ent_boost',   name: 'Entropic',     type: 'prefix', stat: 'ent',            format: 'flat', minBase: 1,  maxBase: 1,   minTier: 5, weight: 3,  desc: '+{value} Entropic Resistance (ENT)' },
-  { id: 'gra_boost',   name: 'Gravitic',     type: 'prefix', stat: 'gra',            format: 'flat', minBase: 1,  maxBase: 1,   minTier: 5, weight: 3,  desc: '+{value} Gravitic Harmony (GRA)' },
+  // ── PREFIXES: NEXUS ATTRIBUTE BONUSES (always +1, no tier scaling) ────
+  { id: 'bio_boost',   name: 'Vital',        type: 'prefix', stat: 'bio',            format: 'flat', minBase: 1,  maxBase: 1,   minTier: 4, weight: 5,  desc: '+1 Biomass (BIO)' },
+  { id: 'neu_boost',   name: 'Focused',      type: 'prefix', stat: 'neu',            format: 'flat', minBase: 1,  maxBase: 1,   minTier: 4, weight: 5,  desc: '+1 Neural Integrity (NEU)' },
+  { id: 'kin_boost',   name: 'Kinetic',      type: 'prefix', stat: 'kin',            format: 'flat', minBase: 1,  maxBase: 1,   minTier: 4, weight: 5,  desc: '+1 Kinetic Efficiency (KIN)' },
+  { id: 'qnt_boost',   name: 'Quantum',      type: 'prefix', stat: 'qnt',            format: 'flat', minBase: 1,  maxBase: 1,   minTier: 4, weight: 4,  desc: '+1 Quantum Aptitude (QNT)' },
+  { id: 'syn_boost',   name: 'Synthetic',    type: 'prefix', stat: 'syn',            format: 'flat', minBase: 1,  maxBase: 1,   minTier: 4, weight: 4,  desc: '+1 Synthetic Affinity (SYN)' },
+  { id: 'chr_boost',   name: 'Chronal',      type: 'prefix', stat: 'chr',            format: 'flat', minBase: 1,  maxBase: 1,   minTier: 5, weight: 3,  desc: '+1 Chronal Stability (CHR)' },
+  { id: 'ent_boost',   name: 'Entropic',     type: 'prefix', stat: 'ent',            format: 'flat', minBase: 1,  maxBase: 1,   minTier: 5, weight: 3,  desc: '+1 Entropic Resistance (ENT)' },
+  { id: 'gra_boost',   name: 'Gravitic',     type: 'prefix', stat: 'gra',            format: 'flat', minBase: 1,  maxBase: 1,   minTier: 5, weight: 3,  desc: '+1 Gravitic Harmony (GRA)' },
 
-  // ── PREFIXES: PERK LEVEL BONUSES ─────────────────────────────────────
-  { id: 'hero_perk',   name: 'Heroic',       type: 'prefix', stat: 'perkHero',       format: 'flat', minBase: 1,  maxBase: 1,   minTier: 5, weight: 2,  desc: '+{value} Hero Perk Level' },
-  { id: 'warrior_perk',name: 'Warlord\'s',   type: 'prefix', stat: 'perkWarrior',    format: 'flat', minBase: 1,  maxBase: 1,   minTier: 5, weight: 2,  desc: '+{value} Warrior Perk Level' },
-  { id: 'smarts_perk', name: 'Sage\'s',      type: 'prefix', stat: 'perkSmarts',     format: 'flat', minBase: 1,  maxBase: 1,   minTier: 5, weight: 2,  desc: '+{value} Smarts Perk Level' },
-  { id: 'maker_perk',  name: 'Artisan\'s',   type: 'prefix', stat: 'perkMaker',      format: 'flat', minBase: 1,  maxBase: 1,   minTier: 5, weight: 2,  desc: '+{value} Maker Perk Level' },
+  // ── PREFIXES: PERK LEVEL BONUSES (always +1, no tier scaling) ─────────
+  { id: 'hero_perk',   name: 'Heroic',       type: 'prefix', stat: 'perkHero',       format: 'flat', minBase: 1,  maxBase: 1,   minTier: 5, weight: 2,  desc: '+1 Hero Perk Level' },
+  { id: 'warrior_perk',name: 'Warlord\'s',   type: 'prefix', stat: 'perkWarrior',    format: 'flat', minBase: 1,  maxBase: 1,   minTier: 5, weight: 2,  desc: '+1 Warrior Perk Level' },
+  { id: 'smarts_perk', name: 'Sage\'s',      type: 'prefix', stat: 'perkSmarts',     format: 'flat', minBase: 1,  maxBase: 1,   minTier: 5, weight: 2,  desc: '+1 Smarts Perk Level' },
+  { id: 'maker_perk',  name: 'Artisan\'s',   type: 'prefix', stat: 'perkMaker',      format: 'flat', minBase: 1,  maxBase: 1,   minTier: 5, weight: 2,  desc: '+1 Maker Perk Level' },
 
   // ── PREFIXES: SPELL & ABILITY ───────────────────────────────────────
   { id: 'cdr',         name: 'Swift',        type: 'prefix', stat: 'cooldownReduction', format: 'pct', minBase: 2, maxBase: 8,  minTier: 3, weight: 8,  desc: '+{value}% Cooldown Reduction' },
@@ -110,15 +110,15 @@ export const AFFIX_POOL: AffixDef[] = [
   { id: 'insulated',   name: 'of Grounding',  type: 'suffix', stat: 'lightningResist',format: 'pct', minBase: 3,  maxBase: 12,  minTier: 2, weight: 7,  desc: '+{value}% Lightning Resistance' },
   { id: 'warded',      name: 'of Warding',    type: 'suffix', stat: 'arcaneResist',  format: 'pct',  minBase: 3,  maxBase: 10,  minTier: 3, weight: 5,  desc: '+{value}% Arcane Resistance' },
 
-  // ── SUFFIXES: ATTRIBUTE BONUSES (+1 to +4 on the 8 stats) ─────────────
-  { id: 'of_bio',      name: 'of Biomass',    type: 'suffix', stat: 'bio',           format: 'flat', minBase: 1,  maxBase: 2,   minTier: 4, weight: 4,  desc: '+{value} Biomass (BIO)' },
-  { id: 'of_neu',      name: 'of Clarity',    type: 'suffix', stat: 'neu',           format: 'flat', minBase: 1,  maxBase: 2,   minTier: 4, weight: 4,  desc: '+{value} Neural Integrity (NEU)' },
-  { id: 'of_kin',      name: 'of Momentum',   type: 'suffix', stat: 'kin',           format: 'flat', minBase: 1,  maxBase: 2,   minTier: 4, weight: 4,  desc: '+{value} Kinetic Efficiency (KIN)' },
-  { id: 'of_qnt',      name: 'of Probability',type: 'suffix', stat: 'qnt',           format: 'flat', minBase: 1,  maxBase: 2,   minTier: 4, weight: 3,  desc: '+{value} Quantum Aptitude (QNT)' },
-  { id: 'of_syn',      name: 'of Synthesis',  type: 'suffix', stat: 'syn',           format: 'flat', minBase: 1,  maxBase: 2,   minTier: 4, weight: 3,  desc: '+{value} Synthetic Affinity (SYN)' },
-  { id: 'of_chr',      name: 'of the Timeline', type: 'suffix', stat: 'chr',         format: 'flat', minBase: 1,  maxBase: 1,   minTier: 5, weight: 2,  desc: '+{value} Chronal Stability (CHR)' },
-  { id: 'of_ent',      name: 'of Preservation', type: 'suffix', stat: 'ent',         format: 'flat', minBase: 1,  maxBase: 1,   minTier: 5, weight: 2,  desc: '+{value} Entropic Resistance (ENT)' },
-  { id: 'of_gra',      name: 'of Orbit',      type: 'suffix', stat: 'gra',           format: 'flat', minBase: 1,  maxBase: 1,   minTier: 5, weight: 2,  desc: '+{value} Gravitic Harmony (GRA)' },
+  // ── SUFFIXES: ATTRIBUTE BONUSES (always +1, no tier scaling) ───────────
+  { id: 'of_bio',      name: 'of Biomass',    type: 'suffix', stat: 'bio',           format: 'flat', minBase: 1,  maxBase: 1,   minTier: 4, weight: 4,  desc: '+1 Biomass (BIO)' },
+  { id: 'of_neu',      name: 'of Clarity',    type: 'suffix', stat: 'neu',           format: 'flat', minBase: 1,  maxBase: 1,   minTier: 4, weight: 4,  desc: '+1 Neural Integrity (NEU)' },
+  { id: 'of_kin',      name: 'of Momentum',   type: 'suffix', stat: 'kin',           format: 'flat', minBase: 1,  maxBase: 1,   minTier: 4, weight: 4,  desc: '+1 Kinetic Efficiency (KIN)' },
+  { id: 'of_qnt',      name: 'of Probability',type: 'suffix', stat: 'qnt',           format: 'flat', minBase: 1,  maxBase: 1,   minTier: 4, weight: 3,  desc: '+1 Quantum Aptitude (QNT)' },
+  { id: 'of_syn',      name: 'of Synthesis',  type: 'suffix', stat: 'syn',           format: 'flat', minBase: 1,  maxBase: 1,   minTier: 4, weight: 3,  desc: '+1 Synthetic Affinity (SYN)' },
+  { id: 'of_chr',      name: 'of the Timeline', type: 'suffix', stat: 'chr',         format: 'flat', minBase: 1,  maxBase: 1,   minTier: 5, weight: 2,  desc: '+1 Chronal Stability (CHR)' },
+  { id: 'of_ent',      name: 'of Preservation', type: 'suffix', stat: 'ent',         format: 'flat', minBase: 1,  maxBase: 1,   minTier: 5, weight: 2,  desc: '+1 Entropic Resistance (ENT)' },
+  { id: 'of_gra',      name: 'of Orbit',      type: 'suffix', stat: 'gra',           format: 'flat', minBase: 1,  maxBase: 1,   minTier: 5, weight: 2,  desc: '+1 Gravitic Harmony (GRA)' },
 
   // ── SUFFIXES: RARE UTILITY ─────────────────────────────────────────
   { id: 'eternal',     name: 'of Eternity',   type: 'suffix', stat: 'durability',    format: 'pct',  minBase: 10, maxBase: 30,  minTier: 4, weight: 6,  desc: '+{value}% Durability' },
@@ -179,10 +179,22 @@ export interface LootDrop {
 
 // ── Rolling Engine ──────────────────────────────────────────────────────────
 
+/** Stats that are capped at their base value (no tier scaling). */
+const NO_SCALE_STATS = new Set([
+  'bio','neu','kin','qnt','syn','chr','ent','gra',
+  'perkHero','perkWarrior','perkSmarts','perkMaker',
+]);
+
 /**
  * Roll a single affix value within the tier-scaled range.
+ * Attribute and perk stats always roll exactly their base (1) —
+ * no tier inflation. Everything else scales with tier.
  */
 function rollValue(affix: AffixDef, tier: number): number {
+  if (NO_SCALE_STATS.has(affix.stat)) {
+    // Flat +1 always. No tier scaling on attributes/perks.
+    return affix.minBase;
+  }
   const mult = tierValueMultiplier(tier);
   const min = Math.floor(affix.minBase * mult);
   const max = Math.ceil(affix.maxBase * mult);
