@@ -30,6 +30,7 @@ export type AnimCategory =
   | 'combat_throw'
   | 'combat_ranged'
   | 'combat_spell'
+  | 'combat_2h'
   | 'traversal'
   | 'survival'
   | 'interaction'
@@ -163,6 +164,52 @@ export const ALL_ANIMS: AnimDef[] = [
   define({ clipName: 'Interact',       key: 'interact',     category: 'interaction', loop: 'once', duration: 0.80, source: 'UAL1', description: 'Generic interact reach — switches, levers, buttons.' }),
   define({ clipName: 'Fixing_Kneeling', key: 'repair',      category: 'interaction', loop: 'loop', duration: 1.80, source: 'UAL1', description: 'Kneeling repair gesture — workbench / item repair.' }),
 
+  // ── COMBAT : RIFLE / SHOTGUN (Mixamo pack — loaded from /models/animations/) ─
+  define({ clipName: 'Rifle_Idle_Loop',      key: 'rifle_idle',       category: 'combat_ranged', loop: 'loop', duration: 1.6,  weaponTypes: ['rifle', 'shotgun', 'crossbow', 'smg'], source: 'UAL1', description: 'Rifle held at low ready — default idle with long gun.' }),
+  define({ clipName: 'Rifle_Aim_Neutral',    key: 'rifle_aim',        category: 'combat_ranged', loop: 'loop', duration: 1.0,  weaponTypes: ['rifle', 'shotgun', 'crossbow', 'smg'], source: 'UAL1', description: 'Rifle aim-down-sights neutral.' }),
+  define({ clipName: 'Rifle_Aim_Up',         key: 'rifle_aim_up',     category: 'combat_ranged', loop: 'loop', duration: 1.0,  weaponTypes: ['rifle', 'shotgun', 'crossbow', 'smg'], source: 'UAL1', description: 'Rifle aim raised.' }),
+  define({ clipName: 'Rifle_Aim_Down',       key: 'rifle_aim_down',   category: 'combat_ranged', loop: 'loop', duration: 1.0,  weaponTypes: ['rifle', 'shotgun', 'crossbow', 'smg'], source: 'UAL1', description: 'Rifle aim lowered.' }),
+  define({ clipName: 'Rifle_Shoot',          key: 'rifle_shoot',      category: 'combat_ranged', loop: 'once', duration: 0.25, weaponTypes: ['rifle', 'shotgun', 'crossbow', 'smg'], source: 'UAL1', description: 'Rifle fire — heavier recoil than pistol.' }),
+  define({ clipName: 'Rifle_Reload',         key: 'rifle_reload',     category: 'combat_ranged', loop: 'once', duration: 2.20, weaponTypes: ['rifle', 'shotgun', 'crossbow', 'smg'], source: 'UAL1', description: 'Rifle magazine swap — longer than pistol.' }),
+  define({ clipName: 'Rifle_Walk_Fwd',       key: 'rifle_walk',       category: 'combat_ranged', loop: 'loop', duration: 1.1,  weaponTypes: ['rifle', 'shotgun', 'crossbow', 'smg'], source: 'UAL1', description: 'Walking with rifle at low ready.' }),
+  define({ clipName: 'Rifle_Run_Fwd',        key: 'rifle_run',        category: 'combat_ranged', loop: 'loop', duration: 0.8,  weaponTypes: ['rifle', 'shotgun', 'crossbow', 'smg'], source: 'UAL1', description: 'Running with rifle.' }),
+  define({ clipName: 'Shotgun_Pump',         key: 'shotgun_pump',     category: 'combat_ranged', loop: 'once', duration: 0.60, weaponTypes: ['shotgun'], source: 'UAL1', description: 'Pump-action rack between shots.' }),
+
+  // ── COMBAT : 2H MELEE (greatsword, greataxe, hammer, spear) ─────────────
+  define({ clipName: '2H_Idle_Loop',         key: '2h_idle',          category: 'combat_2h',    loop: 'loop', duration: 1.6,  weaponTypes: ['greatsword', 'greataxe', 'hammer', 'spear', 'mace'], source: 'UAL2', description: '2-handed weapon ready stance.' }),
+  define({ clipName: '2H_Swing_A',           key: '2h_swing_a',       category: 'combat_2h',    loop: 'once', duration: 0.70, recovery: '2H_Swing_A_Rec', weaponTypes: ['greatsword', 'greataxe', 'hammer', 'spear', 'mace'], source: 'UAL2', description: 'Heavy horizontal swing — combo step 0.' }),
+  define({ clipName: '2H_Swing_A_Rec',       key: '2h_swing_a_rec',   category: 'combat_2h',    loop: 'once', duration: 0.35, weaponTypes: ['greatsword', 'greataxe', 'hammer', 'spear', 'mace'], source: 'UAL2', description: 'Recovery after heavy swing A.' }),
+  define({ clipName: '2H_Swing_B',           key: '2h_swing_b',       category: 'combat_2h',    loop: 'once', duration: 0.75, recovery: '2H_Swing_B_Rec', weaponTypes: ['greatsword', 'greataxe', 'hammer', 'spear', 'mace'], source: 'UAL2', description: 'Heavy diagonal swing — combo step 1.' }),
+  define({ clipName: '2H_Swing_B_Rec',       key: '2h_swing_b_rec',   category: 'combat_2h',    loop: 'once', duration: 0.35, weaponTypes: ['greatsword', 'greataxe', 'hammer', 'spear', 'mace'], source: 'UAL2', description: 'Recovery after heavy swing B.' }),
+  define({ clipName: '2H_Slam',              key: '2h_slam',          category: 'combat_2h',    loop: 'once', duration: 0.90, weaponTypes: ['greatsword', 'greataxe', 'hammer', 'mace'], source: 'UAL2', description: 'Overhead slam — finisher / heavy attack.' }),
+  define({ clipName: '2H_Spin',              key: '2h_spin',          category: 'combat_2h',    loop: 'once', duration: 0.85, weaponTypes: ['greatsword', 'greataxe', 'spear'], source: 'UAL2', description: '360° spin attack — AoE clear.' }),
+  define({ clipName: '2H_Block',             key: '2h_block',         category: 'combat_2h',    loop: 'once', duration: 0.50, weaponTypes: ['greatsword', 'greataxe', 'hammer', 'spear', 'mace'], source: 'UAL2', description: '2H weapon parry stance.' }),
+  define({ clipName: '2H_Thrust',            key: '2h_thrust',        category: 'combat_2h',    loop: 'once', duration: 0.60, weaponTypes: ['spear', 'greatsword'], source: 'UAL2', description: 'Forward thrust — spear primary, greatsword alt.' }),
+
+  // ── COMBAT : BOW / CROSSBOW ─────────────────────────────────────────────
+  define({ clipName: 'Bow_Idle_Loop',        key: 'bow_idle',         category: 'combat_ranged', loop: 'loop', duration: 1.6,  weaponTypes: ['bow', 'crossbow'], source: 'UAL1', description: 'Bow held at side — idle stance.' }),
+  define({ clipName: 'Bow_Draw',             key: 'bow_draw',         category: 'combat_ranged', loop: 'once', duration: 0.40, weaponTypes: ['bow', 'crossbow'], source: 'UAL1', description: 'Draw bowstring — hold for aim.' }),
+  define({ clipName: 'Bow_Aim_Loop',         key: 'bow_aim',          category: 'combat_ranged', loop: 'loop', duration: 1.0,  weaponTypes: ['bow', 'crossbow'], source: 'UAL1', description: 'Held aim pose with drawn bow.' }),
+  define({ clipName: 'Bow_Release',          key: 'bow_release',      category: 'combat_ranged', loop: 'once', duration: 0.30, weaponTypes: ['bow', 'crossbow'], source: 'UAL1', description: 'Release arrow — fire shot.' }),
+  define({ clipName: 'Bow_Reload',           key: 'bow_reload',       category: 'combat_ranged', loop: 'once', duration: 0.80, weaponTypes: ['bow', 'crossbow'], source: 'UAL1', description: 'Nock new arrow.' }),
+
+  // ── COMBAT : KNIFE / STEALTH ─────────────────────────────────────────────
+  define({ clipName: 'Knife_Stab',           key: 'knife_stab',       category: 'combat_sword',  loop: 'once', duration: 0.40, weaponTypes: ['knife', 'dagger'], source: 'UAL2', description: 'Quick forward stab — faster than sword slash.' }),
+  define({ clipName: 'Knife_Slash',          key: 'knife_slash',      category: 'combat_sword',  loop: 'once', duration: 0.35, weaponTypes: ['knife', 'dagger'], source: 'UAL2', description: 'Horizontal knife slash — combo step B.' }),
+  define({ clipName: 'Backstab',             key: 'backstab',         category: 'combat_sword',  loop: 'once', duration: 0.80, weaponTypes: ['knife', 'dagger'], source: 'UAL2', description: 'Stealth backstab kill — from behind unaware target.' }),
+
+  // ── DEPLOY / MECHANICAL ──────────────────────────────────────────────────
+  define({ clipName: 'Deploy_Place',         key: 'deploy_place',     category: 'interaction',   loop: 'once', duration: 1.20, source: 'UAL2', description: 'Place deployable (turret, drone, trap) on ground.' }),
+  define({ clipName: 'Deploy_Activate',      key: 'deploy_activate',  category: 'interaction',   loop: 'once', duration: 0.60, source: 'UAL2', description: 'Activate deployed device — press button.' }),
+  define({ clipName: 'Deploy_Recall',        key: 'deploy_recall',    category: 'interaction',   loop: 'once', duration: 0.80, source: 'UAL2', description: 'Recall deployed device back to inventory.' }),
+
+  // ── ALLY / SOCIAL (companion NPC commands) ────────────────────────────────
+  define({ clipName: 'Wave',                 key: 'wave',             category: 'social',        loop: 'once', duration: 1.20, source: 'UAL1', description: 'Wave greeting — player emote + NPC follow acknowledge.' }),
+  define({ clipName: 'Salute',               key: 'salute',           category: 'social',        loop: 'once', duration: 1.00, source: 'UAL2', description: 'Military salute — NPC recruited acknowledge.' }),
+  define({ clipName: 'PointForward',         key: 'point_forward',    category: 'social',        loop: 'once', duration: 0.80, source: 'UAL2', description: 'Point forward — command ally to move to position.' }),
+  define({ clipName: 'StopSignal',           key: 'stop_signal',      category: 'social',        loop: 'once', duration: 0.60, source: 'UAL2', description: 'Hold-position hand signal — command ally to stay.' }),
+  define({ clipName: 'Cheer',                key: 'cheer',            category: 'social',        loop: 'once', duration: 1.40, source: 'UAL2', description: 'Victory cheer — post-combat celebration.' }),
+
   // ── ENEMY (UAL2 — used by zombie-style enemies on the same rig) ─────────
   define({ clipName: 'Zombie_Idle_Loop',     key: 'enemy_zombie_idle',   category: 'enemy', loop: 'loop', duration: 2.00, source: 'UAL2', description: 'Zombie idle — used on undead enemy type.' }),
   define({ clipName: 'Zombie_Scratch',       key: 'enemy_zombie_attack', category: 'enemy', loop: 'once', duration: 0.90, source: 'UAL2', description: 'Zombie swipe attack.' }),
@@ -234,6 +281,56 @@ export const SWORD_COMBO: ComboChain = {
   finisher: 'Sword_Regular_Combo',
 };
 
+export const KNIFE_COMBO: ComboChain = {
+  weaponType: 'knife',
+  steps: [
+    { clipName: 'Knife_Stab', windowMs: 400 },
+    { clipName: 'Knife_Slash', windowMs: 450 },
+    { clipName: 'Knife_Stab', windowMs: 400 },
+  ],
+  finisher: 'Backstab',
+};
+
+export const HEAVY_2H_COMBO: ComboChain = {
+  weaponType: 'greatsword',
+  steps: [
+    { clipName: '2H_Swing_A', windowMs: 800 },
+    { clipName: '2H_Swing_B', windowMs: 850 },
+  ],
+  finisher: '2H_Slam',
+};
+
+/** Lookup combo chain by weapon type. Falls back to sword combo for unmapped types. */
+export function getComboChain(weaponType: string): ComboChain {
+  switch (weaponType) {
+    case 'knife': case 'dagger': return KNIFE_COMBO;
+    case 'greatsword': case 'greataxe': case 'hammer': case 'mace': case 'spear': return HEAVY_2H_COMBO;
+    default: return SWORD_COMBO;
+  }
+}
+
+/** Reload clip per weapon type — R key. */
+export const RELOAD_CLIP: Record<string, string> = {
+  pistol:   'Pistol_Reload',
+  gun:      'Pistol_Reload',
+  rifle:    'Rifle_Reload',
+  shotgun:  'Rifle_Reload',
+  smg:      'Rifle_Reload',
+  crossbow: 'Bow_Reload',
+  bow:      'Bow_Reload',
+};
+
+/** ADS aim clip per weapon type — held while RMB is down. */
+export const AIM_CLIP: Record<string, string> = {
+  pistol:   'Pistol_Aim_Neutral',
+  gun:      'Pistol_Aim_Neutral',
+  rifle:    'Rifle_Aim_Neutral',
+  shotgun:  'Rifle_Aim_Neutral',
+  smg:      'Rifle_Aim_Neutral',
+  crossbow: 'Rifle_Aim_Neutral',
+  bow:      'Bow_Aim_Loop',
+};
+
 // ── Slide state machine ────────────────────────────────────────────────────
 
 export const SLIDE_TRANSITIONS = {
@@ -245,36 +342,65 @@ export const SLIDE_TRANSITIONS = {
 // ── Weapon → primary attack clip (LMB) ─────────────────────────────────────
 
 export const PRIMARY_ATTACK_CLIP: Record<string, string> = {
+  // Unarmed
   unarmed:      'Melee_Hook',
   fists:        'Melee_Hook',
   gloves:       'Melee_Hook',
+  // 1H melee
   sword:        'Sword_Regular_A',
-  dagger:       'Sword_Regular_A',
-  knife:        'Sword_Regular_A',
+  dagger:       'Knife_Stab',
+  knife:        'Knife_Stab',
   sword_shield: 'Sword_Regular_A',
-  axe:          'TreeChopping_Loop',
+  // 2H melee
+  axe:          '2H_Swing_A',
   hatchet:      'TreeChopping_Loop',
+  greatsword:   '2H_Swing_A',
+  greataxe:     '2H_Swing_A',
+  hammer:       '2H_Slam',
+  mace:         '2H_Swing_A',
+  spear:        '2H_Thrust',
+  // Thrown
   throwable:    'OverhandThrow',
   javelin:      'OverhandThrow',
   grenade:      'OverhandThrow',
-  spear:        'OverhandThrow',
+  // Shield
   shield:       'Shield_OneShot',
+  // Ranged — pistol
   pistol:       'Pistol_Shoot',
   gun:          'Pistol_Shoot',
+  // Ranged — rifle / shotgun / SMG
+  rifle:        'Rifle_Shoot',
+  shotgun:      'Rifle_Shoot',
+  crossbow:     'Bow_Release',
+  smg:          'Rifle_Shoot',
+  // Ranged — bow
+  bow:          'Bow_Release',
+  // Magic
   staff:        'Spell_Simple_Shoot',
   wand:         'Spell_Simple_Shoot',
   tome:         'Spell_Simple_Shoot',
+  // Tools
   scythe:       'Farm_Harvest',
 };
 
 // ── Weapon → block clip (right-click) ──────────────────────────────────────
 
 export const BLOCK_CLIP: Record<string, string> = {
+  // 1H melee
   sword:        'Sword_Block',
   sword_shield: 'Sword_Block',
   shield:       'Idle_Shield_Loop',
   dagger:       'Sword_Block',
   knife:        'Sword_Block',
+  // 2H melee
+  greatsword:   '2H_Block',
+  greataxe:     '2H_Block',
+  hammer:       '2H_Block',
+  mace:         '2H_Block',
+  spear:        '2H_Block',
+  axe:          '2H_Block',
+  // Ranged (RMB = ADS, not block — handled by PlayerController.startAiming)
+  // No block clip for ranged weapons — ADS is the default RMB behavior
 };
 
 // ── Sprint + LMB → dash attack ─────────────────────────────────────────────
@@ -285,6 +411,9 @@ export const DASH_ATTACK_CLIP: Record<string, string> = {
   knife:        'Sword_Dash_RM',
   sword_shield: 'Sword_Dash_RM',
   shield:       'Shield_Dash_RM',
+  greatsword:   '2H_Spin',
+  greataxe:     '2H_Spin',
+  spear:        '2H_Thrust',
 };
 
 // ── Equipment-driven idle override ─────────────────────────────────────────
@@ -299,6 +428,16 @@ export const IDLE_OVERRIDE_CLIP: Record<string, string> = {
   knife:        'Sword_Idle',
   pistol:       'Pistol_Idle_Loop',
   gun:          'Pistol_Idle_Loop',
+  rifle:        'Rifle_Idle_Loop',
+  shotgun:      'Rifle_Idle_Loop',
+  smg:          'Rifle_Idle_Loop',
+  crossbow:     'Rifle_Idle_Loop',
+  bow:          'Bow_Idle_Loop',
+  greatsword:   '2H_Idle_Loop',
+  greataxe:     '2H_Idle_Loop',
+  hammer:       '2H_Idle_Loop',
+  mace:         '2H_Idle_Loop',
+  spear:        '2H_Idle_Loop',
 };
 
 // ── E-interact → clip per prop/node type ───────────────────────────────────
