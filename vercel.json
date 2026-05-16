@@ -1,14 +1,14 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "pnpm run build",
-  "installCommand": "pnpm install --frozen-lockfile",
+  "installCommand": "pnpm install",
   "outputDirectory": "artifacts/website/dist/public",
   "rewrites": [
     { "source": "/api/:path*", "destination": "https://api.grudge-studio.com/api/:path*" },
 
     { "source": "/arpg-game", "destination": "/arpg-game/index.html" },
     { "source": "/arpg-game/", "destination": "/arpg-game/index.html" },
-    { "source": "/arpg-game/:path*", "destination": "/arpg-game/:path*" },
+    { "source": "/arpg-game/:path*", "destination": "/arpg-game/index.html" },
 
     { "source": "/admin", "destination": "/admin/index.html" },
     { "source": "/admin/", "destination": "/admin/index.html" },

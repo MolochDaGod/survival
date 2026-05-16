@@ -15,7 +15,7 @@ COPY pnpm-lock.yaml pnpm-workspace.yaml package.json tsconfig.base.json tsconfig
 COPY lib/ lib/
 COPY artifacts/api-server/ artifacts/api-server/
 
-RUN pnpm install --frozen-lockfile --filter @workspace/api-server...
+RUN pnpm install --filter @workspace/api-server...
 
 # Build the esbuild bundle
 RUN pnpm --filter @workspace/api-server run build
@@ -32,7 +32,7 @@ COPY --from=builder /app/lib/db/package.json lib/db/package.json
 COPY --from=builder /app/lib/api-zod/package.json lib/api-zod/package.json
 
 # Install only production dependencies (externals that esbuild doesn't bundle)
-RUN pnpm install --frozen-lockfile --prod --filter @workspace/api-server...
+RUN pnpm install --prod --filter @workspace/api-server...
 
 COPY --from=builder /app/artifacts/api-server/dist/ artifacts/api-server/dist/
 
