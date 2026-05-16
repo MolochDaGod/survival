@@ -78,7 +78,7 @@ if (!existsSync(configPath)) {
   const config = {
     version: 3,
     routes: [
-      { src: '/api/(.*)', dest: 'https://api.grudge-studio.com/api/$1' },
+{ src: '/api/(.*)', dest: 'https://grudge-nexus-api-production.up.railway.app/api/$1' },
       { src: '/arpg-game$', dest: '/arpg-game/index.html' },
       { src: '/arpg-game/$', dest: '/arpg-game/index.html' },
       { src: '/admin$', dest: '/admin/index.html' },
