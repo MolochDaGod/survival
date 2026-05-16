@@ -11,6 +11,7 @@ FROM node:24-slim AS builder
 RUN corepack enable && corepack prepare pnpm@latest --activate
 
 WORKDIR /app
+ENV DOCKER=1
 COPY pnpm-lock.yaml pnpm-workspace.yaml package.json tsconfig.base.json tsconfig.json ./
 COPY lib/ lib/
 COPY artifacts/api-server/ artifacts/api-server/
@@ -26,6 +27,7 @@ FROM node:24-slim AS runtime
 RUN corepack enable && corepack prepare pnpm@latest --activate
 
 WORKDIR /app
+ENV DOCKER=1
 COPY --from=builder /app/pnpm-lock.yaml /app/pnpm-workspace.yaml /app/package.json ./
 COPY --from=builder /app/artifacts/api-server/package.json artifacts/api-server/package.json
 COPY --from=builder /app/lib/db/package.json lib/db/package.json
