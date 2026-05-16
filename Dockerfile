@@ -8,7 +8,7 @@
 # ── Stage 1: Install & build ────────────────────────────────────────────────
 FROM node:24-slim AS builder
 
-RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN corepack enable && corepack prepare pnpm@9 --activate
 
 WORKDIR /app
 ENV DOCKER=1
@@ -24,7 +24,7 @@ RUN pnpm --filter @workspace/api-server run build
 # ── Stage 2: Production runtime ────────────────────────────────────────────
 FROM node:24-slim AS runtime
 
-RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN corepack enable && corepack prepare pnpm@9 --activate
 
 WORKDIR /app
 ENV DOCKER=1
