@@ -72,9 +72,9 @@ if (existsSync(gameSrc)) {
   console.warn('[prebuilt] WARNING: arpg-game not built — run pnpm build:game first');
 }
 
-// Ensure config.json exists
+// Always write config.json (overwrite stale versions from previous deploys)
 const configPath = resolve(root, '.vercel/output/config.json');
-if (!existsSync(configPath)) {
+{
   const config = {
     version: 3,
     routes: [

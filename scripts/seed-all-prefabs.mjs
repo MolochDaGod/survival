@@ -677,11 +677,11 @@ async function seed() {
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${ADMIN_TOKEN}` },
         body: JSON.stringify(prefab),
       });
-      if (res.status === 201) { created++; }
-      else if (res.status === 409 || res.status === 500) { skipped++; } // 500 = dup key on old API
-      else { const b = await res.text(); console.error(`  ✗ ${prefab.id} — ${res.status}: ${b.slice(0, 120)}`); errors++; continue; }
-      // Progress every 20
-      if ((created + skipped) % 20 === 0) process.stdout.write('.');
+      if (res.status === 201) { created++; process.stdout.write('✓'); }
+      else if (res.status === 409 || res.status === 500) { skipped++; process.stdout.write('○'); }
+      else { const b = await res.text(); console.error(`\n  ✗ ${prefab.id} — ${res.status}: ${b.slice(0, 120)}`); errors++; }
+      // Rate limit: 60 writes/min → 1.1s between requests
+      await new Promise(r => setTimeout(r, 1100));
     } catch (err) { console.error(`  ✗ ${prefab.id} — ${err.message}`); errors++; }
   }
 

@@ -11,6 +11,7 @@ import { groundY as groundFloor } from './GroundSampler';
 import { LocomotionAnimator } from './LocomotionAnimator';
 import { PhysicsWorld } from './physics/PhysicsWorld';
 import { StatProgressionService } from './progression/StatProgressionService';
+import { WeaponAttachment } from './WeaponAttachment';
 
 /** Player capsule height — `this.position.y` sits this far above the feet. */
 const EYE_HEIGHT = 1.65; // approx — head mesh sits at local y=1.7
@@ -134,6 +135,8 @@ export class PlayerController {
   leftLegGroup: THREE.Group | null = null;
   rightLegGroup: THREE.Group | null = null;
   weaponMesh: THREE.Mesh | null = null;
+  /** Bone-based weapon attachment system for skeleton-rigged models. */
+  weaponAttachment: WeaponAttachment = new WeaponAttachment();
 
   private modelGroup: THREE.Group | null = null;
   private modelMixer: THREE.AnimationMixer | null = null;
@@ -219,7 +222,10 @@ export class PlayerController {
     this.equippedWeapons = startingWeapons ?? [WEAPONS[0], WEAPONS[2]];
 
     if (this.inventory) {
-      this.inventory.onChange = () => this.applyEquipmentStats();
+      this.inventory.onChange = () => {
+        this.applyEquipmentStats();
+        this.syncWeaponAttachments();
+      };
     }
 
     this.playerGroup = new THREE.Group();
@@ -269,6 +275,9 @@ export class PlayerController {
         // direction whenever the player presses W.
         this.modelGroup.rotation.y = Math.PI;
         this.playerGroup.add(this.modelGroup);
+
+        // Bind the weapon attachment system to the skeleton bones
+        this.weaponAttachment.bindSkeleton(this.modelGroup);
 
         // Build the directional locomotion blender if we got a mixer +
         // multiple clips. Falls back to the simple playAnimation() path
@@ -1489,7 +1498,30 @@ export class PlayerController {
     this.onStatChange?.();
   }
 
+  /**
+   * Sync bone-attached weapon models with currently equipped inventory items.
+   * Called on every inventory change. Falls back to procedural weapons if no
+   * skeleton is bound (procedural player body).
+   */
+  private syncWeaponAttachments(): void {
+    if (!this.inventory || !this.weaponAttachment.hasSkeleton()) return;
+    const mainhand = this.inventory.equipped.mainhand;
+    const offhand = this.inventory.equipped.offhand;
+
+    if (mainhand) {
+      this.weaponAttachment.attachWeapon(mainhand, 'mainhand');
+    } else {
+      this.weaponAttachment.detachWeapon('mainhand');
+    }
+    if (offhand) {
+      this.weaponAttachment.attachWeapon(offhand, 'offhand');
+    } else {
+      this.weaponAttachment.detachWeapon('offhand');
+    }
+  }
+
   dispose() {
+    this.weaponAttachment.dispose();
     this.scene.remove(this.playerGroup);
     this.scene.remove(this.fpCamera);
     if (this.modelMixer) this.modelMixer.stopAllAction();
