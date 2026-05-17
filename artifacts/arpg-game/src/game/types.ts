@@ -6,7 +6,9 @@ export interface WeaponStats {
   id: string;
   name: string;
   type: 'sword' | 'axe' | 'dagger' | 'mace' | 'bow' | 'staff' | 'gun'
-    | 'knife' | 'unarmed' | 'shield' | 'sword_shield' | 'throwable' | 'javelin' | 'hatchet' | 'lantern';
+    | 'knife' | 'unarmed' | 'shield' | 'sword_shield' | 'throwable' | 'javelin' | 'hatchet' | 'lantern'
+    | 'hammer' | 'greatsword' | 'greataxe' | 'spear' | 'crossbow' | 'scythe' | 'wand'
+    | 'rifle' | 'shotgun' | 'smg' | 'pistol';
   damage: number;
   speed: number;
   range: number;
@@ -37,7 +39,7 @@ export interface SkillNode {
   maxLevel: number;
   currentLevel: number;
   requires?: string[];
-  stat: 'strength' | 'agility' | 'intelligence' | 'endurance' | 'ability';
+  stat: 'strength' | 'vitality' | 'endurance' | 'intellect' | 'wisdom' | 'dexterity' | 'agility' | 'tactics' | 'ability';
   abilityId?: string;
   bonusPerLevel: number;
   x: number;
@@ -51,10 +53,25 @@ export interface PlayerStats {
   maxMana: number;
   stamina: number;
   maxStamina: number;
+  // ── Legacy 8 Attributes (Combat Sheet) ─────────────────────────────────
+  // Source of truth: https://grudges.grudge-studio.com/stats-guide.html
+  // These drive the 37 derived stats and perk gateway thresholds.
+  /** Raw physical power — melee damage, carry capacity, stagger. */
   strength: number;
-  agility: number;
-  intelligence: number;
+  /** Toughness — max HP, HP regen, bleed/poison resistance. */
+  vitality: number;
+  /** Stamina pool + regen, block effect, fall damage reduction. */
   endurance: number;
+  /** Spell power, max mana, spell penetration. */
+  intellect: number;
+  /** Mana regen, cooldown reduction, healing power. */
+  wisdom: number;
+  /** Ranged/melee finesse — crit chance, attack speed, crafting speed. */
+  dexterity: number;
+  /** Evasion, movement speed, dodge window. */
+  agility: number;
+  /** Accuracy, XP bonus, reputation gain, party aura range. */
+  tactics: number;
   level: number;
   experience: number;
   skillPoints: number;

@@ -149,9 +149,9 @@ export const SKILL_TREE: SkillNode[] = [
   { id: 'agi1', name: 'Swift Feet', description: '+5% movement speed per level', maxLevel: 3, currentLevel: 0, stat: 'agility', bonusPerLevel: 5, x: 2, y: 0 },
   { id: 'agi2', name: 'Dodge Roll', description: '+8% dodge chance per level', maxLevel: 3, currentLevel: 0, requires: ['agi1'], stat: 'agility', bonusPerLevel: 8, x: 2, y: 1 },
   { id: 'agi3', name: 'Blade Dance', description: '+10% attack speed per level', maxLevel: 3, currentLevel: 0, requires: ['agi2'], stat: 'agility', bonusPerLevel: 10, x: 2, y: 2 },
-  // Intelligence branch
-  { id: 'int1', name: 'Arcane Mind', description: '+10 max mana per level', maxLevel: 3, currentLevel: 0, stat: 'intelligence', bonusPerLevel: 10, x: 4, y: 0 },
-  { id: 'int2', name: 'Spell Power', description: '+8% ability damage per level', maxLevel: 3, currentLevel: 0, requires: ['int1'], stat: 'intelligence', bonusPerLevel: 8, x: 4, y: 1 },
+  // Intellect branch
+  { id: 'int1', name: 'Arcane Mind', description: '+10 max mana per level', maxLevel: 3, currentLevel: 0, stat: 'intellect', bonusPerLevel: 10, x: 4, y: 0 },
+  { id: 'int2', name: 'Spell Power', description: '+8% ability damage per level', maxLevel: 3, currentLevel: 0, requires: ['int1'], stat: 'intellect', bonusPerLevel: 8, x: 4, y: 1 },
   // Ability: Fireball
   { id: 'abil_fireball', name: 'Fireball', description: 'Unlocks Fireball spell', maxLevel: 1, currentLevel: 0, requires: ['int1'], stat: 'ability', abilityId: 'fireball', bonusPerLevel: 0, x: 5, y: 1 },
   { id: 'abil_lightning', name: 'Lightning Strike', description: 'Unlocks Lightning Strike', maxLevel: 1, currentLevel: 0, requires: ['int2'], stat: 'ability', abilityId: 'lightning_strike', bonusPerLevel: 0, x: 4, y: 2 },
@@ -171,10 +171,15 @@ export const INITIAL_PLAYER_STATS: PlayerStats = {
   maxMana: 80,
   stamina: 100,
   maxStamina: 100,
+  // Legacy 8 Attributes — all start at 10
   strength: 10,
-  agility: 10,
-  intelligence: 10,
+  vitality: 10,
   endurance: 10,
+  intellect: 10,
+  wisdom: 10,
+  dexterity: 10,
+  agility: 10,
+  tactics: 10,
   level: 1,
   experience: 0,
   skillPoints: 3,

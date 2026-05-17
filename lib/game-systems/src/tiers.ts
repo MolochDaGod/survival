@@ -8,14 +8,14 @@
 import type { TierDef } from './types.js';
 
 export const TIERS: TierDef[] = [
-  { tier: 1, label: 'Common',    color: '#8b7355', tw: 'text-stone-400',  twBorder: 'border-stone-600' },
-  { tier: 2, label: 'Uncommon',  color: '#a8a8a8', tw: 'text-gray-300',   twBorder: 'border-gray-500' },
-  { tier: 3, label: 'Rare',      color: '#4a9eff', tw: 'text-blue-400',   twBorder: 'border-blue-600' },
-  { tier: 4, label: 'Epic',      color: '#9d4dff', tw: 'text-purple-400', twBorder: 'border-purple-600' },
-  { tier: 5, label: 'Heroic',    color: '#ff4d4d', tw: 'text-red-400',    twBorder: 'border-red-600' },
-  { tier: 6, label: 'Mythic',    color: '#ffaa00', tw: 'text-amber-400',  twBorder: 'border-amber-600' },
-  { tier: 7, label: 'Ancient',   color: '#d4a84b', tw: 'text-yellow-500', twBorder: 'border-yellow-600' },
-  { tier: 8, label: 'Legendary', color: '#f0d890', tw: 'text-yellow-200', twBorder: 'border-yellow-400' },
+  { tier: 1, label: 'Scrap',      color: '#8b7355', tw: 'text-stone-400',  twBorder: 'border-stone-600' },
+  { tier: 2, label: 'Salvaged',   color: '#a8a8a8', tw: 'text-gray-300',   twBorder: 'border-gray-500' },
+  { tier: 3, label: 'Refined',    color: '#4a9eff', tw: 'text-blue-400',   twBorder: 'border-blue-600' },
+  { tier: 4, label: 'Forged',     color: '#9d4dff', tw: 'text-purple-400', twBorder: 'border-purple-600' },
+  { tier: 5, label: 'Relic',      color: '#ff4d4d', tw: 'text-red-400',    twBorder: 'border-red-600' },
+  { tier: 6, label: 'Ascendant',  color: '#ffaa00', tw: 'text-amber-400',  twBorder: 'border-amber-600' },
+  { tier: 7, label: 'Ancient',    color: '#d4a84b', tw: 'text-yellow-500', twBorder: 'border-yellow-600' },
+  { tier: 8, label: 'Legendary',  color: '#f0d890', tw: 'text-yellow-200', twBorder: 'border-yellow-400' },
 ];
 
 export function getTierDef(tier: number): TierDef {

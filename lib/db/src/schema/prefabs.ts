@@ -21,6 +21,12 @@ export const PREFAB_KINDS = [
   "vfx",
   "container",
   "structure",
+  // ── Deployable entities (unlocked via CHR/ENT/GRA perks) ──────────────
+  "deployable",
+  "turret",
+  "drone",
+  "mech",
+  "vehicle",
 ] as const;
 export type PrefabKind = (typeof PREFAB_KINDS)[number];
 

@@ -521,7 +521,7 @@ const StatsTab: React.FC<{
   const armor = totalStats.armor ?? 0;
   const crit = totalStats.critChance ?? Math.floor(stats.agility * 0.3);
   const hpRegen = Math.floor(stats.endurance * 0.06 * 10) / 10;
-  const mpRegen = Math.floor(stats.intelligence * 0.04 * 10) / 10;
+  const mpRegen = Math.floor(stats.intellect * 0.04 * 10) / 10;
   const moveSpd = (totalStats.moveSpeed ?? 0) + stats.agility * 0.15;
   const atkSpd = (totalStats.attackSpeed ?? 0) + stats.agility * 0.2;
 
@@ -775,7 +775,7 @@ const StatsTab: React.FC<{
       <div className="mp-stat-grid">
         <div className="mp-stat-cell"><div className="lbl">💪 Strength</div><div className="val">{stats.strength}{totalStats.strength ? ` (+${totalStats.strength})` : ''}</div><div className="sub">+1.25 dmg / pt</div></div>
         <div className="mp-stat-cell"><div className="lbl">⚡ Agility</div><div className="val">{stats.agility}{totalStats.agility ? ` (+${totalStats.agility})` : ''}</div><div className="sub">+0.3% crit, +0.15% mv</div></div>
-        <div className="mp-stat-cell"><div className="lbl">🧠 Intelligence</div><div className="val">{stats.intelligence}{totalStats.intelligence ? ` (+${totalStats.intelligence})` : ''}</div><div className="sub">+0.04 MP regen/s</div></div>
+        <div className="mp-stat-cell"><div className="lbl">🧠 Intelligence</div><div className="val">{stats.intellect}{totalStats.intelligence ? ` (+${totalStats.intelligence})` : ''}</div><div className="sub">+0.04 MP regen/s</div></div>
         <div className="mp-stat-cell"><div className="lbl">🛡 Endurance</div><div className="val">{stats.endurance}{totalStats.endurance ? ` (+${totalStats.endurance})` : ''}</div><div className="sub">+0.06 HP regen/s</div></div>
       </div>
     </>

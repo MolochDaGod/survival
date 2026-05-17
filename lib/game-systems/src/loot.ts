@@ -145,16 +145,18 @@ export const AFFIX_POOL: AffixDef[] = [
 
 // ── Tier → Affix Count ──────────────────────────────────────────────────────
 
-/** Number of affix slots available at each tier. */
+/** Number of affix slots available at each tier.
+ *  Aligned with the stats guide:
+ *  https://grudges.grudge-studio.com/stats-guide.html */
 export const AFFIX_COUNT_BY_TIER: Record<number, number> = {
-  1: 1,   // Common: 1 affix
-  2: 2,   // Uncommon: 2 affixes
-  3: 3,   // Rare: 3 affixes
-  4: 4,   // Epic: 4 affixes
-  5: 5,   // Heroic: 5 affixes
-  6: 6,   // Mythic: 6 affixes (max — this is the "perfect roll" tier)
-  7: 6,   // Ancient: 6 affixes + higher value rolls
-  8: 6,   // Legendary: 6 affixes + highest value rolls + guaranteed unique
+  1: 2,   // Scrap: 2 affixes — surface salvage, bent rebar
+  2: 3,   // Salvaged: 3 affixes — workshop re-bored gear
+  3: 4,   // Refined: 4 affixes — faction-armoury issue, one faction-flavoured
+  4: 5,   // Forged: 5 affixes — master-crafted, one guaranteed prefix slot
+  5: 6,   // Relic: 6 affixes + unique implicit — pre-collapse tech, cannot be crafted
+  6: 7,   // Ascendant: 7 affixes + ascendant suffix + corruption mod — rift-binding apex
+  7: 7,   // Ancient: 7 affixes + higher value rolls
+  8: 7,   // Legendary: 7 affixes + highest value rolls + guaranteed unique
 };
 
 /** Value multiplier per tier. T1 = 1.0×, T8 = 3.0×. */

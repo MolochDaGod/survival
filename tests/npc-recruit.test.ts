@@ -302,18 +302,18 @@ describe('@workspace/game-systems combat', () => {
 // ── Tier system tests ───────────────────────────────────────────────────────
 
 describe('@workspace/game-systems tiers', () => {
-  it('8 tiers from Common to Legendary', async () => {
+  it('8 tiers from Scrap to Legendary', async () => {
     const { TIERS, getTierDef, getTierLabel } = await import(
       '../lib/game-systems/src/tiers.js'
     );
     expect(TIERS.length).toBe(8);
-    expect(getTierLabel(1)).toBe('Common');
+    expect(getTierLabel(1)).toBe('Scrap');
     expect(getTierLabel(8)).toBe('Legendary');
     expect(getTierDef(5).color).toBe('#ff4d4d');
   });
 
-  it('unknown tier falls back to T1', async () => {
+  it('unknown tier falls back to T1 (Scrap)', async () => {
     const { getTierDef } = await import('../lib/game-systems/src/tiers.js');
-    expect(getTierDef(99).label).toBe('Common');
+    expect(getTierDef(99).label).toBe('Scrap');
   });
 });

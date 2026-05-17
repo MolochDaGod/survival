@@ -39,6 +39,22 @@ export {
   type CraftingStation, type HarvestingProfession,
 } from './tiers.js';
 
+// Derived Stats (37 combat + economy stats from 8 legacy attributes)
+export {
+  computeDerivedStats, derivedToCombatStats, derivedToResistances,
+  DERIVED_STAT_META,
+  type DerivedStats, type DerivedStatMeta,
+} from './derivedStats.js';
+
+// Deployables (turrets, drones, mechs, beacons + entity role system)
+export {
+  ENTITY_ROLES, ROLE_AI_GOALS, ROLE_COLORS,
+  DEPLOYABLE_KINDS, DEPLOYABLES,
+  getDeployable, getDeployablesByKind, getDeployablesByUnlock, getUnlockedDeployables,
+  scaleDeployableStats,
+  type EntityRole, type DeployableKind, type DeployableDef, type DeployableAnimSet,
+} from './deployables.js';
+
 // Loot (Diablo-style affix generation, tier-scaled drops)
 export {
   AFFIX_POOL, AFFIX_COUNT_BY_TIER,

@@ -153,7 +153,7 @@ export function computeTownshipState(currentPopulation: number): TownshipState {
   // Determine which NPC roles are unlocked
   const unlockedRoles: NPCRole[] = [];
   for (const role of NPC_ROLES) {
-    if (svc.hasSkill(role.unlockSkill)) {
+    if (svc.isLearned(role.unlockSkill)) {
       unlockedRoles.push(role.id);
     }
   }

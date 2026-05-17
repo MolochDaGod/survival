@@ -391,8 +391,8 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ characterConfig = DEFAUL
       playerStats.agility += node.bonusPerLevel;
       player.moveSpeed += node.bonusPerLevel * 0.05;
     }
-    if (node.stat === 'intelligence') {
-      playerStats.intelligence += node.bonusPerLevel;
+    if (node.stat === 'intellect') {
+      playerStats.intellect += node.bonusPerLevel;
       playerStats.maxMana += node.bonusPerLevel;
     }
     if (node.stat === 'endurance') {
@@ -867,7 +867,7 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ characterConfig = DEFAUL
             maxMana:  stats.maxMana,
             strength: stats.strength,
             agility:  stats.agility,
-            intellect: stats.intelligence,
+            intellect: stats.intellect,
           }}
         />
       )}
