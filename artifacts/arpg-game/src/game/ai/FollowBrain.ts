@@ -157,7 +157,7 @@ export class FollowBrain {
       this.vehicle.update(dt);
 
       // Map velocity to locomotion input
-      const speed = this.vehicle.getSpeed();
+      const speed = (this.vehicle as any).getSpeed?.() ?? this.vehicle.maxSpeed;
       const speed01 = THREE.MathUtils.mapLinear(
         speed,
         0, this.config.runSpeed,
@@ -198,6 +198,6 @@ export class FollowBrain {
   }
 
   dispose() {
-    this.vehicle.steering.clear();
+    (this.vehicle.steering as any).clear?.();
   }
 }

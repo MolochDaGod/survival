@@ -100,7 +100,7 @@ export const SkillTree: React.FC<SkillTreeProps> = ({ stats, onSkillUpgrade, onC
         position: 'absolute', top: '70px', left: 0, right: 0,
         display: 'flex', justifyContent: 'center', gap: '24px',
       }}>
-        {(['strength', 'agility', 'intelligence', 'endurance'] as const).map(stat => (
+        {(['strength', 'agility', 'intellect', 'endurance'] as const).map(stat => (
           <div key={stat} style={{
             background: 'rgba(0,0,0,0.5)',
             border: `1px solid ${STAT_COLORS[stat]}44`,

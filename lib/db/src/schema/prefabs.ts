@@ -14,9 +14,19 @@ export const PREFAB_KINDS = [
   "npc",
   "player_body",
   "item",
+  "weapon",
+  "prop",
+  "furniture",
+  "consumable",
   "vfx",
   "container",
   "structure",
+  // ── Deployable entities (unlocked via CHR/ENT/GRA perks) ──────────────
+  "deployable",
+  "turret",
+  "drone",
+  "mech",
+  "vehicle",
 ] as const;
 export type PrefabKind = (typeof PREFAB_KINDS)[number];
 

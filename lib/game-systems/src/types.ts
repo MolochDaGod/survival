@@ -74,6 +74,10 @@ export interface AbilityDef {
   color: string;
 }
 
+export type LegacyAttribute =
+  | 'strength' | 'vitality' | 'endurance' | 'intellect'
+  | 'wisdom' | 'dexterity' | 'agility' | 'tactics';
+
 export interface SkillNode {
   id: string;
   name: string;
@@ -81,7 +85,7 @@ export interface SkillNode {
   maxLevel: number;
   currentLevel: number;
   requires?: string[];
-  stat: 'strength' | 'agility' | 'intelligence' | 'endurance' | 'ability';
+  stat: LegacyAttribute | 'ability';
   abilityId?: string;
   bonusPerLevel: number;
   x: number;
@@ -95,13 +99,20 @@ export interface PlayerStats {
   maxMana: number;
   stamina: number;
   maxStamina: number;
+  // ── Legacy 8 Attributes (Combat Sheet) ─────────────────────────────────
+  // These drive the derived stats and perk gateway thresholds.
   strength: number;
-  agility: number;
-  intelligence: number;
+  vitality: number;
   endurance: number;
+  intellect: number;
+  wisdom: number;
+  dexterity: number;
+  agility: number;
+  tactics: number;
   level: number;
   experience: number;
   skillPoints: number;
+  // ── Survival vitals ────────────────────────────────────────────────────
   hunger: number;
   maxHunger: number;
   thirst: number;

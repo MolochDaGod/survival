@@ -57,7 +57,7 @@ console.log('[prebuilt] Website copied (images excluded, icons cherry-picked)');
 // Copy arpg-game build output into /arpg-game/ subpath
 const gameSrc = resolve(root, 'artifacts/arpg-game/dist/public');
 const gameDest = resolve(dest, 'arpg-game');
-const GAME_SKIP = new Set(['models', 'icons', 'textures', 'locations', 'books', 'bestiary', 'assets', 'decoders', 'vendor', 'lore']);
+const GAME_SKIP = new Set(['models', 'icons', 'textures', 'locations', 'books', 'bestiary', 'decoders', 'vendor', 'lore']);
 if (existsSync(gameSrc)) {
   cpSync(gameSrc, gameDest, {
     recursive: true,
@@ -72,13 +72,13 @@ if (existsSync(gameSrc)) {
   console.warn('[prebuilt] WARNING: arpg-game not built — run pnpm build:game first');
 }
 
-// Ensure config.json exists
+// Always write config.json (overwrite stale versions from previous deploys)
 const configPath = resolve(root, '.vercel/output/config.json');
-if (!existsSync(configPath)) {
+{
   const config = {
     version: 3,
     routes: [
-      { src: '/api/(.*)', dest: 'https://api.grudge-studio.com/api/$1' },
+{ src: '/api/(.*)', dest: 'https://grudge-nexus-api-production.up.railway.app/api/$1' },
       { src: '/arpg-game$', dest: '/arpg-game/index.html' },
       { src: '/arpg-game/$', dest: '/arpg-game/index.html' },
       { src: '/admin$', dest: '/admin/index.html' },

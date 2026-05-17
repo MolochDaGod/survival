@@ -8,14 +8,15 @@
 # ── Stage 1: Install & build ────────────────────────────────────────────────
 FROM node:24-slim AS builder
 
-RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN corepack enable && corepack prepare pnpm@9 --activate
 
 WORKDIR /app
+ENV DOCKER=1
 COPY pnpm-lock.yaml pnpm-workspace.yaml package.json tsconfig.base.json tsconfig.json ./
 COPY lib/ lib/
 COPY artifacts/api-server/ artifacts/api-server/
 
-RUN pnpm install --frozen-lockfile --filter @workspace/api-server...
+RUN pnpm install --filter @workspace/api-server...
 
 # Build the esbuild bundle
 RUN pnpm --filter @workspace/api-server run build
@@ -23,16 +24,17 @@ RUN pnpm --filter @workspace/api-server run build
 # ── Stage 2: Production runtime ────────────────────────────────────────────
 FROM node:24-slim AS runtime
 
-RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN corepack enable && corepack prepare pnpm@9 --activate
 
 WORKDIR /app
+ENV DOCKER=1
 COPY --from=builder /app/pnpm-lock.yaml /app/pnpm-workspace.yaml /app/package.json ./
 COPY --from=builder /app/artifacts/api-server/package.json artifacts/api-server/package.json
 COPY --from=builder /app/lib/db/package.json lib/db/package.json
 COPY --from=builder /app/lib/api-zod/package.json lib/api-zod/package.json
 
 # Install only production dependencies (externals that esbuild doesn't bundle)
-RUN pnpm install --frozen-lockfile --prod --filter @workspace/api-server...
+RUN pnpm install --prod --filter @workspace/api-server...
 
 COPY --from=builder /app/artifacts/api-server/dist/ artifacts/api-server/dist/
 
