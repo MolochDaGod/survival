@@ -63,10 +63,12 @@ export const charactersService = {
       throw new ServiceError("validation", parsed.error.message, parsed.error.flatten());
     }
     return charactersRepository.insert({
+      id: crypto.randomUUID(),
       accountId: parsed.data.accountId,
       name: parsed.data.name,
-      config: parsed.data.config as object,
-      saveData: null,
+      config: (parsed.data.config ?? {}) as object,
+      saveData: null as unknown as object,
+      createdAt: Date.now(),
     });
   },
 
