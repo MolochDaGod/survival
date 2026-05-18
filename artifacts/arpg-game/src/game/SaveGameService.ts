@@ -17,11 +17,6 @@ import { CharacterConfig } from './CharacterConfig';
 import { saveCharacter, loadCharacter } from './characterStorage';
 import { getGrudgeId } from './identity';
 import { getActiveCharacterId, activeSuffix } from './activeCharacter';
-import {
-  getActiveCharId as getXGameCharId,
-  pushSurvivalProgress,
-  pullCrossGame,
-} from './services/GrudgeCharacterService';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -171,24 +166,6 @@ export class SaveGameService {
       if (res.ok) {
         const json = await res.json() as { savedAt?: string };
         this.onSaved?.(data.timestamp);
-
-        // Push profession progress to cross-game sync so RTS + crafting can
-        // see the survival profession levels for this character.
-        const charId = getXGameCharId();
-        if (charId && data.professions) {
-          const profs = data.professions;
-          // Build a simplified cross-game progress record from the survival
-          // ProfessionState { xp: Record<profId, number>; learned: string[] }
-          const profMap: Record<string, { level: number; xp: number }> = {};
-          for (const [profId, xpVal] of Object.entries(profs.xp ?? {})) {
-            // Survival stores cumulative XP; we expose it as-is for the merge.
-            profMap[profId] = { level: 1, xp: Number(xpVal) || 0 };
-          }
-          pushSurvivalProgress(charId, {
-            professions: profMap,
-            learnedSkills: profs.learned ?? [],
-          });
-        }
       } else {
         this.onSaveFail?.();
       }
