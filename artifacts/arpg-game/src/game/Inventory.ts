@@ -9,7 +9,7 @@ import {
 export type EquippedSet = Partial<Record<EquipSlot, InventoryItem>>;
 
 export const ALL_SLOTS: EquipSlot[] = [
-  'mainhand', 'offhand', 'helm', 'chest', 'legs', 'boots', 'ring', 'amulet',
+  'mainhand', 'offhand', 'helm', 'chest', 'legs', 'boots', 'ring', 'amulet', 'cape', 'relic',
 ];
 
 export class Inventory {

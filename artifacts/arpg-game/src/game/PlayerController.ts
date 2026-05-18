@@ -12,6 +12,9 @@ import { LocomotionAnimator } from './LocomotionAnimator';
 import { PhysicsWorld } from './physics/PhysicsWorld';
 import { StatProgressionService } from './progression/StatProgressionService';
 import { WeaponAttachment } from './WeaponAttachment';
+import { GearVisualManager, resolveGearModelPath } from './GearVisualManager';
+import { ITEM_DATABASE } from './Items';
+import type { Gender } from './CharacterConfig';
 
 /** Player capsule height — `this.position.y` sits this far above the feet. */
 const EYE_HEIGHT = 1.65; // approx — head mesh sits at local y=1.7
@@ -137,6 +140,10 @@ export class PlayerController {
   weaponMesh: THREE.Mesh | null = null;
   /** Bone-based weapon attachment system for skeleton-rigged models. */
   weaponAttachment: WeaponAttachment = new WeaponAttachment();
+  /** Gear visual overlay system — swaps armor meshes on equip/unequip. */
+  gearVisuals: GearVisualManager = new GearVisualManager();
+  /** Gender for gear path resolution (set from CharacterConfig). */
+  private characterGender: Gender = 'female';
 
   private modelGroup: THREE.Group | null = null;
   private modelMixer: THREE.AnimationMixer | null = null;
@@ -225,6 +232,7 @@ export class PlayerController {
       this.inventory.onChange = () => {
         this.applyEquipmentStats();
         this.syncWeaponAttachments();
+        this.syncGearVisuals();
       };
     }
 
@@ -278,6 +286,9 @@ export class PlayerController {
 
         // Bind the weapon attachment system to the skeleton bones
         this.weaponAttachment.bindSkeleton(this.modelGroup);
+
+        // Bind the gear visual overlay system to the character armature
+        this.gearVisuals.bind(this.modelGroup, this.characterGender);
 
         // Build the directional locomotion blender if we got a mixer +
         // multiple clips. Falls back to the simple playAnimation() path
@@ -1518,6 +1529,27 @@ export class PlayerController {
     } else {
       this.weaponAttachment.detachWeapon('offhand');
     }
+  }
+
+  /**
+   * Sync visual gear overlays (helm, chest, legs, boots) with inventory.
+   * Hides the base character mesh for each slot and shows the gear mesh.
+   */
+  private syncGearVisuals(): void {
+    if (!this.inventory || !this.gearVisuals.isBound()) return;
+    this.gearVisuals.syncWithEquipment(
+      this.inventory.equipped,
+      (defId, gender) => {
+        const def = ITEM_DATABASE[defId];
+        if (!def) return null;
+        return resolveGearModelPath(def, gender);
+      },
+    );
+  }
+
+  /** Set gender for gear path resolution (call from character creation). */
+  setCharacterGender(gender: Gender): void {
+    this.characterGender = gender;
   }
 
   dispose() {

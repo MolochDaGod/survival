@@ -6,7 +6,9 @@ export type EquipSlot =
   | 'legs'
   | 'boots'
   | 'ring'
-  | 'amulet';
+  | 'amulet'
+  | 'cape'
+  | 'relic';
 
 export type ItemRarity = 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary';
 
@@ -34,6 +36,13 @@ export interface ItemDef {
   stats: ItemStats;
   levelReq?: number;
   weaponId?: string;
+  /**
+   * Path to the gear overlay FBX/GLB (under /models/gear/ or /models/character_parts/).
+   * Use `{gender}` placeholder for gender-specific paths, e.g.
+   * `/models/gear/chest/ranger_{gender}.fbx`.
+   * When omitted, GearVisualManager auto-resolves from slot + rarity.
+   */
+  gearModelPath?: string;
 }
 
 export interface InventoryItem {
@@ -47,6 +56,11 @@ export interface InventoryItem {
   generatedName?: string;
   /** Tier of the drop (1-8). Determines affix count + value scaling. */
   dropTier?: number;
+  /**
+   * Gear tint colour (hex). Applied to clothing/fabric materials on the
+   * gear mesh overlay — never to skin. Null = use baked material colour.
+   */
+  gearTint?: string | null;
 }
 
 export const RARITY_COLORS: Record<ItemRarity, number> = {

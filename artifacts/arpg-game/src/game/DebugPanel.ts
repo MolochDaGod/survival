@@ -30,6 +30,10 @@ interface DebugDeps {
    * tick). Pass the actual exported singletons from ThirdPersonCamera. */
   tpTuning?: CameraTuning;
   arpgTuning?: CameraTuning;
+  /** GearVisualManager instance for live gear preview. */
+  gearVisuals?: import('./GearVisualManager').GearVisualManager;
+  /** Current character gender for gear path resolution. */
+  characterGender?: () => import('./CharacterConfig').Gender;
 }
 
 const LS_TP   = 'grudge:debug:tp';
@@ -95,6 +99,7 @@ export class DebugPanel {
     this.buildRendererFolder();
     this.buildSceneFolder();
     this.buildActionsFolder();
+    this.buildGearFolder();
 
     document.addEventListener('keydown', this.onKey);
   }
@@ -191,6 +196,75 @@ export class DebugPanel {
     const f = this.gui.addFolder('Actions');
     f.add({ shadows: () => this.deps.forceShadowUpdate() }, 'shadows').name('Force shadow regen');
     f.add({ reset: () => this.deps.resetPlayer() }, 'reset').name('Reset player to origin');
+  }
+
+  /**
+   * Gear Preview folder — lets you equip/unequip armor meshes per slot
+   * to visually verify the GearVisualManager's mesh swapping, base-mesh
+   * hiding, and skeleton rebinding in real time.
+   */
+  private buildGearFolder() {
+    const gv = this.deps.gearVisuals;
+    if (!gv || !gv.isBound()) return;
+
+    const f = this.gui.addFolder('Gear Preview');
+
+    const GEAR_SETS = ['peasant', 'ranger'] as const;
+    const SLOTS = [
+      { label: 'Helm',  slot: 'helm',  dir: 'head' },
+      { label: 'Chest', slot: 'chest', dir: 'chest' },
+      { label: 'Legs',  slot: 'legs',  dir: 'legs' },
+      { label: 'Boots', slot: 'boots', dir: 'feet' },
+    ] as const;
+
+    const gender = () => this.deps.characterGender?.() ?? 'male';
+
+    for (const slotDef of SLOTS) {
+      const sf = f.addFolder(slotDef.label);
+      for (const set of GEAR_SETS) {
+        // Skip peasant head (doesn't exist)
+        if (slotDef.dir === 'head' && set === 'peasant') continue;
+        sf.add({
+          equip: () => {
+            const path = `/models/gear/${slotDef.dir}/${set}_${gender()}.fbx`;
+            gv.equip(slotDef.slot, path);
+          },
+        }, 'equip').name(`Equip ${set}`);
+      }
+      sf.add({
+        unequip: () => gv.unequip(slotDef.slot),
+      }, 'unequip').name('Unequip (show base)');
+    }
+
+    // Bulk operations
+    f.add({
+      equipAll: () => {
+        const g = gender();
+        gv.equip('helm',  `/models/gear/head/ranger_${g}.fbx`);
+        gv.equip('chest', `/models/gear/chest/ranger_${g}.fbx`);
+        gv.equip('legs',  `/models/gear/legs/ranger_${g}.fbx`);
+        gv.equip('boots', `/models/gear/feet/ranger_${g}.fbx`);
+      },
+    }, 'equipAll').name('⚔️ Full Ranger Set');
+
+    f.add({
+      equipPeasant: () => {
+        const g = gender();
+        gv.equip('helm',  `/models/gear/head/ranger_${g}.fbx`); // no peasant head
+        gv.equip('chest', `/models/gear/chest/peasant_${g}.fbx`);
+        gv.equip('legs',  `/models/gear/legs/peasant_${g}.fbx`);
+        gv.equip('boots', `/models/gear/feet/peasant_${g}.fbx`);
+      },
+    }, 'equipPeasant').name('🧑‍🌾 Full Peasant Set');
+
+    f.add({
+      stripAll: () => {
+        gv.unequip('helm');
+        gv.unequip('chest');
+        gv.unequip('legs');
+        gv.unequip('boots');
+      },
+    }, 'stripAll').name('🔄 Strip All (base mesh)');
   }
 
   show() { this.gui.domElement.style.display = ''; this.visible = true; }
