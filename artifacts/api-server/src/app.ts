@@ -85,4 +85,16 @@ app.use(writeLimiter);
 
 app.use("/api", router);
 
+// ── Global error handler (MUST be last middleware) ─────────────────────────
+// Catches any error that escapes route handlers (async rejections, BigInt
+// serialization, Drizzle query failures, etc.) and returns JSON instead of
+// Express's default HTML error page.
+app.use((err: unknown, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+  const msg = err instanceof Error ? err.message : String(err);
+  logger.error({ err }, '[global] unhandled error');
+  if (!res.headersSent) {
+    res.status(500).json({ error: 'internal server error', detail: msg });
+  }
+});
+
 export default app;
