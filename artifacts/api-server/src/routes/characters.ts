@@ -38,18 +38,22 @@ charactersRouter.get("/", async (req, res) => {
   }
 });
 
-charactersRouter.post("/", async (req, res) => {
-  try {
-    const row = await charactersService.create(req.body);
-    res.status(201).json(row);
-  } catch (err) {
-    if (!handleServiceError(err, res)) {
-      // Log the real error so Railway logs capture it, then return 500.
-      req.log?.error?.({ err }, '[characters] create failed');
-      console.error('[characters] create failed:', err);
-      res.status(500).json({ error: 'character creation failed' });
+charactersRouter.post("/", (req, res, next) => {
+  // Double-wrap: Express 4 doesn't catch async rejections, so we funnel
+  // every possible failure path through next(err) as a last resort.
+  (async () => {
+    try {
+      const row = await charactersService.create(req.body);
+      res.status(201).json(row);
+    } catch (err: unknown) {
+      if (handleServiceError(err, res)) return;
+      const msg = err instanceof Error ? err.message : String(err);
+      console.error('[characters] create failed:', msg, err);
+      if (!res.headersSent) {
+        res.status(500).json({ error: 'character creation failed', detail: msg });
+      }
     }
-  }
+  })().catch(next);
 });
 
 charactersRouter.get("/:id", async (req, res) => {
