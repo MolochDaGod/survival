@@ -43,7 +43,12 @@ charactersRouter.post("/", async (req, res) => {
     const row = await charactersService.create(req.body);
     res.status(201).json(row);
   } catch (err) {
-    if (!handleServiceError(err, res)) throw err;
+    if (!handleServiceError(err, res)) {
+      // Log the real error so Railway logs capture it, then return 500.
+      req.log?.error?.({ err }, '[characters] create failed');
+      console.error('[characters] create failed:', err);
+      res.status(500).json({ error: 'character creation failed' });
+    }
   }
 });
 

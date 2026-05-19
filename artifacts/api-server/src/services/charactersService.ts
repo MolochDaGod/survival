@@ -62,13 +62,30 @@ export const charactersService = {
     if (!parsed.success) {
       throw new ServiceError("validation", parsed.error.message, parsed.error.flatten());
     }
+    const now = Date.now();
     return charactersRepository.insert({
       id: crypto.randomUUID(),
       accountId: parsed.data.accountId,
       name: parsed.data.name,
+      // Provide all NOT NULL columns explicitly so we don't depend on
+      // DB-side defaults that may be missing after schema drift.
+      raceId: 'human',
+      classId: 'survivor',
+      level: 1,
+      xp: 0,
+      hp: 100,
+      energy: 100,
+      attributes: {},
+      equipment: {},
+      inventory: [],
+      professionLevels: {},
+      gold: 0,
+      experience: 0,
+      attributePoints: 24,
+      skillPoints: 0,
       config: (parsed.data.config ?? {}) as object,
-      saveData: null as unknown as object,
-      createdAt: Date.now(),
+      createdAt: now,
+      updatedAt: now,
     });
   },
 
