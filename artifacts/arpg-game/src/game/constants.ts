@@ -136,6 +136,18 @@ export const ABILITIES: AbilityDef[] = [
     key: '5',
     color: '#fff176',
   },
+  {
+    id: 'ice_spike',
+    name: 'Ice Spike',
+    icon: '🧊',
+    description: 'Erupt a burst of ice shards that freeze and shatter enemies.',
+    manaCost: 28,
+    cooldown: 5,
+    damage: 50,
+    unlocked: false,
+    key: '6',
+    color: '#66ccff',
+  },
 ];
 
 export const SKILL_TREE: SkillNode[] = [

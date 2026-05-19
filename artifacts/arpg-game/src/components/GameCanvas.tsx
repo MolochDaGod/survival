@@ -118,6 +118,10 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ characterConfig = DEFAUL
   const [bagCap, setBagCap] = useState(24);
   const [totalStats, setTotalStats] = useState<ItemStats>({});
   const [pickups, setPickups] = useState<ItemDef[]>([]);
+  // Crosshair state: spread (0–1) polled from player, hitMarker flashes on enemy damage.
+  const [crosshairSpread, setCrosshairSpread] = useState(0);
+  const [hitMarker, setHitMarker] = useState(false);
+  const hitMarkerTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [playerPos, setPlayerPos] = useState<{ x: number; y: number; z: number }>({ x: 0, y: 0, z: 0 });
   const [playerYaw, setPlayerYaw] = useState(0);
   const [gloom, setGloom] = useState(0);
@@ -193,6 +197,13 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ characterConfig = DEFAUL
     };
     engine.onInteractionPrompt = (label) => setInteractionPrompt(label);
 
+    // Flash hit-marker crosshair red whenever a bullet/melee swing lands on an enemy.
+    engine.enemyManager && (engine.enemyManager.onEnemyDamaged = () => {
+      setHitMarker(true);
+      if (hitMarkerTimerRef.current) clearTimeout(hitMarkerTimerRef.current);
+      hitMarkerTimerRef.current = setTimeout(() => setHitMarker(false), 80);
+    });
+
     // Wire wall-break resource drops → survival inventory React state.
     engine.onSurvivalLootDrop = (itemId, count) => {
       setSurvivalStacks((prev) => {
@@ -216,6 +227,7 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ characterConfig = DEFAUL
         const p = engine.player.position;
         setPlayerPos({ x: p.x, y: p.y, z: p.z });
         setPlayerYaw((engine.player as any).yaw ?? 0);
+        setCrosshairSpread(engine.player.spreadValue ?? 0);
       }
       if (engine.fogSystem) {
         setGloom((engine.fogSystem as any).gloom ?? 0);
@@ -806,6 +818,46 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ characterConfig = DEFAUL
           onOpenMagic={handleOpenSkillTree}
         />
       )}
+
+{/* Dynamic crosshair — collapses to a dot when ADS, expands with
+          spread/movement, flashes red on hit. */}
+{
+  gameState.gameStarted && !gameState.mainMenuOpen && (() => {
+    const isAiming = engineRef.current?.player?.isAiming ?? false;
+    const gap = isAiming ? 0 : 4 + crosshairSpread * 14;
+    const color = hitMarker ? '#ff3333' : 'rgba(255,255,255,0.9)';
+    const thickness = 2;
+    const armLen = isAiming ? 0 : 8;
+    return (
+      <div style= {{
+      position: 'fixed',
+        top: 0, left: 0, right: 0, bottom: 0,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+            pointerEvents: 'none',
+              zIndex: 150,
+          }
+  }>
+    <svg width={ 60 } height = { 60} viewBox = "-30 -30 60 60" style = {{ overflow: 'visible' }
+}>
+  {/* Center dot — always visible */ }
+  < circle cx = { 0} cy = { 0} r = { isAiming? 1.5: 1 } fill = { color } />
+    {/* Four arms */ }
+{
+  armLen > 0 && <>
+    <line x1={ 0 } y1 = {- (gap + armLen)
+} x2 = { 0} y2 = {- gap}
+stroke = { color } strokeWidth = { thickness } strokeLinecap = "round" />
+  <line x1={ 0 } y1 = { gap } x2 = { 0} y2 = { gap + armLen}
+stroke = { color } strokeWidth = { thickness } strokeLinecap = "round" />
+  <line x1={ -(gap + armLen) } y1 = { 0} x2 = {- gap} y2 = { 0}
+stroke = { color } strokeWidth = { thickness } strokeLinecap = "round" />
+  <line x1={ gap } y1 = { 0} x2 = { gap + armLen} y2 = { 0}
+stroke = { color } strokeWidth = { thickness } strokeLinecap = "round" />
+  </>}
+</svg>
+  </div>
+        );
+      }) ()}
 
       {/* Admin / Debug button — top right. Opens the lil-gui panel that
           exposes camera tunings (3rd-person + ARPG offset/lookat/snap),

@@ -263,7 +263,14 @@ export function getAnimsByCategory(category: AnimCategory): AnimDef[] {
 
 export interface ComboChain {
   weaponType: string;
-  steps: Array<{ clipName: string; windowMs: number }>;
+  steps: Array<{
+    clipName: string;
+    windowMs: number;
+    /** Normalized clip time (0-1) where damage window starts. */
+    hitFrameStart: number;
+    /** Normalized clip time (0-1) where damage window ends. */
+    hitFrameEnd: number;
+  }>;
   finisher: string;
 }
 
@@ -274,9 +281,9 @@ export interface ComboChain {
 export const SWORD_COMBO: ComboChain = {
   weaponType: 'sword',
   steps: [
-    { clipName: 'Sword_Regular_A', windowMs: 600 },
-    { clipName: 'Sword_Regular_B', windowMs: 650 },
-    { clipName: 'Sword_Regular_C', windowMs: 700 },
+    { clipName: 'Sword_Regular_A', windowMs: 600, hitFrameStart: 0.25, hitFrameEnd: 0.65 },
+    { clipName: 'Sword_Regular_B', windowMs: 650, hitFrameStart: 0.22, hitFrameEnd: 0.62 },
+    { clipName: 'Sword_Regular_C', windowMs: 700, hitFrameStart: 0.20, hitFrameEnd: 0.70 },
   ],
   finisher: 'Sword_Regular_Combo',
 };
@@ -284,9 +291,9 @@ export const SWORD_COMBO: ComboChain = {
 export const KNIFE_COMBO: ComboChain = {
   weaponType: 'knife',
   steps: [
-    { clipName: 'Knife_Stab', windowMs: 400 },
-    { clipName: 'Knife_Slash', windowMs: 450 },
-    { clipName: 'Knife_Stab', windowMs: 400 },
+    { clipName: 'Knife_Stab', windowMs: 400, hitFrameStart: 0.30, hitFrameEnd: 0.70 },
+    { clipName: 'Knife_Slash', windowMs: 450, hitFrameStart: 0.25, hitFrameEnd: 0.65 },
+    { clipName: 'Knife_Stab', windowMs: 400, hitFrameStart: 0.30, hitFrameEnd: 0.70 },
   ],
   finisher: 'Backstab',
 };
@@ -294,8 +301,8 @@ export const KNIFE_COMBO: ComboChain = {
 export const HEAVY_2H_COMBO: ComboChain = {
   weaponType: 'greatsword',
   steps: [
-    { clipName: '2H_Swing_A', windowMs: 800 },
-    { clipName: '2H_Swing_B', windowMs: 850 },
+    { clipName: '2H_Swing_A', windowMs: 800, hitFrameStart: 0.30, hitFrameEnd: 0.75 },
+    { clipName: '2H_Swing_B', windowMs: 850, hitFrameStart: 0.28, hitFrameEnd: 0.72 },
   ],
   finisher: '2H_Slam',
 };

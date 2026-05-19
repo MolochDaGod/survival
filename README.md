@@ -35,7 +35,7 @@ Monorepo (`pnpm workspace`) with:
 ## Stack
 
 - **Frontend**: Vercel (auto-deploy from `main`)
-- **Backend**: Docker (Railway or VPS) via `Dockerfile` + `docker-compose.yml`
+- **Backend**: Railway (Docker) via `Dockerfile` + `docker-compose.yml`
 - **Database**: PostgreSQL 17 (Drizzle ORM)
 - **Assets**: Cloudflare R2 CDN (`assets.grudge-studio.com`)
 - **Auth**: Puter.js (browser) → Grudge ID (server)

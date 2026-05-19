@@ -105,6 +105,66 @@ export function clearBulletCache(): void {
   _bulletCache.clear();
 }
 
+// ── Shotgun convenience ────────────────────────────────────────────────────────
+
+import type { ProjectileSystem, SpawnOptions } from './ProjectileSystem';
+
+/**
+ * Spawn a shotgun blast: `pelletCount` projectiles spread within `spreadDeg`
+ * half-angle cone around `baseDirection`.
+ *
+ * Usage:
+ *   spawnShotgunBlast(projectileSystem, {
+ *     ...DEFAULT_BULLET_OPTS, origin, damage, lifetime, meshTemplate,
+ *     owner: 'player', getTargets, onHit,
+ *   }, origin, dir);
+ *
+ * @param sys          The ProjectileSystem instance.
+ * @param opts         Base spawn options shared by all pellets.
+ *                     `direction` is ignored — the per-pellet direction is derived
+ *                     from `baseDirection` + random spread within `spreadDeg`.
+ * @param origin       World-space muzzle position.
+ * @param baseDirection Normalized aim vector.
+ * @param pelletCount  Number of projectiles. Default 6.
+ * @param spreadDeg    Half-angle spread in degrees. Default 12°.
+ */
+export function spawnShotgunBlast(
+  sys: ProjectileSystem,
+  opts: Omit<SpawnOptions, 'origin' | 'direction'>,
+  origin: THREE.Vector3,
+  baseDirection: THREE.Vector3,
+  pelletCount = 6,
+  spreadDeg = 12,
+): void {
+  const spreadRad = THREE.MathUtils.degToRad(spreadDeg);
+  // Build orthonormal basis for the cone
+  const dir = baseDirection.clone().normalize();
+  const perp1 = new THREE.Vector3();
+  const perp2 = new THREE.Vector3();
+  if (Math.abs(dir.y) < 0.95) {
+    perp1.set(-dir.z, 0, dir.x).normalize();
+  } else {
+    perp1.set(1, 0, 0);
+  }
+  perp2.crossVectors(dir, perp1).normalize();
+
+  for (let i = 0; i < pelletCount; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const spread = Math.random() * Math.tan(spreadRad); // uniform in cone
+    const pelletDir = new THREE.Vector3(
+      dir.x + (perp1.x * Math.cos(angle) + perp2.x * Math.sin(angle)) * spread,
+      dir.y + (perp1.y * Math.cos(angle) + perp2.y * Math.sin(angle)) * spread,
+      dir.z + (perp1.z * Math.cos(angle) + perp2.z * Math.sin(angle)) * spread,
+    ).normalize();
+
+    sys.spawn({
+      ...opts,
+      origin,
+      direction: pelletDir,
+    });
+  }
+}
+
 /**
  * List all ammo variant names available in the set.
  * Useful for dev tooling / pickers; loads the set if not already cached.

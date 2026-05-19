@@ -7,6 +7,7 @@
  * world state, no save, no server-side simulation. Just relay + presence.
  */
 import type { WebSocket } from "ws";
+import { encode as msgpackEncode } from "@msgpack/msgpack";
 import {
   ROOM_MAX_PEERS,
   type ServerMessage,
@@ -66,12 +67,12 @@ export class Room {
 
   /** Broadcast a message to everyone in the room except `exceptId`. */
   broadcast(msg: ServerMessage, exceptId?: string): void {
-    const json = JSON.stringify(msg);
+    const buf = msgpackEncode(msg);
     for (const peer of this.peers.values()) {
       if (peer.peerId === exceptId) continue;
       // OPEN === 1 in ws lib; check numerically to avoid importing the enum.
       if (peer.ws.readyState === 1) {
-        peer.ws.send(json);
+        peer.ws.send(buf);
       }
     }
   }
@@ -80,7 +81,7 @@ export class Room {
   sendTo(peerId: string, msg: ServerMessage): void {
     const p = this.peers.get(peerId);
     if (p && p.ws.readyState === 1) {
-      p.ws.send(JSON.stringify(msg));
+      p.ws.send(msgpackEncode(msg));
     }
   }
 }

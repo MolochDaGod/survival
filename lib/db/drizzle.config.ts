@@ -7,8 +7,11 @@ if (!process.env.DATABASE_URL) {
 
 export default defineConfig({
   schema: "./src/schema/*.ts",
+  out: "./migrations",
   dialect: "postgresql",
   dbCredentials: {
     url: process.env.DATABASE_URL,
   },
+  // Never drop columns/tables automatically — force explicit migrations.
+  strict: true,
 });
