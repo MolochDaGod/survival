@@ -6,14 +6,18 @@ A sci-fi survival ARPG set a century after alien contact. Build, fight, trade, a
 
 ## Live
 
-| App | URL |
-|---|---|
-| Website | [grudges.grudge-studio.com](https://grudges.grudge-studio.com) |
-| Game Client | [grudges.grudge-studio.com/arpg-game/](https://grudges.grudge-studio.com/arpg-game/) |
-| Admin Panel | [grudges.grudge-studio.com/admin/](https://grudges.grudge-studio.com/admin/) |
-| Asset Studio | [grudges.grudge-studio.com/asset-studio/](https://grudges.grudge-studio.com/asset-studio/) |
-| API Server | `grudge-nexus-api-production.up.railway.app/api` |
-| Asset CDN | `assets.grudge-studio.com` (Cloudflare R2) |
+| Domain | Role | URL |
+|---|---|---|
+| **survival.grudge-studio.com** | Game — play, character creation, gameplay | [survival.grudge-studio.com](https://survival.grudge-studio.com) |
+| **grudges.grudge-studio.com** | Lore Weaver — world lore, attribute deep-dives, faction guides | [grudges.grudge-studio.com](https://grudges.grudge-studio.com) |
+| Game Client | Playable game (via either domain) | `/arpg-game/` |
+| Lore & Factions | Five faction histories, timeline | `/lore.html` |
+| Stats Guide | 8 attributes, 37 derived stats, perk tiers | `/stats-guide.html` |
+| How It Plays | Combat, building, professions overview | `/info.html` |
+| Admin Panel | Prefab, spawn rules, asset management | `/admin/` |
+| Asset Studio | Asset browser & pipeline | `/asset-studio/` |
+| API Server | Backend (Railway) | `grudge-nexus-api-production.up.railway.app/api` |
+| Asset CDN | 4,264 files on Cloudflare R2 | `assets.grudge-studio.com` |
 
 ## The Game
 
