@@ -84,6 +84,8 @@ export class PlayerController {
   berserkerTimer: number = 0;
   gunFirePending: boolean = false;
   gunRecoilTimer: number = 0;
+  /** Crosshair spread 0 (tight) → 1 (max). Decays at rest, grows on fire/move. */
+  public spreadValue: number = 0;
 
   // ── Water / vehicle state (written by SwimController + BoatSystem) ─────
   /** True when the SwimController has the player in the swimming or submerged
@@ -295,6 +297,18 @@ export class PlayerController {
         // for models that ship a single clip.
         if (this.modelMixer && this.modelAnimations.length >= 2) {
           this.locomotion = new LocomotionAnimator(this.modelMixer, this.modelAnimations);
+          // Set initial weapon stance so the character holds the starting weapon
+          this.updateWeaponStance();
+          // Provide the root/hip bone for root-motion extraction on _RM clips.
+          this.modelGroup.traverse((obj) => {
+            if (obj instanceof THREE.Bone) {
+              const n = obj.name.toLowerCase();
+              // Hips / Pelvis / Root are the conventional Mixamo root bone names.
+              if (n.includes('hips') || n.includes('pelvis') || n === 'root') {
+                this.locomotion!.setRootBone(obj);
+              }
+            }
+          });
         } else {
           this.playAnimation('Idle');
         }
@@ -721,6 +735,15 @@ export class PlayerController {
     this.activeWeaponIndex = this.activeWeaponIndex === 0 ? 1 : 0;
     this.weaponSwapCooldown = 0.5;
     this.buildWeaponMesh();
+    this.updateWeaponStance();
+  }
+
+  /** Push the active weapon type into the locomotion blend tree so the
+   *  character holds the weapon during idle/walk/run. */
+  private updateWeaponStance(): void {
+    if (!this.locomotion) return;
+    const weapon = this.equippedWeapons[this.activeWeaponIndex];
+    this.locomotion.setWeaponStance(weapon?.type ?? null);
   }
 
   jump() {
@@ -776,6 +799,9 @@ export class PlayerController {
       this.attackTimer = fireCooldown;
       this.attackAnimTimer = fireCooldown;
       this.gunFirePending = true;
+      // Spread grows with each shot
+      const isShotgun = weapon.id === 'hellfire_shotgun';
+      this.spreadValue = Math.min(1, this.spreadValue + (isShotgun ? 0.30 : 0.15));
       this.gunRecoilTimer = 0.12;
       // Camera kick. ADS halves the recoil so aimed shots stay on
       // target. Rifles/shotguns have heavier kick than pistols.
@@ -823,6 +849,16 @@ export class PlayerController {
     }
   }
 
+  /** Returns the normalised [0-1] hit frame window for the current combo step. */
+  getComboHitFrames(): { hitFrameStart: number; hitFrameEnd: number } {
+    const weapon = this.equippedWeapons[this.activeWeaponIndex];
+    if (!weapon) return { hitFrameStart: 0.15, hitFrameEnd: 0.65 };
+    const chain = getComboChain(weapon.type);
+    const step = chain.steps[this.comboStep];
+    if (!step) return { hitFrameStart: 0.15, hitFrameEnd: 0.65 };
+    return { hitFrameStart: step.hitFrameStart, hitFrameEnd: step.hitFrameEnd };
+  }
+
   startBlock() {
     this.isBlocking = true;
     this.isParrying = true;
@@ -843,10 +879,16 @@ export class PlayerController {
     if (AIM_CLIP[weaponType]) {
       this.playAnimation('Aim');
     }
+    // Activate additive aim layer for supported ranged weapons.
+    if (this.locomotion) {
+      this.locomotion.setAimWeapon(weaponType);
+      this.locomotion.setAimActive(true);
+    }
   }
 
   stopAiming() {
     this.isAiming = false;
+    this.locomotion?.setAimActive(false);
   }
 
   /** Trigger reload animation for the equipped ranged weapon. */
@@ -1023,10 +1065,32 @@ export class PlayerController {
     // handleMovement; mixer.update() then advances all weighted clips.
     if (this.locomotion) {
       this.locomotion.setMovement(this.lastLocoForward, this.lastLocoStrafe, this.lastLocoSpeed01);
+      // Feed current vertical look angle into the additive aim layer so it
+      // pitches the upper body to match where the camera is looking.
+      // pitch is clamped to ±PI/2.5 so normalise it to [-1,1].
+      const maxPitch = Math.PI / 2.5;
+      this.locomotion.setAimPitch(this.pitch / maxPitch);
       this.locomotion.update(dt);
+      // Root motion: capture root bone position before mixer advances.
+      this.locomotion.captureRootPos();
     }
     if (this.modelMixer) this.modelMixer.update(dt);
     if (this.fpHandsMixer) this.fpHandsMixer.update(dt);
+    // Root motion: after mixer has advanced, apply the bone delta to movement
+    // and suppress the code-driven lunge so RM clips self-propel the character.
+    if (this.locomotion?.isRootMotionActive) {
+      const rmDelta = this.locomotion.computeRootMotionDelta();
+      // Replace lunge with root-motion displacement.
+      this.lungeVelocity.set(0, 0, 0);
+      this.lungeTimer = 0;
+      if (this.physics && this.rapierController) {
+        this._pendingMoveX += rmDelta.x;
+        this._pendingMoveZ += rmDelta.z;
+      } else {
+        this.position.x += rmDelta.x;
+        this.position.z += rmDelta.z;
+      }
+    }
   }
 
   private handleMouse(dt: number) {
@@ -1299,6 +1363,18 @@ export class PlayerController {
     }
     if (this.lungeTimer > 0) this.lungeTimer -= dt;
     else this.lungeVelocity.set(0, 0, 0);
+
+    // Spread: decay toward 0 at rest; grow a tiny bit while moving with a gun.
+    const isMoving = Math.hypot(this.lastLocoForward, this.lastLocoStrafe) > 0.05;
+    const weapon = this.equippedWeapons[this.activeWeaponIndex];
+    const isGun = weapon.type === 'gun' || weapon.type === 'rifle' || weapon.type === 'shotgun'
+      || weapon.type === 'smg';
+    if (isGun && isMoving && !this.isAiming) {
+      this.spreadValue = Math.min(1, this.spreadValue + dt * 0.35);
+    }
+    // Collapse to 0 during ADS; decay normally otherwise
+    const decayRate = this.isAiming ? 8 : 3;
+    this.spreadValue = Math.max(0, this.spreadValue * Math.exp(-decayRate * dt));
 
     if (this.parryTimer > 0) this.parryTimer -= dt;
     else this.isParrying = false;

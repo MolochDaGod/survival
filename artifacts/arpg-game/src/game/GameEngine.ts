@@ -43,18 +43,10 @@ import { initPhysics, PhysicsWorld } from './physics/PhysicsWorld';
 import { buildMapColliders, MapColliderHandle } from './physics/MapColliders';
 import { BreakableWallSystem } from './world/BreakableWallSystem';
 import { MultiplayerSystem } from './net/MultiplayerSystem';
-
-interface Bullet {
-  mesh: THREE.Mesh;
-  velocity: THREE.Vector3;
-  damage: number;
-  lifetime: number;
-  isShotgun: boolean;
-}
-
-const _bulletGeoCache = new THREE.SphereGeometry(0.06, 5, 5);
-const _flashGeoCache = new THREE.SphereGeometry(0.18, 5, 5);
-const _impactGeoCache = new THREE.SphereGeometry(0.3, 5, 5);
+import { ProjectileSystem } from './projectiles/ProjectileSystem';
+import { getBulletTemplate, DEFAULT_BULLET_OPTS } from './projectiles/Bullets';
+import { MuzzleFlash } from './vfx/MuzzleFlash';
+import { ImpactSparks } from './vfx/ImpactSparks';
 
 export class GameEngine {
   renderer: THREE.WebGLRenderer;
@@ -146,7 +138,10 @@ export class GameEngine {
   wave: number = 1;
   waveTimer: number = 0;
   waveCooldown: number = 15;
-  bullets: Bullet[] = [];
+  private projectileSystem!: ProjectileSystem;
+  private muzzleFlash!: MuzzleFlash;
+  private impactSparks!: ImpactSparks;
+  private bulletTemplate: THREE.Object3D | null = null;
   assetsLoaded: boolean = false;
 
   onStatsUpdate: ((stats: PlayerStats) => void) | null = null;
@@ -339,6 +334,11 @@ export class GameEngine {
 
       // Floating damage numbers + runtime debug GUI live alongside the scene.
       this.damageNumbers = new DamageNumbers(this.scene);
+      // Projectile system replaces the inline bullet array.
+      this.projectileSystem = new ProjectileSystem(this.scene);
+      this.muzzleFlash = new MuzzleFlash(this.scene);
+      this.impactSparks = new ImpactSparks(this.scene);
+      getBulletTemplate().then(tmpl => { this.bulletTemplate = tmpl; }).catch(() => { });
       this.debugPanel = new DebugPanel({
         scene: this.scene,
         camera: this.camera,
@@ -732,73 +732,64 @@ export class GameEngine {
       dir.normalize();
     }
 
-    const bulletColor = isShotgun ? 0xff6600 : 0xffff44;
-    const bulletMat = new THREE.MeshBasicMaterial({ color: bulletColor });
-    const bulletMesh = new THREE.Mesh(_bulletGeoCache, bulletMat);
-    bulletMesh.position.copy(this.player.position).add(new THREE.Vector3(0, 0.1, 0));
-    bulletMesh.position.add(dir.clone().multiplyScalar(0.8));
-    this.scene.add(bulletMesh);
-
-    const flashMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.9 });
-    const flash = new THREE.Mesh(_flashGeoCache, flashMat);
-    flash.position.copy(bulletMesh.position);
-    this.scene.add(flash);
-    setTimeout(() => { this.scene.remove(flash); flashMat.dispose(); }, 60);
-
+    const origin = this.player.position.clone().add(new THREE.Vector3(0, 1.1, 0))
+      .add(dir.clone().multiplyScalar(0.8));
     const speed = isShotgun ? 28 : 45;
-    this.bullets.push({
-      mesh: bulletMesh,
-      velocity: dir.clone().multiplyScalar(speed),
-      damage: weapon.damage,
+    const damage = weapon.damage;
+
+    // Procedural muzzle flash (billboard + ring + sparks) — no GLB required.
+    this.muzzleFlash?.spawn(origin, dir, isShotgun);
+
+    this.projectileSystem.spawn({
+      ...DEFAULT_BULLET_OPTS,
+      origin,
+      direction: dir,
+      speed,
+      damage,
       lifetime: weapon.range / speed,
-      isShotgun,
+      meshTemplate: this.bulletTemplate ?? new THREE.Mesh(
+        new THREE.SphereGeometry(0.06, 5, 5),
+        new THREE.MeshBasicMaterial({ color: isShotgun ? 0xff6600 : 0xffff44 }),
+      ),
+      tracer: weapon.type === 'smg',
+      tracerColor: 0xffffaa,
+      owner: 'player',
+      getTargets: () => this.enemyManager
+        ? this.enemyManager.enemies.filter(e => e.state !== 'dead').map(e => e.mesh)
+        : [],
+      onHit: (_hit, _p) => {
+        // Impact sparks at the hit point, reflected along the world-space surface normal.
+        const worldNormal = _hit.normal
+          ? _hit.normal.clone().transformDirection(_hit.object.matrixWorld)
+          : null;
+        this.impactSparks?.burst(
+          _hit.point,
+          worldNormal,
+          isShotgun ? 0xff6600 : 0xffee88,
+          isShotgun ? 1.3 : 1.0,
+        );
+        // Find the enemy whose mesh was hit
+        if (!this.enemyManager) return;
+        const hitMesh = _hit.object;
+        const enemy = this.enemyManager.enemies.find(e => {
+          let found = false;
+          e.mesh.traverse(c => { if (c === hitMesh) found = true; });
+          return found;
+        });
+        if (!enemy || enemy.state === 'dead') return;
+        enemy.health -= damage;
+        this.damageNumbers?.spawn(enemy.mesh.position, damage);
+        this.audio.play('hit');
+        this.enemyManager.onEnemyDamaged?.(enemy.mesh.position, damage);
+        if (enemy.health <= 0) this.enemyManager.killEnemy(enemy);
+      },
     });
   }
 
   updateBullets(dt: number) {
-    if (!this.enemyManager) return;
-    const activeEnemies = this.enemyManager.enemies.filter(e => e.state !== 'dead');
-
-    for (let i = this.bullets.length - 1; i >= 0; i--) {
-      const b = this.bullets[i];
-      b.lifetime -= dt;
-
-      if (b.lifetime <= 0) {
-        this.scene.remove(b.mesh);
-        (b.mesh.material as THREE.Material).dispose();
-        this.bullets.splice(i, 1);
-        continue;
-      }
-
-      b.mesh.position.addScaledVector(b.velocity, dt);
-
-      let hit = false;
-      for (let j = activeEnemies.length - 1; j >= 0; j--) {
-        const enemy = activeEnemies[j];
-        const dist = b.mesh.position.distanceTo(enemy.mesh.position);
-        if (dist < 1.5) {
-          enemy.health -= b.damage;
-          if (enemy.health <= 0) this.enemyManager.killEnemy(enemy);
-
-          this.damageNumbers?.spawn(enemy.mesh.position, b.damage);
-          this.audio.play('hit');
-
-          this.scene.remove(b.mesh);
-          (b.mesh.material as THREE.Material).dispose();
-          this.bullets.splice(i, 1);
-
-          const impactMat = new THREE.MeshBasicMaterial({ color: b.isShotgun ? 0xff4400 : 0xffffff, transparent: true, opacity: 0.8 });
-          const impact = new THREE.Mesh(_impactGeoCache, impactMat);
-          impact.position.copy(b.mesh.position);
-          this.scene.add(impact);
-          setTimeout(() => { this.scene.remove(impact); impactMat.dispose(); }, 80);
-
-          hit = true;
-          break;
-        }
-      }
-      if (hit) continue;
-    }
+    this.projectileSystem.update(dt, this.camera);
+    this.muzzleFlash?.update(dt);
+    this.impactSparks?.update(dt);
   }
 
   onResize = () => {
@@ -962,34 +953,45 @@ export class GameEngine {
 
     // Melee swing: damage applies once per swing during the active window.
     // Per-combo-step parameters (arc, range, damage) come from the player.
-    if (!isGun && this.player.isAttacking && this.player.meleeHitPending
-        && this.player.attackTimer < this.player.attackAnimTimer * 0.6) {
-      const fwd = this.player.getForwardDir();
-      const combo = this.player.getComboParams();
-      const isHeavy = activeWeapon.type === 'axe' || activeWeapon.type === 'mace' || activeWeapon.range >= 3;
-      const knockback = (isHeavy ? 7 : 3) * (combo.isFinisher ? 1.6 : 1);
-      const hits = this.enemyManager.checkPlayerAttack(
-        this.player.position, fwd,
-        this.player.getAttackRange() * combo.rangeMul,
-        this.player.getAttackDamage() * combo.damageMul,
-        false,
-        knockback,
-        combo.arcDot,
-      );
-      if (hits > 0) {
-        // Only consume the swing on a hit so an enemy sliding into range
-        // mid-swing still gets clipped — a single swing still only hits any
-        // given enemy once because checkPlayerAttack is called per-enemy
-        // within one frame.
-        this.player.meleeHitPending = false;
-        // Hitstop only on heavy weapons or the finisher of the combo —
-        // light hits stay snappy. Shake scales with weight so a finisher
-        // really thumps.
-        if (isHeavy || combo.isFinisher) {
-          this.combatFX.hitStop(combo.isFinisher ? 5 : 3);
-          this.combatFX.shake(0.18 * (combo.isFinisher ? 1.5 : 1), 0.18);
-        } else {
-          this.combatFX.shake(0.07, 0.12);
+    if (!isGun && this.player.isAttacking && this.player.meleeHitPending) {
+      // Gate damage to the hit-frame window defined per combo step (normalised 0-1).
+      const elapsed = this.player.attackAnimTimer > 0
+        ? 1 - (this.player.attackTimer / this.player.attackAnimTimer)
+        : 0;
+      const { hitFrameStart, hitFrameEnd } = this.player.getComboHitFrames();
+      if (elapsed >= hitFrameStart && elapsed <= hitFrameEnd) {
+        const fwd = this.player.getForwardDir();
+        const combo = this.player.getComboParams();
+        const isHeavy = activeWeapon.type === 'axe' || activeWeapon.type === 'mace' || activeWeapon.range >= 3;
+        const knockback = (isHeavy ? 7 : 3) * (combo.isFinisher ? 1.6 : 1);
+        // Use weapon bone world position as sweep origin if available, else player position.
+        const weaponBone = this.player.weaponAttachment?.getAttached('mainhand')?.bone;
+        const sweepOrigin = weaponBone
+          ? weaponBone.getWorldPosition(new THREE.Vector3())
+          : this.player.position;
+        const hits = this.enemyManager.checkPlayerAttack(
+          sweepOrigin, fwd,
+          this.player.getAttackRange() * combo.rangeMul,
+          this.player.getAttackDamage() * combo.damageMul,
+          false,
+          knockback,
+          combo.arcDot,
+        );
+        if (hits > 0) {
+          // Only consume the swing on a hit so an enemy sliding into range
+          // mid-swing still gets clipped — a single swing still only hits any
+          // given enemy once because checkPlayerAttack is called per-enemy
+          // within one frame.
+          this.player.meleeHitPending = false;
+          // Hitstop only on heavy weapons or the finisher of the combo —
+          // light hits stay snappy. Shake scales with weight so a finisher
+          // really thumps.
+          if (isHeavy || combo.isFinisher) {
+            this.combatFX.hitStop(combo.isFinisher ? 5 : 3);
+            this.combatFX.shake(0.18 * (combo.isFinisher ? 1.5 : 1), 0.18);
+          } else {
+            this.combatFX.shake(0.07, 0.12);
+          }
         }
       }
     }
@@ -1001,19 +1003,24 @@ export class GameEngine {
     // Same window gate as enemy melee: only the first active window frame
     // deals damage. Consume meleeHitPending on contact so one swing applies
     // damage exactly once — mirroring the enemy melee contract above.
-    if (!isGun && this.player.isAttacking && this.player.meleeHitPending
-        && this.player.attackTimer < this.player.attackAnimTimer * 0.6) {
-      const fwd = this.player.getForwardDir();
-      const hitResult = this.breakableWallSystem?.checkHit(
-        this.player.position,
-        fwd,
-        this.player.getAttackRange() * 1.5,
-        this.player.getAttackDamage(),
-      );
-      if (hitResult) {
-        // Consume pending flag so damage is applied once per swing.
-        this.player.meleeHitPending = false;
-        this.combatFX.shake(0.14, 0.15);
+    if (!isGun && this.player.isAttacking && this.player.meleeHitPending) {
+      const elapsedW = this.player.attackAnimTimer > 0
+        ? 1 - (this.player.attackTimer / this.player.attackAnimTimer)
+        : 0;
+      const { hitFrameStart: wHitStart, hitFrameEnd: wHitEnd } = this.player.getComboHitFrames();
+      if (elapsedW >= wHitStart && elapsedW <= wHitEnd) {
+        const fwd = this.player.getForwardDir();
+        const hitResult = this.breakableWallSystem?.checkHit(
+          this.player.position,
+          fwd,
+          this.player.getAttackRange() * 1.5,
+          this.player.getAttackDamage(),
+        );
+        if (hitResult) {
+          // Consume pending flag so damage is applied once per swing.
+          this.player.meleeHitPending = false;
+          this.combatFX.shake(0.14, 0.15);
+        }
       }
     }
 
@@ -1215,8 +1222,7 @@ export class GameEngine {
     if (this.boatSystem) { this.boatSystem.dispose(); this.boatSystem = null; }
     if (this.fishingSystem) { this.fishingSystem.dispose(); this.fishingSystem = null; }
     this.swimController = null;
-    this.bullets.forEach(b => { this.scene.remove(b.mesh); (b.mesh.material as THREE.Material).dispose(); });
-    this.bullets = [];
+    if (this.projectileSystem) this.projectileSystem.clear();
     if (this.rainSystem) this.rainSystem.dispose();
     // Player.dispose() removes its own Rapier body from the world; dispose
     // the player BEFORE the world so the cleanup order matches.
