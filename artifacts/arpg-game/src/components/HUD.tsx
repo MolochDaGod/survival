@@ -16,6 +16,10 @@ interface HUDProps {
   playerPos?: { x: number; y: number; z: number };
   worldSize?: number;
   arenaRadius?: number;
+  /** Crosshair spread 0 (tight) → 1 (max bloom). Driven by PlayerController. */
+  spread?: number;
+  /** >0 while a hit marker should be visible. Counts down in ms. */
+  hitMarkerTimer?: number;
 }
 
 const GOLD  = '#c9950a';
@@ -204,10 +208,76 @@ const RadarDisplay: React.FC = () => {
   );
 };
 
+// ── Dynamic Crosshair ────────────────────────────────────────────────────────
+//
+// Spread-responsive crosshair with hit markers. The four lines expand/contract
+// based on `spread` (0–1). ADS collapses to a tight circle + dot. Hit markers
+// flash 4 angled strokes for 150ms when hitMarkerTimer > 0.
+
+const DynamicCrosshair: React.FC<{ isAiming: boolean; spread: number; hitMarkerTimer: number }> = ({
+  isAiming, spread, hitMarkerTimer,
+}) => {
+  // Spread drives the gap between each line and the centre dot.
+  // At spread=0 the gap is 3px (tight); at spread=1 the gap is 18px (max bloom).
+  const gap = isAiming
+    ? 2 + spread * 4           // ADS: very tight, minimal bloom
+    : 3 + spread * 15;         // Hip-fire: full bloom range
+  const lineLen = isAiming ? 5 : 7;
+  const cx = 32;               // SVG centre
+  const cy = 32;
+  const sz = 64;               // SVG viewport
+  const lineColor = isAiming ? GOLD : 'white';
+  const lineOpacity = isAiming ? 0.9 : 0.75;
+  const showHitMarker = hitMarkerTimer > 0;
+
+  return (
+    <div style={{
+      position: 'fixed', top: '50%', left: '50%',
+      transform: 'translate(-50%, -50%)',
+      zIndex: 100, pointerEvents: 'none',
+    }}>
+      <svg width={sz} height={sz} viewBox={`0 0 ${sz} ${sz}`}>
+        {/* Centre dot */}
+        <circle cx={cx} cy={cy} r={isAiming ? 1.5 : 2}
+          fill={lineColor} opacity={isAiming ? 0.95 : 0.7} />
+
+        {/* ADS outer ring */}
+        {isAiming && (
+          <circle cx={cx} cy={cy} r={12 + spread * 3}
+            fill="none" stroke={GOLD} strokeWidth="1" opacity="0.7" />
+        )}
+
+        {/* Top line */}
+        <line x1={cx} y1={cy - gap - lineLen} x2={cx} y2={cy - gap}
+          stroke={lineColor} strokeWidth="1.5" opacity={lineOpacity} />
+        {/* Bottom line */}
+        <line x1={cx} y1={cy + gap} x2={cx} y2={cy + gap + lineLen}
+          stroke={lineColor} strokeWidth="1.5" opacity={lineOpacity} />
+        {/* Left line */}
+        <line x1={cx - gap - lineLen} y1={cy} x2={cx - gap} y2={cy}
+          stroke={lineColor} strokeWidth="1.5" opacity={lineOpacity} />
+        {/* Right line */}
+        <line x1={cx + gap} y1={cy} x2={cx + gap + lineLen} y2={cy}
+          stroke={lineColor} strokeWidth="1.5" opacity={lineOpacity} />
+
+        {/* Hit marker — 4 angled strokes at 45° */}
+        {showHitMarker && (
+          <g opacity="0.9">
+            <line x1={cx-4} y1={cy-4} x2={cx-9} y2={cy-9} stroke="#ff3333" strokeWidth="2" />
+            <line x1={cx+4} y1={cy-4} x2={cx+9} y2={cy-9} stroke="#ff3333" strokeWidth="2" />
+            <line x1={cx-4} y1={cy+4} x2={cx-9} y2={cy+9} stroke="#ff3333" strokeWidth="2" />
+            <line x1={cx+4} y1={cy+4} x2={cx+9} y2={cy+9} stroke="#ff3333" strokeWidth="2" />
+          </g>
+        )}
+      </svg>
+    </div>
+  );
+};
+
 export const HUD: React.FC<HUDProps> = ({
   stats, cameraMode, wave, killCount, score,
   weaponName, secondWeaponName, isAiming,
-  playerPos,
+  playerPos, spread = 0, hitMarkerTimer = 0,
 }) => {
   const hpFrac = stats.health / stats.maxHealth;
 
@@ -280,31 +350,8 @@ export const HUD: React.FC<HUDProps> = ({
         </div>
       </div>
 
-      {/* Crosshair */}
-      <div style={{
-        position: 'fixed', top: '50%', left: '50%',
-        transform: 'translate(-50%, -50%)',
-        zIndex: 100, pointerEvents: 'none',
-      }}>
-        {isAiming ? (
-          <svg width="32" height="32" viewBox="0 0 32 32">
-            <circle cx="16" cy="16" r="12" fill="none" stroke={GOLD} strokeWidth="1" opacity="0.8" />
-            <circle cx="16" cy="16" r="2" fill={GOLD} opacity="0.9" />
-            <line x1="16" y1="1" x2="16" y2="7" stroke={GOLD} strokeWidth="1.5" opacity="0.8" />
-            <line x1="16" y1="25" x2="16" y2="31" stroke={GOLD} strokeWidth="1.5" opacity="0.8" />
-            <line x1="1" y1="16" x2="7" y2="16" stroke={GOLD} strokeWidth="1.5" opacity="0.8" />
-            <line x1="25" y1="16" x2="31" y2="16" stroke={GOLD} strokeWidth="1.5" opacity="0.8" />
-          </svg>
-        ) : (
-          <svg width="22" height="22" viewBox="0 0 22 22">
-            <line x1="11" y1="2" x2="11" y2="8" stroke="white" strokeWidth="1.5" opacity="0.75" />
-            <line x1="11" y1="14" x2="11" y2="20" stroke="white" strokeWidth="1.5" opacity="0.75" />
-            <line x1="2" y1="11" x2="8" y2="11" stroke="white" strokeWidth="1.5" opacity="0.75" />
-            <line x1="14" y1="11" x2="20" y2="11" stroke="white" strokeWidth="1.5" opacity="0.75" />
-            <circle cx="11" cy="11" r="2" fill="none" stroke="white" strokeWidth="1" opacity="0.6" />
-          </svg>
-        )}
-      </div>
+      {/* Dynamic Crosshair */}
+      <DynamicCrosshair isAiming={!!isAiming} spread={spread} hitMarkerTimer={hitMarkerTimer} />
 
       {/* Bottom center – stamina + mana slim bars */}
       <div style={{

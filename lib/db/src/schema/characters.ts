@@ -1,4 +1,4 @@
-import { pgTable, varchar, text, integer, boolean, bigint, jsonb } from "drizzle-orm/pg-core";
+import { pgTable, varchar, text, integer, boolean, bigint, jsonb, timestamp } from "drizzle-orm/pg-core";
 
 /**
  * Shared characters table — matches production schema from GrudgeBuilder.
@@ -29,6 +29,12 @@ export const charactersTable = pgTable("characters", {
   spriteConfig: jsonb("sprite_config"),
   model3d: jsonb("model_3d"),
   gameState: jsonb("game_state"),
+  /** Character creation config (race, class, appearance, origin). */
+  config: jsonb("config"),
+  /** Full cloud-save JSON blob (stats, wave, inventory, buildings, professions). */
+  saveData: jsonb("save_data"),
+  /** When the player last loaded/played this character. */
+  lastPlayedAt: timestamp("last_played_at", { withTimezone: true }),
   createdAt: bigint("created_at", { mode: "number" }).notNull(),
   updatedAt: bigint("updated_at", { mode: "number" }),
 });

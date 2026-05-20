@@ -66,3 +66,5 @@ attached_assets/
 # Replit
 .cache/
 .local/
+
+.vercel

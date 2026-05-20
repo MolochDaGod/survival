@@ -62,12 +62,35 @@ export const charactersService = {
     if (!parsed.success) {
       throw new ServiceError("validation", parsed.error.message, parsed.error.flatten());
     }
-    return charactersRepository.insert({
-      accountId: parsed.data.accountId,
-      name: parsed.data.name,
-      config: parsed.data.config as object,
-      saveData: null,
-    });
+    const now = Date.now();
+    try {
+      return await charactersRepository.insert({
+        id: crypto.randomUUID(),
+        accountId: parsed.data.accountId,
+        name: parsed.data.name,
+        // Provide all NOT NULL columns explicitly so we don't depend on
+        // DB-side defaults that may be missing after schema drift.
+        raceId: 'human',
+        classId: 'survivor',
+        level: 1,
+        xp: 0,
+        hp: 100,
+        energy: 100,
+        attributes: {},
+        equipment: {},
+        inventory: [],
+        professionLevels: {},
+        gold: 0,
+        experience: 0,
+        attributePoints: 24,
+        skillPoints: 0,
+        config: (parsed.data.config ?? {}) as object,
+        createdAt: now,
+      });
+    } catch (dbErr) {
+      console.error('[charactersService.create] DB insert failed:', dbErr);
+      throw dbErr;
+    }
   },
 
   async update(id: string, input: unknown): Promise<CharacterRow> {

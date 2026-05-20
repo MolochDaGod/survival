@@ -38,15 +38,18 @@ export class LootManager {
     const item = rollItemFromTable(table);
     if (!item) return;
 
-    // Roll affix tier and generate randomized affixes via game-systems
+    // Roll affix tier and generate randomized affixes via game-systems.
+    // Pass the item's equip slot so the roller filters weapon-only and
+    // armor-only affixes correctly (helms won't get "+Damage" etc.).
     const dropTier = rollDropTier(tier, luckBonus);
     const def = ITEM_DATABASE[item.defId];
     if (def) {
-      const lootDrop = generateLootDrop(item.defId, def.name, dropTier);
+      const lootDrop = generateLootDrop(item.defId, def.name, dropTier, def.slot);
       item.affixes = lootDrop.affixes;
       item.bonusStats = lootDrop.bonusStats;
       item.generatedName = lootDrop.generatedName;
       item.dropTier = dropTier;
+      item.gearTint = lootDrop.gearTint;
     }
 
     this.spawnOrb(position, item);

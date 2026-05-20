@@ -254,3 +254,193 @@ describe('Generated name format', () => {
     }
   });
 });
+
+// ── Slot-aware affix filtering ──────────────────────────────────────────────
+
+/** Weapon-only affix IDs (damage, elemental, procs). */
+const WEAPON_ONLY_IDS = new Set(
+  AFFIX_POOL.filter(a => a.slots === 'weapon').map(a => a.id),
+);
+/** Armor-only affix IDs. */
+const ARMOR_ONLY_IDS = new Set(
+  AFFIX_POOL.filter(a => a.slots === 'armor').map(a => a.id),
+);
+
+describe('Slot-aware affix filtering', () => {
+  const SAMPLE = 500;
+
+  it('weapon-only affixes never appear on armor drops (helm)', () => {
+    for (let i = 0; i < SAMPLE; i++) {
+      const drop = generateLootDrop('iron_helm', 'Iron Helm', 6, 'helm');
+      for (const a of drop.affixes) {
+        expect(WEAPON_ONLY_IDS.has(a.affixId), `weapon affix ${a.affixId} on helm`).toBe(false);
+      }
+    }
+  });
+
+  it('weapon-only affixes never appear on armor drops (chest)', () => {
+    for (let i = 0; i < SAMPLE; i++) {
+      const drop = generateLootDrop('void_plate', 'Voidplate', 6, 'chest');
+      for (const a of drop.affixes) {
+        expect(WEAPON_ONLY_IDS.has(a.affixId), `weapon affix ${a.affixId} on chest`).toBe(false);
+      }
+    }
+  });
+
+  it('weapon-only affixes never appear on armor drops (boots)', () => {
+    for (let i = 0; i < SAMPLE; i++) {
+      const drop = generateLootDrop('leather_boots', 'Leather Boots', 4, 'boots');
+      for (const a of drop.affixes) {
+        expect(WEAPON_ONLY_IDS.has(a.affixId), `weapon affix ${a.affixId} on boots`).toBe(false);
+      }
+    }
+  });
+
+  it('armor-only affixes never appear on weapon drops (mainhand)', () => {
+    for (let i = 0; i < SAMPLE; i++) {
+      const drop = generateLootDrop('iron_sword', 'Iron Sword', 6, 'mainhand');
+      for (const a of drop.affixes) {
+        expect(ARMOR_ONLY_IDS.has(a.affixId), `armor affix ${a.affixId} on mainhand`).toBe(false);
+      }
+    }
+  });
+
+  it('armor-only affixes never appear on weapon drops (offhand)', () => {
+    for (let i = 0; i < SAMPLE; i++) {
+      const drop = generateLootDrop('wooden_shield', 'Wooden Shield', 4, 'offhand');
+      for (const a of drop.affixes) {
+        expect(ARMOR_ONLY_IDS.has(a.affixId), `armor affix ${a.affixId} on offhand`).toBe(false);
+      }
+    }
+  });
+
+  it('rings can roll both weapon and armor affixes (unrestricted)', () => {
+    const weaponSeen = new Set<string>();
+    const armorSeen = new Set<string>();
+    for (let i = 0; i < 2000; i++) {
+      const drop = generateLootDrop('copper_ring', 'Copper Ring', 6, 'ring');
+      for (const a of drop.affixes) {
+        if (WEAPON_ONLY_IDS.has(a.affixId)) weaponSeen.add(a.affixId);
+        if (ARMOR_ONLY_IDS.has(a.affixId)) armorSeen.add(a.affixId);
+      }
+    }
+    expect(weaponSeen.size, 'ring should see weapon affixes').toBeGreaterThan(0);
+    expect(armorSeen.size, 'ring should see armor affixes').toBeGreaterThan(0);
+  });
+
+  it('armor drops roll armor-exclusive affixes (reinforced, padded, etc.)', () => {
+    const armorAffixSeen = new Set<string>();
+    for (let i = 0; i < 1000; i++) {
+      const drop = generateLootDrop('iron_helm', 'Iron Helm', 6, 'helm');
+      for (const a of drop.affixes) {
+        if (ARMOR_ONLY_IDS.has(a.affixId)) armorAffixSeen.add(a.affixId);
+      }
+    }
+    // At least some of the 9 armor-exclusive prefixes should appear
+    expect(armorAffixSeen.size).toBeGreaterThanOrEqual(4);
+  });
+
+  it('weapon drops roll weapon-exclusive affixes (sharp, blazing, etc.)', () => {
+    const weaponAffixSeen = new Set<string>();
+    for (let i = 0; i < 1000; i++) {
+      const drop = generateLootDrop('iron_sword', 'Iron Sword', 6, 'mainhand');
+      for (const a of drop.affixes) {
+        if (WEAPON_ONLY_IDS.has(a.affixId)) weaponAffixSeen.add(a.affixId);
+      }
+    }
+    expect(weaponAffixSeen.size).toBeGreaterThanOrEqual(4);
+  });
+
+  it('no-slot drops (legacy) still roll from full pool', () => {
+    const allIds = new Set<string>();
+    for (let i = 0; i < 2000; i++) {
+      const drop = generateLootDrop('test', 'Test', 6);
+      for (const a of drop.affixes) allIds.add(a.affixId);
+    }
+    // Should see both weapon and armor exclusive affixes
+    let weaponCount = 0, armorCount = 0;
+    for (const id of allIds) {
+      if (WEAPON_ONLY_IDS.has(id)) weaponCount++;
+      if (ARMOR_ONLY_IDS.has(id)) armorCount++;
+    }
+    expect(weaponCount).toBeGreaterThan(0);
+    expect(armorCount).toBeGreaterThan(0);
+  });
+});
+
+// ── Gear tint colour system ─────────────────────────────────────────────────
+
+describe('Gear tint colour', () => {
+  it('armor drops have a gearTint (hex string)', () => {
+    for (let i = 0; i < 100; i++) {
+      const drop = generateLootDrop('iron_helm', 'Iron Helm', 3, 'helm');
+      expect(drop.gearTint).not.toBeNull();
+      expect(drop.gearTint).toMatch(/^#[0-9a-f]{6}$/i);
+    }
+  });
+
+  it('weapon drops have gearTint = null', () => {
+    for (let i = 0; i < 100; i++) {
+      const drop = generateLootDrop('iron_sword', 'Iron Sword', 3, 'mainhand');
+      expect(drop.gearTint).toBeNull();
+    }
+  });
+
+  it('chest/legs/boots armor all get tints', () => {
+    for (const slot of ['chest', 'legs', 'boots']) {
+      const drop = generateLootDrop('test_armor', 'Test Armor', 4, slot);
+      expect(drop.gearTint, `${slot} should have tint`).not.toBeNull();
+    }
+  });
+
+  it('cape gets a tint', () => {
+    const drop = generateLootDrop('test_cape', 'Test Cape', 3, 'cape');
+    expect(drop.gearTint).not.toBeNull();
+  });
+
+  it('ring/amulet/relic do NOT get tints', () => {
+    for (const slot of ['ring', 'amulet', 'relic']) {
+      const drop = generateLootDrop('test_acc', 'Test Accessory', 3, slot);
+      expect(drop.gearTint, `${slot} should have no tint`).toBeNull();
+    }
+  });
+
+  it('low-tier tints are muted (earth tones)', () => {
+    const lowTints = new Set<string>();
+    for (let i = 0; i < 200; i++) {
+      const drop = generateLootDrop('leather_cap', 'Cap', 1, 'helm');
+      if (drop.gearTint) lowTints.add(drop.gearTint);
+    }
+    // Low palette has 8 muted colours
+    expect(lowTints.size).toBeGreaterThanOrEqual(3);
+    // None should be the high-tier vivid colours
+    const highPalette = new Set(['#c41e3a','#1e90ff','#9b59b6','#f39c12','#2ecc71','#e74c3c','#3498db','#8e44ad']);
+    for (const tint of lowTints) {
+      expect(highPalette.has(tint), `low tier should not produce vivid ${tint}`).toBe(false);
+    }
+  });
+
+  it('high-tier tints are vivid', () => {
+    const highTints = new Set<string>();
+    for (let i = 0; i < 200; i++) {
+      const drop = generateLootDrop('void_plate', 'Voidplate', 6, 'chest');
+      if (drop.gearTint) highTints.add(drop.gearTint);
+    }
+    expect(highTints.size).toBeGreaterThanOrEqual(3);
+    // None should be the low-tier muted colours
+    const lowPalette = new Set(['#7b6b5a','#6b7b5a','#5a6b7b','#7b5a5a','#6b5a7b','#8a7a6a','#5a7b6b','#7b7b5a']);
+    for (const tint of highTints) {
+      expect(lowPalette.has(tint), `high tier should not produce muted ${tint}`).toBe(false);
+    }
+  });
+
+  it('different drops of the same item can get different tints', () => {
+    const tints = new Set<string>();
+    for (let i = 0; i < 50; i++) {
+      const drop = generateLootDrop('iron_helm', 'Iron Helm', 4, 'helm');
+      if (drop.gearTint) tints.add(drop.gearTint);
+    }
+    // With 8 colours in the mid palette and 50 rolls, we should see at least 2
+    expect(tints.size).toBeGreaterThanOrEqual(2);
+  });
+});

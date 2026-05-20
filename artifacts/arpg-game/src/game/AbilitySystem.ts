@@ -3,6 +3,9 @@ import { AbilityDef, Projectile, ParticleEffect } from './types';
 import { ABILITIES } from './constants';
 import { ExplosionVFX } from './ExplosionVFX';
 import { NoiseSphereVFX, NoiseSpherePreset } from './NoiseSphereVFX';
+import { SpellFlare, FlareType } from './vfx/SpellFlare';
+import { IceShardVFX } from './vfx/IceShardVFX';
+import { FireBillboardVFX } from './vfx/FireBillboardVFX';
 
 export class AbilitySystem {
   scene: THREE.Scene;
@@ -13,6 +16,11 @@ export class AbilitySystem {
   particles: ParticleEffect[] = [];
   explosions: ExplosionVFX;
   noiseSpheres: NoiseSphereVFX;
+  spellFlare: SpellFlare;
+  iceShards: IceShardVFX;
+  fireBillboards: FireBillboardVFX;
+  /** Maps fireball projectile mesh → its fire billboard mesh for cleanup. */
+  private _fireballBillboards = new Map<THREE.Mesh, THREE.Mesh>();
 
   onAbilityUsed: ((id: string, remaining: number) => void) | null = null;
 
@@ -21,8 +29,11 @@ export class AbilitySystem {
     this.camera = camera;
     this.abilities = ABILITIES.map(a => ({ ...a }));
     this.abilities.forEach(a => { this.cooldowns[a.id] = 0; });
-    this.explosions  = new ExplosionVFX(scene);
+    this.explosions = new ExplosionVFX(scene);
     this.noiseSpheres = new NoiseSphereVFX(scene);
+    this.spellFlare = new SpellFlare(scene);
+    this.iceShards = new IceShardVFX(scene);
+    this.fireBillboards = new FireBillboardVFX(scene);
   }
 
   /**
@@ -79,6 +90,20 @@ export class AbilitySystem {
     this.cooldowns[abilityId] = ability.cooldown;
     this.onAbilityUsed?.(abilityId, ability.cooldown);
 
+    // Lens flare on cast — colour keyed to ability type
+    const flareMap: Record<string, FlareType> = {
+      fireball: 'fire',
+      lightning_strike: 'lightning',
+      ice_spike: 'ice',
+      berserker_rage: 'fire',
+      whirlwind: 'arcane',
+      shield_bash: 'default',
+    };
+    this.spellFlare.trigger(
+      playerPos.clone().add(new THREE.Vector3(0, 1.4, 0)),
+      flareMap[abilityId] ?? 'default',
+    );
+
     switch (abilityId) {
       case 'whirlwind':
         this.doWhirlwind(playerPos, ability.damage, onDamage);
@@ -95,6 +120,9 @@ export class AbilitySystem {
         break;
       case 'lightning_strike':
         this.doLightningStrike(playerPos, playerFwd, ability.damage, onDamage);
+        break;
+      case 'ice_spike':
+        this.doIceSpike(playerPos, playerFwd, ability.damage, onDamage);
         break;
     }
   }
@@ -132,6 +160,13 @@ export class AbilitySystem {
     };
     this.projectiles.push(projectile);
 
+    // FBM fire billboard attached to the fireball mesh
+    const billboard = this.fireBillboards.attachTo(mesh, {
+      colour: 'fire', width: 1.2, height: 1.6,
+      offset: new THREE.Vector3(0, 0.4, 0),
+    });
+    this._fireballBillboards.set(mesh, billboard);
+
     // Trail — small fire flashes every 60 ms
     const interval = setInterval(() => {
       if (!this.scene.children.includes(mesh)) { clearInterval(interval); return; }
@@ -168,6 +203,26 @@ export class AbilitySystem {
     const points = new THREE.Points(geo, mat);
     this.scene.add(points);
     this.particles.push({ particles: points, lifetime: 1.5, maxLifetime: 1.5 });
+  }
+
+  private doIceSpike(pos: THREE.Vector3, fwd: THREE.Vector3, damage: number, onDamage: (d: number, aoe: boolean) => void) {
+    // Project forward to find impact point (6 m ahead, at ground level)
+    const impactPos = pos.clone().add(fwd.clone().multiplyScalar(6));
+    impactPos.y = Math.max(pos.y - 0.5, 0.0);  // snap to ground
+
+    // Ice shard burst (8 spikes + Voronoi frost disc)
+    this.iceShards.burst(impactPos, 2.6, 8, 2.0);
+
+    // Noise-sphere ice flash at impact centre
+    this.noiseSpheres.spawn(impactPos.clone().add(new THREE.Vector3(0, 0.8, 0)), {
+      preset: 'ice', radius: 1.0, lifetime: 0.9, fadeIn: 0.05,
+    });
+
+    // Spawn a secondary flare at the impact site
+    this.spellFlare.trigger(impactPos.clone().add(new THREE.Vector3(0, 1, 0)), 'ice', 0.3);
+
+    this.createImpactEffect(impactPos, 0x66ccff);
+    onDamage(damage, false);
   }
 
   private doLightningStrike(pos: THREE.Vector3, fwd: THREE.Vector3, damage: number, onDamage: (d: number, aoe: boolean) => void) {
@@ -283,6 +338,11 @@ export class AbilitySystem {
           particles: 80,
           lifetime: 1.4,
         });
+        // Detach fire billboard if one was attached to this projectile
+        const fb = this._fireballBillboards.get(proj.mesh);
+        if (fb) { this.fireBillboards.detach(fb); this._fireballBillboards.delete(proj.mesh); }
+        // Burst fire at impact
+        this.fireBillboards.burstAt(proj.mesh.position.clone(), { colour: 'fire', width: 2.0, height: 2.5, lifetime: 0.9 });
         // If the projectile mesh was a noise sphere, kill it cleanly
         this.noiseSpheres.kill(proj.mesh);
         this.scene.remove(proj.mesh);
@@ -293,6 +353,9 @@ export class AbilitySystem {
 
     this.explosions.update(dt);
     this.noiseSpheres.update(dt, this.camera);
+    this.iceShards.update(dt);
+    this.fireBillboards.update(dt, this.camera);
+    this.spellFlare.update(dt, this.camera);
 
     // Update particles
     this.particles = this.particles.filter(p => {
@@ -325,6 +388,10 @@ export class AbilitySystem {
             particles: 100,
             lifetime: 1.4,
           });
+          // Detach fire billboard if one was attached
+          const fb = this._fireballBillboards.get(proj.mesh);
+          if (fb) { this.fireBillboards.detach(fb); this._fireballBillboards.delete(proj.mesh); }
+          this.fireBillboards.burstAt(proj.mesh.position.clone(), { colour: 'fire', width: 2.0, height: 2.5, lifetime: 0.9 });
           // Kill any noise-sphere that IS this projectile's mesh
           this.noiseSpheres.kill(proj.mesh);
           this.scene.remove(proj.mesh);
@@ -347,5 +414,9 @@ export class AbilitySystem {
     for (const p of this.particles) this.scene.remove(p.particles);
     this.explosions.dispose();
     this.noiseSpheres.dispose();
+    this.spellFlare.dispose();
+    this.iceShards.dispose();
+    this.fireBillboards.dispose();
+    this._fireballBillboards.clear();
   }
 }

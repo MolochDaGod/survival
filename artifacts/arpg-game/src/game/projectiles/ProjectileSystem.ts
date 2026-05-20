@@ -49,6 +49,7 @@
 import * as THREE from 'three';
 import { clone as skeletonClone } from 'three/examples/jsm/utils/SkeletonUtils.js';
 import { VFXLibrary, VFXId } from '../vfx/VFXLibrary';
+import { RibbonTrail } from '../vfx/RibbonTrail';
 
 // ─── Public types ─────────────────────────────────────────────────────────────
 
@@ -113,9 +114,7 @@ export interface ActiveProjectile {
   lifetime:   number;
   target?:    THREE.Object3D;
   turnRate:   number;
-  history?:   THREE.Vector3[];        // for tracer
-  trail?:     THREE.Line;             // tracer line
-  trailMat?:  THREE.LineBasicMaterial;
+  trail?: RibbonTrail;            // GPU ribbon tracer
   impactVFX?: VFXId;
   getTargets: () => THREE.Object3D[];
   onHit?:     (hit: ProjectileHit, p: ActiveProjectile) => boolean | void;
@@ -175,28 +174,16 @@ export class ProjectileSystem {
     };
 
     if (opts.tracer) {
-      const segs    = Math.max(2, opts.tracerSegments ?? 12);
-      const positions = new Float32Array(segs * 3);
-      // Initialize all positions at the origin so the line doesn't span (0,0,0).
-      for (let i = 0; i < segs; i++) {
-        positions[i * 3 + 0] = opts.origin.x;
-        positions[i * 3 + 1] = opts.origin.y;
-        positions[i * 3 + 2] = opts.origin.z;
-      }
-      const geom = new THREE.BufferGeometry();
-      geom.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-      const mat  = new THREE.LineBasicMaterial({
+      const segs = Math.max(3, opts.tracerSegments ?? 14);
+      const trail = new RibbonTrail({
+        segments: segs,
+        width: 0.08,
         color: opts.tracerColor ?? 0xffffff,
-        transparent: true,
-        opacity: 0.85,
-        depthWrite: false,
+        opacity: 0.9,
       });
-      const line = new THREE.Line(geom, mat);
-      line.frustumCulled = false;
-      this.scene.add(line);
-      projectile.trail    = line;
-      projectile.trailMat = mat;
-      projectile.history  = Array.from({ length: segs }, () => opts.origin.clone());
+      trail.addPoint(opts.origin);
+      this.scene.add(trail.mesh);
+      projectile.trail = trail;
     }
 
     this.scene.add(mesh);
@@ -210,9 +197,8 @@ export class ProjectileSystem {
     if (idx >= 0) this.active.splice(idx, 1);
     this.scene.remove(p.mesh);
     if (p.trail) {
-      this.scene.remove(p.trail);
-      (p.trail.geometry as THREE.BufferGeometry).dispose();
-      p.trailMat?.dispose();
+      p.trail.dispose();
+      this.scene.remove(p.trail.mesh);
     }
   }
 
@@ -230,8 +216,9 @@ export class ProjectileSystem {
 
   // ── tick ──────────────────────────────────────────────────────────────────
 
-  update(dt: number): void {
+  update(dt: number, camera?: THREE.Camera): void {
     if (dt <= 0) return;
+    const _camera = camera;
     // Iterate by index since we may splice.
     for (let i = this.active.length - 1; i >= 0; i--) {
       const p = this.active[i]!;
@@ -280,19 +267,10 @@ export class ProjectileSystem {
       _SCRATCH_DIR.copy(p.velocity).normalize();
       p.mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), _SCRATCH_DIR);
 
-      // 4) tracer history shift
-      if (p.history && p.trail) {
-        // shift history forward
-        for (let h = p.history.length - 1; h > 0; h--) {
-          p.history[h]!.copy(p.history[h - 1]!);
-        }
-        p.history[0]!.copy(p.mesh.position);
-        const attr = (p.trail.geometry as THREE.BufferGeometry).getAttribute('position') as THREE.BufferAttribute;
-        for (let h = 0; h < p.history.length; h++) {
-          const v = p.history[h]!;
-          attr.setXYZ(h, v.x, v.y, v.z);
-        }
-        attr.needsUpdate = true;
+      // 4) ribbon tracer — push current position and rebuild the quad strip
+      if (p.trail) {
+        p.trail.addPoint(p.mesh.position);
+        p.trail.rebuildGeom(_camera);
       }
 
       // 5) collision: cast ray from prev → current

@@ -34,17 +34,30 @@ charactersRouter.get("/", async (req, res) => {
     const rows = await charactersService.list(String(req.query.accountId ?? ""));
     res.json(rows);
   } catch (err) {
-    if (!handleServiceError(err, res)) throw err;
+    if (!handleServiceError(err, res)) {
+      const msg = err instanceof Error ? err.message : String(err);
+      console.error('[characters] list failed:', msg, err);
+      res.status(500).json({ error: 'list failed', detail: msg });
+    }
   }
 });
 
-charactersRouter.post("/", async (req, res) => {
-  try {
-    const row = await charactersService.create(req.body);
-    res.status(201).json(row);
-  } catch (err) {
-    if (!handleServiceError(err, res)) throw err;
-  }
+charactersRouter.post("/", (req, res, next) => {
+  // Double-wrap: Express 4 doesn't catch async rejections, so we funnel
+  // every possible failure path through next(err) as a last resort.
+  (async () => {
+    try {
+      const row = await charactersService.create(req.body);
+      res.status(201).json(row);
+    } catch (err: unknown) {
+      if (handleServiceError(err, res)) return;
+      const msg = err instanceof Error ? err.message : String(err);
+      console.error('[characters] create failed:', msg, err);
+      if (!res.headersSent) {
+        res.status(500).json({ error: 'character creation failed', detail: msg });
+      }
+    }
+  })().catch(next);
 });
 
 charactersRouter.get("/:id", async (req, res) => {
@@ -52,7 +65,11 @@ charactersRouter.get("/:id", async (req, res) => {
     const row = await charactersService.get(req.params.id);
     res.json(row);
   } catch (err) {
-    if (!handleServiceError(err, res)) throw err;
+    if (!handleServiceError(err, res)) {
+      const msg = err instanceof Error ? err.message : String(err);
+      console.error('[characters] get failed:', msg);
+      res.status(500).json({ error: 'get failed', detail: msg });
+    }
   }
 });
 
@@ -61,7 +78,11 @@ charactersRouter.put("/:id", async (req, res) => {
     const row = await charactersService.update(req.params.id, req.body);
     res.json(row);
   } catch (err) {
-    if (!handleServiceError(err, res)) throw err;
+    if (!handleServiceError(err, res)) {
+      const msg = err instanceof Error ? err.message : String(err);
+      console.error('[characters] update failed:', msg);
+      res.status(500).json({ error: 'update failed', detail: msg });
+    }
   }
 });
 
@@ -70,6 +91,10 @@ charactersRouter.delete("/:id", async (req, res) => {
     await charactersService.remove(req.params.id);
     res.status(204).end();
   } catch (err) {
-    if (!handleServiceError(err, res)) throw err;
+    if (!handleServiceError(err, res)) {
+      const msg = err instanceof Error ? err.message : String(err);
+      console.error('[characters] delete failed:', msg);
+      res.status(500).json({ error: 'delete failed', detail: msg });
+    }
   }
 });

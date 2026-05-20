@@ -117,11 +117,12 @@ adminRouter.get("/players/search", requireAdmin, async (req, res) => {
     });
   }
   for (const r of charNameMatches) {
-    const existing = matched.get(r.accountId);
+    const acctId = r.accountId ?? '';
+    const existing = matched.get(acctId);
     if (existing) {
       existing.characterName = true;
     } else {
-      matched.set(r.accountId, { grudgeId: false, displayName: false, characterName: true });
+      matched.set(acctId, { grudgeId: false, displayName: false, characterName: true });
     }
   }
 
@@ -151,11 +152,12 @@ adminRouter.get("/players/search", requireAdmin, async (req, res) => {
 
   const charsByAccount = new Map<string, typeof characters>();
   for (const c of characters) {
-    const list = charsByAccount.get(c.accountId);
+    const key = c.accountId ?? '';
+    const list = charsByAccount.get(key);
     if (list) {
       list.push(c);
     } else {
-      charsByAccount.set(c.accountId, [c]);
+      charsByAccount.set(key, [c]);
     }
   }
 
@@ -168,7 +170,7 @@ adminRouter.get("/players/search", requireAdmin, async (req, res) => {
       if (flags.characterName) matchedFields.push("characterName");
       return { account: a, characters: charsByAccount.get(a.id) ?? [], matchedFields };
     })
-    .sort((a, b) => a.account.grudgeId.localeCompare(b.account.grudgeId));
+    .sort((a, b) => (a.account.grudgeId ?? '').localeCompare(b.account.grudgeId ?? ''));
 
   res.json({ q, returnedCount: results.length, hasMore, results });
 });

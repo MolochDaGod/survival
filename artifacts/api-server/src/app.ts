@@ -7,6 +7,17 @@ import { logger } from "./lib/logger";
 
 const app: Express = express();
 
+// ── BigInt JSON safety ─────────────────────────────────────────────────────
+// Drizzle returns `bigint` columns as native JS BigInt. JSON.stringify throws
+// on BigInt by default ("Do not know how to serialize a BigInt"). This
+// global patch converts BigInts to Numbers during serialization so Express's
+// res.json() never crashes. Safe because our bigint columns (created_at,
+// updated_at) are epoch-ms timestamps that fit in Number.MAX_SAFE_INTEGER
+// until the year 287,396.
+(BigInt.prototype as unknown as { toJSON: () => number }).toJSON = function () {
+  return Number(this);
+};
+
 // Trust the first reverse proxy (Railway, VPS nginx, etc.) so req.ip
 // resolves to the real client IP for rate-limiting.
 app.set("trust proxy", 1);
@@ -73,5 +84,17 @@ app.use(globalLimiter);
 app.use(writeLimiter);
 
 app.use("/api", router);
+
+// ── Global error handler (MUST be last middleware) ─────────────────────────
+// Catches any error that escapes route handlers (async rejections, BigInt
+// serialization, Drizzle query failures, etc.) and returns JSON instead of
+// Express's default HTML error page.
+app.use((err: unknown, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+  const msg = err instanceof Error ? err.message : String(err);
+  logger.error({ err }, '[global] unhandled error');
+  if (!res.headersSent) {
+    res.status(500).json({ error: 'internal server error', detail: msg });
+  }
+});
 
 export default app;

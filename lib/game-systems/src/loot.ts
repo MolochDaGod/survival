@@ -21,6 +21,8 @@
 
 export type AffixSlotType = 'prefix' | 'suffix';
 
+export type AffixSlotRestriction = 'any' | 'weapon' | 'armor';
+
 export interface AffixDef {
   id: string;
   name: string;
@@ -38,6 +40,13 @@ export interface AffixDef {
   weight: number;
   /** Human-readable description template. {value} is replaced with the roll. */
   desc: string;
+  /**
+   * Slot restriction for this affix:
+   *   'weapon' = only rolls on mainhand/offhand
+   *   'armor'  = only rolls on helm/chest/legs/boots/cape
+   *   'any'    = rolls on any slot (default if omitted)
+   */
+  slots?: AffixSlotRestriction;
 }
 
 /**
@@ -45,31 +54,42 @@ export interface AffixDef {
  * list automatically. Weight controls how common each affix is.
  */
 export const AFFIX_POOL: AffixDef[] = [
-  // ── PREFIXES: BASE COMBAT ────────────────────────────────────────────
-  { id: 'sharp',       name: 'Sharp',        type: 'prefix', stat: 'damage',         format: 'flat', minBase: 2,  maxBase: 8,   minTier: 1, weight: 20, desc: '+{value} Damage' },
-  { id: 'fierce',      name: 'Fierce',       type: 'prefix', stat: 'damage',         format: 'flat', minBase: 6,  maxBase: 18,  minTier: 3, weight: 12, desc: '+{value} Damage' },
-  { id: 'quick',       name: 'Quick',        type: 'prefix', stat: 'attackSpeed',    format: 'pct',  minBase: 2,  maxBase: 8,   minTier: 1, weight: 15, desc: '+{value}% Attack Speed' },
+  // ── PREFIXES: BASE COMBAT (weapon-only) ─────────────────────────────
+  { id: 'sharp',       name: 'Sharp',        type: 'prefix', stat: 'damage',         format: 'flat', minBase: 2,  maxBase: 8,   minTier: 1, weight: 20, desc: '+{value} Damage', slots: 'weapon' },
+  { id: 'fierce',      name: 'Fierce',       type: 'prefix', stat: 'damage',         format: 'flat', minBase: 6,  maxBase: 18,  minTier: 3, weight: 12, desc: '+{value} Damage', slots: 'weapon' },
+  { id: 'quick',       name: 'Quick',        type: 'prefix', stat: 'attackSpeed',    format: 'pct',  minBase: 2,  maxBase: 8,   minTier: 1, weight: 15, desc: '+{value}% Attack Speed', slots: 'weapon' },
   { id: 'precise',     name: 'Precise',      type: 'prefix', stat: 'critChance',     format: 'pct',  minBase: 1,  maxBase: 5,   minTier: 2, weight: 12, desc: '+{value}% Critical Chance' },
-  { id: 'brutal',      name: 'Brutal',       type: 'prefix', stat: 'critDamage',     format: 'pct',  minBase: 5,  maxBase: 20,  minTier: 3, weight: 10, desc: '+{value}% Critical Damage' },
-  { id: 'piercing',    name: 'Piercing',     type: 'prefix', stat: 'armorPen',       format: 'pct',  minBase: 2,  maxBase: 10,  minTier: 3, weight: 8,  desc: '+{value}% Armor Penetration' },
-  { id: 'staggering',  name: 'Staggering',   type: 'prefix', stat: 'stagger',        format: 'pct',  minBase: 2,  maxBase: 8,   minTier: 3, weight: 8,  desc: '+{value}% Stagger Chance' },
+  { id: 'brutal',      name: 'Brutal',       type: 'prefix', stat: 'critDamage',     format: 'pct',  minBase: 5,  maxBase: 20,  minTier: 3, weight: 10, desc: '+{value}% Critical Damage', slots: 'weapon' },
+  { id: 'piercing',    name: 'Piercing',     type: 'prefix', stat: 'armorPen',       format: 'pct',  minBase: 2,  maxBase: 10,  minTier: 3, weight: 8,  desc: '+{value}% Armor Penetration', slots: 'weapon' },
+  { id: 'staggering',  name: 'Staggering',   type: 'prefix', stat: 'stagger',        format: 'pct',  minBase: 2,  maxBase: 8,   minTier: 3, weight: 8,  desc: '+{value}% Stagger Chance', slots: 'weapon' },
 
-  // ── PREFIXES: DAMAGE TYPES (elemental) ───────────────────────────────
-  { id: 'blazing',     name: 'Blazing',      type: 'prefix', stat: 'fireDamage',     format: 'flat', minBase: 3,  maxBase: 12,  minTier: 2, weight: 8,  desc: '+{value} Fire Damage' },
-  { id: 'frozen',      name: 'Frozen',       type: 'prefix', stat: 'iceDamage',      format: 'flat', minBase: 3,  maxBase: 12,  minTier: 2, weight: 8,  desc: '+{value} Ice Damage' },
-  { id: 'shocking',    name: 'Shocking',     type: 'prefix', stat: 'lightningDamage',format: 'flat', minBase: 3,  maxBase: 12,  minTier: 2, weight: 8,  desc: '+{value} Lightning Damage' },
-  { id: 'arcane',      name: 'Arcane',       type: 'prefix', stat: 'arcaneDamage',   format: 'flat', minBase: 3,  maxBase: 12,  minTier: 3, weight: 7,  desc: '+{value} Arcane Damage' },
-  { id: 'holy',        name: 'Blessed',      type: 'prefix', stat: 'holyDamage',     format: 'flat', minBase: 3,  maxBase: 12,  minTier: 3, weight: 6,  desc: '+{value} Holy Damage' },
-  { id: 'toxic',       name: 'Venomous',     type: 'prefix', stat: 'natureDamage',   format: 'flat', minBase: 3,  maxBase: 10,  minTier: 2, weight: 7,  desc: '+{value} Nature/Poison Damage' },
+  // ── PREFIXES: ARMOR-EXCLUSIVE ──────────────────────────────────────────
+  { id: 'reinforced',  name: 'Reinforced',   type: 'prefix', stat: 'armor',          format: 'flat', minBase: 4,  maxBase: 16,  minTier: 1, weight: 20, desc: '+{value} Armor', slots: 'armor' },
+  { id: 'plated',      name: 'Plated',       type: 'prefix', stat: 'armor',          format: 'flat', minBase: 10, maxBase: 30,  minTier: 3, weight: 12, desc: '+{value} Armor', slots: 'armor' },
+  { id: 'padded',      name: 'Padded',       type: 'prefix', stat: 'health',         format: 'flat', minBase: 8,  maxBase: 30,  minTier: 1, weight: 18, desc: '+{value} Health', slots: 'armor' },
+  { id: 'warded_arm',  name: 'Warded',       type: 'prefix', stat: 'magicResist',    format: 'pct',  minBase: 3,  maxBase: 12,  minTier: 2, weight: 10, desc: '+{value}% Magic Resistance', slots: 'armor' },
+  { id: 'tempered',    name: 'Tempered',     type: 'prefix', stat: 'tenacity',       format: 'pct',  minBase: 2,  maxBase: 8,   minTier: 3, weight: 8,  desc: '+{value}% Crowd Control Reduction', slots: 'armor' },
+  { id: 'fortified',   name: 'Fortified',    type: 'prefix', stat: 'blockChance',    format: 'pct',  minBase: 2,  maxBase: 6,   minTier: 2, weight: 10, desc: '+{value}% Block Chance', slots: 'armor' },
+  { id: 'nimble',      name: 'Nimble',       type: 'prefix', stat: 'evasion',        format: 'pct',  minBase: 2,  maxBase: 6,   minTier: 2, weight: 10, desc: '+{value}% Evasion', slots: 'armor' },
+  { id: 'insulating',  name: 'Insulating',   type: 'prefix', stat: 'temperature',    format: 'flat', minBase: 3,  maxBase: 10,  minTier: 1, weight: 8,  desc: '+{value} Cold Resistance', slots: 'armor' },
+  { id: 'vented',      name: 'Vented',       type: 'prefix', stat: 'heatResist',     format: 'flat', minBase: 3,  maxBase: 10,  minTier: 1, weight: 8,  desc: '+{value} Heat Resistance', slots: 'armor' },
 
-  // ── PREFIXES: PROC EFFECTS (chance-on-hit) ────────────────────────────
-  { id: 'vampiric',    name: 'Vampiric',     type: 'prefix', stat: 'drainHealth',    format: 'pct',  minBase: 1,  maxBase: 4,   minTier: 4, weight: 6,  desc: '+{value}% Life Steal' },
-  { id: 'igniting',    name: 'Igniting',     type: 'prefix', stat: 'procBurn',       format: 'pct',  minBase: 3,  maxBase: 12,  minTier: 3, weight: 6,  desc: '{value}% chance to Burn on hit (3s)' },
-  { id: 'freezing',    name: 'Chilling',     type: 'prefix', stat: 'procFreeze',     format: 'pct',  minBase: 2,  maxBase: 8,   minTier: 3, weight: 5,  desc: '{value}% chance to Slow on hit (2s)' },
-  { id: 'shocking_p',  name: 'Arcing',       type: 'prefix', stat: 'procChainLightning', format: 'pct', minBase: 2, maxBase: 6, minTier: 4, weight: 4,  desc: '{value}% chance to Chain Lightning (2 targets)' },
-  { id: 'bleeding',    name: 'Serrated',     type: 'prefix', stat: 'procBleed',      format: 'pct',  minBase: 4,  maxBase: 15,  minTier: 2, weight: 8,  desc: '{value}% chance to Bleed on hit (4s)' },
-  { id: 'poisoning',   name: 'Toxic',        type: 'prefix', stat: 'procPoison',     format: 'pct',  minBase: 3,  maxBase: 10,  minTier: 3, weight: 6,  desc: '{value}% chance to Poison on hit (5s)' },
-  { id: 'exploding',   name: 'Volatile',     type: 'prefix', stat: 'procExplode',    format: 'pct',  minBase: 1,  maxBase: 4,   minTier: 5, weight: 3,  desc: '{value}% chance to Explode on kill (AoE)' },
+  // ── PREFIXES: DAMAGE TYPES (weapon-only) ──────────────────────────────
+  { id: 'blazing',     name: 'Blazing',      type: 'prefix', stat: 'fireDamage',     format: 'flat', minBase: 3,  maxBase: 12,  minTier: 2, weight: 8,  desc: '+{value} Fire Damage', slots: 'weapon' },
+  { id: 'frozen',      name: 'Frozen',       type: 'prefix', stat: 'iceDamage',      format: 'flat', minBase: 3,  maxBase: 12,  minTier: 2, weight: 8,  desc: '+{value} Ice Damage', slots: 'weapon' },
+  { id: 'shocking',    name: 'Shocking',     type: 'prefix', stat: 'lightningDamage',format: 'flat', minBase: 3,  maxBase: 12,  minTier: 2, weight: 8,  desc: '+{value} Lightning Damage', slots: 'weapon' },
+  { id: 'arcane',      name: 'Arcane',       type: 'prefix', stat: 'arcaneDamage',   format: 'flat', minBase: 3,  maxBase: 12,  minTier: 3, weight: 7,  desc: '+{value} Arcane Damage', slots: 'weapon' },
+  { id: 'holy',        name: 'Blessed',      type: 'prefix', stat: 'holyDamage',     format: 'flat', minBase: 3,  maxBase: 12,  minTier: 3, weight: 6,  desc: '+{value} Holy Damage', slots: 'weapon' },
+  { id: 'toxic',       name: 'Venomous',     type: 'prefix', stat: 'natureDamage',   format: 'flat', minBase: 3,  maxBase: 10,  minTier: 2, weight: 7,  desc: '+{value} Nature/Poison Damage', slots: 'weapon' },
+
+  // ── PREFIXES: PROC EFFECTS (weapon-only) ──────────────────────────────
+  { id: 'vampiric',    name: 'Vampiric',     type: 'prefix', stat: 'drainHealth',    format: 'pct',  minBase: 1,  maxBase: 4,   minTier: 4, weight: 6,  desc: '+{value}% Life Steal', slots: 'weapon' },
+  { id: 'igniting',    name: 'Igniting',     type: 'prefix', stat: 'procBurn',       format: 'pct',  minBase: 3,  maxBase: 12,  minTier: 3, weight: 6,  desc: '{value}% chance to Burn on hit (3s)', slots: 'weapon' },
+  { id: 'freezing',    name: 'Chilling',     type: 'prefix', stat: 'procFreeze',     format: 'pct',  minBase: 2,  maxBase: 8,   minTier: 3, weight: 5,  desc: '{value}% chance to Slow on hit (2s)', slots: 'weapon' },
+  { id: 'shocking_p',  name: 'Arcing',       type: 'prefix', stat: 'procChainLightning', format: 'pct', minBase: 2, maxBase: 6, minTier: 4, weight: 4,  desc: '{value}% chance to Chain Lightning (2 targets)', slots: 'weapon' },
+  { id: 'bleeding',    name: 'Serrated',     type: 'prefix', stat: 'procBleed',      format: 'pct',  minBase: 4,  maxBase: 15,  minTier: 2, weight: 8,  desc: '{value}% chance to Bleed on hit (4s)', slots: 'weapon' },
+  { id: 'poisoning',   name: 'Toxic',        type: 'prefix', stat: 'procPoison',     format: 'pct',  minBase: 3,  maxBase: 10,  minTier: 3, weight: 6,  desc: '{value}% chance to Poison on hit (5s)', slots: 'weapon' },
+  { id: 'exploding',   name: 'Volatile',     type: 'prefix', stat: 'procExplode',    format: 'pct',  minBase: 1,  maxBase: 4,   minTier: 5, weight: 3,  desc: '{value}% chance to Explode on kill (AoE)', slots: 'weapon' },
 
   // ── PREFIXES: NEXUS ATTRIBUTE BONUSES (always +1, no tier scaling) ────
   { id: 'bio_boost',   name: 'Vital',        type: 'prefix', stat: 'bio',            format: 'flat', minBase: 1,  maxBase: 1,   minTier: 4, weight: 5,  desc: '+1 Biomass (BIO)' },
@@ -192,6 +212,12 @@ export interface LootDrop {
   bonusStats: Record<string, number>;
   /** Generated name: "Sharp Iron Helm of Fortitude" */
   generatedName: string;
+  /**
+   * Gear tint colour (hex, e.g. '#a03030'). Applied to the clothing/fabric
+   * material channels on the gear mesh — never to skin. Rolled per-drop so
+   * identical base items can look distinct. Null = use the mesh's baked colour.
+   */
+  gearTint: string | null;
 }
 
 // ── Rolling Engine ──────────────────────────────────────────────────────────
@@ -218,12 +244,30 @@ function rollValue(affix: AffixDef, tier: number): number {
   return min + Math.floor(Math.random() * (max - min + 1));
 }
 
+/** Equipment slot categories for affix filtering. */
+const WEAPON_SLOTS = new Set(['mainhand', 'offhand']);
+const ARMOR_SLOTS  = new Set(['helm', 'chest', 'legs', 'boots', 'cape']);
+
+function slotCategory(slot: string): AffixSlotRestriction {
+  if (WEAPON_SLOTS.has(slot)) return 'weapon';
+  if (ARMOR_SLOTS.has(slot))  return 'armor';
+  return 'any';
+}
+
 /**
  * Pick N affixes from the pool using weighted random selection.
- * No duplicate affix IDs. Respects minTier requirements.
+ * No duplicate affix IDs. Respects minTier AND slot restrictions.
  */
-function pickAffixes(tier: number, count: number): AffixDef[] {
-  const eligible = AFFIX_POOL.filter(a => tier >= a.minTier);
+function pickAffixes(tier: number, count: number, equipSlot?: string): AffixDef[] {
+  const cat = equipSlot ? slotCategory(equipSlot) : 'any';
+  const eligible = AFFIX_POOL.filter(a => {
+    if (tier < a.minTier) return false;
+    // Slot filtering: 'any' affixes always eligible. Otherwise must match.
+    const affixSlot = a.slots ?? 'any';
+    if (affixSlot === 'any') return true;
+    if (cat === 'any') return true; // rings/amulets/relic can roll anything
+    return affixSlot === cat;
+  });
   const picked: AffixDef[] = [];
   const usedIds = new Set<string>();
 
@@ -253,19 +297,34 @@ function pickAffixes(tier: number, count: number): AffixDef[] {
   return picked;
 }
 
+// ── Gear Tint Colour Palettes ────────────────────────────────────────────────
+// Rolled per-drop so visually identical base items look distinct. Palette is
+// tier-aware: low tiers get muted earth tones, high tiers get saturated hues.
+
+const TINT_PALETTE_LOW  = ['#7b6b5a','#6b7b5a','#5a6b7b','#7b5a5a','#6b5a7b','#8a7a6a','#5a7b6b','#7b7b5a'];
+const TINT_PALETTE_MID  = ['#8b4513','#2e5a1e','#1e3a5a','#5a1e3a','#3a5a1e','#5a3a1e','#1e5a5a','#4a2e6b'];
+const TINT_PALETTE_HIGH = ['#c41e3a','#1e90ff','#9b59b6','#f39c12','#2ecc71','#e74c3c','#3498db','#8e44ad'];
+
+function rollGearTint(tier: number, equipSlot: string): string | null {
+  if (!ARMOR_SLOTS.has(equipSlot)) return null; // weapons don't tint
+  const palette = tier <= 2 ? TINT_PALETTE_LOW : tier <= 4 ? TINT_PALETTE_MID : TINT_PALETTE_HIGH;
+  return palette[Math.floor(Math.random() * palette.length)];
+}
+
 /**
  * Generate a loot drop with randomized affixes.
  *
- * @param baseId  ID of the base item definition (e.g. 'iron_helm')
- * @param baseName Human-readable base item name (e.g. 'Iron Helm')
- * @param tier    Item tier (1-8). Determines affix count + value scaling.
- * @returns       A LootDrop with rolled affixes and a generated name.
+ * @param baseId    ID of the base item definition (e.g. 'iron_helm')
+ * @param baseName  Human-readable base item name (e.g. 'Iron Helm')
+ * @param tier      Item tier (1-8). Determines affix count + value scaling.
+ * @param equipSlot Equipment slot (e.g. 'helm', 'mainhand'). Filters affix pool.
+ * @returns         A LootDrop with rolled affixes, generated name, and gear tint.
  */
-export function generateLootDrop(baseId: string, baseName: string, tier: number): LootDrop {
+export function generateLootDrop(baseId: string, baseName: string, tier: number, equipSlot?: string): LootDrop {
   const clampedTier = Math.max(1, Math.min(8, tier));
   const affixCount = AFFIX_COUNT_BY_TIER[clampedTier] ?? 1;
 
-  const selectedAffixes = pickAffixes(clampedTier, affixCount);
+  const selectedAffixes = pickAffixes(clampedTier, affixCount, equipSlot);
   const rolledAffixes: RolledAffix[] = [];
   const bonusStats: Record<string, number> = {};
 
@@ -304,6 +363,7 @@ export function generateLootDrop(baseId: string, baseName: string, tier: number)
     affixes: rolledAffixes,
     bonusStats,
     generatedName,
+    gearTint: rollGearTint(clampedTier, equipSlot ?? ''),
   };
 }
 
