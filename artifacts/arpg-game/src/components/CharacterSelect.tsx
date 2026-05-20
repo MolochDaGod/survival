@@ -138,7 +138,22 @@ export function CharacterSelect({
         setCharacters(rows);
       } catch (e: unknown) {
         if (cancelled) return;
-        setError(e instanceof Error ? e.message : String(e));
+        const msg = e instanceof Error ? e.message : String(e);
+        console.warn('[CharacterSelect] API failed, enabling offline mode:', msg);
+        setError(msg);
+        // Offline fallback: create a synthetic account so the player can
+        // still reach character creation and play locally. The character
+        // won't be persisted server-side until the API is fixed, but the
+        // game is fully playable with localStorage saves.
+        if (!account) {
+          setAccount({
+            id: `offline_${identity.grudgeId}`,
+            grudgeId: identity.grudgeId,
+            displayName: identity.displayName ?? 'Survivor',
+            createdAt: new Date().toISOString(),
+          });
+        }
+        setCharacters([]);
       }
     })();
     return () => {
@@ -195,7 +210,11 @@ export function CharacterSelect({
           </p>
         </div>
 
-        {error && <div className="select-error">Couldn't load characters: {error}</div>}
+        {error && (
+          <div className="select-error">
+            Server offline — playing locally. Your progress saves to this browser.
+          </div>
+        )}
 
         {!account || !characters ? (
           <div className="select-loading">Loading characters…</div>
