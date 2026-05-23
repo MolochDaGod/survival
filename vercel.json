@@ -4,25 +4,28 @@
   "installCommand": "pnpm install",
   "outputDirectory": "artifacts/website/dist/public",
   "rewrites": [
-{ "source": "/api/:path*", "destination": "https://grudge-nexus-api-production.up.railway.app/api/:path*" },
-
+    { "source": "/api/:path*", "destination": "https://grudge-nexus-api-production.up.railway.app/api/:path*" },
     { "source": "/arpg-game", "destination": "/arpg-game/index.html" },
     { "source": "/arpg-game/", "destination": "/arpg-game/index.html" },
     { "source": "/arpg-game/:path*", "destination": "/arpg-game/index.html" },
-
     { "source": "/admin", "destination": "/admin/index.html" },
     { "source": "/admin/", "destination": "/admin/index.html" },
     { "source": "/admin/:path*", "destination": "/admin/:path*" },
-
     { "source": "/asset-studio", "destination": "/asset-studio/index.html" },
     { "source": "/asset-studio/", "destination": "/asset-studio/index.html" },
     { "source": "/asset-studio/:path*", "destination": "/asset-studio/:path*" },
-
     { "source": "/info.html", "destination": "/info.html" },
     { "source": "/lore.html", "destination": "/lore.html" },
     { "source": "/stats-guide.html", "destination": "/stats-guide.html" }
   ],
   "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "Content-Security-Policy", "value": "frame-ancestors 'self' https://id.grudge-studio.com https://*.grudge-studio.com" },
+        { "key": "X-Content-Type-Options", "value": "nosniff" }
+      ]
+    },
     {
       "source": "/api/(.*)",
       "headers": [
