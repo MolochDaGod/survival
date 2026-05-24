@@ -19,7 +19,7 @@ import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
 import { createGLTFLoader } from '@/game/loaders/createGLTFLoader';
 import { assetUrl } from '@/lib/assetUrl';
 import type { EquipSlot } from './Items';
-import type { Gender } from './CharacterConfig';
+import { type Gender, rarityToGearVariant, getGearPath } from './CharacterConfig';
 
 // ── Slot → base mesh suffix mapping ─────────────────────────────────────────
 //
@@ -433,26 +433,11 @@ export class GearVisualManager {
 // Maps item rarity → gear asset set and resolves gender-specific paths.
 // Used by PlayerController.syncGearVisuals() as the resolveGearPath callback.
 
-type GearSet = 'peasant' | 'ranger';
-
-function rarityToGearSet(rarity: string): GearSet {
-  switch (rarity) {
-    case 'common':
-    case 'uncommon':
-      return 'peasant';
-    case 'rare':
-    case 'epic':
-    case 'legendary':
-    default:
-      return 'ranger';
-  }
-}
-
 /**
- * Slot → subdirectory under models/gear/.
- * Only slots with actual gear models are listed.
+ * EquipSlot → GEAR_VARIANTS key mapping.
+ * Only slots with actual gear meshes are listed.
  */
-const SLOT_TO_GEAR_DIR: Partial<Record<EquipSlot, string>> = {
+const SLOT_TO_VARIANT_KEY: Partial<Record<EquipSlot, 'head' | 'chest' | 'legs' | 'feet'>> = {
   helm:  'head',
   chest: 'chest',
   legs:  'legs',
@@ -460,10 +445,13 @@ const SLOT_TO_GEAR_DIR: Partial<Record<EquipSlot, string>> = {
 };
 
 /**
- * Resolve an item definition to a gear model path, or null if the item has
- * no visual gear mesh. Checks:
- *   1. itemDef.gearModelPath (explicit override)
- *   2. Automatic resolution via rarity → gear set + gender
+ * Resolve an item definition to a modular gear FBX path on the CDN.
+ *
+ * Resolution order:
+ *   1. itemDef.gearModelPath (explicit override — {gender} placeholder replaced)
+ *   2. Automatic: rarity → Quaternius variant → per-slot FBX from GEAR_VARIANTS
+ *
+ * Returns null for slots that have no visual mesh (ring, amulet, cape, relic).
  */
 export function resolveGearModelPath(
   itemDef: { id: string; slot: string; rarity: string; gearModelPath?: string },
@@ -471,20 +459,13 @@ export function resolveGearModelPath(
 ): string | null {
   // Explicit override wins
   if (itemDef.gearModelPath) {
-    // Replace {gender} placeholder if present
     return itemDef.gearModelPath.replace('{gender}', gender);
   }
 
-  // Auto-resolve from slot + rarity + gender
-  const gearDir = SLOT_TO_GEAR_DIR[itemDef.slot as EquipSlot];
-  if (!gearDir) return null;
+  // Auto-resolve: rarity → Quaternius variant → per-slot FBX
+  const variantKey = SLOT_TO_VARIANT_KEY[itemDef.slot as EquipSlot];
+  if (!variantKey) return null;
 
-  const set = rarityToGearSet(itemDef.rarity);
-
-  // Peasant set has no head piece — fall back to ranger
-  if (gearDir === 'head' && set === 'peasant') {
-    return `/models/gear/head/ranger_${gender}.fbx`;
-  }
-
-  return `/models/gear/${gearDir}/${set}_${gender}.fbx`;
+  const variant = rarityToGearVariant(itemDef.rarity);
+  return getGearPath(variant, variantKey);
 }
