@@ -20,6 +20,10 @@ interface HUDProps {
   spread?: number;
   /** >0 while a hit marker should be visible. Counts down in ms. */
   hitMarkerTimer?: number;
+  /** Active weapon type for crosshair shape selection. */
+  weaponType?: string;
+  /** True when the crosshair is hovering over a hostile target. */
+  onTarget?: boolean;
 }
 
 const GOLD  = '#c9950a';
@@ -208,27 +212,65 @@ const RadarDisplay: React.FC = () => {
   );
 };
 
-// ── Dynamic Crosshair ────────────────────────────────────────────────────────
+// ── Fortnite-style Dynamic Crosshair ─────────────────────────────────────────
 //
-// Spread-responsive crosshair with hit markers. The four lines expand/contract
-// based on `spread` (0–1). ADS collapses to a tight circle + dot. Hit markers
-// flash 4 angled strokes for 150ms when hitMarkerTimer > 0.
+// Weapon-aware reticle shapes with spread bloom, ADS collapse, hit markers,
+// and target-lock colour feedback. Shapes per weapon type:
+//   gun (pistol/smg)  → 4-line cross (classic Fortnite)
+//   shotgun           → wide ring with 4 short ticks (spread indicator)
+//   bow/crossbow      → chevron (triangle aim point)
+//   melee/default     → small dot only
+//
+// Spread (0-1) drives the gap between lines/ring and the centre.
+// Movement, firing, and jumping inflate spread; rest decays it.
+// Colour: white normally, GOLD when ADS, red when on-target.
 
-const DynamicCrosshair: React.FC<{ isAiming: boolean; spread: number; hitMarkerTimer: number }> = ({
-  isAiming, spread, hitMarkerTimer,
+type CrosshairShape = 'cross' | 'shotgun_ring' | 'chevron' | 'dot';
+
+function weaponTypeToShape(weaponType: string | undefined): CrosshairShape {
+  switch (weaponType) {
+    case 'gun':       return 'cross';        // pistol, rifle
+    case 'smg':       return 'cross';
+    case 'shotgun':   return 'shotgun_ring';  // spread indicator ring
+    case 'bow':       return 'chevron';
+    case 'crossbow':  return 'chevron';
+    case 'staff':     return 'chevron';       // magic ranged
+    case 'wand':      return 'chevron';
+    default:          return 'dot';           // melee, unarmed
+  }
+}
+
+interface CrosshairProps {
+  isAiming: boolean;
+  spread: number;
+  hitMarkerTimer: number;
+  weaponType?: string;
+  onTarget?: boolean;
+}
+
+const DynamicCrosshair: React.FC<CrosshairProps> = ({
+  isAiming, spread, hitMarkerTimer, weaponType, onTarget,
 }) => {
-  // Spread drives the gap between each line and the centre dot.
-  // At spread=0 the gap is 3px (tight); at spread=1 the gap is 18px (max bloom).
-  const gap = isAiming
-    ? 2 + spread * 4           // ADS: very tight, minimal bloom
-    : 3 + spread * 15;         // Hip-fire: full bloom range
-  const lineLen = isAiming ? 5 : 7;
-  const cx = 32;               // SVG centre
-  const cy = 32;
-  const sz = 64;               // SVG viewport
-  const lineColor = isAiming ? GOLD : 'white';
-  const lineOpacity = isAiming ? 0.9 : 0.75;
+  const shape = weaponTypeToShape(weaponType);
+  const cx = 40;             // SVG centre
+  const cy = 40;
+  const sz = 80;             // SVG viewport
   const showHitMarker = hitMarkerTimer > 0;
+
+  // Colour: red when on target, gold when ADS, white hip-fire
+  const baseColor = onTarget ? '#ff4444' : isAiming ? GOLD : 'white';
+  const baseOpacity = isAiming ? 0.92 : 0.78;
+
+  // Spread drives gap for cross/ring reticles
+  const gap = isAiming
+    ? 2 + spread * 5
+    : 4 + spread * 18;
+  const lineLen = isAiming ? 6 : 9;
+
+  // Shotgun ring radius
+  const ringR = isAiming
+    ? 8 + spread * 4
+    : 12 + spread * 14;
 
   return (
     <div style={{
@@ -237,36 +279,100 @@ const DynamicCrosshair: React.FC<{ isAiming: boolean; spread: number; hitMarkerT
       zIndex: 100, pointerEvents: 'none',
     }}>
       <svg width={sz} height={sz} viewBox={`0 0 ${sz} ${sz}`}>
-        {/* Centre dot */}
-        <circle cx={cx} cy={cy} r={isAiming ? 1.5 : 2}
-          fill={lineColor} opacity={isAiming ? 0.95 : 0.7} />
 
-        {/* ADS outer ring */}
-        {isAiming && (
-          <circle cx={cx} cy={cy} r={12 + spread * 3}
-            fill="none" stroke={GOLD} strokeWidth="1" opacity="0.7" />
+        {/* ── Cross reticle (pistol / SMG / rifle) ───────────────────── */}
+        {shape === 'cross' && (
+          <>
+            {/* Centre dot */}
+            <circle cx={cx} cy={cy} r={isAiming ? 1.2 : 1.8}
+              fill={baseColor} opacity={0.9} />
+
+            {/* ADS outer ring */}
+            {isAiming && (
+              <circle cx={cx} cy={cy} r={14 + spread * 4}
+                fill="none" stroke={baseColor} strokeWidth="1" opacity="0.5" />
+            )}
+
+            {/* 4-line cross — gap expands with spread */}
+            <line x1={cx} y1={cy - gap - lineLen} x2={cx} y2={cy - gap}
+              stroke={baseColor} strokeWidth="2" opacity={baseOpacity}
+              strokeLinecap="round" />
+            <line x1={cx} y1={cy + gap} x2={cx} y2={cy + gap + lineLen}
+              stroke={baseColor} strokeWidth="2" opacity={baseOpacity}
+              strokeLinecap="round" />
+            <line x1={cx - gap - lineLen} y1={cy} x2={cx - gap} y2={cy}
+              stroke={baseColor} strokeWidth="2" opacity={baseOpacity}
+              strokeLinecap="round" />
+            <line x1={cx + gap} y1={cy} x2={cx + gap + lineLen} y2={cy}
+              stroke={baseColor} strokeWidth="2" opacity={baseOpacity}
+              strokeLinecap="round" />
+
+            {/* Distance ticks (ADS only — small horizontal marks at 1/3 and 2/3 of each arm) */}
+            {isAiming && [1/3, 2/3].map((frac, i) => {
+              const tickY = cy - gap - lineLen * frac;
+              return (
+                <line key={i} x1={cx - 1.5} y1={tickY} x2={cx + 1.5} y2={tickY}
+                  stroke={baseColor} strokeWidth="0.8" opacity="0.4" />
+              );
+            })}
+          </>
         )}
 
-        {/* Top line */}
-        <line x1={cx} y1={cy - gap - lineLen} x2={cx} y2={cy - gap}
-          stroke={lineColor} strokeWidth="1.5" opacity={lineOpacity} />
-        {/* Bottom line */}
-        <line x1={cx} y1={cy + gap} x2={cx} y2={cy + gap + lineLen}
-          stroke={lineColor} strokeWidth="1.5" opacity={lineOpacity} />
-        {/* Left line */}
-        <line x1={cx - gap - lineLen} y1={cy} x2={cx - gap} y2={cy}
-          stroke={lineColor} strokeWidth="1.5" opacity={lineOpacity} />
-        {/* Right line */}
-        <line x1={cx + gap} y1={cy} x2={cx + gap + lineLen} y2={cy}
-          stroke={lineColor} strokeWidth="1.5" opacity={lineOpacity} />
+        {/* ── Shotgun ring reticle ────────────────────────────────── */}
+        {shape === 'shotgun_ring' && (
+          <>
+            {/* Centre dot */}
+            <circle cx={cx} cy={cy} r={2} fill={baseColor} opacity={0.85} />
 
-        {/* Hit marker — 4 angled strokes at 45° */}
+            {/* Spread ring */}
+            <circle cx={cx} cy={cy} r={ringR}
+              fill="none" stroke={baseColor} strokeWidth="1.5" opacity={baseOpacity}
+              strokeDasharray={isAiming ? 'none' : '4 3'} />
+
+            {/* 4 short ticks on the ring at cardinal points */}
+            {[0, 90, 180, 270].map((deg) => {
+              const rad = deg * Math.PI / 180;
+              const x1 = cx + Math.cos(rad) * (ringR - 3);
+              const y1 = cy + Math.sin(rad) * (ringR - 3);
+              const x2 = cx + Math.cos(rad) * (ringR + 3);
+              const y2 = cy + Math.sin(rad) * (ringR + 3);
+              return (
+                <line key={deg} x1={x1} y1={y1} x2={x2} y2={y2}
+                  stroke={baseColor} strokeWidth="2" opacity={baseOpacity}
+                  strokeLinecap="round" />
+              );
+            })}
+          </>
+        )}
+
+        {/* ── Chevron reticle (bow / crossbow) ───────────────────── */}
+        {shape === 'chevron' && (
+          <>
+            {/* Chevron point (triangle pointing down) */}
+            <polyline
+              points={`${cx - 6 - spread * 4},${cy - 4 - spread * 3} ${cx},${cy + 2 + spread * 2} ${cx + 6 + spread * 4},${cy - 4 - spread * 3}`}
+              fill="none" stroke={baseColor} strokeWidth="2" opacity={baseOpacity}
+              strokeLinecap="round" strokeLinejoin="round" />
+
+            {/* Tiny centre dot */}
+            <circle cx={cx} cy={cy} r={1.2}
+              fill={baseColor} opacity={0.9} />
+          </>
+        )}
+
+        {/* ── Dot reticle (melee / default) ──────────────────────── */}
+        {shape === 'dot' && (
+          <circle cx={cx} cy={cy} r={2.5}
+            fill={baseColor} opacity={0.6} />
+        )}
+
+        {/* ── Hit marker — 4 angled strokes at 45° ──────────────── */}
         {showHitMarker && (
-          <g opacity="0.9">
-            <line x1={cx-4} y1={cy-4} x2={cx-9} y2={cy-9} stroke="#ff3333" strokeWidth="2" />
-            <line x1={cx+4} y1={cy-4} x2={cx+9} y2={cy-9} stroke="#ff3333" strokeWidth="2" />
-            <line x1={cx-4} y1={cy+4} x2={cx-9} y2={cy+9} stroke="#ff3333" strokeWidth="2" />
-            <line x1={cx+4} y1={cy+4} x2={cx+9} y2={cy+9} stroke="#ff3333" strokeWidth="2" />
+          <g opacity="0.95">
+            <line x1={cx-5} y1={cy-5} x2={cx-11} y2={cy-11} stroke="#ff3333" strokeWidth="2.5" strokeLinecap="round" />
+            <line x1={cx+5} y1={cy-5} x2={cx+11} y2={cy-11} stroke="#ff3333" strokeWidth="2.5" strokeLinecap="round" />
+            <line x1={cx-5} y1={cy+5} x2={cx-11} y2={cy+11} stroke="#ff3333" strokeWidth="2.5" strokeLinecap="round" />
+            <line x1={cx+5} y1={cy+5} x2={cx+11} y2={cy+11} stroke="#ff3333" strokeWidth="2.5" strokeLinecap="round" />
           </g>
         )}
       </svg>
@@ -274,11 +380,13 @@ const DynamicCrosshair: React.FC<{ isAiming: boolean; spread: number; hitMarkerT
   );
 };
 
-export const HUD: React.FC<HUDProps> = ({
-  stats, cameraMode, wave, killCount, score,
-  weaponName, secondWeaponName, isAiming,
-  playerPos, spread = 0, hitMarkerTimer = 0,
-}) => {
+export const HUD: React.FC<HUDProps> = (props) => {
+  const {
+    stats, cameraMode, wave, killCount, score,
+    weaponName, secondWeaponName, isAiming,
+    playerPos, spread = 0, hitMarkerTimer = 0,
+    weaponType, onTarget,
+  } = props;
   const hpFrac = stats.health / stats.maxHealth;
 
   return (
@@ -351,7 +459,13 @@ export const HUD: React.FC<HUDProps> = ({
       </div>
 
       {/* Dynamic Crosshair */}
-      <DynamicCrosshair isAiming={!!isAiming} spread={spread} hitMarkerTimer={hitMarkerTimer} />
+      <DynamicCrosshair
+        isAiming={!!isAiming}
+        spread={spread}
+        hitMarkerTimer={hitMarkerTimer}
+        weaponType={weaponType}
+        onTarget={onTarget}
+      />
 
       {/* Bottom center – stamina + mana slim bars */}
       <div style={{
