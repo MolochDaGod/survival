@@ -55,6 +55,13 @@ export {
   type EntityRole, type DeployableKind, type DeployableDef, type DeployableAnimSet,
 } from './deployables.js';
 
+// Perks (Nexus milestone perk effects — quantified from STAT_MILESTONE_PERKS)
+export {
+  getMilestoneEffects, mergeEffectBags, readEffect,
+  MILESTONE_EFFECTS,
+  type MilestoneEffectBag,
+} from './perks.js';
+
 // Loot (Diablo-style affix generation, tier-scaled drops)
 export {
   AFFIX_POOL, AFFIX_COUNT_BY_TIER,

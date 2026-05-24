@@ -47,6 +47,9 @@ import { ProjectileSystem } from './projectiles/ProjectileSystem';
 import { getBulletTemplate, DEFAULT_BULLET_OPTS } from './projectiles/Bullets';
 import { MuzzleFlash } from './vfx/MuzzleFlash';
 import { ImpactSparks } from './vfx/ImpactSparks';
+import { SurvivorSpawner, type SurvivorSpawnerSnapshot } from './township/SurvivorSpawner';
+import { getMilestoneEffects, mergeEffectBags, readEffect, type MilestoneEffectBag } from '@workspace/game-systems/perks';
+import { sumPassives, getUnlockedPerks, getUnlockedCombos, type StatTrack } from './progression/PerkSystem';
 
 export class GameEngine {
   renderer: THREE.WebGLRenderer;
@@ -80,6 +83,10 @@ export class GameEngine {
   citySpawner?: CitySpawner;
   /** Handles damage, fracture animation, and resource drops for GLB walls/ceilings. */
   breakableWallSystem?: BreakableWallSystem;
+  /** RTS survivor camp system — spawns wild survivors, manages camp production + raids. */
+  survivorSpawner?: SurvivorSpawner;
+  /** Aggregated perk effect bag — refreshed once per second, read every frame. */
+  perkEffects: MilestoneEffectBag = {};
   /**
    * Called by BreakableWallSystem when a wall breaks and drops resources.
    * GameCanvas wires this to append items to the survivalStacks React state.
@@ -135,6 +142,7 @@ export class GameEngine {
 
   animFrameId: number = 0;
   lastTime: number = 0;
+  private _perkRefreshTimer: number = 0;
   wave: number = 1;
   waveTimer: number = 0;
   waveCooldown: number = 15;
@@ -623,6 +631,19 @@ export class GameEngine {
         }
       }
 
+      // ── RTS Survivor Camp System ────────────────────────────────────────────
+      // Spawns wild survivors, manages camp production ticks, triggers raids.
+      this.survivorSpawner = new SurvivorSpawner(this.citySpawner!, this.enemyManager);
+      this.survivorSpawner.onProduction = (resources) => {
+        // Feed produced resources into the survival stacks UI
+        for (const [itemId, count] of Object.entries(resources)) {
+          this.onSurvivalLootDrop?.(itemId, count);
+        }
+      };
+      this.survivorSpawner.onJoinPrompt = (label) => {
+        this.onInteractionPrompt?.(label);
+      };
+
       this.onAssetsLoaded?.();
     });
   }
@@ -932,6 +953,16 @@ export class GameEngine {
     // Breakable wall physics (fragment gravity, fade-out).
     this.breakableWallSystem?.update(dt);
 
+    // ── RTS survivor camp ────────────────────────────────────────────────────
+    this.survivorSpawner?.update(dt, this.player.position);
+
+    // ── Perk effects (refreshed once per second for perf) ────────────────────
+    this._perkRefreshTimer -= dt;
+    if (this._perkRefreshTimer <= 0) {
+      this._perkRefreshTimer = 1.0;
+      this.refreshPerkEffects();
+    }
+
     const activeWeapon = this.player.equippedWeapons[this.player.activeWeaponIndex];
     const isGun = activeWeapon.type === 'gun';
 
@@ -1117,6 +1148,8 @@ export class GameEngine {
       buildings: this.modularBuilding?.serialize() ?? { pieces: [] },
       // SWG-style profession progression (XP per profession + learned skills).
       professions: ProfessionsService.serialize(),
+      // RTS camp survivor spawner state.
+      survivorSpawner: this.survivorSpawner?.serialize() ?? null,
     };
   }
 
@@ -1207,6 +1240,53 @@ export class GameEngine {
     }
   }
 
+  /**
+   * Refresh the aggregated perk effect bag from both Nexus milestone perks
+   * and the 4-track perk tree. Called once per second in update().
+   *
+   * Key effects applied to PlayerController:
+   *   maxHp, maxStamina, meleeDamage, moveSpeed, damageTaken, hpRegen,
+   *   staminaRegen, critChance, critMult, bleedResist, toxinResist.
+   */
+  private refreshPerkEffects(): void {
+    if (!this.player) return;
+
+    // Nexus milestone effects from the 8-stat system
+    const nexusStats = this.characterConfig.grudgeStats;
+    const milestoneEffects = nexusStats ? getMilestoneEffects(nexusStats) : {};
+
+    // 4-track perk tree effects (hero/warrior/smarts/maker)
+    const trackPoints: Record<StatTrack, number> = {
+      hero: 0, warrior: 0, smarts: 0, maker: 0,
+    };
+    // Track points come from the StatPerkChoices allocation — for now we derive
+    // them from the Nexus stats mapping: BIO+VIT → hero, KIN+STR → warrior,
+    // NEU+INT → smarts, SYN+ENT → maker. This keeps both systems in sync.
+    if (nexusStats) {
+      trackPoints.hero    = (nexusStats.bio ?? 0) + (nexusStats.gra ?? 0);
+      trackPoints.warrior = (nexusStats.kin ?? 0);
+      trackPoints.smarts  = (nexusStats.neu ?? 0) + (nexusStats.qnt ?? 0);
+      trackPoints.maker   = (nexusStats.syn ?? 0) + (nexusStats.ent ?? 0);
+    }
+    const perks = getUnlockedPerks(trackPoints);
+    const combos = getUnlockedCombos(trackPoints);
+    const trackEffects = sumPassives([...perks, ...combos]);
+
+    // Merge into a single bag
+    this.perkEffects = mergeEffectBags(milestoneEffects, trackEffects);
+
+    // Apply key effects to PlayerStats
+    const pe = this.perkEffects;
+    const base = this.playerStats;
+    base.maxHealth  = this.player['baseMaxHealth']  + readEffect(pe, 'maxHp');
+    base.maxStamina = (base.maxStamina > 0 ? 100 : 0) + readEffect(pe, 'maxStamina');
+    base.maxMana    = this.player['baseMaxMana'] + readEffect(pe, 'maxMana');
+
+    // Movement speed bonus (applied as multiplier in PlayerController)
+    const speedBonus = readEffect(pe, 'moveSpeed');
+    this.player.moveSpeed = this.player['baseMoveSpeed'] * (1 + speedBonus);
+  }
+
   dispose() {
     getSaveGameService().stopAutoSave();
     cancelAnimationFrame(this.animFrameId);
@@ -1238,6 +1318,7 @@ export class GameEngine {
     if (this.interiorPortalSystem) this.interiorPortalSystem.dispose();
     if (this.citySpawner) this.citySpawner.dispose();
     if (this.breakableWallSystem) this.breakableWallSystem.dispose();
+    if (this.survivorSpawner) { this.survivorSpawner.dispose(); this.survivorSpawner = undefined; }
     if (this.debugPanel) this.debugPanel.dispose();
     this.gamepad.dispose();
     this.audio.dispose();
