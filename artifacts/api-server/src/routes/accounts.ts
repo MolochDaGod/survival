@@ -41,45 +41,50 @@ accountsRouter.post("/upsert", async (req, res) => {
   }
   const { grudgeId, displayName, puterUuid, puterUsername, email, authType } = parsed.data;
 
-  // Check if account already exists by grudge_id
-  const existing = await db.query.accountsTable.findFirst({
-    where: eq(accountsTable.grudgeId, grudgeId),
-  });
+  try {
+    // Check if account already exists by grudge_id
+    const existing = await db.query.accountsTable.findFirst({
+      where: eq(accountsTable.grudgeId, grudgeId),
+    });
 
-  if (existing) {
-    // Update display name and puter fields
-    const [updated] = await db
-      .update(accountsTable)
-      .set({
-        displayName: displayName ?? existing.displayName,
-        puterUuid: puterUuid ?? existing.puterUuid,
-        puterUsername: puterUsername ?? existing.puterUsername,
-        updatedAt: Date.now(),
+    if (existing) {
+      // Update display name and puter fields
+      const [updated] = await db
+        .update(accountsTable)
+        .set({
+          displayName: displayName ?? existing.displayName,
+          puterUuid: puterUuid ?? existing.puterUuid,
+          puterUsername: puterUsername ?? existing.puterUsername,
+          updatedAt: Date.now(),
+        })
+        .where(eq(accountsTable.id, existing.id))
+        .returning();
+      res.json(updated);
+      return;
+    }
+
+    // Create new account
+    const now = Date.now();
+    const [row] = await db
+      .insert(accountsTable)
+      .values({
+        id: randomUUID(),
+        grudgeId,
+        displayName: displayName ?? null,
+        puterUuid: puterUuid ?? null,
+        puterUsername: puterUsername ?? null,
+        email: email ?? null,
+        authType: authType ?? (grudgeId.startsWith('puter_') ? 'puter' : 'guest'),
+        isGuest: grudgeId.startsWith('guest_'),
+        createdAt: now,
+        updatedAt: now,
       })
-      .where(eq(accountsTable.id, existing.id))
       .returning();
-    res.json(updated);
-    return;
+    res.json(row);
+  } catch (err) {
+    req.log?.error(err, '[accounts] upsert failed');
+    res.status(500).json({ error: 'account upsert failed' });
   }
-
-  // Create new account
-  const now = Date.now();
-  const [row] = await db
-    .insert(accountsTable)
-    .values({
-      id: randomUUID(),
-      grudgeId,
-      displayName: displayName ?? null,
-      puterUuid: puterUuid ?? null,
-      puterUsername: puterUsername ?? null,
-      email: email ?? null,
-      authType: authType ?? (grudgeId.startsWith('puter_') ? 'puter' : 'guest'),
-      isGuest: grudgeId.startsWith('guest_'),
-      createdAt: now,
-      updatedAt: now,
-    })
-    .returning();
-  res.json(row);
 });
 
 accountsRouter.get("/:grudgeId", async (req, res) => {
@@ -88,12 +93,17 @@ accountsRouter.get("/:grudgeId", async (req, res) => {
     res.status(400).json({ error: "grudgeId required" });
     return;
   }
-  const row = await db.query.accountsTable.findFirst({
-    where: eq(accountsTable.grudgeId, grudgeId),
-  });
-  if (!row) {
-    res.status(404).json({ error: "not found" });
-    return;
+  try {
+    const row = await db.query.accountsTable.findFirst({
+      where: eq(accountsTable.grudgeId, grudgeId),
+    });
+    if (!row) {
+      res.status(404).json({ error: "not found" });
+      return;
+    }
+    res.json(row);
+  } catch (err) {
+    req.log?.error(err, '[accounts] get failed');
+    res.status(500).json({ error: 'account lookup failed' });
   }
-  res.json(row);
 });

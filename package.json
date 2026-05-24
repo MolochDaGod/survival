@@ -3,8 +3,6 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-"preinstall": "node -e \"if(!process.env.CI && !process.env.RAILWAY_ENVIRONMENT && !process.env.DOCKER && !process.env.npm_config_user_agent?.startsWith('pnpm')){console.error('Use pnpm instead');process.exit(1)}\"",
-    "build": "pnpm run typecheck && pnpm -r --if-present run build",
     "preinstall": "node -e \"if(!process.env.CI && !process.env.RAILWAY_ENVIRONMENT && !process.env.DOCKER && !process.env.npm_config_user_agent?.startsWith('pnpm')){console.error('Use pnpm instead');process.exit(1)}\"",
     "build": "pnpm run typecheck && pnpm -r --if-present run build && node scripts/merge-outputs.mjs",
     "build:website": "pnpm --filter @workspace/website run build",

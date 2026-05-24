@@ -3,15 +3,16 @@
  *
  * Ported from GrudgeBuilder combatCalculations.ts, wired to Nexus stats.
  *
- * 8-step pipeline:
+ * 9-step pipeline:
  *   1. Base damage (weapon + ability multiplier)
  *   2. Attribute scaling (from Nexus 8-stat system)
  *   3. Physical / magical split
  *   4. Elemental resistance
- *   5. Defense mitigation (√defense formula)
- *   6. Variance (±25%)
- *   7. Block check (physical only, capped at 75%)
- *   8. Critical check (cannot crit if blocked, capped at 75%)
+ *   5. Evasion / accuracy check (miss → 0 damage)
+ *   6. Defense mitigation (√defense formula)
+ *   7. Variance (±25%)
+ *   8. Block check (physical only, capped at 75%)
+ *   9. Critical check (cannot crit if blocked, capped at 75%)
  *
  * Combat math: Damage Taken = Incoming × (100 − √Defense) / 100
  */
@@ -104,20 +105,46 @@ export function calculateDamage(input: DamageInput): DamageResult {
   physDmg *= (1 - physResist / 100);
   magDmg *= (1 - elemResist / 100);
 
-  // Step 4: Defense mitigation (√defense formula)
+  // Step 5: Evasion / accuracy check
+  // Hit chance = clamp(accuracy − evasion, 5, 100). A miss returns 0 damage.
+  let isMiss = false;
+  {
+    const hitChance = Math.max(5, Math.min(100,
+      clampStat('accuracy', attacker.accuracy) - clampStat('evasion', defender.evasion),
+    ));
+    if (Math.random() * 100 >= hitChance) {
+      isMiss = true;
+    }
+  }
+
+  if (isMiss) {
+    return {
+      physicalDamage: 0,
+      magicalDamage: 0,
+      totalDamage: 0,
+      isCrit: false,
+      isBlocked: false,
+      isMiss: true,
+      elementApplied: element !== 'none' ? element : null,
+      comboTriggered: false,
+      effects: [],
+    };
+  }
+
+  // Step 6: Defense mitigation (√defense formula)
   const physMit = Math.min(90, Math.sqrt(defender.physicalDefense));
   const magMit = Math.min(90, Math.sqrt(defender.magicalDefense));
   physDmg *= (100 - physMit) / 100;
   magDmg *= (100 - magMit) / 100;
 
-  // Step 5: Variance (±25%)
+  // Step 7: Variance (±25%)
   if (variance) {
     const v = 0.75 + Math.random() * 0.5;
     physDmg *= v;
     magDmg *= v;
   }
 
-  // Step 6: Block check (physical only)
+  // Step 8: Block check (physical only)
   let isBlocked = false;
   const blockChance = clampStat('block', defender.blockChance);
   if (Math.random() * 100 < blockChance) {
@@ -126,7 +153,7 @@ export function calculateDamage(input: DamageInput): DamageResult {
     physDmg *= (1 - blockEff);
   }
 
-  // Step 7: Critical check (cannot crit if blocked)
+  // Step 9: Critical check (cannot crit if blocked)
   let isCrit = false;
   if (!isBlocked) {
     const critChance = clampStat('criticalChance', attacker.critChance);
@@ -138,7 +165,7 @@ export function calculateDamage(input: DamageInput): DamageResult {
     }
   }
 
-  // Step 8: Final
+  // Step 9: Final
   const totalDamage = Math.max(1, Math.floor(physDmg + magDmg));
 
   return {
@@ -147,6 +174,7 @@ export function calculateDamage(input: DamageInput): DamageResult {
     totalDamage,
     isCrit,
     isBlocked,
+    isMiss: false,
     elementApplied: element !== 'none' ? element : null,
     comboTriggered: false,
     effects: [],

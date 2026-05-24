@@ -88,7 +88,8 @@ export const charactersService = {
         createdAt: now,
       });
     } catch (dbErr) {
-      console.error('[charactersService.create] DB insert failed:', dbErr);
+      const { logger } = await import('../lib/logger');
+      logger.error({ err: dbErr }, '[charactersService.create] DB insert failed');
       throw dbErr;
     }
   },

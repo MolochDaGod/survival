@@ -156,6 +156,8 @@ export interface DamageResult {
   totalDamage: number;
   isCrit: boolean;
   isBlocked: boolean;
+  /** True when the attack missed due to evasion > accuracy. */
+  isMiss: boolean;
   elementApplied: ElementType | null;
   comboTriggered: boolean;
   effects: string[];

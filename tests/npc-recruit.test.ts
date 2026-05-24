@@ -244,8 +244,8 @@ describe('@workspace/game-systems combat', () => {
       weaponMagical: 0,
       abilityMultiplier: 1.0,
       element: 'physical',
-      attacker: DEFAULT_COMBAT_STATS,
-      defender: DEFAULT_COMBAT_STATS,
+      attacker: { ...DEFAULT_COMBAT_STATS, accuracy: 100, critChance: 0 },
+      defender: { ...DEFAULT_COMBAT_STATS, evasion: 0, blockChance: 0 },
       defenderResists: DEFAULT_RESISTANCES,
       variance: false,
     });
@@ -266,15 +266,15 @@ describe('@workspace/game-systems combat', () => {
     const lowDef = { ...DEFAULT_COMBAT_STATS, physicalDefense: 100, blockChance: 0, critChance: 0 };
     const r1 = calculateDamage({
       weaponPhysical: 100, weaponMagical: 0, abilityMultiplier: 1.0,
-      element: 'physical', attacker: { ...DEFAULT_COMBAT_STATS, critChance: 0 },
+      element: 'physical', attacker: { ...DEFAULT_COMBAT_STATS, critChance: 0, accuracy: 100 },
       defender: lowDef, defenderResists: DEFAULT_RESISTANCES, variance: false,
     });
 
     // With 2500 defense, mitigation = √2500 = 50%
-    const highDef = { ...DEFAULT_COMBAT_STATS, physicalDefense: 2500, blockChance: 0, critChance: 0 };
+    const highDef = { ...DEFAULT_COMBAT_STATS, physicalDefense: 2500, blockChance: 0, critChance: 0, evasion: 0 };
     const r2 = calculateDamage({
       weaponPhysical: 100, weaponMagical: 0, abilityMultiplier: 1.0,
-      element: 'physical', attacker: { ...DEFAULT_COMBAT_STATS, critChance: 0 },
+      element: 'physical', attacker: { ...DEFAULT_COMBAT_STATS, critChance: 0, accuracy: 100 },
       defender: highDef, defenderResists: DEFAULT_RESISTANCES, variance: false,
     });
 
