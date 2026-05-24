@@ -17,6 +17,7 @@ import {
   charactersService,
   ServiceError,
 } from "../services/charactersService";
+import { logger } from "../lib/logger";
 
 export const charactersRouter = Router();
 
@@ -35,9 +36,8 @@ charactersRouter.get("/", async (req, res) => {
     res.json(rows);
   } catch (err) {
     if (!handleServiceError(err, res)) {
-      const msg = err instanceof Error ? err.message : String(err);
-      console.error('[characters] list failed:', msg, err);
-      res.status(500).json({ error: 'list failed', detail: msg });
+      logger.error({ err }, '[characters] list failed');
+      res.status(500).json({ error: 'list failed' });
     }
   }
 });
@@ -51,10 +51,9 @@ charactersRouter.post("/", (req, res, next) => {
       res.status(201).json(row);
     } catch (err: unknown) {
       if (handleServiceError(err, res)) return;
-      const msg = err instanceof Error ? err.message : String(err);
-      console.error('[characters] create failed:', msg, err);
+      logger.error({ err }, '[characters] create failed');
       if (!res.headersSent) {
-        res.status(500).json({ error: 'character creation failed', detail: msg });
+        res.status(500).json({ error: 'character creation failed' });
       }
     }
   })().catch(next);
@@ -66,9 +65,8 @@ charactersRouter.get("/:id", async (req, res) => {
     res.json(row);
   } catch (err) {
     if (!handleServiceError(err, res)) {
-      const msg = err instanceof Error ? err.message : String(err);
-      console.error('[characters] get failed:', msg);
-      res.status(500).json({ error: 'get failed', detail: msg });
+      logger.error({ err }, '[characters] get failed');
+      res.status(500).json({ error: 'get failed' });
     }
   }
 });
@@ -79,9 +77,8 @@ charactersRouter.put("/:id", async (req, res) => {
     res.json(row);
   } catch (err) {
     if (!handleServiceError(err, res)) {
-      const msg = err instanceof Error ? err.message : String(err);
-      console.error('[characters] update failed:', msg);
-      res.status(500).json({ error: 'update failed', detail: msg });
+      logger.error({ err }, '[characters] update failed');
+      res.status(500).json({ error: 'update failed' });
     }
   }
 });
@@ -92,9 +89,8 @@ charactersRouter.delete("/:id", async (req, res) => {
     res.status(204).end();
   } catch (err) {
     if (!handleServiceError(err, res)) {
-      const msg = err instanceof Error ? err.message : String(err);
-      console.error('[characters] delete failed:', msg);
-      res.status(500).json({ error: 'delete failed', detail: msg });
+      logger.error({ err }, '[characters] delete failed');
+      res.status(500).json({ error: 'delete failed' });
     }
   }
 });
