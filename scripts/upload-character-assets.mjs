@@ -104,13 +104,26 @@ async function upload(localPath, r2Key) {
   }
 
   const body = readFileSync(localPath);
-  await s3.send(new PutObjectCommand({
-    Bucket: BUCKET,
-    Key: r2Key,
-    Body: body,
-    ContentType: mimeForExt(ext),
-  }));
-  console.log(`[OK]   ${r2Key}  (${sizeMB} MB)`);
+  // Retry up to 3 times for transient SSL/network errors
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      await s3.send(new PutObjectCommand({
+        Bucket: BUCKET,
+        Key: r2Key,
+        Body: body,
+        ContentType: mimeForExt(ext),
+      }));
+      console.log(`[OK]   ${r2Key}  (${sizeMB} MB)`);
+      return;
+    } catch (e) {
+      if (attempt < 3 && (e.code?.includes('SSL') || e.code?.includes('ECONNRESET') || e.message?.includes('SSL'))) {
+        console.log(`[RETRY ${attempt}/3] ${r2Key} — ${e.code || e.message}`);
+        await new Promise(r => setTimeout(r, 2000 * attempt));
+      } else {
+        throw e;
+      }
+    }
+  }
 }
 
 // ── Slot mapping ────────────────────────────────────────────────────────────

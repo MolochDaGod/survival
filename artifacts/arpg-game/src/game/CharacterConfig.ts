@@ -217,13 +217,21 @@ export interface BodyTypeConfig {
  * meshes have been retired from the picker.
  */
 export const BODY_TYPES: BodyTypeConfig[] = [
-  // The roster is intentionally collapsed to one entry per gender; the
-  // `gltfPath` MUST point at a clothed Quaternius "Ultimate Animated
-  // Character" mesh (24 baked clips, full locomotion + combat). The
-  // `/models/characters/base/<gender>.gltf` superhero base is a NAKED
-  // gear-canvas — using it here is what produced the "naked heroes" bug.
-  { id: 'superhero', gender: 'male',   label: 'Male',   icon: '♂', category: 'base', scaleX: 1.00, scaleY: 1.00, gltfPath: '/models/characters/male/adventurer.gltf' },
-  { id: 'superhero', gender: 'female', label: 'Female', icon: '♀', category: 'base', scaleX: 1.00, scaleY: 1.00, gltfPath: '/models/characters/female/adventurer.gltf' },
+  // ── Male Quaternius variants ─────────────────────────────────────────────
+  // Each loads a full clothed GLTF from R2 with 24 baked animation clips.
+  { id: 'adventurer',    gender: 'male', label: 'Adventurer', icon: '⚔️',  category: 'civilian', scaleX: 1.00, scaleY: 1.00, gltfPath: '/models/characters/male/adventurer.gltf' },
+  { id: 'beach',         gender: 'male', label: 'Scout',      icon: '🏖️', category: 'civilian', scaleX: 1.00, scaleY: 1.00, gltfPath: '/models/characters/male/beach.gltf' },
+  { id: 'casual',        gender: 'male', label: 'Survivor',   icon: '🧥',  category: 'civilian', scaleX: 1.00, scaleY: 1.00, gltfPath: '/models/characters/male/casual_2.gltf' },
+  { id: 'casual-hoodie', gender: 'male', label: 'Scavenger',  icon: '🪝',  category: 'civilian', scaleX: 1.00, scaleY: 1.00, gltfPath: '/models/characters/male/casual_hoodie.gltf' },
+  { id: 'farmer',        gender: 'male', label: 'Settler',    icon: '🌾',  category: 'civilian', scaleX: 1.00, scaleY: 1.00, gltfPath: '/models/characters/male/farmer.gltf' },
+  { id: 'king',          gender: 'male', label: 'Warlord',    icon: '👑',  category: 'civilian', scaleX: 1.00, scaleY: 1.00, gltfPath: '/models/characters/male/king.gltf' },
+  { id: 'punk',          gender: 'male', label: 'Raider',     icon: '💀',  category: 'civilian', scaleX: 1.00, scaleY: 1.00, gltfPath: '/models/characters/male/punk.gltf' },
+  { id: 'spacesuit',     gender: 'male', label: 'Vanguard',   icon: '🚀',  category: 'civilian', scaleX: 1.00, scaleY: 1.00, gltfPath: '/models/characters/male/spacesuit.gltf' },
+  { id: 'suit',          gender: 'male', label: 'Commander',  icon: '🕴️', category: 'civilian', scaleX: 1.00, scaleY: 1.00, gltfPath: '/models/characters/male/suit.gltf' },
+  { id: 'swat',          gender: 'male', label: 'Enforcer',   icon: '🛡️', category: 'civilian', scaleX: 1.00, scaleY: 1.00, gltfPath: '/models/characters/male/swat.gltf' },
+  { id: 'worker',        gender: 'male', label: 'Builder',    icon: '🔧',  category: 'civilian', scaleX: 1.00, scaleY: 1.00, gltfPath: '/models/characters/male/worker.gltf' },
+  // ── Female (adventurer only until female modular pack is sourced) ────────
+  { id: 'adventurer',    gender: 'female', label: 'Adventurer', icon: '⚔️', category: 'civilian', scaleX: 1.00, scaleY: 1.00, gltfPath: '/models/characters/female/adventurer.gltf' },
 ];
 
 /** Body types available for the given gender. */
@@ -250,6 +258,8 @@ export interface CharacterBackground {
 export interface StartingLoadout {
   /** Two equipped weapons — slot 0 is primary (melee), slot 1 is secondary (ranged). */
   weapons: [string, string];
+  /** Starting armor (item IDs from ITEM_DATABASE). Gives each Origin a distinct look. */
+  armor: { helm?: string; chest?: string; legs?: string; boots?: string };
   /** Survival/consumable items seeded in the bag. */
   survival: Array<{ itemId: string; count: number }>;
 }
@@ -263,8 +273,8 @@ export const BACKGROUNDS: CharacterBackground[] = [
     emphasis: 'KIN · ENT',
     proficiencies: ['Combat Tactics', 'Survival', 'Weapons Maintenance', 'Field Medicine'],
     startingLoadout: {
-      // Standard sidearm + reliable melee. Field rations and bandages.
       weapons: ['iron_sword', 'iron_pistol'],
+      armor: { helm: 'iron_helm', chest: 'iron_breastplate', legs: 'iron_greaves', boots: 'swift_treads' },
       survival: [
         { itemId: 'bandage',     count: 4 },
         { itemId: 'first_aid',   count: 1 },
@@ -284,8 +294,8 @@ export const BACKGROUNDS: CharacterBackground[] = [
     emphasis: 'QNT · NEU',
     proficiencies: ['Quantum Physics', 'Chemistry', 'Data Analysis', 'Lab Fabrication'],
     startingLoadout: {
-      // Lightly armed — relies on tools and intellect. Plenty of crafting prep.
       weapons: ['shadow_dagger', 'iron_pistol'],
+      armor: { chest: 'cloth_tunic', legs: 'leather_pants', boots: 'leather_boots' },
       survival: [
         { itemId: 'bandage',     count: 2 },
         { itemId: 'bottle_full', count: 1 },
@@ -304,8 +314,8 @@ export const BACKGROUNDS: CharacterBackground[] = [
     emphasis: 'BIO · NEU',
     proficiencies: ['Surgery', 'Pharmacology', 'Anatomy', 'Bio-Augmentation'],
     startingLoadout: {
-      // Trauma-focused — heavy bandage + first-aid loadout.
       weapons: ['shadow_dagger', 'iron_pistol'],
+      armor: { chest: 'cloth_tunic', legs: 'leather_pants', boots: 'leather_boots' },
       survival: [
         { itemId: 'bandage',     count: 8 },
         { itemId: 'first_aid',   count: 2 },
@@ -324,8 +334,8 @@ export const BACKGROUNDS: CharacterBackground[] = [
     emphasis: 'SYN · ENT',
     proficiencies: ['Electronics', 'Robotics', 'Fabrication', 'Network Intrusion'],
     startingLoadout: {
-      // Builders' kit — duct tape, tools, parts.
       weapons: ['thunder_mace', 'iron_pistol'],
+      armor: { helm: 'leather_cap', chest: 'iron_breastplate', legs: 'leather_pants', boots: 'leather_boots' },
       survival: [
         { itemId: 'bandage',     count: 2 },
         { itemId: 'bottle_full', count: 1 },
@@ -345,8 +355,8 @@ export const BACKGROUNDS: CharacterBackground[] = [
     emphasis: 'GRA · CHR',
     proficiencies: ['Stellar Navigation', 'Zero-G Operations', 'Ship Systems', 'Temporal Reading'],
     startingLoadout: {
-      // Travel-light spacer — water, light, and a sidearm.
       weapons: ['shadow_dagger', 'iron_pistol'],
+      armor: { helm: 'leather_cap', chest: 'cloth_tunic', legs: 'leather_pants', boots: 'swift_treads' },
       survival: [
         { itemId: 'bandage',     count: 3 },
         { itemId: 'bottle_full', count: 3 },
@@ -365,8 +375,8 @@ export const BACKGROUNDS: CharacterBackground[] = [
     emphasis: 'NEU · QNT',
     proficiencies: ['Neural Hacking', 'Psionic Defense', 'Consciousness Upload', 'Reality Anchoring'],
     startingLoadout: {
-      // Mentalist — minimal physical gear, dual finesse weapons.
       weapons: ['shadow_dagger', 'thunder_mace'],
+      armor: { chest: 'mage_robe', legs: 'shadowsilk_pants', boots: 'leather_boots' },
       survival: [
         { itemId: 'bandage',     count: 2 },
         { itemId: 'bottle_full', count: 1 },
@@ -383,8 +393,8 @@ export const BACKGROUNDS: CharacterBackground[] = [
     emphasis: 'KIN · SYN',
     proficiencies: ['Parkour', 'Black Market Trade', 'Improvised Tech', 'Urban Survival'],
     startingLoadout: {
-      // Scavenger gear — dagger, pistol, scrap. Reflects "improvisation".
       weapons: ['shadow_dagger', 'iron_pistol'],
+      armor: { helm: 'leather_cap', chest: 'cloth_tunic', legs: 'leather_pants', boots: 'leather_boots' },
       survival: [
         { itemId: 'bandage',      count: 3 },
         { itemId: 'bottle_full',  count: 1 },
@@ -406,8 +416,8 @@ export const BACKGROUNDS: CharacterBackground[] = [
     emphasis: 'CHR · GRA',
     proficiencies: ['Timeline Anchoring', 'Paradox Avoidance', 'Temporal Weapons', 'Gravity Manipulation'],
     startingLoadout: {
-      // Heavy combat — fire axe + shotgun.
       weapons: ['fire_axe', 'hellfire_shotgun'],
+      armor: { helm: 'iron_helm', chest: 'void_plate', legs: 'iron_greaves', boots: 'warlords_sabatons' },
       survival: [
         { itemId: 'bandage',     count: 4 },
         { itemId: 'first_aid',   count: 1 },
