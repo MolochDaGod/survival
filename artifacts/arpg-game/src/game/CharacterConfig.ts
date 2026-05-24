@@ -575,6 +575,55 @@ export const STARTING_MODEL: Record<Gender, string> = {
   male:   '/models/characters/male/adventurer.gltf',
 };
 
+// ── Modular Gear Variants (Quaternius "Ultimate Modular Men") ────────────────
+// Each variant maps to 4 modular FBX parts on R2 under
+// /models/gear/male/{slot}/{variant}.fbx. The GearVisualManager loads these
+// when gear is equipped and rebinds their skeleton to the player's armature.
+
+export type GearVariant =
+  | 'adventurer' | 'beach' | 'casual' | 'casual2' | 'farmer'
+  | 'king' | 'punk' | 'spacesuit' | 'suit' | 'swat' | 'worker';
+
+export interface GearVariantPaths {
+  head:  string;
+  chest: string;
+  legs:  string;
+  feet:  string;
+  back?: string;
+}
+
+/** CDN paths for every Quaternius modular gear variant (male only for now). */
+export const GEAR_VARIANTS: Record<GearVariant, GearVariantPaths> = {
+  adventurer: { head: '/models/gear/male/head/adventurer.fbx', chest: '/models/gear/male/chest/adventurer.fbx', legs: '/models/gear/male/legs/adventurer.fbx', feet: '/models/gear/male/feet/adventurer.fbx', back: '/models/gear/male/back/adventurer.fbx' },
+  beach:      { head: '/models/gear/male/head/beach.fbx',      chest: '/models/gear/male/chest/beach.fbx',      legs: '/models/gear/male/legs/beach.fbx',      feet: '/models/gear/male/feet/beach.fbx' },
+  casual:     { head: '/models/gear/male/head/casual.fbx',     chest: '/models/gear/male/chest/casual.fbx',     legs: '/models/gear/male/legs/casual.fbx',     feet: '/models/gear/male/feet/casual.fbx' },
+  casual2:    { head: '/models/gear/male/head/casual2.fbx',    chest: '/models/gear/male/chest/casual2.fbx',    legs: '/models/gear/male/legs/casual2.fbx',    feet: '/models/gear/male/feet/casual2.fbx' },
+  farmer:     { head: '/models/gear/male/head/farmer.fbx',     chest: '/models/gear/male/chest/farmer.fbx',     legs: '/models/gear/male/legs/farmer.fbx',     feet: '/models/gear/male/feet/farmer.fbx' },
+  king:       { head: '/models/gear/male/head/king.fbx',       chest: '/models/gear/male/chest/king.fbx',       legs: '/models/gear/male/legs/king.fbx',       feet: '/models/gear/male/feet/king.fbx' },
+  punk:       { head: '/models/gear/male/head/punk.fbx',       chest: '/models/gear/male/chest/punk.fbx',       legs: '/models/gear/male/legs/punk.fbx',       feet: '/models/gear/male/feet/punk.fbx' },
+  spacesuit:  { head: '/models/gear/male/head/spacesuit.fbx',  chest: '/models/gear/male/chest/spacesuit.fbx',  legs: '/models/gear/male/legs/spacesuit.fbx',  feet: '/models/gear/male/feet/spacesuit.fbx' },
+  suit:       { head: '/models/gear/male/head/suit.fbx',       chest: '/models/gear/male/chest/suit.fbx',       legs: '/models/gear/male/legs/suit.fbx',       feet: '/models/gear/male/feet/suit.fbx' },
+  swat:       { head: '/models/gear/male/head/swat.fbx',       chest: '/models/gear/male/chest/swat.fbx',       legs: '/models/gear/male/legs/swat.fbx',       feet: '/models/gear/male/feet/swat.fbx' },
+  worker:     { head: '/models/gear/male/head/worker.fbx',     chest: '/models/gear/male/chest/worker.fbx',     legs: '/models/gear/male/legs/worker.fbx',     feet: '/models/gear/male/feet/worker.fbx' },
+};
+
+/** Map item rarity → Quaternius gear variant for auto-resolution. */
+export function rarityToGearVariant(rarity: string): GearVariant {
+  switch (rarity) {
+    case 'common':    return 'casual';
+    case 'uncommon':  return 'farmer';
+    case 'rare':      return 'adventurer';
+    case 'epic':      return 'swat';
+    case 'legendary': return 'king';
+    default:          return 'casual';
+  }
+}
+
+/** Look up the CDN path for a gear slot given a variant name. */
+export function getGearPath(variant: GearVariant, slot: 'head' | 'chest' | 'legs' | 'feet' | 'back'): string | null {
+  return GEAR_VARIANTS[variant]?.[slot] ?? null;
+}
+
 export const DEFAULT_STATS: GrudgeStats = {
   bio: STAT_DEFAULT,
   neu: STAT_DEFAULT,
