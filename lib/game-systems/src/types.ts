@@ -44,7 +44,8 @@ export type WeaponType =
   | 'knife' | 'unarmed' | 'shield' | 'sword_shield' | 'throwable'
   | 'javelin' | 'hatchet' | 'lantern'
   | 'hammer' | 'greatsword' | 'greataxe' | 'spear' | 'crossbow'
-  | 'scythe' | 'wand';
+  | 'scythe' | 'wand'
+  | 'rifle' | 'shotgun' | 'smg' | 'pistol';
 
 export interface WeaponStats {
   id: string;
