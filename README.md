@@ -6,19 +6,21 @@ A sci-fi survival RPG set a century after The Way sealed the orbital elevators. 
 
 ## Live
 
-| Domain | Role | URL |
-|---|---|---|
-| **survival.grudge-studio.com** | Game client + character creation | [survival.grudge-studio.com](https://survival.grudge-studio.com) |
-| **grudges.grudge-studio.com** | Lore Weaver — world lore, faction guides | [grudges.grudge-studio.com](https://grudges.grudge-studio.com) |
-| Game Client | Playable game | `/arpg-game/` |
-| Lore & Factions | Five faction histories, timeline | `/lore.html` |
-| Stats Guide | 8 Nexus attributes, 37 derived stats, perk tiers | `/stats-guide.html` |
-| How It Plays | Combat, building, professions overview | `/info.html` |
-| Admin Panel | Prefab, spawn rules, asset management | `/admin/` |
-| Asset Studio | Asset browser & pipeline | `/asset-studio/` |
-| API Server | Backend (Railway) | `grudge-nexus-api-production.up.railway.app/api` |
-| WebSocket | Co-op realtime (Railway, direct) | `wss://grudge-nexus-api-production.up.railway.app/api/realtime` |
-| Asset CDN | Cloudflare R2 | `assets.grudge-studio.com` |
+Both `grudges.grudge-studio.com` and `survival.grudge-studio.com` are custom domains on the **same Vercel deployment** (project: `survival`). All paths below are available on either domain.
+
+| URL | Role |
+|---|---|
+| [grudges.grudge-studio.com](https://grudges.grudge-studio.com) | Primary — Lore Weaver, marketing, game launcher |
+| [survival.grudge-studio.com](https://survival.grudge-studio.com) | Alias — same deployment |
+| [grudges.grudge-studio.com/arpg-game/](https://grudges.grudge-studio.com/arpg-game/) | Playable game client |
+| [grudges.grudge-studio.com/lore.html](https://grudges.grudge-studio.com/lore.html) | Five faction histories, timeline |
+| [grudges.grudge-studio.com/stats-guide.html](https://grudges.grudge-studio.com/stats-guide.html) | 8 Nexus attributes, 37 derived stats, perk tiers |
+| [grudges.grudge-studio.com/info.html](https://grudges.grudge-studio.com/info.html) | Combat, building, professions overview |
+| [grudges.grudge-studio.com/admin/](https://grudges.grudge-studio.com/admin/) | Admin panel (prefabs, spawn rules, assets) |
+| [grudges.grudge-studio.com/asset-studio/](https://grudges.grudge-studio.com/asset-studio/) | Asset browser & pipeline |
+| `grudge-nexus-api-production.up.railway.app/api` | API server (Railway — `zealous-love` project) |
+| `wss://grudge-nexus-api-production.up.railway.app/api/realtime` | Co-op WebSocket (Railway, direct) |
+| `assets.grudge-studio.com` | Asset CDN (Cloudflare R2) |
 
 ## The Game
 
@@ -112,41 +114,94 @@ pnpm run typecheck
 
 ## Production Deployment
 
+### DNS (Cloudflare)
+
+`grudge-studio.com` is managed in Cloudflare. All records have **proxy enabled** (orange cloud) unless noted.
+
+| Record | Type | Target | Notes |
+|---|---|---|---|
+| `grudges` | CNAME | `cname.vercel-dns.com` | Primary game domain → Vercel |
+| `survival` | CNAME | `cname.vercel-dns.com` | Alias → same Vercel project |
+| `assets` | CNAME | `<r2-bucket>.r2.cloudflarestorage.com` | R2 public CDN (proxy ON) |
+| `id` | CNAME | (Cloudflare Worker or Vercel) | Grudge ID auth worker |
+
+Add both `grudges.grudge-studio.com` and `survival.grudge-studio.com` as custom domains inside the Vercel project dashboard → **Settings → Domains**.
+
 ### Frontend (Vercel)
-Pushes to `main` auto-deploy. Sub-apps (arpg-game, admin, asset-studio) are merged into the website output by `scripts/merge-outputs.mjs`.
 
-Vercel env vars (set in dashboard):
-- `VITE_WS_URL=wss://grudge-nexus-api-production.up.railway.app`
-- `VITE_GRUDGE_API_BASE=https://grudge-nexus-api-production.up.railway.app`
-- `VITE_ASSET_CDN_URL=https://assets.grudge-studio.com/grudge-nexus`
+**Project**: `survival` · **Repo**: `MolochDaGod/survival` (auto-deploy from `main`)
 
-### Backend (Railway)
-Project: `zealous-love`. Only `@workspace/api-server` + Postgres live here.
+Build config (`vercel.json`):
+
+- Build command: `pnpm run build`
+- Output directory: `artifacts/website/dist/public`
+- Sub-apps merged by `scripts/merge-outputs.mjs` after build: `arpg-game → /arpg-game/`, `admin → /admin/`, `asset-studio → /asset-studio/`
+
+Vercel env vars (set in dashboard → Settings → Environment Variables):
+
+| Variable | Value |
+|---|---|
+| `VITE_WS_URL` | `wss://grudge-nexus-api-production.up.railway.app` |
+| `VITE_GRUDGE_API_BASE` | `https://grudge-nexus-api-production.up.railway.app` |
+| `VITE_ASSET_CDN_URL` | `https://assets.grudge-studio.com/grudge-nexus` |
+
+Deploy manually:
 
 ```bash
-railway login && railway link  # select zealous-love → api-server
-railway up                     # deploys via Dockerfile
+# Preview
+pnpm deploy:preview
+
+# Production (prebuilt — skips Vercel build minutes)
+pnpm deploy:prod
 ```
 
-Or via Docker Compose (self-hosted):
+Verify after deploy:
+
 ```bash
-cp .env.example .env    # fill in production values
-docker compose up -d --build
+curl https://grudges.grudge-studio.com/arpg-game/ -I   # 200 OK
+curl https://grudges.grudge-studio.com/api/healthz      # {"status":"ok"}
+```
+
+### Backend (Railway)
+
+**Project**: `zealous-love` · **Service**: `api-server` · **Deployed via**: `Dockerfile`
+
+Only `@workspace/api-server` + the linked Postgres addon live here. No other services.
+
+```bash
+railway login && railway link   # select zealous-love → api-server
+railway up                      # deploys current HEAD via Dockerfile
+```
+
+Health check:
+
+```bash
+curl https://grudge-nexus-api-production.up.railway.app/api/healthz
+# → {"status":"ok"}
+```
+
+WebSocket test (browser console):
+
+```js
+new WebSocket('wss://grudge-nexus-api-production.up.railway.app/api/realtime')
+// fires onopen, then receives {type:"welcome"} JSON frame
 ```
 
 See [`railway-env.md`](railway-env.md) for the complete env var reference.
 
 ### Database Schema
+
 ```bash
 # Push Drizzle schema to production DB (use public proxy URL)
 $env:DATABASE_URL="postgresql://postgres:xxx@zephyr.proxy.rlwy.net:41964/railway"
 pnpm db:push
 ```
 
-### Asset CDN Sync
+### Asset CDN (Cloudflare R2)
+
 ```bash
 node scripts/sync-assets-to-r2.mjs --dry-run   # preview
-node scripts/sync-assets-to-r2.mjs              # full sync
+node scripts/sync-assets-to-r2.mjs              # full sync to grudge-assets bucket
 ```
 
 ## Environment Variables
