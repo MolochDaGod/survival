@@ -63,6 +63,13 @@ const DEFAULT_CFG: Cfg = {
   eyeOffset:         1.65,
 };
 
+/**
+ * Stat-effect reader callback. The GameEngine passes a closure that
+ * reads from the aggregated perkEffects bag so the SwimController
+ * doesn't import game-systems directly.
+ */
+export type StatReader = (key: string) => number;
+
 export class SwimController {
   private player: PlayerController;
   private water: WaterSurface;
@@ -80,6 +87,14 @@ export class SwimController {
    *  speed. 1 when dry. */
   speedMultiplier: number = 1;
 
+  /**
+   * Optional reader for perk effects (maxOxygen, oxygenRegen, swimSpeed).
+   * Set by GameEngine after construction so swim behaviour scales with
+   * Nexus stat milestones (BIO → oxygen capacity, ENT → oxygen regen,
+   * KIN → swim speed).
+   */
+  readStat: StatReader = () => 0;
+
   private prevState: SwimState = 'dry';
   private prevY: number;
 
@@ -89,6 +104,28 @@ export class SwimController {
     this.cfg    = { ...DEFAULT_CFG, ...cfg };
     this.oxygen = this.cfg.oxygenMax;
     this.prevY  = player.position.y;
+  }
+
+  // ── Dynamic stat getters ────────────────────────────────────────────────
+
+  /** Effective oxygen capacity: base + BIO milestone bonus. */
+  private get effectiveOxygenMax(): number {
+    return this.cfg.oxygenMax + this.readStat('maxOxygen');
+  }
+
+  /** Effective oxygen regen rate: base + ENT milestone bonus. */
+  private get effectiveOxygenRegen(): number {
+    return this.cfg.oxygenRegenPerSec + this.readStat('oxygenRegen');
+  }
+
+  /** Effective swim speed multiplier: base reduced by KIN bonus. */
+  private get effectiveSwimMul(): number {
+    return Math.min(1, this.cfg.swimSpeedMul + this.readStat('swimSpeed'));
+  }
+
+  /** Effective wade speed multiplier: base reduced by KIN bonus. */
+  private get effectiveWadeMul(): number {
+    return Math.min(1, this.cfg.wadeSpeedMul + this.readStat('swimSpeed'));
   }
 
   update(dt: number, terrainY: number): void {
@@ -120,19 +157,19 @@ export class SwimController {
       case 'dry':
         this.speedMultiplier = 1;
         // Oxygen recovers fully out of water
-        this.oxygen = Math.min(this.cfg.oxygenMax, this.oxygen + this.cfg.oxygenRegenPerSec * dt);
+        this.oxygen = Math.min(this.effectiveOxygenMax, this.oxygen + this.effectiveOxygenRegen * dt);
         break;
 
       case 'wading':
-        this.speedMultiplier = this.cfg.wadeSpeedMul;
+        this.speedMultiplier = this.effectiveWadeMul;
         if (this.isMoving()) {
           this.player.stats.stamina = Math.max(0, this.player.stats.stamina - this.cfg.staminaDrainPerSec * dt);
         }
-        this.oxygen = Math.min(this.cfg.oxygenMax, this.oxygen + this.cfg.oxygenRegenPerSec * dt);
+        this.oxygen = Math.min(this.effectiveOxygenMax, this.oxygen + this.effectiveOxygenRegen * dt);
         break;
 
       case 'swimming':
-        this.speedMultiplier = this.cfg.swimSpeedMul;
+        this.speedMultiplier = this.effectiveSwimMul;
         if (this.isMoving()) {
           this.player.stats.stamina = Math.max(0, this.player.stats.stamina - this.cfg.staminaDrainPerSec * dt);
         }
@@ -141,11 +178,11 @@ export class SwimController {
           const targetY = surfaceY + (this.cfg.eyeOffset * 0.15); // chin clearance
           p.y = THREE.MathUtils.lerp(p.y, targetY, Math.min(1, dt * 6));
         }
-        this.oxygen = Math.min(this.cfg.oxygenMax, this.oxygen + this.cfg.oxygenRegenPerSec * dt);
+        this.oxygen = Math.min(this.effectiveOxygenMax, this.oxygen + this.effectiveOxygenRegen * dt);
         break;
 
       case 'submerged':
-        this.speedMultiplier = this.cfg.swimSpeedMul * 0.85;
+        this.speedMultiplier = this.effectiveSwimMul * 0.85;
         this.oxygen = Math.max(0, this.oxygen - this.cfg.oxygenDrainPerSec * dt);
         if (this.oxygen <= 0) {
           this.player.stats.health = Math.max(0, this.player.stats.health - this.cfg.drowningHpPerSec * dt);
@@ -172,7 +209,8 @@ export class SwimController {
 
   /** UI/HUD: 0..1 oxygen fraction. */
   oxygenFraction(): number {
-    return this.cfg.oxygenMax === 0 ? 1 : this.oxygen / this.cfg.oxygenMax;
+    const max = this.effectiveOxygenMax;
+    return max === 0 ? 1 : this.oxygen / max;
   }
 
   private isMoving(): boolean {

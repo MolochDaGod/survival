@@ -41,12 +41,44 @@ app.use(
     },
   }),
 );
-// ── CORS ───────────────────────────────────────────────────────────────────
-// In production, lock down to explicit origins. In dev, allow everything.
+// ── CORS ─────────────────────────────────────────────────────────────────────
+// In production, lock down to explicit origins (supports wildcard patterns
+// like *.vercel.app and *.grudge-studio.com). In dev, allow everything.
+//
+// Patterns are converted to RegExp: "*.vercel.app" → /^https:\/\/.*\.vercel\.app$/
+// Exact strings are compared directly. Localhost entries match as-is.
+
+/** Convert a CORS_ORIGINS entry to a RegExp or null (passthrough). */
+function originPatternToRegex(pattern: string): RegExp | string {
+  if (!pattern.includes('*')) return pattern; // exact match
+  const escaped = pattern
+    .replace(/[.+?^${}()|[\]\\]/g, '\\$&') // escape regex specials
+    .replace(/\*/g, '.*');                    // * → .*
+  return new RegExp(`^https?:\\/\\/${escaped}$`);
+}
+
 const rawOrigins = process.env.CORS_ORIGINS;
+
+/** Compiled allowlist — exported so the WS upgrade handler can reuse it. */
+export const corsAllowList: (string | RegExp)[] = rawOrigins
+  ? rawOrigins.split(',').map(o => originPatternToRegex(o.trim()))
+  : [];
+
+/** Test whether an origin matches the compiled allowlist. */
+export function isOriginAllowed(origin: string | undefined): boolean {
+  if (!origin) return false;
+  if (corsAllowList.length === 0) return true; // dev mode
+  return corsAllowList.some((entry) =>
+    typeof entry === 'string' ? entry === origin : entry.test(origin),
+  );
+}
+
 const corsOptions: cors.CorsOptions = rawOrigins
   ? {
-      origin: rawOrigins.split(',').map((o) => o.trim()),
+      origin: (origin, cb) => {
+        if (!origin || isOriginAllowed(origin)) cb(null, true);
+        else cb(new Error('CORS: origin not allowed'));
+      },
       credentials: true,
     }
   : {

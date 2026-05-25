@@ -64,11 +64,19 @@ export class NetClient {
   constructor(private readonly handlers: NetClientHandlers = {}) {}
 
   /**
-   * Resolve the websocket URL relative to the current page so the same code
-   * works in dev (replit dev domain) and prod (`*.replit.app`). Path is
-   * `/api/realtime` because the api-server artifact is mounted at `/api`.
+   * Resolve the websocket URL. In production the frontend lives on Vercel
+   * which cannot proxy WebSocket upgrades, so `VITE_WS_URL` must point
+   * directly at the Railway api-server (e.g.
+   * `wss://grudge-nexus-api-production.up.railway.app`). In dev the env
+   * var is usually unset, and we fall back to same-origin which works
+   * because Vite's dev proxy handles the upgrade.
    */
   private resolveUrl(): string {
+    const envUrl = (import.meta as any).env?.VITE_WS_URL as string | undefined;
+    if (envUrl) {
+      // Strip trailing slash, append the realtime path.
+      return `${envUrl.replace(/\/+$/, '')}/api/realtime`;
+    }
     const proto = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
     return `${proto}//${window.location.host}/api/realtime`;
   }

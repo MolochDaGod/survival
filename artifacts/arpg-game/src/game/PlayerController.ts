@@ -94,6 +94,9 @@ export class PlayerController {
   /** Subset of isSwimming — head is below the surface. SwimController also
    *  drains oxygen / applies drowning damage when this is true. */
   isSubmerged: boolean = false;
+  /** True while the ClimbController has the player attached to a wall.
+   *  Disables gravity, jump, and ground snap. */
+  isClimbing: boolean = false;
   /** Boat id when mounted, else null. While set, handleMovement short-circuits
    *  — BoatSystem rewrites `position` from the seat anchor each frame. */
   mountedBoat: string | null = null;
@@ -748,9 +751,10 @@ export class PlayerController {
 
   jump() {
     if (!this.isGrounded) return;
-    // Can't jump while in the water (SwimController owns vertical motion) or
-    // while piloting a boat (BoatSystem owns the player position).
-    if (this.isSwimming || this.mountedBoat) return;
+    // Can't jump while in the water (SwimController owns vertical motion),
+    // while piloting a boat (BoatSystem owns the player position), or while
+    // climbing (ClimbController owns position — Space detaches from wall).
+    if (this.isSwimming || this.mountedBoat || this.isClimbing) return;
     this.jumpVelocity = 8;
     this.isGrounded = false;
     this.playAnimation('Jump');
@@ -1252,6 +1256,17 @@ export class PlayerController {
    *    world. Unchanged from the pre-Rapier implementation.
    */
   private handleGravity(dt: number) {
+    // ClimbController owns the player position while climbing — skip all
+    // gravity, ground snap, and Rapier movement so we don't fight it.
+    if (this.isClimbing) {
+      this.vy = 0;
+      this.jumpVelocity = 0;
+      this._pendingMoveX = 0;
+      this._pendingMoveZ = 0;
+      this.isGrounded = false;
+      return;
+    }
+
     if (
       this.physics &&
       this.rapierController &&

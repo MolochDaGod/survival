@@ -855,30 +855,86 @@ export class AssetManager {
         this.allTextures.push(texture);
       }
 
-      const finish = (root: THREE.Object3D, animations: THREE.AnimationClip[]) => {
-        root.scale.setScalar(def.scale);
+      const finish = (root: THREE.Object3D, animations: THREE.AnimationClip[], isGlb: boolean) => {
+        // ── Auto-normalize scale for GLB enemies ───────────────────────────
+        // FBX creatures use hand-tuned scales from creatures.ts (0.012, 0.014,
+        // etc.). GLB models from attached_assets export at wildly varying
+        // units — the lava_monster is 60 m tall while the snail_monster is
+        // 0.3 m. When def.scale === 1.0 (the GLB default in creatures.ts),
+        // auto-normalize so the creature fits a target height envelope based
+        // on its threat level. Otherwise trust the hand-tuned scale.
+        if (def.scale === 1.0 && isGlb) {
+          root.scale.setScalar(1.0);
+          root.updateMatrixWorld(true);
+          const rawBox = new THREE.Box3().setFromObject(root);
+          const rawH = rawBox.max.y - rawBox.min.y;
+          // Threat-scaled target height: TL1 = 1.0m, TL2 = 1.4m, TL3 = 1.8m, TL4 = 2.4m, TL5 = 3.2m
+          const threatLevel = (this.enemyDefs.find(d => d.key === def.key) as any)?.threatLevel ?? 3;
+          const targetH = [1.0, 1.0, 1.4, 1.8, 2.4, 3.2][Math.min(threatLevel, 5)];
+          const fitScale = rawH > 0.01 ? targetH / rawH : 1.0;
+          root.scale.setScalar(fitScale);
+          console.log(`[AssetManager] Auto-scale GLB '${def.key}': rawH=${rawH.toFixed(2)}m → targetH=${targetH}m (scale=${fitScale.toFixed(4)})`);
+        } else {
+          root.scale.setScalar(def.scale);
+        }
 
-        const mat = new THREE.MeshStandardMaterial({
-          map:             texture ?? undefined,
-          color:           texture ? 0xffffff : (def.color ?? 0xaaaaaa),
-          roughness:       0.82,
-          metalness:       0.05,
-          envMapIntensity: 0.5,
-        });
-        this.allMaterials.push(mat);
-
-        root.traverse((child) => {
-          if (child instanceof THREE.Mesh || child instanceof THREE.SkinnedMesh) {
-            child.castShadow = true;
-            child.receiveShadow = true;
-            if (Array.isArray(child.material)) {
-              child.material = child.material.map(() => mat);
-            } else {
-              child.material = mat;
+        // ── Material setup ─────────────────────────────────────────────────
+        // For GLB models: preserve their embedded PBR materials and textures
+        // instead of replacing with a flat tint. Only FBX creatures (which
+        // often have no proper materials) get the override material. GLB
+        // models from Sketchfab ship with full PBR setups that look much
+        // better when preserved.
+        if (isGlb && !texture) {
+          // Preserve GLB materials — just enable shadows and track geometry
+          root.traverse((child) => {
+            if (child instanceof THREE.Mesh || child instanceof THREE.SkinnedMesh) {
+              child.castShadow = true;
+              child.receiveShadow = true;
+              // Upgrade Lambert/Phong to Standard for PBR consistency
+              const mats = Array.isArray(child.material) ? child.material : [child.material];
+              for (let i = 0; i < mats.length; i++) {
+                const m = mats[i];
+                if (m instanceof THREE.MeshLambertMaterial || m instanceof THREE.MeshPhongMaterial) {
+                  const std = new THREE.MeshStandardMaterial({
+                    color: (m as any).color,
+                    map: (m as any).map,
+                    roughness: 0.8,
+                    metalness: 0.05,
+                    envMapIntensity: 0.5,
+                  });
+                  if (Array.isArray(child.material)) (child.material as THREE.Material[])[i] = std;
+                  else child.material = std;
+                  this.allMaterials.push(std);
+                  m.dispose();
+                }
+              }
+              if (child.geometry) this.allGeometries.push(child.geometry);
             }
-            if (child.geometry) this.allGeometries.push(child.geometry);
-          }
-        });
+          });
+        } else {
+          // FBX path or explicit texture override — replace all materials
+          const mat = new THREE.MeshStandardMaterial({
+            map:             texture ?? undefined,
+            color:           texture ? 0xffffff : (def.color ?? 0xaaaaaa),
+            roughness:       0.82,
+            metalness:       0.05,
+            envMapIntensity: 0.5,
+          });
+          this.allMaterials.push(mat);
+
+          root.traverse((child) => {
+            if (child instanceof THREE.Mesh || child instanceof THREE.SkinnedMesh) {
+              child.castShadow = true;
+              child.receiveShadow = true;
+              if (Array.isArray(child.material)) {
+                child.material = child.material.map(() => mat);
+              } else {
+                child.material = mat;
+              }
+              if (child.geometry) this.allGeometries.push(child.geometry);
+            }
+          });
+        }
 
         // Measured *after* scale.setScalar above, so the bbox is in
         // post-scale local units. Saves us from re-measuring per spawn.
@@ -897,7 +953,7 @@ export class AssetManager {
       if (isGltf) {
         this.gltfLoader.load(
           def.fbxPath,
-          (gltf) => finish(gltf.scene, gltf.animations ?? []),
+          (gltf) => finish(gltf.scene, gltf.animations ?? [], true),
           undefined,
           (err) => {
             console.warn(`[AssetManager] GLB failed (${def.key}):`, err);
@@ -907,7 +963,7 @@ export class AssetManager {
       } else {
         this.fbxLoader.load(
           def.fbxPath,
-          (fbx) => finish(fbx, fbx.animations),
+          (fbx) => finish(fbx, fbx.animations, false),
           undefined,
           (err) => {
             console.warn(`[AssetManager] FBX failed (${def.key}):`, err);

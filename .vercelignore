@@ -8,8 +8,6 @@ artifacts/arpg-game/public/bestiary/
 artifacts/arpg-game/public/assets/
 artifacts/arpg-game/public/decoders/
 artifacts/arpg-game/public/vendor/
-artifacts/website/public/icons/
-artifacts/website/public/images/
 artifacts/website/dist/
 
 # ── Large non-deployable directories ────────────────────────────────────
@@ -32,19 +30,22 @@ skills-lock.json
 07_creation_origin.png
 
 # ── Screenshots / design docs ──────────────────────────────────────────
+# Blanket-exclude loose screenshots/mockups in the repo root, but whitelist
+# all images inside the website and arpg-game public directories — these
+# are needed at runtime (marketing site, game loading screens, perk icons).
 *.png
 *.jpg
-!artifacts/website/public/grudges-logo.png
-!artifacts/website/public/grudges-bg-city.png
-!artifacts/website/public/grudges-bg-banner.png
-!artifacts/website/public/grudges-landing.png
-!artifacts/website/public/opengraph.jpg
+!artifacts/website/public/**/*.png
+!artifacts/website/public/**/*.jpg
+!artifacts/website/public/*.png
+!artifacts/website/public/*.jpg
 !artifacts/website/public/favicon.svg
 !artifacts/arpg-game/public/grudges-logo.png
 !artifacts/arpg-game/public/grudges-landing.png
 !artifacts/arpg-game/public/grudges-loading-1.png
 !artifacts/arpg-game/public/grudges-loading-2.png
 !artifacts/arpg-game/public/bosslogo.png
+!artifacts/arpg-game/public/icons/**/*.png
 
 # ── Build artifacts ────────────────────────────────────────────────────
 node_modules/

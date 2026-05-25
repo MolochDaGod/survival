@@ -27,12 +27,12 @@ export interface MilestoneEffectBag {
 // Each stat has 6 milestones (levels 1-6). Index 0 = milestone 1.
 
 const BIO_EFFECTS: MilestoneEffectBag[] = [
-  { maxHp: 5,  bleedResist: 0.10 },                                          // Iron Constitution
-  { maxHp: 10, toxinResist: 0.15, hpRegen: 0.5 },                            // Cellular Regen
-  { maxHp: 20, implantSlots: 1, toxinResist: 0.30 },                         // Augment Compatibility
-  { maxHp: 35, hpRegen: 1.5, diseaseImmune: 1 },                             // Nanoflesh Matrix
-  { maxHp: 55, hpRegen: 2.5, combatRegen: 1 },                               // Apex Physiology
-  { maxHp: 80, deathDefiance: 1 },                                            // Undying Protocol
+  { maxHp: 5,  bleedResist: 0.10, maxOxygen: 2 },                            // Iron Constitution
+  { maxHp: 10, toxinResist: 0.15, hpRegen: 0.5, maxOxygen: 2 },              // Cellular Regen
+  { maxHp: 20, implantSlots: 1, toxinResist: 0.30, maxOxygen: 2 },           // Augment Compatibility
+  { maxHp: 35, hpRegen: 1.5, diseaseImmune: 1, maxOxygen: 2 },               // Nanoflesh Matrix
+  { maxHp: 55, hpRegen: 2.5, combatRegen: 1, maxOxygen: 2 },                 // Apex Physiology
+  { maxHp: 80, deathDefiance: 1, maxOxygen: 2 },                              // Undying Protocol
 ];
 
 const NEU_EFFECTS: MilestoneEffectBag[] = [
@@ -45,12 +45,12 @@ const NEU_EFFECTS: MilestoneEffectBag[] = [
 ];
 
 const KIN_EFFECTS: MilestoneEffectBag[] = [
-  { moveSpeed: 0.05, fallDmgResist: 0.10 },                                  // Fleet Footed
-  { meleeDamage: 0.10, staminaRegen: 0.5 },                                  // Combat Cadence
-  { moveSpeed: 0.15, zeroGCombat: 1, dodgeWindow: 0.020 },                   // Zero-G Trained
-  { meleeDamage: 0.25, momentumStrikes: 1 },                                 // Kinetic Amplifier
-  { sprintFree: 1, aerialAssault: 1 },                                       // Apex Predator
-  { knockbackImmune: 1, groundSlam: 1, meleeDamage: 0.40 },                  // Unstoppable Force
+  { moveSpeed: 0.05, fallDmgResist: 0.10, swimSpeed: 0.05, climbSpeed: 0.05 }, // Fleet Footed
+  { meleeDamage: 0.10, staminaRegen: 0.5, swimSpeed: 0.05, climbSpeed: 0.05 }, // Combat Cadence
+  { moveSpeed: 0.15, zeroGCombat: 1, dodgeWindow: 0.020, swimSpeed: 0.05, climbSpeed: 0.10 }, // Zero-G Trained
+  { meleeDamage: 0.25, momentumStrikes: 1, swimSpeed: 0.05, climbSpeed: 0.10 }, // Kinetic Amplifier
+  { sprintFree: 1, aerialAssault: 1, swimSpeed: 0.05, climbSpeed: 0.10 },     // Apex Predator
+  { knockbackImmune: 1, groundSlam: 1, meleeDamage: 0.40, swimSpeed: 0.05, climbSpeed: 0.10 }, // Unstoppable Force
 ];
 
 const QNT_EFFECTS: MilestoneEffectBag[] = [
@@ -81,12 +81,12 @@ const CHR_EFFECTS: MilestoneEffectBag[] = [
 ];
 
 const ENT_EFFECTS: MilestoneEffectBag[] = [
-  { equipDurability: 0.20, salvageYield: 0.10, repairCostReduce: 0.15 },     // Hardy Materials
-  { salvageDrone: 1, resourceSpoilage: -0.30, corrosionResist: 1 },          // Decay Shield
-  { repairPylon: 1, degradedCraft: 1, repairCostReduce: 0.25 },              // Reclamation Expert
-  { entropyField: 1, gearMinDurability: 0.10 },                              // Entropy Sink
-  { fieldRecycler: 1, corrosionImmune: 1 },                                  // Void Preservation
-  { gearIndestructible: 1, deployableDuration: 0.50, passiveHpRegen: 1 },    // Eternal Engine
+  { equipDurability: 0.20, salvageYield: 0.10, repairCostReduce: 0.15, oxygenRegen: 0.15 }, // Hardy Materials
+  { salvageDrone: 1, resourceSpoilage: -0.30, corrosionResist: 1, oxygenRegen: 0.15 },      // Decay Shield
+  { repairPylon: 1, degradedCraft: 1, repairCostReduce: 0.25, oxygenRegen: 0.15 },          // Reclamation Expert
+  { entropyField: 1, gearMinDurability: 0.10, oxygenRegen: 0.15 },                          // Entropy Sink
+  { fieldRecycler: 1, corrosionImmune: 1, oxygenRegen: 0.15 },                              // Void Preservation
+  { gearIndestructible: 1, deployableDuration: 0.50, passiveHpRegen: 1, oxygenRegen: 0.15 }, // Eternal Engine
 ];
 
 const GRA_EFFECTS: MilestoneEffectBag[] = [

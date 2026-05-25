@@ -1,6 +1,10 @@
+# ── Railway only builds the api-server (Dockerfile). Everything else
+# deploys to Vercel. Ignore as much as possible to shrink build context.
 node_modules
 .vercel
 dist
+
+# ── Binary assets (served from R2 CDN) ──────────────────────────────────
 *.png
 *.jpg
 *.jpeg
@@ -15,22 +19,24 @@ dist
 *.blend
 *.zip
 *.tar.gz
-attached_assets
-artifacts/arpg-game/public/models
-artifacts/arpg-game/public/textures
-artifacts/arpg-game/public/icons
-artifacts/arpg-game/public/locations
-artifacts/arpg-game/public/books
-artifacts/arpg-game/public/bestiary
-artifacts/arpg-game/public/vendor
-artifacts/arpg-game/public/lore
-artifacts/arpg-game/public/decoders
-artifacts/arpg-game/dist
-artifacts/website/dist
-artifacts/website/public/images
-artifacts/admin/dist
+
+# ── Frontend artifacts — NOT deployed to Railway ────────────────────────
+artifacts/arpg-game
+artifacts/website
+artifacts/admin
 artifacts/asset-studio
+artifacts/mockup-sandbox
+
+# ── Client-only libs — not needed by the api-server ────────────────────
+lib/api-client-react
+lib/game-systems
+
+# ── Misc ────────────────────────────────────────────────────────────────
+attached_assets
 Lore-Weaver
 tests
+scripts
 .git
 .agents
+.canvas
+.github
