@@ -1,64 +1,89 @@
-# GRUDGES — Bind a grudge. Bear it forward.
+# GRUDGES — Nexus Era Survival-RTS-MMO
 
-A sci-fi survival ARPG set a century after alien contact. Build, fight, trade, and explore a 6.4 km² procedural world that rewards preparation and punishes carelessness.
+A sci-fi survival RPG set a century after The Way sealed the orbital elevators. Five factions claw for the surface. Build, fight, trade, climb, swim, and survive a 6.4 km² procedural world.
 
-> *They left us behind. Twelve percent went to the stars. Sixty-eight percent rose to the stratocolonies. The rest of us stayed on the surface and learned how to bury our own.*
+> *They called it Earth. We call it ours now. The difference is that we stayed.*
 
 ## Live
 
 | Domain | Role | URL |
 |---|---|---|
-| **survival.grudge-studio.com** | Game — play, character creation, gameplay | [survival.grudge-studio.com](https://survival.grudge-studio.com) |
-| **grudges.grudge-studio.com** | Lore Weaver — world lore, attribute deep-dives, faction guides | [grudges.grudge-studio.com](https://grudges.grudge-studio.com) |
-| Game Client | Playable game (via either domain) | `/arpg-game/` |
+| **survival.grudge-studio.com** | Game client + character creation | [survival.grudge-studio.com](https://survival.grudge-studio.com) |
+| **grudges.grudge-studio.com** | Lore Weaver — world lore, faction guides | [grudges.grudge-studio.com](https://grudges.grudge-studio.com) |
+| Game Client | Playable game | `/arpg-game/` |
 | Lore & Factions | Five faction histories, timeline | `/lore.html` |
-| Stats Guide | 8 attributes, 37 derived stats, perk tiers | `/stats-guide.html` |
+| Stats Guide | 8 Nexus attributes, 37 derived stats, perk tiers | `/stats-guide.html` |
 | How It Plays | Combat, building, professions overview | `/info.html` |
 | Admin Panel | Prefab, spawn rules, asset management | `/admin/` |
 | Asset Studio | Asset browser & pipeline | `/asset-studio/` |
 | API Server | Backend (Railway) | `grudge-nexus-api-production.up.railway.app/api` |
-| Asset CDN | 4,264 files on Cloudflare R2 | `assets.grudge-studio.com` |
+| WebSocket | Co-op realtime (Railway, direct) | `wss://grudge-nexus-api-production.up.railway.app/api/realtime` |
+| Asset CDN | Cloudflare R2 | `assets.grudge-studio.com` |
 
 ## The Game
 
-**Grudges** is an open-world survival RPG featuring:
+**Grudges** is an open-world survival-RTS-MMO featuring:
 
-- **Open World** — 6,400 m × 6,400 m procedural terrain with 9 biomes, 8 towns, 4 camps, 4 caves, and 4 outposts. Hunger, thirst, temperature, and faction hostility are constant.
-- **Township Building** — Modular building system (foundations, walls, doors, windows, stairs, roofs). Your settlement grows through 5 tiers: Camp → Tribe → Village → Town → Stronghold.
-- **7 Professions, 35 Branches** — Gathering, Hunting, Crafting, Township, Survival, Chemistry, Combat. 147 learnable skills. Master skills require full branch completion.
-- **8 Core Attributes** — Biomass, Neural Integrity, Kinetic Efficiency, Quantum Aptitude, Synthetic Affinity, Chronal Stability, Entropic Resistance, Gravitic Harmony. 37 derived stats with diminishing returns.
-- **Diablo-Style Loot** — 73 affixes across 8 tiers (Scrap → Legendary). Slot-aware rolling: weapon-only affixes (damage, procs, elemental) never appear on armor; armor-exclusive affixes (reinforced, tenacity, block) never appear on weapons.
-- **Modular Gear** — Visual equipment overlay system. Equipping armor replaces character mesh regions (head, body, legs, feet) with gear models. Per-drop colour tinting from tier-aware palettes.
-- **Action Combat** — Weapon-stance locomotion, animation-synced hit windows, 3-step combo chains, projectile system with raycasted collision, dynamic crosshair with spread bloom and hit markers.
-- **21 Weapon Types** — Swords, axes, daggers, maces, bows, staves, guns, shields, spears, crossbows, scythes, wands, and more. Each with unique attack clips, block stances, and combo chains.
-- **30+ Creatures** — 6 hostile humanoids, 6 animated creatures, 3 sci-fi units, 4 endgame mechs, 7 farm animals, 7 fish. Biome-weighted spawn tables.
-- **15 NPC Roles** — Woodcutter, Miner, Farmer, Stall Vendor, Caravan Master, Sentry, Captain, Diplomat, and more. Goal-stack AI with YUKA steering.
-- **14 Deployable Entities** — Turrets, drones, mechs, and beacons tied to CHR/ENT/GRA stat milestones.
-- **Living NPCs** — Every NPC runs the same stats, perks, and XP system you do. Sentiment-driven faction reactions.
+- **Open World** — 6,400 m × 6,400 m procedural terrain with 9 biomes (DeepOcean, Ocean, ShallowSea, Beach, Grassland, Forest, Highland, Mountain, SnowPeak), 8 towns, 4 camps, 4 caves, 4 outposts. Custom biome shader (snow SSS, volumetric grass blades, forest scatter, desert warmth, IQ fog).
+- **Five Factions** — Keepers of the Old Faith, Tech-Scavengers, Hollow Lords, The Network, The Forgotten. Each has territory, vendors, contracts, and standing enemies.
+- **Township Building** — Modular building system (foundations, walls, doors, windows, stairs, roofs). Settlement tiers: Camp → Tribe → Village → Town → Stronghold.
+- **7 Professions, 35 Branches** — Gathering, Hunting, Crafting, Township, Survival, Chemistry, Combat. 147 learnable skills.
+- **8 Nexus Attributes** — Biomass (BIO), Neural Integrity (NEU), Kinetic Efficiency (KIN), Quantum Aptitude (QNT), Synthetic Affinity (SYN), Chronal Stability (CHR), Entropic Resistance (ENT), Gravitic Harmony (GRA). 37 derived stats with diminishing returns. 6 milestone perks per stat.
+- **Swimming & Climbing** — Stat-tied traversal. BIO increases oxygen capacity (+2s/level). ENT improves oxygen regen. KIN boosts swim/climb speed. GRA ≥ 3 unlocks wall-run burst. Stamina-gated climbing with forward raycast wall detection.
+- **55+ Creatures** — 6 humanoid hostiles, 6 animated creatures, 5 sci-fi units, 6 endgame mechs, 23 Nexus-era surface creatures (from GLB attached assets), 7 farm animals, 9 fish/aquatic. Biome-weighted spawn tables across 5 lore biomes (permafrost, glasslands, derelict-sprawl, anomaly-field, cinder-wastes).
+- **Diablo-Style Loot** — 73 affixes across 8 tiers (Scrap → Legendary). Slot-aware rolling.
+- **Modular Gear** — Visual equipment overlay system with per-drop colour tinting.
+- **Action Combat** — Weapon-stance locomotion, animation-synced hit windows, 3-step combo chains, projectile system, dynamic crosshair.
+- **21 Weapon Types** — Swords, axes, daggers, maces, bows, staves, guns, shields, spears, crossbows, scythes, wands, and more.
+- **Co-op Multiplayer** — Room-based co-op via WebSocket (msgpack binary protocol, 20 Hz state broadcast, token-bucket rate limiting). Host/join with 6-character room codes.
+- **15 NPC Roles** — Goal-stack AI with YUKA steering. Sentiment-driven faction reactions.
+- **14 Deployable Entities** — Turrets, drones, mechs, beacons tied to CHR/ENT/GRA stat milestones.
+- **Highland Rock Scatter** — Procedural boulder props (jittered dodecahedron) instanced per chunk in Highland/Mountain biomes.
+- **Weather System** — Rain, fog, gloom cycling. Procedural sky with sun-direction fog warmth.
 
 ## Architecture
 
-Monorepo (`pnpm workspace`) with 7 packages:
+Monorepo (`pnpm workspace`) with 8 packages:
 
 | Package | Purpose |
 |---|---|
 | `artifacts/website` | Marketing site (Vite + React + Tailwind + Framer Motion) |
 | `artifacts/arpg-game` | Game client (Three.js + Rapier physics + React) |
-| `artifacts/api-server` | API server (Express + Drizzle + PostgreSQL) |
+| `artifacts/api-server` | API server (Express + Drizzle + PostgreSQL + WebSocket) |
 | `artifacts/admin` | Admin panel (React + Vite) |
 | `artifacts/asset-studio` | Asset browser & pipeline (React + Three.js) |
-| `lib/game-systems` | Shared game logic (attributes, loot, combat, deployables, tiers) |
+| `artifacts/chat-worker` | Cloudflare Worker (deployed separately via wrangler) |
+| `lib/game-systems` | Shared game logic (attributes, loot, combat, perks, deployables) |
 | `lib/db` | Database schema (Drizzle ORM + PostgreSQL) |
 
 ## Stack
 
-- **Frontend**: Vercel (auto-deploy from `main`)
-- **Backend**: Railway (Docker) via `Dockerfile` + `railway.json`
-- **Database**: PostgreSQL 17 (Drizzle ORM)
-- **Assets**: Cloudflare R2 CDN — 4,264 files, 1.5 GB synced via `scripts/sync-assets-to-r2.mjs`
+- **Frontend**: Vercel (`survival` project, auto-deploy from `main`)
+- **Backend**: Railway (`zealous-love` project, Docker via `Dockerfile`)
+- **Database**: PostgreSQL 17 on Railway (Drizzle ORM, 4 tables: accounts, characters, prefabs, spawn_rules)
+- **Realtime**: WebSocket on Railway (`/api/realtime`, msgpack, origin-validated)
+- **Assets**: Cloudflare R2 CDN (`assets.grudge-studio.com`)
 - **Auth**: Puter.js (browser) → Grudge ID → account upsert (server)
-- **DNS/CDN**: Cloudflare (grudge-studio.com)
-- **Tests**: Vitest — 303 tests (loot simulation, deployable alignment, gear visual, NPC recruit)
+- **DNS/CDN**: Cloudflare (grudge-studio.com) — wildcard CORS via regex matching
+- **Tests**: Vitest
+
+## API Routes
+
+All routes live under `/api` on the Railway backend:
+
+| Route | Method | Purpose |
+|---|---|---|
+| `/api/healthz` | GET | Health check |
+| `/api/accounts/upsert` | POST | Get-or-create account by Grudge ID |
+| `/api/accounts/:grudgeId` | GET | Read account |
+| `/api/characters` | CRUD | Character management |
+| `/api/savegame/:sessionId` | GET/POST/DELETE | Cloud save (R2-backed) |
+| `/api/prefabs` | CRUD | Prefab registry (admin) |
+| `/api/spawn-rules` | CRUD | Biome spawn rules (admin) |
+| `/api/admin/*` | Various | Admin operations (requires ADMIN_TOKEN) |
+| `/api/stats/*` | GET | Stat catalog |
+| `/api/assets/*` | GET | Asset catalog (R2 bridge) |
+| `/api/realtime` | WebSocket | Co-op multiplayer (msgpack binary) |
 
 ## Quick Start
 
@@ -90,10 +115,17 @@ pnpm run typecheck
 ### Frontend (Vercel)
 Pushes to `main` auto-deploy. Sub-apps (arpg-game, admin, asset-studio) are merged into the website output by `scripts/merge-outputs.mjs`.
 
+Vercel env vars (set in dashboard):
+- `VITE_WS_URL=wss://grudge-nexus-api-production.up.railway.app`
+- `VITE_GRUDGE_API_BASE=https://grudge-nexus-api-production.up.railway.app`
+- `VITE_ASSET_CDN_URL=https://assets.grudge-studio.com/grudge-nexus`
+
 ### Backend (Railway)
+Project: `zealous-love`. Only `@workspace/api-server` + Postgres live here.
+
 ```bash
-railway login && railway link
-railway up              # deploys via Dockerfile
+railway login && railway link  # select zealous-love → api-server
+railway up                     # deploys via Dockerfile
 ```
 
 Or via Docker Compose (self-hosted):
@@ -102,31 +134,35 @@ cp .env.example .env    # fill in production values
 docker compose up -d --build
 ```
 
+See [`railway-env.md`](railway-env.md) for the complete env var reference.
+
 ### Database Schema
 ```bash
-# Push Drizzle schema to production DB
-DATABASE_URL=<your-url> pnpm db:push
+# Push Drizzle schema to production DB (use public proxy URL)
+$env:DATABASE_URL="postgresql://postgres:xxx@zephyr.proxy.rlwy.net:41964/railway"
+pnpm db:push
 ```
 
 ### Asset CDN Sync
 ```bash
-# Requires R2 credentials in .env
 node scripts/sync-assets-to-r2.mjs --dry-run   # preview
-node scripts/sync-assets-to-r2.mjs              # full sync (~1.5 GB)
+node scripts/sync-assets-to-r2.mjs              # full sync
 ```
 
 ## Environment Variables
 
-See [`.env.example`](.env.example) for the full list. Key variables:
+See [`.env.example`](.env.example) for the full list and [`railway-env.md`](railway-env.md) for production values.
 
 | Variable | Purpose |
 |---|---|
 | `DATABASE_URL` | PostgreSQL connection string |
+| `CORS_ORIGINS` | Wildcard-capable origin allowlist (e.g. `https://*.vercel.app`) |
+| `ADMIN_TOKEN` | Admin route auth (hex, 48+ chars) |
 | `CF_ACCOUNT_ID` | Cloudflare account (R2 S3 endpoint) |
 | `OBJECT_STORAGE_KEY/SECRET` | R2 access credentials |
 | `R2_BUCKET_ASSETS` | R2 bucket name (default: `grudge-assets`) |
-| `VITE_ASSET_CDN_URL` | CDN URL for game assets (set in Vercel) |
-| `CORS_ORIGINS` | Allowed origins for API |
+| `VITE_WS_URL` | WebSocket URL for co-op (Vercel env, points to Railway) |
+| `VITE_ASSET_CDN_URL` | CDN URL for game assets (Vercel env) |
 
 ## Credits
 

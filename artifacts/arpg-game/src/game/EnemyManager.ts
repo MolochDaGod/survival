@@ -252,6 +252,13 @@ export class EnemyManager {
       modelGroup.position.y = footOffsetY;
       group.add(modelGroup);
 
+      // Measure the actual rendered height after foot-offset so the health
+      // bar sits just above the model's head, regardless of scale/origin.
+      modelGroup.updateMatrixWorld(true);
+      const hpBox = new THREE.Box3().setFromObject(modelGroup);
+      const modelTop = isFinite(hpBox.max.y) ? hpBox.max.y : 2.0;
+      group.userData.hpBarY = modelTop + 0.35;
+
       // Pre-create one action per logical state (idle/walk/attack/death) so
       // the per-frame `updateEnemyAnimState` call can crossfade between them
       // without hitting `mixer.clipAction()` in the hot loop. If a rig is
@@ -635,15 +642,19 @@ export class EnemyManager {
   }
 
   private addHealthBar(group: THREE.Group) {
+    // Use per-creature height when available (set during spawn after
+    // auto-scale + foot-offset), or fall back to the legacy 2.6 m.
+    const barY = group.userData.hpBarY ?? 2.6;
+
     const hbarBg = new THREE.Mesh(this.sharedHpBgGeo, this.sharedHpBgMat);
-    hbarBg.position.y       = 2.6;
+    hbarBg.position.y       = barY;
     hbarBg.userData.isHpBg  = true;
     group.add(hbarBg);
 
     const hbarGeo = new THREE.PlaneGeometry(0.78, 0.06);
     const hbarMat = this.sharedHpMat.clone();
     const hbar    = new THREE.Mesh(hbarGeo, hbarMat);
-    hbar.position.set(0, 2.6, 0.01);
+    hbar.position.set(0, barY, 0.01);
     hbar.userData.isHpBar = true;
     group.add(hbar);
   }

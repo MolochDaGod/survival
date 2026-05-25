@@ -28,6 +28,7 @@ interface ChunkEntry {
   terrain: THREE.Mesh;
   trees: THREE.InstancedMesh | null;
   winterTrees?: THREE.InstancedMesh[];
+  rocks?: THREE.InstancedMesh | null;
 }
 
 // ─── Shared materials ─────────────────────────────────────────────────────────
@@ -50,6 +51,30 @@ const foliageMat = new THREE.MeshStandardMaterial({
 
 const _trunkGeo = new THREE.CylinderGeometry(0.28, 0.46, 7, 6);
 const _folGeo   = new THREE.ConeGeometry(4, 9, 7);
+
+// ─── Shared rock geometry + material ──────────────────────────────────────────
+// Irregular boulder approximated by a subdivided dodecahedron with vertex jitter.
+const _rockGeo = (() => {
+  const g = new THREE.DodecahedronGeometry(1.0, 1);
+  const p = g.attributes.position as THREE.BufferAttribute;
+  for (let i = 0; i < p.count; i++) {
+    p.setXYZ(
+      i,
+      p.getX(i) + (Math.random() - 0.5) * 0.25,
+      p.getY(i) + (Math.random() - 0.5) * 0.25,
+      p.getZ(i) + (Math.random() - 0.5) * 0.25,
+    );
+  }
+  g.computeVertexNormals();
+  return g;
+})();
+
+const rockMat = new THREE.MeshStandardMaterial({
+  color: 0x686860,
+  roughness: 0.95,
+  metalness: 0.02,
+  envMapIntensity: 0.3,
+});
 
 // ─── Manager ─────────────────────────────────────────────────────────────────
 
@@ -122,6 +147,7 @@ export class WorldChunkManager {
     let forestCount = 0;
     const forestSlots: Array<{ lx: number; lz: number; h: number }> = [];
     const winterSlots: Array<{ wx: number; wz: number; h: number }> = [];
+    const rockSlots:   Array<{ wx: number; wz: number; h: number }> = [];
 
     for (let i = 0; i < pos.count; i++) {
       // PlaneGeometry lies in local XY; after rotation.x = -π/2:
@@ -148,6 +174,11 @@ export class WorldChunkManager {
       // Collect winter-biome sites for GLB tree placement
       if ((biome === Biome.Mountain || biome === Biome.SnowPeak) && (i % 8 === 0)) {
         winterSlots.push({ wx, wz, h });
+      }
+
+      // Collect highland/mountain sites for rock + crystal scatter
+      if ((biome === Biome.Highland || biome === Biome.Mountain) && (i % 12 === 0)) {
+        rockSlots.push({ wx, wz, h });
       }
     }
 
@@ -226,11 +257,38 @@ export class WorldChunkManager {
       }
     }
 
+    // ── Highland rock scatter ──────────────────────────────────────────────────
+    // Procedural rocks for Highland/Mountain biomes (same instancing pattern as trees).
+    const rockCount = Math.min(rockSlots.length, 10);
+    let rockInst: THREE.InstancedMesh | null = null;
+    if (rockCount > 0) {
+      rockInst = new THREE.InstancedMesh(_rockGeo, rockMat, rockCount);
+      rockInst.castShadow = true;
+      rockInst.receiveShadow = true;
+      const dummy = new THREE.Object3D();
+      const step = Math.max(1, Math.floor(rockSlots.length / rockCount));
+      let placed = 0;
+      for (let si = 0; si < rockSlots.length && placed < rockCount; si += step) {
+        const slot = rockSlots[si];
+        const scale = 0.5 + Math.random() * 1.5;
+        dummy.position.set(slot.wx, slot.h + 0.3 * scale, slot.wz);
+        dummy.scale.set(scale, scale * (0.6 + Math.random() * 0.5), scale);
+        dummy.rotation.set(Math.random() * 0.3, Math.random() * Math.PI * 2, Math.random() * 0.3);
+        dummy.updateMatrix();
+        rockInst.setMatrixAt(placed, dummy.matrix);
+        placed++;
+      }
+      rockInst.count = placed;
+      rockInst.instanceMatrix.needsUpdate = true;
+      rockInst.layers.enable(LAYERS.WORLD);
+      this.scene.add(rockInst);
+    }
+
     // Seed harvestable resource nodes for this chunk (safe no-op if duplicate).
     try { getResourceSystem().seedChunk(cx, cz, CHUNK_SIZE); } catch { /* scene not ready */ }
 
     const key = `${cx},${cz}`;
-    this.chunks.set(key, { cx, cz, terrain, trees, winterTrees });
+    this.chunks.set(key, { cx, cz, terrain, trees, winterTrees, rocks: rockInst });
 
     // Plant decorative grass on top of this chunk (only on Grass/Forest
     // biomes — the GrassSystem itself filters out water, beach, mountain).
@@ -252,6 +310,10 @@ export class WorldChunkManager {
         // Geometry and material are owned by WinterTreeSystem prefabs — do not dispose here
       }
     }
+    if (entry.rocks) {
+      this.scene.remove(entry.rocks);
+      // Don't dispose _rockGeo / rockMat — shared across all chunks
+    }
     // Tear down the grass instance for this chunk so it doesn't leak GPU
     // memory as the player moves across the world.
     this.grass?.destroyChunk(entry.cx, entry.cz);
@@ -265,6 +327,8 @@ export class WorldChunkManager {
     foliageMat.dispose();
     _trunkGeo.dispose();
     _folGeo.dispose();
+    _rockGeo.dispose();
+    rockMat.dispose();
     // Release prefab geometry/materials owned by the winter tree system
     try { getWinterTreeSystem().dispose(); } catch { /* not initialised — safe to skip */ }
   }

@@ -37,6 +37,7 @@ import { InteriorPortalSystem } from './world/InteriorPortalSystem';
 import { SwimController } from './world/water/SwimController';
 import { FishingSystem } from './world/water/FishingSystem';
 import { BoatSystem } from './world/water/BoatSystem';
+import { ClimbController } from './world/ClimbController';
 import { groundY } from './GroundSampler';
 import { CitySpawner } from './ai/CitySpawner';
 import { initPhysics, PhysicsWorld } from './physics/PhysicsWorld';
@@ -108,6 +109,7 @@ export class GameEngine {
    *  on the existing LMB pipeline; boat listens on the unified INTERACT
    *  key (KeyE) for board/disembark. */
   private swimController: SwimController | null = null;
+  private climbController: ClimbController | null = null;
   private fishingSystem: FishingSystem | null = null;
   private boatSystem: BoatSystem | null = null;
   /** Survival provider passed into ModularBuilding; UI swaps it in via setSurvivalProvider. */
@@ -465,7 +467,13 @@ export class GameEngine {
         this.player,
         this.sceneBuilder.water,
       );
+      // Wire perk effects → swim stats (BIO → oxygen, ENT → regen, KIN → speed)
+      this.swimController.readStat = (key) => readEffect(this.perkEffects, key);
       this.swimController.onSplash = (pos) => this.sceneBuilder?.splashFX.splash(pos);
+
+      // ClimbController: raycast-based wall climbing tied to KIN/GRA stats.
+      this.climbController = new ClimbController(this.player, this.scene);
+      this.climbController.readStat = (key) => readEffect(this.perkEffects, key);
 
       // FishingSystem: triggered through handleFishingClick (LMB capture).
       this.fishingSystem = new FishingSystem(
@@ -881,6 +889,7 @@ export class GameEngine {
       const p = this.player.position;
       this.swimController.update(dt, groundY(p.x, p.z));
     }
+    this.climbController?.update(dt);
     this.fishingSystem?.update(dt);
     this.boatSystem?.update(dt);
     this.sceneBuilder?.updateSky(nowSec, this.camera.aspect);
@@ -1252,7 +1261,7 @@ export class GameEngine {
     if (!this.player) return;
 
     // Nexus milestone effects from the 8-stat system
-    const nexusStats = this.characterConfig.grudgeStats;
+    const nexusStats = this.characterConfig.stats;
     const milestoneEffects = nexusStats ? getMilestoneEffects(nexusStats) : {};
 
     // 4-track perk tree effects (hero/warrior/smarts/maker)
@@ -1302,6 +1311,7 @@ export class GameEngine {
     if (this.boatSystem) { this.boatSystem.dispose(); this.boatSystem = null; }
     if (this.fishingSystem) { this.fishingSystem.dispose(); this.fishingSystem = null; }
     this.swimController = null;
+    this.climbController = null;
     if (this.projectileSystem) this.projectileSystem.clear();
     if (this.rainSystem) this.rainSystem.dispose();
     // Player.dispose() removes its own Rapier body from the world; dispose
