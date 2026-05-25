@@ -881,10 +881,10 @@ export const CharacterCreation: React.FC<CharacterCreationProps> = ({ onComplete
               <IdentityTab
                 gender={config.gender}
                 nameInput={nameInput}
-bodyProportion = { config.bodyProportion }
+                bodyProportion={config.bodyProportion}
                 onGenderChange={setGender}
                 onNameChange={setNameInput}
-onBodyProportionChange = { b => setConfig(p => ({ ...p, bodyProportion: b }))}
+                onBodyProportionChange={b => setConfig(p => ({ ...p, bodyProportion: b }))}
               />
             )}
             {activeTab === 'appearance' && (
@@ -1358,34 +1358,32 @@ const IdentityTab: React.FC<{
       ))}
     </div>
 
-  < SectionLabel > Character </SectionLabel>
-  < div style = {{ fontSize: 10, color: '#556677', marginBottom: 8, lineHeight: 1.5 }}>
-    Choose your look.Body shape sliders are in the < span style = {{ color: '#e8a030' }}> Looks </span> tab.
-      </div>
-      < div style = {{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 7, marginBottom: 18 }}>
-      {
-        availableTypes.map(bt => {
-          const selected = bodyProportion === bt.id;
-          return (
-            <button key= { bt.id } onClick = {() => onBodyProportionChange(bt.id)
-        } style = {{
-          cursor: 'pointer', padding: '10px 6px',
-          background: selected
-            ? 'linear-gradient(135deg,rgba(200,120,40,0.4),rgba(200,120,40,0.15))'
-            : 'rgba(255,255,255,0.03)',
-          border: selected ? '2px solid #c87820' : '2px solid rgba(255,255,255,0.07)',
-          borderRadius: 8, fontFamily: 'inherit',
-          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
-          transition: 'all 0.12s ease',
-        }} >
-        <span style={ { fontSize: 20 } }> { bt.icon } </span>
-          < span style = {{
-  fontSize: 9, fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase',
-    color: selected ? '#e8a030' : '#8899aa', textAlign: 'center', lineHeight: 1.2,
+    <SectionLabel>Character</SectionLabel>
+    <div style={{ fontSize: 10, color: '#556677', marginBottom: 8, lineHeight: 1.5 }}>
+      Choose your look. Body shape sliders are in the <span style={{ color: '#e8a030' }}>Looks</span> tab.
+    </div>
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 7, marginBottom: 18 }}>
+      {availableTypes.map(bt => {
+        const selected = bodyProportion === bt.id;
+        return (
+          <button key={bt.id} onClick={() => onBodyProportionChange(bt.id)} style={{
+            cursor: 'pointer', padding: '10px 6px',
+            background: selected
+              ? 'linear-gradient(135deg,rgba(200,120,40,0.4),rgba(200,120,40,0.15))'
+              : 'rgba(255,255,255,0.03)',
+            border: selected ? '2px solid #c87820' : '2px solid rgba(255,255,255,0.07)',
+            borderRadius: 8, fontFamily: 'inherit',
+            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
+            transition: 'all 0.12s ease',
+          }}>
+            <span style={{ fontSize: 20 }}>{bt.icon}</span>
+            <span style={{
+              fontSize: 9, fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase',
+              color: selected ? '#e8a030' : '#8899aa', textAlign: 'center', lineHeight: 1.2,
             }}>
-  { bt.label }
-  </span>
-  </button>
+              {bt.label}
+            </span>
+          </button>
         );
       })}
     </div>

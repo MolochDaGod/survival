@@ -683,7 +683,7 @@ export const DEFAULT_PERK_CHOICES: PerkChoices = {
 export const DEFAULT_CHARACTER_CONFIG: CharacterConfig = {
   name: 'Survivor',
   gender: 'female',
-  bodyProportion: 'superhero',
+  bodyProportion: 'adventurer',
   outfitId: 'none',
   hairStyleId: 'Hair_Long',
   skinColor: '#D4905A',

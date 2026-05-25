@@ -901,12 +901,10 @@ stroke = { color } strokeWidth = { thickness } strokeLinecap = "round" />
 
       {bestiaryOpen && <BestiaryBook onClose={handleCloseBestiary} />}
 
-{
-  worldMapOpen && (
-    <WorldMapOverlay
-          player={ playerPos }
-  onClose = {() => setWorldMapOpen(false)
-}
+      {worldMapOpen && (
+        <WorldMapOverlay
+          player={playerPos}
+          onClose={() => setWorldMapOpen(false)}
         />
       )}
 
@@ -1101,24 +1099,25 @@ stroke = { color } strokeWidth = { thickness } strokeLinecap = "round" />
  *  resource/trader landmarks.  Live enemy markers are merged in dynamically
  *  by the GameEngine subscription. */
 function seedMapMarkers(): MapMarker[] {
+  const { getSettlements } = require('../game/world/WorldGen') as typeof import('../game/world/WorldGen');
   const settlements = getSettlements();
   const markers: MapMarker[] = settlements.map(s => ({
     id: `settlement-${s.name}`,
     kind: s.type === 'town' ? 'town' as const
-      : s.type === 'cave' ? 'dungeon' as const
+        : s.type === 'cave' ? 'dungeon' as const
         : 'resource' as const,
     x: s.x,
     z: s.z,
     label: s.name,
     detail: s.type === 'town' ? 'Settlement · exploreable'
-      : s.type === 'camp' ? 'Survivor camp'
-        : s.type === 'cave' ? 'Cave entrance'
+          : s.type === 'camp' ? 'Survivor camp'
+          : s.type === 'cave' ? 'Cave entrance'
           : 'Outpost',
   }));
   // Static traders near spawn
   markers.push(
-    { id: 'trader1', kind: 'trader', x: -30, z: 25, label: 'Wandering Merch.', detail: 'Stocks ammo & medkits' },
-    { id: 'trader2', kind: 'trader', x: 60, z: -55, label: 'The Tinkerer', detail: 'Buys & repairs gear' },
+    { id: 'trader1', kind: 'trader', x: -30, z:  25, label: 'Wandering Merch.', detail: 'Stocks ammo & medkits' },
+    { id: 'trader2', kind: 'trader', x:  60, z: -55, label: 'The Tinkerer',     detail: 'Buys & repairs gear'  },
   );
   return markers;
 }

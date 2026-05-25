@@ -26,7 +26,6 @@ import { ItemDef, ItemStats, InventoryItem, EquipSlot } from '../game/Items';
 import { EquippedSet } from '../game/Inventory';
 import { SURVIVAL_ITEMS } from '../game/survival/SurvivalItems';
 import { RECIPES, CraftingStation } from '../game/survival/Recipes';
-import { getSettlements } from '../game/world/WorldGen';
 
 function checkWebGL(): boolean {
   try {
@@ -901,15 +900,6 @@ stroke = { color } strokeWidth = { thickness } strokeLinecap = "round" />
 
       {bestiaryOpen && <BestiaryBook onClose={handleCloseBestiary} />}
 
-{
-  worldMapOpen && (
-    <WorldMapOverlay
-          player={ playerPos }
-  onClose = {() => setWorldMapOpen(false)
-}
-        />
-      )}
-
       {professionsOpen && (
         <ProfessionsBook
           onClose={() => {
@@ -1097,28 +1087,20 @@ stroke = { color } strokeWidth = { thickness } strokeLinecap = "round" />
   );
 };
 
-/** Seed the world map with actual world settlements from WorldGen + known
- *  resource/trader landmarks.  Live enemy markers are merged in dynamically
- *  by the GameEngine subscription. */
+/** Seed the world map with a handful of known landmarks for the Adventure book.
+ *  Live enemy markers are merged in dynamically by the GameEngine subscription. */
 function seedMapMarkers(): MapMarker[] {
-  const settlements = getSettlements();
-  const markers: MapMarker[] = settlements.map(s => ({
-    id: `settlement-${s.name}`,
-    kind: s.type === 'town' ? 'town' as const
-      : s.type === 'cave' ? 'dungeon' as const
-        : 'resource' as const,
-    x: s.x,
-    z: s.z,
-    label: s.name,
-    detail: s.type === 'town' ? 'Settlement · exploreable'
-      : s.type === 'camp' ? 'Survivor camp'
-        : s.type === 'cave' ? 'Cave entrance'
-          : 'Outpost',
-  }));
-  // Static traders near spawn
-  markers.push(
-    { id: 'trader1', kind: 'trader', x: -30, z: 25, label: 'Wandering Merch.', detail: 'Stocks ammo & medkits' },
-    { id: 'trader2', kind: 'trader', x: 60, z: -55, label: 'The Tinkerer', detail: 'Buys & repairs gear' },
-  );
-  return markers;
+  return [
+    { id: 'town-1',  kind: 'town',     x:   0, z:  -40, label: 'Hollow Refuge',  detail: 'Survivor settlement · safe' },
+    { id: 'town-2',  kind: 'town',     x:  90, z:   60, label: 'Iron Hills',     detail: 'Trader hub · 4 vendors' },
+    { id: 'trader1', kind: 'trader',   x: -30, z:   25, label: 'Wandering Merch.', detail: 'Stocks ammo & medkits' },
+    { id: 'trader2', kind: 'trader',   x:  60, z:  -55, label: 'The Tinkerer',   detail: 'Buys & repairs gear' },
+    { id: 'res-1',   kind: 'resource', x: -50, z:  -10, label: 'Iron Vein',      detail: 'Mineable · 24 ore' },
+    { id: 'res-2',   kind: 'resource', x:  35, z:   18, label: 'Wild Berries',   detail: 'Forageable food' },
+    { id: 'res-3',   kind: 'resource', x: -75, z:   45, label: 'Spring Water',   detail: 'Fresh water source' },
+    { id: 'res-4',   kind: 'resource', x:  10, z:   90, label: 'Lumber Stand',   detail: 'Choppable trees' },
+    { id: 'dun-1',   kind: 'dungeon',  x: 110, z:  110, label: 'Sunken Vault',   detail: 'Tier 3 · sealed' },
+    { id: 'dun-2',   kind: 'dungeon',  x: -120, z:  80, label: 'Old Mine',       detail: 'Tier 1 · entrance open' },
+    { id: 'dun-3',   kind: 'dungeon',  x:  20, z: -130, label: 'Ironclad Bunker', detail: 'Tier 4 · keycard required' },
+  ];
 }
