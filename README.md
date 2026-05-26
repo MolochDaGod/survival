@@ -45,7 +45,7 @@ Both `grudges.grudge-studio.com` and `survival.grudge-studio.com` are custom dom
 
 ## Architecture
 
-Monorepo (`pnpm workspace`) with 8 packages:
+Monorepo (`pnpm workspace`) with 7 packages:
 
 | Package | Purpose |
 |---|---|
@@ -54,7 +54,6 @@ Monorepo (`pnpm workspace`) with 8 packages:
 | `artifacts/api-server` | API server (Express + Drizzle + PostgreSQL + WebSocket) |
 | `artifacts/admin` | Admin panel (React + Vite) |
 | `artifacts/asset-studio` | Asset browser & pipeline (React + Three.js) |
-| `artifacts/chat-worker` | Cloudflare Worker (deployed separately via wrangler) |
 | `lib/game-systems` | Shared game logic (attributes, loot, combat, perks, deployables) |
 | `lib/db` | Database schema (Drizzle ORM + PostgreSQL) |
 
