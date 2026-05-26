@@ -13,18 +13,20 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=EB+Garamond:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap" />
 <style>
   :root {
-    --bg-deep:#0a0604; --bg:#14100a; --panel:#1c1610; --panel-2:#221a12;
-    --gold:#c5a059; --gold-bright:#f0d088; --gold-dim:rgba(197,160,89,0.4);
-    --parchment:#e8d8a8; --ink:#2a1810; --muted:#9a8a6a; --dim:#6a5a3a;
-    --ember:#d4602a; --blood:#8a2020; --moss:#6e8a3a; --chill:#5a9ad8; --bone:#c8b890;
-    --green:#7ac874; --cyan:#6abdc5;
-    --rule:rgba(197,160,89,0.25); --rule-strong:rgba(197,160,89,0.55);
+    --bg-deep:#06080e; --bg:#0c1018; --panel:#111820; --panel-2:#151e2a;
+    --gold:#c5a059; --gold-bright:#f0d088; --gold-deep:#d4a84a; --gold-dim:rgba(197,160,89,0.4);
+    --parchment:#c8d8e8; --paper:#0e1420; --paper-2:#121828;
+    --ink:#dce4f0; --ink-soft:#8899b0; --muted:#607090; --dim:#4a5a78;
+    --ember:#e06030; --blood:#cc3838; --moss:#68a840; --chill:#4a9ee0; --bone:#8098b0;
+    --green:#50b848; --cyan:#38b0c8;
+    --rule:rgba(197,160,89,0.22); --rule-strong:rgba(197,160,89,0.45);
+    --rule-ink:rgba(100,140,180,0.15); --rule-ink-strong:rgba(100,140,180,0.30);
     --mono:'JetBrains Mono',ui-monospace,monospace;
     --display:'Cinzel',serif;
   }
   *{box-sizing:border-box}
-  html,body{margin:0;padding:0;background:var(--bg-deep);color:var(--parchment);font-family:'EB Garamond',Georgia,serif;line-height:1.6;-webkit-font-smoothing:antialiased}
-  a{color:var(--gold-bright);text-decoration:none;transition:color .15s}
+  html,body{margin:0;padding:0;background:var(--bg-deep);color:var(--ink);font-family:'EB Garamond',Georgia,serif;line-height:1.65;-webkit-font-smoothing:antialiased}
+  a{color:var(--gold-deep);text-decoration:none;transition:color .15s}
   a:hover{color:var(--ember)}
   h1,h2,h3,h4{font-family:var(--display);color:var(--gold-bright);letter-spacing:.03em;margin:0 0 .6rem;line-height:1.2}
   h1{font-size:clamp(2rem,3.6vw,3rem);font-weight:900}
@@ -43,82 +45,83 @@
   nav.site .play:hover{background:linear-gradient(to bottom,var(--gold-bright),var(--gold));color:var(--ink)}
 
   .container{max-width:1180px;margin:0 auto;padding:0 1.5rem}
-  .page-hero{padding:3.4rem 1.5rem 2.6rem;text-align:center;background:linear-gradient(to bottom,rgba(10,6,4,0.10),rgba(10,6,4,0.55));border-bottom:1px solid var(--rule)}
+  .page-hero{padding:3.4rem 1.5rem 2.6rem;text-align:center;background:linear-gradient(to bottom,rgba(8,12,20,0.92),rgba(12,18,28,0.96));border-bottom:1px solid var(--rule)}
   .page-hero .eyebrow{font-family:var(--display);color:var(--ember);letter-spacing:.25em;text-transform:uppercase;font-size:.85rem}
-  .page-hero p.lead{font-size:1.05rem;max-width:760px;margin:.8rem auto 0;opacity:.9}
+  .page-hero p.lead{font-size:1.05rem;max-width:760px;margin:.8rem auto 0;color:var(--parchment)}
 
   .level-info{display:flex;justify-content:center;gap:2rem;margin-top:1.5rem;flex-wrap:wrap}
   .level-info .li-item{text-align:center;min-width:90px}
   .level-info .li-val{color:var(--gold-bright);font-size:1.5rem;font-weight:700;font-family:var(--mono)}
-  .level-info .li-lbl{color:var(--muted);font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;margin-top:.2rem}
+  .level-info .li-lbl{color:var(--ink-soft);font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;margin-top:.2rem}
 
   .section{padding:2.4rem 0;border-bottom:1px solid var(--rule)}
   .section:last-child{border-bottom:0}
-  .section .lead-sm{color:var(--muted);font-size:.95rem;margin:-.2rem 0 1.4rem;max-width:780px}
+  .section .lead-sm{color:var(--ink-soft);font-size:.95rem;margin:-.2rem 0 1.4rem;max-width:780px}
 
   /* attributes */
   .attr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:1.1rem}
-  .attr-card{background:linear-gradient(to bottom,var(--panel),var(--panel-2));border:1px solid var(--rule);border-left:4px solid var(--gold);border-radius:0 4px 4px 0;padding:1.2rem 1.3rem;transition:transform .15s, border-color .15s}
-  .attr-card:hover{transform:translateY(-2px);border-left-color:var(--gold-bright)}
+  .attr-card{background:var(--panel);border:1px solid var(--rule-ink);border-left:4px solid var(--gold);border-radius:0 4px 4px 0;padding:1.2rem 1.3rem;transition:transform .15s, border-color .15s;box-shadow:0 2px 8px rgba(0,0,0,0.35)}
+  .attr-card:hover{transform:translateY(-2px);border-left-color:var(--ember)}
   .attr-head{display:flex;align-items:center;gap:.7rem;margin-bottom:.3rem}
-  .attr-head .ico{font-size:1.55rem;line-height:1;filter:drop-shadow(0 1px 3px rgba(0,0,0,.6))}
-  .attr-head h3{margin:0;font-size:1.15rem;color:var(--gold-bright);text-transform:none;letter-spacing:.04em}
-  .attr-card .role{display:inline-block;font-family:var(--display);font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;padding:2px 8px;border-radius:2px;background:rgba(197,160,89,0.12);color:var(--gold);margin-bottom:.6rem}
-  .attr-card .desc{color:var(--parchment);opacity:.85;font-size:.9rem;margin:.1rem 0 .8rem}
-  .gains{list-style:none;padding:0;margin:0;border-top:1px solid var(--rule)}
-  .gains li{display:flex;justify-content:space-between;gap:.8rem;padding:.32rem 0;font-size:.84rem;border-bottom:1px dashed rgba(197,160,89,0.10)}
+  .attr-head .ico{font-size:1.55rem;line-height:1;filter:drop-shadow(0 1px 2px rgba(29,17,8,.18))}
+  .attr-head h3{margin:0;font-size:1.15rem;color:var(--parchment);text-transform:none;letter-spacing:.04em}
+  .attr-card .role{display:inline-block;font-family:var(--display);font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;padding:2px 8px;border-radius:2px;background:rgba(197,160,89,0.1);color:var(--gold);margin-bottom:.6rem}
+  .attr-card .desc{color:var(--ink-soft);font-size:.9rem;margin:.1rem 0 .8rem}
+  .gains{list-style:none;padding:0;margin:0;border-top:1px solid var(--rule-ink)}
+  .gains li{display:flex;justify-content:space-between;gap:.8rem;padding:.32rem 0;font-size:.84rem;border-bottom:1px dashed rgba(29,17,8,0.10)}
   .gains li:last-child{border-bottom:0}
-  .gains .gl{color:var(--muted)}
+  .gains .gl{color:var(--ink-soft)}
   .gains .gv{color:var(--green);font-family:var(--mono);font-size:.78rem}
   .uuid{font-family:var(--mono);font-size:.62rem;color:var(--dim);margin-top:.7rem;word-break:break-all}
 
   /* derived stats grid */
   .stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:.55rem}
-  .stat-item{background:rgba(0,0,0,0.32);border:1px solid var(--rule);border-radius:3px;padding:.55rem .8rem;display:flex;justify-content:space-between;gap:.6rem;font-size:.84rem}
+  .stat-item{background:var(--panel);border:1px solid var(--rule-ink);border-radius:3px;padding:.55rem .8rem;display:flex;justify-content:space-between;gap:.6rem;font-size:.84rem;box-shadow:0 2px 6px rgba(0,0,0,0.25)}
   .stat-item .sk{color:var(--gold);font-family:var(--display);font-size:.78rem;letter-spacing:.05em}
-  .stat-item .sv{color:var(--muted);font-size:.78rem;text-align:right}
+  .stat-item .sv{color:var(--ink-soft);font-size:.78rem;text-align:right}
 
   /* tables */
-  table.fmt{width:100%;border-collapse:collapse;font-size:.88rem;margin-top:.6rem}
-  table.fmt th{text-align:left;color:var(--gold);padding:.55rem .7rem;border-bottom:2px solid var(--gold-dim);font-family:var(--display);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase}
-  table.fmt td{padding:.55rem .7rem;border-bottom:1px solid rgba(197,160,89,0.08)}
+  table.fmt{width:100%;border-collapse:collapse;font-size:.88rem;margin-top:.6rem;background:var(--panel);border:1px solid var(--rule-ink);border-radius:4px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.35)}
+  table.fmt th{text-align:left;color:var(--gold);padding:.7rem .85rem;border-bottom:2px solid var(--rule);font-family:var(--display);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;background:rgba(197,160,89,0.05)}
+  table.fmt td{padding:.55rem .85rem;border-bottom:1px solid rgba(100,140,180,0.08);color:var(--ink)}
+  table.fmt tr:last-child td{border-bottom:0}
   table.fmt td:first-child{color:var(--parchment);font-weight:600}
-  table.fmt td.mono{font-family:var(--mono);color:var(--cyan);font-size:.82rem}
-  table.fmt td.gold{color:var(--gold-bright);font-family:var(--mono);font-size:.82rem}
-  table.fmt td.muted{color:var(--muted);font-size:.84rem}
+  table.fmt td.gold{color:var(--gold-bright);font-family:var(--mono);font-size:.82rem;font-weight:700}
+  table.fmt td.muted{color:var(--ink-soft);font-size:.84rem}
 
   /* formula box */
-  .formula{background:rgba(0,0,0,0.4);border:1px solid var(--rule);border-left:3px solid var(--ember);border-radius:3px;padding:.95rem 1.1rem;margin:.8rem 0 1rem;font-family:var(--mono);font-size:.86rem;color:var(--gold-bright);line-height:1.7}
+  .formula{background:var(--panel-2);border:1px solid var(--rule-ink);border-left:3px solid var(--ember);border-radius:3px;padding:.95rem 1.1rem;margin:.8rem 0 1rem;font-family:var(--mono);font-size:.86rem;color:var(--parchment);line-height:1.7;box-shadow:0 2px 8px rgba(0,0,0,0.35)}
 
   ol.pipeline{list-style:none;counter-reset:step;padding:0;margin:.6rem 0 0;display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:.6rem}
-  ol.pipeline li{counter-increment:step;background:rgba(0,0,0,0.3);border:1px solid var(--rule);border-radius:3px;padding:.7rem .85rem .7rem 2.6rem;position:relative;font-size:.86rem}
-  ol.pipeline li::before{content:counter(step);position:absolute;left:.7rem;top:.62rem;width:1.6rem;height:1.6rem;display:flex;align-items:center;justify-content:center;background:var(--ember);color:#0a0604;font-family:var(--display);font-weight:700;border-radius:50%;font-size:.78rem}
-  ol.pipeline li b{color:var(--gold-bright);display:block;font-family:var(--display);letter-spacing:.04em;font-size:.92rem;margin-bottom:.15rem}
-  ol.pipeline li span{color:var(--muted);font-size:.82rem}
+  ol.pipeline li{counter-increment:step;background:var(--panel);border:1px solid var(--rule-ink);border-radius:3px;padding:.7rem .85rem .7rem 2.6rem;position:relative;font-size:.86rem;box-shadow:0 2px 6px rgba(0,0,0,0.25)}
+  ol.pipeline li::before{content:counter(step);position:absolute;left:.7rem;top:.62rem;width:1.6rem;height:1.6rem;display:flex;align-items:center;justify-content:center;background:var(--ember);color:#fff5d8;font-family:var(--display);font-weight:700;border-radius:50%;font-size:.78rem}
+  ol.pipeline li b{color:var(--parchment);display:block;font-family:var(--display);letter-spacing:.04em;font-size:.92rem;margin-bottom:.15rem}
+  ol.pipeline li span{color:var(--ink-soft);font-size:.82rem}
 
   /* tiers */
   .tier-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.9rem}
-  .tier{background:linear-gradient(to bottom,var(--panel),var(--panel-2));border:1px solid var(--rule);border-left:5px solid;border-radius:0 4px 4px 0;padding:1rem 1.1rem}
+  .tier{background:var(--panel);border:1px solid var(--rule-ink);border-left:5px solid;border-radius:0 4px 4px 0;padding:1rem 1.1rem;box-shadow:0 2px 8px rgba(0,0,0,0.35)}
   .tier h3{font-family:var(--display);font-size:1rem;margin:0 0 .25rem;letter-spacing:.06em;text-transform:none}
-  .tier .tag{font-family:var(--mono);font-size:.7rem;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;margin-bottom:.4rem}
-  .tier p{margin:.2rem 0 0;font-size:.86rem;color:var(--parchment);opacity:.85;line-height:1.5}
+  .tier .tag{font-family:var(--mono);font-size:.7rem;color:var(--ink-soft);letter-spacing:.15em;text-transform:uppercase;margin-bottom:.4rem}
+  .tier p{margin:.2rem 0 0;font-size:.86rem;color:var(--ink-soft);line-height:1.5}
 
   /* perks */
   .perk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}
-  .perk{background:linear-gradient(to bottom,var(--panel),var(--panel-2));border:1px solid var(--rule);border-radius:4px;padding:1.1rem 1.2rem 1rem;display:flex;flex-direction:column;gap:.5rem}
+  .perk{background:var(--panel);border:1px solid var(--rule-ink);border-radius:4px;padding:1.1rem 1.2rem 1rem;display:flex;flex-direction:column;gap:.5rem;box-shadow:0 2px 8px rgba(0,0,0,0.35)}
   .perk-head{display:flex;align-items:center;gap:.8rem}
-  .perk-head img{width:48px;height:48px;border:1px solid var(--rule-strong);border-radius:4px;background:rgba(0,0,0,0.5);padding:4px;image-rendering:pixelated}
-  .perk-head h3{margin:0;font-size:1rem;text-transform:none;letter-spacing:.04em;color:var(--gold-bright)}
-  .perk-head .role{font-family:var(--display);font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
-  .perk p{margin:0;font-size:.88rem;opacity:.9}
-  .perk ul{margin:.2rem 0 0;padding-left:1.1rem;font-size:.82rem;color:var(--muted)}
+  .perk-head img{width:48px;height:48px;border:1px solid var(--rule-ink-strong);border-radius:4px;background:rgba(29,17,8,0.06);padding:4px;image-rendering:pixelated}
+  .perk-head h3{margin:0;font-size:1rem;text-transform:none;letter-spacing:.04em;color:var(--parchment)}
+  .perk-head .role{font-family:var(--display);font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
+  .perk p{margin:0;font-size:.88rem;color:var(--ink-soft)}
+  .perk ul{margin:.2rem 0 0;padding-left:1.1rem;font-size:.82rem;color:var(--ink-soft)}
   .perk ul li{margin:.15rem 0}
   .perk ul li b{color:var(--parchment);font-weight:600}
 
   .back-link{display:inline-block;margin-bottom:.4rem;color:var(--gold);font-size:.85rem;font-family:var(--display);letter-spacing:.1em;text-transform:uppercase}
-  .loading{padding:1.4rem;text-align:center;color:var(--muted);font-style:italic;font-size:.9rem}
+  .loading{padding:1.4rem;text-align:center;color:var(--ink-soft);font-style:italic;font-size:.9rem}
 
-  footer{padding:2.5rem 1.5rem;text-align:center;color:var(--muted);font-size:.82rem;border-top:1px solid var(--rule)}
+  footer{padding:2.5rem 1.5rem;text-align:center;color:var(--parchment);font-size:.82rem;border-top:1px solid var(--rule);background:var(--bg-deep)}
+  footer code{color:var(--gold-bright)}
 
   @media(max-width:640px){
     nav.site ul{display:none}
@@ -148,7 +151,12 @@
     <a class="back-link" href="./">← Back to Hub</a>
     <div class="eyebrow">Combat Reference</div>
     <h1>Stats &amp; Attributes Guide</h1>
-    <p class="lead">Every number in <em>Grudges</em> traces back to one source of truth: <b>eight primary stats</b> — <span style="color:#4caf50">BIO</span>, <span style="color:#00bcd4">NEU</span>, <span style="color:#ff9800">KIN</span>, <span style="color:#9c27b0">QNT</span>, <span style="color:#2196f3">SYN</span>, <span style="color:#ffeb3b">CHR</span>, <span style="color:#f44336">ENT</span>, <span style="color:#009688">GRA</span> — that drive every affinity effect, perk tree, and derived combat number in the game.</p>
+    <p class="lead">Every number in <em>Grudges</em> traces back to one source of truth: <b>eight primary stats</b> — <span
+        style="color:#2e7d32;font-weight:700">BIO</span>, <span style="color:#00838f;font-weight:700">NEU</span>, <span
+        style="color:#e65100;font-weight:700">KIN</span>, <span style="color:#6a1b9a;font-weight:700">QNT</span>, <span
+        style="color:#1565c0;font-weight:700">SYN</span>, <span style="color:#9a7600;font-weight:700">CHR</span>, <span
+        style="color:#c62828;font-weight:700">ENT</span>, <span style="color:#00695c;font-weight:700">GRA</span> — that
+      drive every affinity effect, perk tree, and derived combat number in the game.</p>
     <div class="level-info">
       <div class="li-item"><div class="li-val">1–60</div><div class="li-lbl">Level Range</div></div>
       <div class="li-item"><div class="li-val">24</div><div class="li-lbl">Starting Pts</div></div>
@@ -168,11 +176,6 @@
     <div class="attr-grid" id="primaryGrid"><div class="loading">Loading primary stats…</div></div>
   </section>
 
-  <section class="section" id="legacy-attributes">
-    <h2>Legacy 8 Attributes (Combat Sheet)</h2>
-    <p class="lead-sm">The combat sheet still resolves through the original eight attributes (Strength, Vitality, Endurance, Intellect, Wisdom, Dexterity, Agility, Tactics). They're what the derived stats and perk trees below actually consume.</p>
-    <div class="attr-grid" id="attrGrid"><div class="loading">Loading attributes…</div></div>
-  </section>
 
   <section class="section" id="derived">
     <h2>All 37 Derived Stats</h2>
@@ -243,12 +246,42 @@
     <h2>Gear Tiers (T1–T6)</h2>
     <p class="lead-sm">Loot in <em>Grudges</em> climbs through six tiers. Every tier roughly doubles affix budget and unlocks an additional rolled property. T6 gear is bound to faction reputation and the rifts at the edge of the map.</p>
     <div class="tier-grid">
-      <div class="tier" style="border-left-color:#7a6a4a"><h3 style="color:#a8956a">T1 Scrap</h3><div class="tag">Surface salvage</div><p>Bent rebar, charred plate, anything you pried loose with a multitool. Found in the first wreck you crack open. Two affixes max, low rolls.</p></div>
-      <div class="tier" style="border-left-color:#a8a8a8"><h3 style="color:#c8c8c8">T2 Salvaged</h3><div class="tag">Workshop-grade</div><p>Re-shafted, re-bored, re-zeroed by a Tech-Scavenger who knew what they were doing. Three affixes, mid-range rolls. The first gear most players actually rely on.</p></div>
-      <div class="tier" style="border-left-color:#5a9ad8"><h3 style="color:#88bce8">T3 Refined</h3><div class="tag">Faction-armoury</div><p>Standard-issue gear from any faction quartermaster who likes you enough. Four affixes, one of them faction-flavoured. The midgame plateau.</p></div>
-      <div class="tier" style="border-left-color:#9d4dff"><h3 style="color:#bf86f0">T4 Forged</h3><div class="tag">Master-crafted</div><p>Hand-built by a named smith using a recipe paid for in someone else's blood. Five affixes, one guaranteed prefix slot. End of the crafting track for most players.</p></div>
-      <div class="tier" style="border-left-color:#d4602a"><h3 style="color:#e8884a">T5 Relic</h3><div class="tag">Pre-collapse tech</div><p>Pulled from a sealed orbital cache, a dead consortium vault, or worse. Six affixes including a unique implicit. Cannot be crafted — only found.</p></div>
-      <div class="tier" style="border-left-color:#f0d088"><h3 style="color:#f8e0a0">T6 Ascendant</h3><div class="tag">Rift-binding</div><p>Bound to a faction reputation track <em>and</em> a rift kill. Seven affixes, an ascendant suffix that scales with your highest-rep faction, and one corruption mod. Apex-tier — drops are public-event news.</p></div>
+      <div class="tier" style="border-left-color:#7a6a4a">
+        <h3 style="color:#5d4a26">T1 Scrap</h3>
+        <div class="tag">Surface salvage</div>
+        <p>Bent rebar, charred plate, anything you pried loose with a multitool. Found in the first wreck you crack open. Two
+          affixes max, low rolls.</p>
+      </div>
+      <div class="tier" style="border-left-color:#7a7a7a">
+        <h3 style="color:#4a4a4a">T2 Salvaged</h3>
+        <div class="tag">Workshop-grade</div>
+        <p>Re-shafted, re-bored, re-zeroed by a Tech-Scavenger who knew what they were doing. Three affixes, mid-range rolls.
+          The first gear most players actually rely on.</p>
+      </div>
+      <div class="tier" style="border-left-color:#3d7eb8">
+        <h3 style="color:#1565c0">T3 Refined</h3>
+        <div class="tag">Faction-armoury</div>
+        <p>Standard-issue gear from any faction quartermaster who likes you enough. Four affixes, one of them
+          faction-flavoured. The midgame plateau.</p>
+      </div>
+      <div class="tier" style="border-left-color:#7a3acc">
+        <h3 style="color:#6a1b9a">T4 Forged</h3>
+        <div class="tag">Master-crafted</div>
+        <p>Hand-built by a named smith using a recipe paid for in someone else's blood. Five affixes, one guaranteed prefix
+          slot. End of the crafting track for most players.</p>
+      </div>
+      <div class="tier" style="border-left-color:#b5481a">
+        <h3 style="color:#a23310">T5 Relic</h3>
+        <div class="tag">Pre-collapse tech</div>
+        <p>Pulled from a sealed orbital cache, a dead consortium vault, or worse. Six affixes including a unique implicit.
+          Cannot be crafted — only found.</p>
+      </div>
+      <div class="tier" style="border-left-color:#c5a059">
+        <h3 style="color:#7a5418">T6 Ascendant</h3>
+        <div class="tag">Rift-binding</div>
+        <p>Bound to a faction reputation track <em>and</em> a rift kill. Seven affixes, an ascendant suffix that scales with
+          your highest-rep faction, and one corruption mod. Apex-tier — drops are public-event news.</p>
+      </div>
     </div>
   </section>
 
@@ -351,6 +384,15 @@
     agility:'#f0d088',  tactics:'#e88858'
   };
 
+      // accent color → readable text color on parchment background
+      const INK_COLOR = {
+        // primary stats — bright on dark background
+        '#4caf50': '#6ade6a', '#00bcd4': '#40e0f0', '#ff9800': '#ffb840',
+        '#9c27b0': '#cc60e0', '#2196f3': '#60b8ff', '#ffeb3b': '#ffe060',
+        '#f44336': '#ff6868', '#009688': '#40d0c0'
+      };
+      function ink(c) { return INK_COLOR[String(c).toLowerCase()] || '#c8d8e8'; }
+
   const CAP_RATIONALE = {
     block:           'Prevents permanent immunity through pure block stacking.',
     criticalChance:  'Balanced against Critical Evasion; keeps non-crit hits relevant.',
@@ -439,45 +481,28 @@
     document.getElementById('primaryGrid').innerHTML = primary.map(s => {
       const myEffects = effectsByDomain[s.key] || [];
       const reserved = (s.affinityEffects || []).length === 0;
+      const inkC = ink(s.color);
       const chips = reserved
-        ? '<span style="font-style:italic;color:var(--muted);font-size:.82rem">No perks reference this stat yet — reserved for future content.</span>'
+        ? '<span style="font-style:italic;color:var(--ink-soft);font-size:.82rem">No perks reference this stat yet — reserved for future content.</span>'
         : myEffects.slice(0, 18).map(ef =>
-            `<span style="display:inline-block;background:${s.color}18;border:1px solid ${s.color}44;color:${s.color};font-family:var(--mono);font-size:.7rem;padding:2px 7px;border-radius:2px;margin:2px 3px 2px 0">${ef.label}${ef.kind==='pct'?' %':''}</span>`
-          ).join('') + (myEffects.length > 18 ? ` <span style="color:var(--muted);font-size:.78rem">+${myEffects.length-18} more</span>` : '');
+          `<span style="display:inline-block;background:${s.color}1a;border:1px solid ${s.color}66;color:${inkC};font-family:var(--mono);font-size:.7rem;padding:2px 7px;border-radius:2px;margin:2px 3px 2px 0">${ef.label}${ef.kind === 'pct' ? ' %' : ''}</span>`
+        ).join('') + (myEffects.length > 18 ? ` <span style="color:var(--ink-soft);font-size:.78rem">+${myEffects.length - 18} more</span>` : '');
       return `
         <div class="attr-card" style="border-left-color:${s.color}">
           <div class="attr-head">
-            <div class="ico" style="width:1.55rem;height:1.55rem;border-radius:50%;background:${s.color};color:#0a0604;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:900;font-size:.72rem">${s.abbr}</div>
-            <h3 style="color:${s.color}">${s.label}</h3>
+            <div class="ico" style="width:1.55rem;height:1.55rem;border-radius:50%;background:${s.color};color:#fff8e7;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:900;font-size:.72rem;text-shadow:0 1px 1px rgba(0,0,0,0.35)">${s.abbr}</div>
+            <h3 style="color:${inkC}">${s.label}</h3>
           </div>
-          <span class="role" style="background:${s.color}22;color:${s.color}">${s.archetype}</span>
+          <span class="role" style="background:${s.color}22;color:${inkC}">${s.archetype}</span>
           <p class="desc">${s.description}</p>
-          <div style="border-top:1px solid var(--rule);padding-top:.5rem;margin-top:.4rem">
-            <div style="font-family:var(--display);font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem">Affinity Effects ${reserved ? '' : '('+myEffects.length+')'}</div>
+          <div style="border-top:1px solid var(--rule-ink);padding-top:.5rem;margin-top:.4rem">
+            <div style="font-family:var(--display);font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:.4rem">Affinity Effects ${reserved ? '' : '(' + myEffects.length + ')'}</div>
             ${chips}
           </div>
         </div>`;
     }).join('');
 
-    // Attributes
-    document.getElementById('attrGrid').innerHTML = attrs.map(a => {
-      const color = ATTR_COLOR[a.key] || '#c5a059';
-      const gains = a.bonuses.map(b => {
-        const stat = derived.find(d => d.key === b.stat);
-        return `<li><span class="gl">${stat ? stat.label : b.stat}</span><span class="gv">${fmtBonus(b, b.stat)}</span></li>`;
-      }).join('');
-      return `
-        <div class="attr-card" style="border-left-color:${color}">
-          <div class="attr-head">
-            <div class="ico">${a.icon || ''}</div>
-            <h3 style="color:${color}">${a.name}</h3>
-          </div>
-          <span class="role" style="background:${color}22;color:${color}">${a.archetype}</span>
-          <p class="desc">${a.description}</p>
-          <ul class="gains">${gains}</ul>
-          <div class="uuid">${a.uuid}</div>
-        </div>`;
-    }).join('');
+    // Legacy attribute grid removed — Nexus uses only the 8 primary stats above.
 
     // Derived stats
     document.getElementById('derivedGrid').innerHTML = derived.map(d => {
