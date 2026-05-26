@@ -2,8 +2,8 @@ export type Gender = 'male' | 'female';
 
 /**
  * Every available body silhouette / starter mesh for the character creator.
- * The mesh files live at `/models/characters/<gender>/<id>.{glb,gltf}` (or
- * `/models/characters/base/<gender>.gltf` for the `superhero` true-base).
+ * The mesh files live at `/models/characters/<gender>/<id>.gltf` — sourced
+ * from the Quaternius "Ultimate Animated Character" male & female packs.
  *
  * Each id is treated as a "build" the player can pick at creation. When the
  * gear/equipment system lands, equipped items will replace pieces on top of
@@ -11,11 +11,9 @@ export type Gender = 'male' | 'female';
  * starter clothing.
  */
 export type BodyProportionType =
-  // Survivor base builds (purpose-built game characters)
+  // Legacy survivor ids kept for save-file migration only — not in BODY_TYPES.
   | 'athletic' | 'lean'
-  // True-base hero physique (used as the equip canvas for future gear)
-  | 'superhero'
-  // Quaternius character pack — body-type/silhouette references with built-in starter clothing
+  // Quaternius animated packs — body-type silhouettes with built-in starter clothing
   | 'adventurer' | 'beach' | 'casual' | 'casual-hoodie' | 'farmer'
   | 'formal' | 'king' | 'medieval' | 'punk' | 'scifi'
   | 'soldier' | 'spacesuit' | 'suit' | 'swat' | 'witch' | 'worker';
@@ -576,9 +574,9 @@ export const MALE_OUTFITS: OutfitPreset[] = [
  * full locomotion + combat set (Idle / Walk / Run / Run_Left / Run_Right
  * / Roll / Sword_Slash / Punch_* / Death / HitRecieve / Interact / Wave),
  * so the LocomotionAnimator wires up directly with no companion-clip
- * merge. The bare `/models/characters/base/<gender>.gltf` mesh is a
- * superhero gear canvas with NO clothing — using it as the default is
- * how the player ended up "naked" before this fix.
+ * merge. Every body-type id in BODY_TYPES resolves to a clothed Quaternius
+ * variant under `/models/characters/<gender>/<id>.gltf` — there is no bare
+ * "base" gear canvas in the picker.
  */
 export const STARTING_MODEL: Record<Gender, string> = {
   female: '/models/characters/female/adventurer.gltf',

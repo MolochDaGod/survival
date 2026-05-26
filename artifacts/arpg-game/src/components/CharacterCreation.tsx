@@ -180,9 +180,10 @@ export const CharacterCreation: React.FC<CharacterCreationProps> = ({ onComplete
     const rg = rootGroupRef.current;
     if (!rg) return;
     const { heightCm, build, bodyProportion, gender } = configRef.current;
-    // BODY_TYPES is currently collapsed to a single 'superhero' entry per
-    // gender. Fall back to the matching gender's entry, then to the first
-    // entry of any gender, so this never throws even if the roster shape
+    // BODY_TYPES holds the Quaternius animated-pack silhouettes
+    // (11 male variants + 1 female 'adventurer'). Resolve by (id, gender),
+    // then fall back to the matching gender's first entry, then to the
+    // first entry of any gender — this never throws even if the roster
     // changes again. (Previous fallback referenced an 'athletic' id that
     // hasn't existed since the roster was collapsed, causing a runtime
     // crash on .scaleY.)

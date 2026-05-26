@@ -29,13 +29,19 @@ export function loadCharacter(): CharacterConfig | null {
     // not trigger the old hide-everything-but-skin-mesh path that left people
     // looking like floating hair.
     parsed.outfitId = 'none';
-    // The body-type roster has been collapsed to one canonical Quaternius
-    // mesh per gender (id 'superhero'), with shape variation driven by the
-    // height + build sliders rather than by mesh swaps. Force any legacy id
-    // ('athletic', 'lean', 'civilian', 'adventurer'/'king'/etc. from a
-    // brief experiment with 16 clothed variants, 'teen', 'regular') back
-    // to 'superhero' so BODY_TYPES.find() always resolves.
-    parsed.bodyProportion = 'superhero';
+    // The body-type roster is the Quaternius animated character pack —
+    // every id in BODY_TYPES maps to a clothed `<gender>/<id>.gltf` mesh
+    // with 24 baked clips. Older saves may carry retired ids ('athletic',
+    // 'lean', 'civilian', 'superhero', 'teen', 'regular'); coerce any id
+    // that no longer resolves back to 'adventurer' (the canonical default
+    // present for both genders) so BODY_TYPES.find() always succeeds.
+    const KNOWN_BODY_IDS = new Set([
+      'adventurer', 'beach', 'casual', 'casual-hoodie', 'farmer', 'king',
+      'punk', 'spacesuit', 'suit', 'swat', 'worker',
+    ]);
+    if (!parsed.bodyProportion || !KNOWN_BODY_IDS.has(parsed.bodyProportion)) {
+      parsed.bodyProportion = 'adventurer';
+    }
     // Map orphaned hair-style ids (the old roster had 15 alias entries that
     // pointed at the same 6 source GLTFs under fake labels) onto the closest
     // surviving real style.
