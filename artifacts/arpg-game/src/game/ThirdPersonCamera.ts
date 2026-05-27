@@ -61,6 +61,9 @@ export class ThirdPersonCamera {
   constructor(camera: THREE.PerspectiveCamera) {
     this.camera = camera;
     this.raycaster.firstHitOnly = true; // BVH fast-path
+    // Three.js r183+ requires camera for Sprite raycasting. Even though
+    // we filter by MASK_WORLD (no Sprites), set it defensively.
+    (this.raycaster as any).camera = camera;
     // Camera occlusion only cares about solid world geometry — never enemies,
     // loot, VFX, or projectiles. Layer mask filtering happens before any
     // triangle math, so this is essentially free.

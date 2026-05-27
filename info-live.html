@@ -14,21 +14,18 @@
 <style>
   :root {
     --bg-deep:#0a0604; --bg:#14100a; --panel:#1c1610; --panel-2:#221a12;
-    --gold:#c5a059; --gold-bright:#f0d088; --gold-deep:#7a5418;
-    --parchment:#e8d8a8; --paper:#f5ebcb; --paper-2:#ecddb0;
-    --ink:#1d1108; --ink-soft:#3d2818;
-    --ember:#b5481a; --blood:#8a2020; --moss:#5a7028; --chill:#3d7eb8; --bone:#a89878;
+    --gold:#c5a059; --gold-bright:#f0d088; --parchment:#e8d8a8; --ink:#2a1810;
+    --ember:#d4602a; --blood:#8a2020; --moss:#6e8a3a; --chill:#5a9ad8; --bone:#c8b890;
     --rule:rgba(197,160,89,0.25); --rule-strong:rgba(197,160,89,0.55);
-    --rule-ink:rgba(29,17,8,0.22); --rule-ink-strong:rgba(29,17,8,0.45);
   }
   *{box-sizing:border-box}
-  html,body{margin:0;padding:0;background:var(--paper);color:var(--ink);font-family:'EB Garamond',Georgia,serif;line-height:1.65;-webkit-font-smoothing:antialiased}
-  a{color:var(--gold-deep);text-decoration:none;transition:color .15s}a:hover{color:var(--ember)}
-  h1,h2,h3,h4{font-family:'Cinzel',serif;color:var(--ink);letter-spacing:.03em;margin:0 0 .6rem;line-height:1.2}
+  html,body{margin:0;padding:0;background:var(--bg-deep);color:var(--parchment);font-family:'EB Garamond',Georgia,serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+  a{color:var(--gold-bright);text-decoration:none;transition:color .15s}a:hover{color:var(--ember)}
+  h1,h2,h3,h4{font-family:'Cinzel',serif;color:var(--gold-bright);letter-spacing:.03em;margin:0 0 .6rem;line-height:1.2}
   h1{font-size:clamp(2.2rem,4vw,3.4rem);font-weight:900}
-  h2{font-size:clamp(1.6rem,2.6vw,2.2rem);font-weight:700;margin-top:1rem;color:var(--ink)}
-  h3{font-size:1.2rem;font-weight:700;color:var(--gold-deep)}
-  h4{font-size:.95rem;font-weight:500;color:var(--gold-deep);text-transform:uppercase;letter-spacing:.15em}
+  h2{font-size:clamp(1.6rem,2.6vw,2.2rem);font-weight:700;margin-top:1rem}
+  h3{font-size:1.2rem;font-weight:700;color:var(--gold)}
+  h4{font-size:.95rem;font-weight:500;color:var(--gold);text-transform:uppercase;letter-spacing:.15em}
   p{margin:0 0 1rem}
   ul{padding-left:1.3rem}
   li{margin:.3rem 0}
@@ -48,52 +45,52 @@
 
   .page-hero{
     padding:5rem 1.5rem 4rem;text-align:center;
-    background:linear-gradient(to bottom,rgba(255,243,205,0.55),rgba(236,221,176,0.85));
-    border-bottom:1px solid var(--rule-ink);
+    background:linear-gradient(to bottom,rgba(10,6,4,0.10),rgba(10,6,4,0.55));
+    border-bottom:1px solid var(--rule);
   }
   .page-hero .eyebrow{font-family:'Cinzel',serif;color:var(--ember);letter-spacing:.25em;text-transform:uppercase;font-size:.85rem}
-  .page-hero p.lead{font-size:1.15rem;max-width:680px;margin:1rem auto 0;color:var(--ink-soft)}
+  .page-hero p.lead{font-size:1.15rem;max-width:680px;margin:1rem auto 0;opacity:.92}
 
   /* Side-nav layout */
   .layout{display:grid;grid-template-columns:240px 1fr;gap:3rem;padding:3rem 0 4rem}
-  .layout aside{position:sticky;top:5rem;align-self:start;background:linear-gradient(to bottom,var(--paper-2),var(--paper));border:1px solid var(--rule-ink);border-radius:4px;padding:1rem 1rem 1.1rem;box-shadow:0 1px 0 rgba(255,255,255,0.4) inset, 0 2px 6px rgba(29,17,8,0.06)}
-  .layout aside h4{margin:0 0 .8rem;font-size:.8rem;color:var(--gold-deep)}
-  .layout aside ul{list-style:none;padding:0;margin:0;border-left:1px solid var(--rule-ink)}
-  .layout aside ul a{display:block;padding:.4rem 0 .4rem 1rem;border-left:2px solid transparent;margin-left:-1px;color:var(--ink-soft);font-family:'Cinzel',serif;font-size:.82rem;letter-spacing:.08em;text-transform:uppercase}
-  .layout aside ul a:hover{color:var(--gold-deep);border-left-color:var(--gold-deep)}
+  .layout aside{position:sticky;top:5rem;align-self:start}
+  .layout aside h4{margin-bottom:.8rem;font-size:.8rem}
+  .layout aside ul{list-style:none;padding:0;margin:0;border-left:1px solid var(--rule)}
+  .layout aside ul a{display:block;padding:.4rem 0 .4rem 1rem;border-left:2px solid transparent;margin-left:-1px;color:var(--parchment);font-family:'Cinzel',serif;font-size:.82rem;letter-spacing:.08em;text-transform:uppercase}
+  .layout aside ul a:hover{color:var(--gold-bright);border-left-color:var(--gold)}
   @media (max-width:760px){.layout{grid-template-columns:1fr}.layout aside{position:static}}
 
   section.subsection{margin-bottom:3rem;scroll-margin-top:5rem}
-  section.subsection .card{background:linear-gradient(to bottom,var(--paper),var(--paper-2));border:1px solid var(--rule-ink);border-radius:4px;padding:1.6rem 1.8rem;margin-top:1rem;box-shadow:0 1px 0 rgba(255,255,255,0.4) inset, 0 2px 6px rgba(29,17,8,0.06)}
+  section.subsection .card{background:linear-gradient(to bottom,var(--panel),var(--panel-2));border:1px solid var(--rule);border-radius:4px;padding:1.6rem 1.8rem;margin-top:1rem}
   .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
   .grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}
   @media (max-width:700px){.grid-2{grid-template-columns:1fr}}
 
-  .feature-card{background:var(--paper-2);border:1px solid var(--rule-ink);border-radius:4px;padding:1.2rem 1.1rem;transition:border-color .15s}
-  .feature-card:hover{border-color:var(--gold-deep)}
-  .feature-card .icon-wrap{width:44px;height:44px;margin-bottom:.6rem;display:flex;align-items:center;justify-content:center;background:rgba(122,84,24,0.10);border:1px solid var(--rule-ink-strong);border-radius:50%}
+  .feature-card{background:var(--panel);border:1px solid var(--rule);border-radius:4px;padding:1.2rem 1.1rem;transition:border-color .15s}
+  .feature-card:hover{border-color:var(--gold)}
+  .feature-card .icon-wrap{width:44px;height:44px;margin-bottom:.6rem;display:flex;align-items:center;justify-content:center;background:rgba(197,160,89,0.08);border:1px solid var(--rule-strong);border-radius:50%}
   .feature-card .icon-wrap img{width:30px;height:30px;image-rendering:pixelated}
-  .feature-card h4{font-family:'Cinzel',serif;color:var(--gold-deep);font-size:1rem;margin:0 0 .35rem;text-transform:none;letter-spacing:.04em}
-  .feature-card p{font-size:.92rem;color:var(--ink-soft);margin:0}
+  .feature-card h4{font-family:'Cinzel',serif;color:var(--gold-bright);font-size:1rem;margin:0 0 .35rem;text-transform:none;letter-spacing:.04em}
+  .feature-card p{font-size:.92rem;opacity:.88;margin:0}
 
   /* Hire roster */
   .roster{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:.8rem;margin-top:1rem}
-  .hire{background:var(--paper-2);border:1px solid var(--rule-ink);border-left:3px solid var(--gold-deep);padding:.9rem 1rem;border-radius:0 4px 4px 0}
+  .hire{background:var(--panel);border:1px solid var(--rule);border-left:3px solid var(--gold);padding:.9rem 1rem;border-radius:0 4px 4px 0}
   .hire.harvester{border-left-color:var(--moss)}
   .hire.vendor{border-left-color:var(--ember)}
   .hire.fighter{border-left-color:var(--blood)}
-  .hire .role{font-family:'Cinzel',serif;color:var(--gold-deep);font-weight:700;font-size:.95rem;letter-spacing:.05em;display:block;margin-bottom:.2rem}
-  .hire .meta{font-size:.78rem;color:var(--gold-deep);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.45rem}
-  .hire p{font-size:.88rem;color:var(--ink-soft);margin:0}
+  .hire .role{font-family:'Cinzel',serif;color:var(--gold-bright);font-weight:700;font-size:.95rem;letter-spacing:.05em;display:block;margin-bottom:.2rem}
+  .hire .meta{font-size:.78rem;color:var(--gold);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.45rem}
+  .hire p{font-size:.88rem;opacity:.88;margin:0}
 
   /* Controls table */
   table.controls{width:100%;border-collapse:collapse;margin-top:1rem}
-  table.controls th,table.controls td{text-align:left;padding:.55rem .8rem;border-bottom:1px solid var(--rule-ink);font-size:.95rem}
-  table.controls th{color:var(--gold-deep);font-family:'Cinzel',serif;letter-spacing:.08em;text-transform:uppercase;font-size:.78rem;font-weight:700}
-  table.controls td.key{font-family:'Courier New',monospace;color:var(--ink);background:rgba(122,84,24,0.14);width:9rem;font-weight:700}
+  table.controls th,table.controls td{text-align:left;padding:.55rem .8rem;border-bottom:1px solid var(--rule);font-size:.95rem}
+  table.controls th{color:var(--gold);font-family:'Cinzel',serif;letter-spacing:.08em;text-transform:uppercase;font-size:.78rem;font-weight:700}
+  table.controls td.key{font-family:'Courier New',monospace;color:var(--gold-bright);background:rgba(0,0,0,0.25);width:9rem}
 
-  blockquote{border-left:3px solid var(--gold-deep);padding:.25rem 0 .25rem 1rem;margin:1.2rem 0;font-style:italic;color:var(--ink-soft)}
-  blockquote cite{display:block;margin-top:.3rem;font-style:normal;color:var(--gold-deep);font-size:.82rem;letter-spacing:.1em}
+  blockquote{border-left:3px solid var(--gold);padding:.25rem 0 .25rem 1rem;margin:1.2rem 0;font-style:italic;color:var(--parchment);opacity:.9}
+  blockquote cite{display:block;margin-top:.3rem;font-style:normal;color:var(--gold);font-size:.82rem;letter-spacing:.1em}
 
   footer.site{background:var(--bg-deep);padding:3rem 0 2rem;text-align:center;color:rgba(232,216,168,0.55);font-size:.9rem;border-top:1px solid var(--rule)}
   footer.site .brand-row{display:flex;align-items:center;justify-content:center;gap:.8rem;margin-bottom:1rem}
@@ -184,10 +181,8 @@
         <h3>What That Means In Practice</h3>
         <div class="grid-2">
           <div>
-            <h4>Same Nexus Attributes</h4>
-            <p>Every NPC rolls the same eight Nexus attributes you do — <strong>BIO, NEU, KIN, QNT, SYN, CHR, ENT, GRA</strong> — in
-              the same range. You can inspect any NPC and read their sheet exactly as you'd read your own. See the <a
-                href="stats-guide.html">Stats Guide</a> for the 37 derived stats each one drives.</p>
+            <h4>Same Stats</h4>
+            <p>Every NPC rolls Strength / Agility / Constitution / Intellect / Resolve / Charisma in the same range you do. You can inspect any NPC and read their sheet exactly as you'd read your own.</p>
           </div>
           <div>
             <h4>Same Professions</h4>
@@ -384,18 +379,8 @@
             <tr><td>Neutral</td><td>0 to +24</td><td>Coexistence. Base prices. The default starting state with all five.</td></tr>
             <tr><td style="color:var(--moss)">Friendly</td><td>+25 to +49</td><td>-10% trade prices. Standard contracts unlock. Faction guards warn off other-faction hostiles in your radius.</td></tr>
             <tr><td style="color:var(--moss)">Honored</td><td>+50 to +74</td><td>-20% trade. Faction guards <em>intervene</em> to defend you in their territory. Faction-signature gear recipes unlock.</td></tr>
-            <tr>
-              <td style="color:var(--gold-deep);font-weight:700">Allied</td>
-              <td>+75 to +99</td>
-              <td>Faction patrols actively protect your claimed camps in their territory. -30% trade. Faction caravans visit your
-                camp every 3-5 days.</td>
-            </tr>
-            <tr>
-              <td style="color:var(--gold-deep);font-weight:900">Hero</td>
-              <td>+100</td>
-              <td>Faction reinforces your camp during raids by other factions (one squad per raid). Unique cosmetic gear set + a
-                named NPC champion joins as a one-of-a-kind hire. Maximum one Hero faction at a time.</td>
-            </tr>
+            <tr><td style="color:var(--gold-bright)">Allied</td><td>+75 to +99</td><td>Faction patrols actively protect your claimed camps in their territory. -30% trade. Faction caravans visit your camp every 3-5 days.</td></tr>
+            <tr><td style="color:var(--gold-bright);font-weight:700">Hero</td><td>+100</td><td>Faction reinforces your camp during raids by other factions (one squad per raid). Unique cosmetic gear set + a named NPC champion joins as a one-of-a-kind hire. Maximum one Hero faction at a time.</td></tr>
           </tbody>
         </table>
       </div>
@@ -532,10 +517,7 @@
         <h3>The Four Requirements</h3>
         <ol>
           <li>
-            <strong>A successful dialog.</strong> Each hire has a recruit method listed in the roster below — usually a
-            Nexus-attribute check (<strong>SYN</strong> for social/recruit, <strong>KIN</strong> for combat, <strong>NEU</strong>
-            for scout/trap, <strong>ENT</strong> for endurance) at a difficulty that scales with the role's tier. You can fail the
-            dialog and try again later, sometimes with better gear or a higher attribute. NPCs remember if you've insulted them.
+            <strong>A successful dialog.</strong> Each hire has a recruit method listed in the roster below — usually a stat check (Charisma, Resolve, Combat, or Survival) at a difficulty that scales with the role's tier. You can fail the dialog and try again later, sometimes with better gear or a higher stat. NPCs remember if you've insulted them.
           </li>
           <li>
             <strong>A claim flag in the area.</strong> The flag is a player-painted 64×64 image stitched onto silk and raised on a 3m pole. It doubles as your <em>guild logo</em>. Until a flag is planted, you have no recognized camp — and no NPC will commit to one.
@@ -573,65 +555,29 @@
 
       <h3 style="margin-top:1.5rem;color:var(--moss)">Harvesters — gather while you sleep</h3>
       <div class="roster">
-        <div class="hire harvester"><span class="role">Woodcutter</span><span class="meta">SYN 8 · Logging Camp · Buildings
-            2</span>
-          <p>+5 wood/day from Logging Camp.</p>
-        </div>
-        <div class="hire harvester"><span class="role">Miner</span><span class="meta">SYN 8 · Mining Outpost · Buildings
-            3</span>
-          <p>+5 ore/day from Mining Outpost.</p>
-        </div>
-        <div class="hire harvester"><span class="role">Farmer</span><span class="meta">SYN 8 · Field · Buildings 4</span>
-          <p>+5 herb/day from Fields.</p>
-        </div>
-        <div class="hire harvester"><span class="role">Forager</span><span class="meta">SYN 7 · Forestry 2</span>
-          <p>Passive berries &amp; mushrooms in camp radius.</p>
-        </div>
-        <div class="hire harvester"><span class="role">Trapper</span><span class="meta">NEU 10 · Trapping 3</span>
-          <p>Resets snares and gathers carcasses.</p>
-        </div>
+        <div class="hire harvester"><span class="role">Woodcutter</span><span class="meta">CHA 8 · Logging Camp · Buildings 2</span><p>+5 wood/day from Logging Camp.</p></div>
+        <div class="hire harvester"><span class="role">Miner</span><span class="meta">CHA 8 · Mining Outpost · Buildings 3</span><p>+5 ore/day from Mining Outpost.</p></div>
+        <div class="hire harvester"><span class="role">Farmer</span><span class="meta">CHA 8 · Field · Buildings 4</span><p>+5 herb/day from Fields.</p></div>
+        <div class="hire harvester"><span class="role">Forager</span><span class="meta">CHA 7 · Forestry 2</span><p>Passive berries &amp; mushrooms in camp radius.</p></div>
+        <div class="hire harvester"><span class="role">Trapper</span><span class="meta">SUR 10 · Trapping 3</span><p>Resets snares and gathers carcasses.</p></div>
       </div>
 
       <h3 style="margin-top:1.5rem;color:var(--ember)">Vendors — turn loot into gold</h3>
       <div class="roster">
-        <div class="hire vendor"><span class="role">Stall Vendor</span><span class="meta">SYN 9 · Market Stall · Trade 1</span>
-          <p>Mans market stall, auto-sells junk-flagged loot.</p>
-        </div>
-        <div class="hire vendor"><span class="role">Caravan Master</span><span class="meta">SYN 11 · Caravan Cart · Trade
-            2</span>
-          <p>Required to make Trade Posts pay out daily gold.</p>
-        </div>
+        <div class="hire vendor"><span class="role">Stall Vendor</span><span class="meta">CHA 9 · Market Stall · Trade 1</span><p>Mans market stall, auto-sells junk-flagged loot.</p></div>
+        <div class="hire vendor"><span class="role">Caravan Master</span><span class="meta">CHA 11 · Caravan Cart · Trade 2</span><p>Required to make Trade Posts pay out daily gold.</p></div>
         <div class="hire vendor"><span class="role">Fence</span><span class="meta">3+ theft acts · Market Complex · Trade 3</span><p>Buys stolen / contraband loot at +50% over normal.</p></div>
-        <div class="hire vendor"><span class="role">Bazaar Merchant</span><span class="meta">SYN 13 · Friendly faction rep ·
-            Trade 4</span>
-          <p>Three slots per Grand Bazaar, rotating rare goods.</p>
-        </div>
+        <div class="hire vendor"><span class="role">Bazaar Merchant</span><span class="meta">CHA 13 · Friendly faction rep · Trade 4</span><p>Three slots per Grand Bazaar, rotating rare goods.</p></div>
       </div>
 
       <h3 style="margin-top:1.5rem;color:var(--blood)">Ally Fighters — guards &amp; followers</h3>
       <div class="roster">
-        <div class="hire fighter"><span class="role">Sentry</span><span class="meta">KIN 8 · Watchtower · Defenses 1</span>
-          <p>Mans watchtower, ranged crossbow alert.</p>
-        </div>
-        <div class="hire fighter"><span class="role">Gate Guard (pair)</span><span class="meta">KIN 10 · Gate / Palisade ·
-            Defenses 2</span>
-          <p>Patrols gates and palisade segments. Each one needs their own tent.</p>
-        </div>
-        <div class="hire fighter"><span class="role">Turret Gunner</span><span class="meta">SYN 12 · Turret · Defenses 3</span>
-          <p>+30% turret accuracy, +20% fire rate.</p>
-        </div>
-        <div class="hire fighter"><span class="role">Captain</span><span class="meta">SYN 14 · Slay named captain or war
-            contract · Defenses 4</span>
-          <p>Elite party companion + 3-NPC squad (each squad member needs a tent too).</p>
-        </div>
-        <div class="hire fighter"><span class="role">Mercenary</span><span class="meta">SYN 10 + KIN 8 · Neutral rep ·
-            Leadership 2</span>
-          <p>Personal party follower, uses your loadout.</p>
-        </div>
-        <div class="hire fighter"><span class="role">Diplomat Envoy</span><span class="meta">SYN 12 · Friendly faction rep ·
-            Embassy · Diplomacy 3</span>
-          <p>Mans embassy, +1 faction reputation per day.</p>
-        </div>
+        <div class="hire fighter"><span class="role">Sentry</span><span class="meta">COM 8 · Watchtower · Defenses 1</span><p>Mans watchtower, ranged crossbow alert.</p></div>
+        <div class="hire fighter"><span class="role">Gate Guard (pair)</span><span class="meta">RES 10 · Gate / Palisade · Defenses 2</span><p>Patrols gates and palisade segments. Each one needs their own tent.</p></div>
+        <div class="hire fighter"><span class="role">Turret Gunner</span><span class="meta">COM 12 · Turret · Defenses 3</span><p>+30% turret accuracy, +20% fire rate.</p></div>
+        <div class="hire fighter"><span class="role">Captain</span><span class="meta">RES 14 · Slay named captain or war contract · Defenses 4</span><p>Elite party companion + 3-NPC squad (each squad member needs a tent too).</p></div>
+        <div class="hire fighter"><span class="role">Mercenary</span><span class="meta">CHA 10 + RES 8 · Neutral rep · Leadership 2</span><p>Personal party follower, uses your loadout.</p></div>
+        <div class="hire fighter"><span class="role">Diplomat Envoy</span><span class="meta">CHA 12 · Friendly faction rep · Embassy · Diplomacy 3</span><p>Mans embassy, +1 faction reputation per day.</p></div>
       </div>
     </section>
 

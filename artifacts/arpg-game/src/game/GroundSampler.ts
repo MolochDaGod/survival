@@ -58,6 +58,9 @@ export function groundY(x: number, z: number): number {
 
   _origin.set(x, RAY_START_Y, z);
   raycaster.set(_origin, DOWN);
+  // Filter out Sprites (damage numbers, loot labels) that crash
+  // Raycaster in Three.js r183+ when raycaster.camera is null.
+  raycaster.layers.mask = MASK_GROUND;
   // Walk children once — root has no geometry of its own. `recursive=true`
   // descends into each chunk + prop. Layer mask filters to WORLD only.
   const hits = raycaster.intersectObjects(scene.children, true);

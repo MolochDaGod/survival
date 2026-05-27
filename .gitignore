@@ -68,3 +68,4 @@ attached_assets/
 .local/
 
 .vercel
+.env*.local

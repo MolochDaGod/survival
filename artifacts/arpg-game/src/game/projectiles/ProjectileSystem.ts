@@ -219,6 +219,10 @@ export class ProjectileSystem {
   update(dt: number, camera?: THREE.Camera): void {
     if (dt <= 0) return;
     const _camera = camera;
+    // Three.js r183+ requires camera on the Raycaster to raycast Sprites.
+    // Without this, any Sprite child (damage numbers, loot labels) in the
+    // target hierarchy crashes with "Cannot read properties of null".
+    if (_camera) (_RAY as any).camera = _camera;
     // Iterate by index since we may splice.
     for (let i = this.active.length - 1; i >= 0; i--) {
       const p = this.active[i]!;

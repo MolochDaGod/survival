@@ -56,8 +56,8 @@
 
   /* Side-nav layout */
   .layout{display:grid;grid-template-columns:240px 1fr;gap:3rem;padding:3rem 0 4rem}
-  .layout aside{position:sticky;top:5rem;align-self:start;background:linear-gradient(to bottom,var(--paper-2),var(--paper));border:1px solid var(--rule-ink);border-radius:4px;padding:1rem 1rem 1.1rem;box-shadow:0 1px 0 rgba(255,255,255,0.4) inset, 0 2px 6px rgba(29,17,8,0.06)}
-  .layout aside h4{margin:0 0 .8rem;font-size:.8rem;color:var(--gold-deep)}
+  .layout aside{position:sticky;top:5rem;align-self:start}
+  .layout aside h4{margin-bottom:.8rem;font-size:.8rem}
   .layout aside ul{list-style:none;padding:0;margin:0;border-left:1px solid var(--rule-ink)}
   .layout aside ul a{display:block;padding:.4rem 0 .4rem 1rem;border-left:2px solid transparent;margin-left:-1px;color:var(--ink-soft);font-family:'Cinzel',serif;font-size:.82rem;letter-spacing:.08em;text-transform:uppercase}
   .layout aside ul a:hover{color:var(--gold-deep);border-left-color:var(--gold-deep)}
@@ -184,10 +184,8 @@
         <h3>What That Means In Practice</h3>
         <div class="grid-2">
           <div>
-            <h4>Same Nexus Attributes</h4>
-            <p>Every NPC rolls the same eight Nexus attributes you do — <strong>BIO, NEU, KIN, QNT, SYN, CHR, ENT, GRA</strong> — in
-              the same range. You can inspect any NPC and read their sheet exactly as you'd read your own. See the <a
-                href="stats-guide.html">Stats Guide</a> for the 37 derived stats each one drives.</p>
+            <h4>Same Stats</h4>
+            <p>Every NPC rolls Strength / Agility / Constitution / Intellect / Resolve / Charisma in the same range you do. You can inspect any NPC and read their sheet exactly as you'd read your own.</p>
           </div>
           <div>
             <h4>Same Professions</h4>
@@ -384,18 +382,8 @@
             <tr><td>Neutral</td><td>0 to +24</td><td>Coexistence. Base prices. The default starting state with all five.</td></tr>
             <tr><td style="color:var(--moss)">Friendly</td><td>+25 to +49</td><td>-10% trade prices. Standard contracts unlock. Faction guards warn off other-faction hostiles in your radius.</td></tr>
             <tr><td style="color:var(--moss)">Honored</td><td>+50 to +74</td><td>-20% trade. Faction guards <em>intervene</em> to defend you in their territory. Faction-signature gear recipes unlock.</td></tr>
-            <tr>
-              <td style="color:var(--gold-deep);font-weight:700">Allied</td>
-              <td>+75 to +99</td>
-              <td>Faction patrols actively protect your claimed camps in their territory. -30% trade. Faction caravans visit your
-                camp every 3-5 days.</td>
-            </tr>
-            <tr>
-              <td style="color:var(--gold-deep);font-weight:900">Hero</td>
-              <td>+100</td>
-              <td>Faction reinforces your camp during raids by other factions (one squad per raid). Unique cosmetic gear set + a
-                named NPC champion joins as a one-of-a-kind hire. Maximum one Hero faction at a time.</td>
-            </tr>
+            <tr><td style="color:var(--gold-bright)">Allied</td><td>+75 to +99</td><td>Faction patrols actively protect your claimed camps in their territory. -30% trade. Faction caravans visit your camp every 3-5 days.</td></tr>
+            <tr><td style="color:var(--gold-bright);font-weight:700">Hero</td><td>+100</td><td>Faction reinforces your camp during raids by other factions (one squad per raid). Unique cosmetic gear set + a named NPC champion joins as a one-of-a-kind hire. Maximum one Hero faction at a time.</td></tr>
           </tbody>
         </table>
       </div>
@@ -532,10 +520,7 @@
         <h3>The Four Requirements</h3>
         <ol>
           <li>
-            <strong>A successful dialog.</strong> Each hire has a recruit method listed in the roster below — usually a
-            Nexus-attribute check (<strong>SYN</strong> for social/recruit, <strong>KIN</strong> for combat, <strong>NEU</strong>
-            for scout/trap, <strong>ENT</strong> for endurance) at a difficulty that scales with the role's tier. You can fail the
-            dialog and try again later, sometimes with better gear or a higher attribute. NPCs remember if you've insulted them.
+            <strong>A successful dialog.</strong> Each hire has a recruit method listed in the roster below — usually a stat check (Charisma, Resolve, Combat, or Survival) at a difficulty that scales with the role's tier. You can fail the dialog and try again later, sometimes with better gear or a higher stat. NPCs remember if you've insulted them.
           </li>
           <li>
             <strong>A claim flag in the area.</strong> The flag is a player-painted 64×64 image stitched onto silk and raised on a 3m pole. It doubles as your <em>guild logo</em>. Until a flag is planted, you have no recognized camp — and no NPC will commit to one.
@@ -573,65 +558,29 @@
 
       <h3 style="margin-top:1.5rem;color:var(--moss)">Harvesters — gather while you sleep</h3>
       <div class="roster">
-        <div class="hire harvester"><span class="role">Woodcutter</span><span class="meta">SYN 8 · Logging Camp · Buildings
-            2</span>
-          <p>+5 wood/day from Logging Camp.</p>
-        </div>
-        <div class="hire harvester"><span class="role">Miner</span><span class="meta">SYN 8 · Mining Outpost · Buildings
-            3</span>
-          <p>+5 ore/day from Mining Outpost.</p>
-        </div>
-        <div class="hire harvester"><span class="role">Farmer</span><span class="meta">SYN 8 · Field · Buildings 4</span>
-          <p>+5 herb/day from Fields.</p>
-        </div>
-        <div class="hire harvester"><span class="role">Forager</span><span class="meta">SYN 7 · Forestry 2</span>
-          <p>Passive berries &amp; mushrooms in camp radius.</p>
-        </div>
-        <div class="hire harvester"><span class="role">Trapper</span><span class="meta">NEU 10 · Trapping 3</span>
-          <p>Resets snares and gathers carcasses.</p>
-        </div>
+        <div class="hire harvester"><span class="role">Woodcutter</span><span class="meta">CHA 8 · Logging Camp · Buildings 2</span><p>+5 wood/day from Logging Camp.</p></div>
+        <div class="hire harvester"><span class="role">Miner</span><span class="meta">CHA 8 · Mining Outpost · Buildings 3</span><p>+5 ore/day from Mining Outpost.</p></div>
+        <div class="hire harvester"><span class="role">Farmer</span><span class="meta">CHA 8 · Field · Buildings 4</span><p>+5 herb/day from Fields.</p></div>
+        <div class="hire harvester"><span class="role">Forager</span><span class="meta">CHA 7 · Forestry 2</span><p>Passive berries &amp; mushrooms in camp radius.</p></div>
+        <div class="hire harvester"><span class="role">Trapper</span><span class="meta">SUR 10 · Trapping 3</span><p>Resets snares and gathers carcasses.</p></div>
       </div>
 
       <h3 style="margin-top:1.5rem;color:var(--ember)">Vendors — turn loot into gold</h3>
       <div class="roster">
-        <div class="hire vendor"><span class="role">Stall Vendor</span><span class="meta">SYN 9 · Market Stall · Trade 1</span>
-          <p>Mans market stall, auto-sells junk-flagged loot.</p>
-        </div>
-        <div class="hire vendor"><span class="role">Caravan Master</span><span class="meta">SYN 11 · Caravan Cart · Trade
-            2</span>
-          <p>Required to make Trade Posts pay out daily gold.</p>
-        </div>
+        <div class="hire vendor"><span class="role">Stall Vendor</span><span class="meta">CHA 9 · Market Stall · Trade 1</span><p>Mans market stall, auto-sells junk-flagged loot.</p></div>
+        <div class="hire vendor"><span class="role">Caravan Master</span><span class="meta">CHA 11 · Caravan Cart · Trade 2</span><p>Required to make Trade Posts pay out daily gold.</p></div>
         <div class="hire vendor"><span class="role">Fence</span><span class="meta">3+ theft acts · Market Complex · Trade 3</span><p>Buys stolen / contraband loot at +50% over normal.</p></div>
-        <div class="hire vendor"><span class="role">Bazaar Merchant</span><span class="meta">SYN 13 · Friendly faction rep ·
-            Trade 4</span>
-          <p>Three slots per Grand Bazaar, rotating rare goods.</p>
-        </div>
+        <div class="hire vendor"><span class="role">Bazaar Merchant</span><span class="meta">CHA 13 · Friendly faction rep · Trade 4</span><p>Three slots per Grand Bazaar, rotating rare goods.</p></div>
       </div>
 
       <h3 style="margin-top:1.5rem;color:var(--blood)">Ally Fighters — guards &amp; followers</h3>
       <div class="roster">
-        <div class="hire fighter"><span class="role">Sentry</span><span class="meta">KIN 8 · Watchtower · Defenses 1</span>
-          <p>Mans watchtower, ranged crossbow alert.</p>
-        </div>
-        <div class="hire fighter"><span class="role">Gate Guard (pair)</span><span class="meta">KIN 10 · Gate / Palisade ·
-            Defenses 2</span>
-          <p>Patrols gates and palisade segments. Each one needs their own tent.</p>
-        </div>
-        <div class="hire fighter"><span class="role">Turret Gunner</span><span class="meta">SYN 12 · Turret · Defenses 3</span>
-          <p>+30% turret accuracy, +20% fire rate.</p>
-        </div>
-        <div class="hire fighter"><span class="role">Captain</span><span class="meta">SYN 14 · Slay named captain or war
-            contract · Defenses 4</span>
-          <p>Elite party companion + 3-NPC squad (each squad member needs a tent too).</p>
-        </div>
-        <div class="hire fighter"><span class="role">Mercenary</span><span class="meta">SYN 10 + KIN 8 · Neutral rep ·
-            Leadership 2</span>
-          <p>Personal party follower, uses your loadout.</p>
-        </div>
-        <div class="hire fighter"><span class="role">Diplomat Envoy</span><span class="meta">SYN 12 · Friendly faction rep ·
-            Embassy · Diplomacy 3</span>
-          <p>Mans embassy, +1 faction reputation per day.</p>
-        </div>
+        <div class="hire fighter"><span class="role">Sentry</span><span class="meta">COM 8 · Watchtower · Defenses 1</span><p>Mans watchtower, ranged crossbow alert.</p></div>
+        <div class="hire fighter"><span class="role">Gate Guard (pair)</span><span class="meta">RES 10 · Gate / Palisade · Defenses 2</span><p>Patrols gates and palisade segments. Each one needs their own tent.</p></div>
+        <div class="hire fighter"><span class="role">Turret Gunner</span><span class="meta">COM 12 · Turret · Defenses 3</span><p>+30% turret accuracy, +20% fire rate.</p></div>
+        <div class="hire fighter"><span class="role">Captain</span><span class="meta">RES 14 · Slay named captain or war contract · Defenses 4</span><p>Elite party companion + 3-NPC squad (each squad member needs a tent too).</p></div>
+        <div class="hire fighter"><span class="role">Mercenary</span><span class="meta">CHA 10 + RES 8 · Neutral rep · Leadership 2</span><p>Personal party follower, uses your loadout.</p></div>
+        <div class="hire fighter"><span class="role">Diplomat Envoy</span><span class="meta">CHA 12 · Friendly faction rep · Embassy · Diplomacy 3</span><p>Mans embassy, +1 faction reputation per day.</p></div>
       </div>
     </section>
 
