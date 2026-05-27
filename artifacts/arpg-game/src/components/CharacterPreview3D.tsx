@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { createGLTFLoader } from '@/game/loaders/createGLTFLoader';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
+import { assetUrl } from '@/lib/assetUrl';
 
 interface Props {
   modelPath: string;
@@ -90,7 +91,7 @@ export const CharacterPreview3D: React.FC<Props> = ({
 
     const loader = createGLTFLoader();
     loader.load(
-      modelPath,
+      assetUrl(modelPath),
       (gltf) => {
         if (disposed) return;
         const model = gltf.scene;

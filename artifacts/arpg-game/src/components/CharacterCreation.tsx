@@ -36,6 +36,7 @@ import { BadgesPanel } from './BadgesPanel';
 import { PerkTierCatalog } from './PerkTierCatalog';
 import { StatBook } from './books/StatBook';
 import { SKILL_TREE } from '../game/constants';
+import { assetUrl } from '../lib/assetUrl';
 
 type Tab = 'identity' | 'appearance' | 'outfit' | 'stats' | 'background';
 
@@ -227,7 +228,7 @@ export const CharacterCreation: React.FC<CharacterCreationProps> = ({ onComplete
       charGroup.traverse((c) => { if (!headBone && c.name === 'Head') headBone = c; });
     }
 
-    gltfLoaderRef.current.load(hairPath, (hairGltf) => {
+    gltfLoaderRef.current.load(assetUrl(hairPath), (hairGltf) => {
       const hairGroup = hairGltf.scene as THREE.Group;
       upgradeMaterials(hairGroup);
       hairGroup.traverse((c) => {
@@ -353,7 +354,7 @@ export const CharacterCreation: React.FC<CharacterCreationProps> = ({ onComplete
       spinnerTimerRef.current = null;
     }, 500);
 
-    gltfLoaderRef.current.load(outfitPreset.gltfPath, (gltf) => {
+    gltfLoaderRef.current.load(assetUrl(outfitPreset.gltfPath), (gltf) => {
       if (token !== outfitLoadTokenRef.current) return;
 
       if (spinnerTimerRef.current !== null) {
@@ -456,7 +457,7 @@ export const CharacterCreation: React.FC<CharacterCreationProps> = ({ onComplete
     const basePath    = bodyTypeCfg?.gltfPath || STARTING_MODEL[gender];
 
     const doLoad = (path: string) => {
-      gltfLoaderRef.current.load(path, (gltf) => {
+      gltfLoaderRef.current.load(assetUrl(path), (gltf) => {
         const group = gltf.scene as THREE.Group;
         upgradeMaterials(group);
         const { skinColor, hairColor, eyeColor } = configRef.current;
@@ -1038,14 +1039,12 @@ onBodyProportionChange = { b => setConfig(p => ({ ...p, bodyProportion: b }))}
                     overflow: 'hidden', flexShrink: 0,
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                   }}>
-                    <img
-                      src={sm.icon}
-                      alt=""
-                      style={{
-                        width: '100%', height: '100%', objectFit: 'cover',
-                        filter: config.stats[sm.key] > 0 ? 'none' : 'grayscale(0.6) brightness(0.75)',
-                      }}
-                    />
+                    <span style={{
+                      fontSize: 8, fontWeight: 900, color: '#fff',
+                      textShadow: '0 1px 2px rgba(0,0,0,0.5)',
+                      letterSpacing: '0.04em',
+                      opacity: config.stats[sm.key] > 0 ? 1 : 0.4,
+                    }}>{sm.abbr}</span>
                   </div>
                   <div style={{ fontSize: 10, color: '#8899aa', width: 28 }}>{sm.abbr}</div>
                   <div style={{ flex: 1, display: 'flex', gap: 2 }}>
@@ -1183,14 +1182,11 @@ onBodyProportionChange = { b => setConfig(p => ({ ...p, bodyProportion: b }))}
                         overflow: 'hidden', flexShrink: 0,
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                       }}>
-                        <img
-                          src={meta.icon}
-                          alt=""
-                          style={{
-                            width: '100%', height: '100%', objectFit: 'cover',
-                            filter: val > 0 ? 'none' : 'grayscale(0.6) brightness(0.75)',
-                          }}
-                        />
+                        <span style={{
+                          fontSize: 7, fontWeight: 900, color: '#fff',
+                          textShadow: '0 1px 2px rgba(0,0,0,0.5)',
+                          opacity: val > 0 ? 1 : 0.4,
+                        }}>{meta.abbr}</span>
                       </div>
                       <span style={{
                         fontSize: 10, fontWeight: 700, letterSpacing: '0.08em',
@@ -1710,15 +1706,13 @@ const StatRow: React.FC<{
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           transition: 'box-shadow 0.2s ease, border-color 0.2s ease',
         }}>
-          <img
-            src={meta.icon}
-            alt=""
-            style={{
-              width: '100%', height: '100%', objectFit: 'cover',
-              filter: value > 0 ? 'none' : 'grayscale(0.6) brightness(0.75)',
-              transition: 'filter 0.2s ease',
-            }}
-          />
+          <span style={{
+            fontSize: 10, fontWeight: 900, color: '#fff',
+            textShadow: '0 1px 3px rgba(0,0,0,0.6)',
+            letterSpacing: '0.04em',
+            opacity: value > 0 ? 1 : 0.4,
+            transition: 'opacity 0.2s ease',
+          }}>{meta.abbr}</span>
         </div>
         <span style={{ fontSize: 11, fontWeight: 800, color: meta.color, letterSpacing: '0.1em', width: 28 }}>{meta.abbr}</span>
         <span style={{ fontSize: 11, color: '#aabbcc', flex: 1 }}>{meta.label}</span>
