@@ -148,8 +148,50 @@ export type EffectKey =
   | "bountyRareContractBonus"
   | "sellGoldBonus"
   | "passiveGoldRate"
-  | "reputationGainBonus";
-// ── CHR / ENT / GRA — reserved for future content (no perks reference these yet)
+  | "reputationGainBonus"
+  // ── CHR — chronal (time manipulation, stasis, rewind) ──
+  | "anomalyResistBonus"
+  | "chronalSicknessImmune"
+  | "temporalScoutDrone"
+  | "causalityShield"
+  | "stasisTurretSlots"
+  | "rewindCharges"
+  | "timeDisplaceImmune"
+  | "rewindAnchor"
+  | "selfDuplicateDuration"
+  | "stasisMineCount"
+  | "rewindWindowDuration"
+  | "outsideTimeline"
+  | "deployableDurationBonus"
+  // ── ENT — entropy (durability, salvage, decay resist) ──
+  | "equipDurabilityBonus"
+  | "salvageDroneSlots"
+  | "resourceSpoilageReduction"
+  | "corrosionResist"
+  | "repairPylonSlots"
+  | "repairCostReduction"
+  | "degradedCraftAccess"
+  | "entropyFieldDps"
+  | "gearMinDurability"
+  | "fieldRecyclerSlots"
+  | "corrosionImmune"
+  | "gearIndestructible"
+  | "passiveHpRegenBonus"
+  // ── GRA — gravitic (fall damage, zero-G, spatial force) ──
+  | "fallDmgResistBonus"
+  | "rollDistanceBonus"
+  | "gravitySentrySlots"
+  | "zeroGNav"
+  | "massDriverTurretSlots"
+  | "gravPushAbility"
+  | "wallRunAccess"
+  | "gravityAnchorSlots"
+  | "zeroGCombat"
+  | "gravManipulation"
+  | "gravitonExoframe"
+  | "enemyLaunch"
+  | "orbitalStrikeAccess"
+  | "gravityReversal";
 
 export interface EffectMeta {
   key: EffectKey;
@@ -265,9 +307,16 @@ export const PRIMARY_STATS: PrimaryStat[] = [
     color: "#ffeb3b",
     icon: "/icons/stats/chr.png",
     description:
-      "Temporal anomaly resistance, time perception, causality protection — content reserved for chronal perks.",
-    archetype: "Chrono-Operative / Echo Reader",
-    affinityEffects: [],
+      "Temporal anomaly resistance, time perception, causality protection. Deploys stasis turrets, rewind anchors, and temporal mines.",
+    archetype: "Chrono-Operative / Echo Reader / Timeline Bender",
+    affinityEffects: [
+      "anomalyResistBonus", "chronalSicknessImmune",
+      "temporalScoutDrone", "causalityShield",
+      "stasisTurretSlots", "rewindCharges", "timeDisplaceImmune",
+      "rewindAnchor", "selfDuplicateDuration",
+      "stasisMineCount", "rewindWindowDuration",
+      "outsideTimeline", "deployableDurationBonus",
+    ],
   },
   {
     key: "ent",
@@ -276,9 +325,16 @@ export const PRIMARY_STATS: PrimaryStat[] = [
     color: "#f44336",
     icon: "/icons/stats/ent.png",
     description:
-      "Equipment durability, resource preservation, decay resistance — content reserved for entropy perks.",
-    archetype: "Reclaimer / Preserver",
-    affinityEffects: [],
+      "Equipment durability, resource preservation, decay resistance. Deploys salvage drones, repair pylons, and entropy fields.",
+    archetype: "Reclaimer / Preserver / Entropy Sink",
+    affinityEffects: [
+      "equipDurabilityBonus", "salvageDroneSlots",
+      "resourceSpoilageReduction", "corrosionResist",
+      "repairPylonSlots", "repairCostReduction", "degradedCraftAccess",
+      "entropyFieldDps", "gearMinDurability",
+      "fieldRecyclerSlots", "corrosionImmune",
+      "gearIndestructible", "passiveHpRegenBonus",
+    ],
   },
   {
     key: "gra",
@@ -287,9 +343,16 @@ export const PRIMARY_STATS: PrimaryStat[] = [
     color: "#009688",
     icon: "/icons/stats/gra.png",
     description:
-      "Fall damage reduction, zero-G adaptation, spatial force manipulation — content reserved for gravitic perks.",
-    archetype: "Orbital Specialist",
-    affinityEffects: [],
+      "Fall damage reduction, zero-G adaptation, spatial force manipulation. Deploys gravity sentries, mass drivers, and graviton exoframes.",
+    archetype: "Orbital Specialist / Graviton Weaver / Force Adept",
+    affinityEffects: [
+      "fallDmgResistBonus", "rollDistanceBonus",
+      "gravitySentrySlots", "zeroGNav",
+      "massDriverTurretSlots", "gravPushAbility", "wallRunAccess",
+      "gravityAnchorSlots", "zeroGCombat", "gravManipulation",
+      "gravitonExoframe", "enemyLaunch",
+      "orbitalStrikeAccess", "gravityReversal",
+    ],
   },
 ];
 
