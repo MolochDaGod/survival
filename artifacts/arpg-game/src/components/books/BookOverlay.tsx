@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { ErrorBoundary, type FallbackProps } from 'react-error-boundary';
 import { useSpriteSheet } from './useSpriteSheet';
 import { CloseGlyph, ArrowLeftGlyph, ArrowRightGlyph } from './BookIcons';
+import { assetUrl } from '../../lib/assetUrl';
 import './books.css';
 
 /**
@@ -139,7 +140,7 @@ export function BookOverlay({ kind, pages, onClose, initialPage = 0 }: BookOverl
 
   // Open animation: 12 frames @ 30 fps = ~400 ms
   const open = useSpriteSheet({
-    url: `${base}/open_book.png`,
+    url: assetUrl(`${base}/open_book.png`),
     cols: 4, rows: 3, totalFrames: 12, fps: 30,
     playing: phase === 'OPENING',
     displayWidth: W, displayHeight: H,
@@ -148,7 +149,7 @@ export function BookOverlay({ kind, pages, onClose, initialPage = 0 }: BookOverl
 
   // Close animation: 12 frames @ 30 fps
   const close = useSpriteSheet({
-    url: `${base}/close_book.png`,
+    url: assetUrl(`${base}/close_book.png`),
     cols: 4, rows: 3, totalFrames: 12, fps: 30,
     playing: phase === 'CLOSING',
     displayWidth: W, displayHeight: H,
@@ -157,7 +158,7 @@ export function BookOverlay({ kind, pages, onClose, initialPage = 0 }: BookOverl
 
   // Turn left & right (16 frames @ 32 fps = ~500 ms)
   const turnLeft = useSpriteSheet({
-    url: `${base}/turn_left.png`,
+    url: assetUrl(`${base}/turn_left.png`),
     cols: 4, rows: 4, totalFrames: 16, fps: 32,
     playing: phase === 'TURNING_LEFT',
     displayWidth: W, displayHeight: H,
@@ -165,7 +166,7 @@ export function BookOverlay({ kind, pages, onClose, initialPage = 0 }: BookOverl
   });
 
   const turnRight = useSpriteSheet({
-    url: `${base}/turn_right.png`,
+    url: assetUrl(`${base}/turn_right.png`),
     cols: 4, rows: 4, totalFrames: 16, fps: 32,
     playing: phase === 'TURNING_RIGHT',
     displayWidth: W, displayHeight: H,
@@ -175,7 +176,7 @@ export function BookOverlay({ kind, pages, onClose, initialPage = 0 }: BookOverl
   // Open frame — also serves as the static "fully open" backdrop while reading,
   // by holding on its last frame.
   const openStatic = useSpriteSheet({
-    url: `${base}/open_book.png`,
+    url: assetUrl(`${base}/open_book.png`),
     cols: 4, rows: 3, totalFrames: 12, fps: 30,
     playing: false,
     displayWidth: W, displayHeight: H,

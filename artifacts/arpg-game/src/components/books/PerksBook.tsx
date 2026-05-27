@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { BookOverlay } from './BookOverlay';
+import { assetUrl } from '../../lib/assetUrl';
 import { HeartMark, SwordMark, SparkleMark, HammerMark, CheckGlyph } from './BookIcons';
 import { HERO_PERKS, WARRIOR_PERKS, SMARTS_PERKS, MAKER_PERKS, type Perk, type StatTrack } from '../../game/progression/PerkSystem';
 
@@ -208,8 +209,8 @@ export function PerksBook({ onClose, spentByTrack, unlocked, availablePoints, on
                         onClick={() => setSelectedByTrack({ ...selectedByTrack, [track]: p })}
                         title={p.name}
                       >
-                        <img
-                          src={p.icon}
+                      <img
+                          src={assetUrl(p.icon)}
                           alt={p.name}
                           style={{ width: '70%', height: '70%' }}
                           onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}

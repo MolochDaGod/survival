@@ -18,6 +18,7 @@
  */
 
 import { useState } from 'react';
+import { assetUrl } from '../../lib/assetUrl';
 
 interface PortraitCrop {
   /** % from left of the source texture. 0..100 */
@@ -76,7 +77,8 @@ export function MonsterPortrait({ enemyKey, name, portrait, fallbackColor = '#3a
     );
   }
 
-  const url = stage === 'explicit' && portrait ? portrait : `/bestiary/${enemyKey}.png`;
+  const raw = stage === 'explicit' && portrait ? portrait : `/bestiary/${enemyKey}.png`;
+  const url = assetUrl(raw);
   return (
     <img
       className="monster-portrait"

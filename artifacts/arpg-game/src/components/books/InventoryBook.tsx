@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
 import { BookOverlay } from './BookOverlay';
+import { assetUrl } from '../../lib/assetUrl';
 import { MiniMap, MapMarker } from './MiniMap';
 import {
   HelmGlyph, ChestplateGlyph, LegsGlyph, BootsGlyph,
@@ -54,7 +55,7 @@ const EQUIP_SLOTS: { slot: EquipSlot; label: string; Icon: SlotIcon }[] = [
  */
 function ItemIcon({ icon, size = 26 }: { icon?: string; size?: number }) {
   if (icon && icon.startsWith('/')) {
-    return <img src={icon} alt="" style={{ width: size, height: size, imageRendering: 'pixelated' }} />;
+    return <img src={assetUrl(icon)} alt="" style={{ width: size, height: size, imageRendering: 'pixelated' }} />;
   }
   return <BoxGlyph size={size} color="#6b3e1c" />;
 }

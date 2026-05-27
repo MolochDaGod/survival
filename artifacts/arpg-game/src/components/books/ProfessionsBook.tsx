@@ -18,6 +18,7 @@
 
 import { useEffect, useState } from 'react';
 import { BookOverlay } from './BookOverlay';
+import { assetUrl } from '../../lib/assetUrl';
 import { CheckGlyph } from './BookIcons';
 import {
   PROFESSIONS,
@@ -210,7 +211,7 @@ export function ProfessionsBook({ onClose }: Props) {
                       title={skill.name}
                     >
                       <img
-                        src={skill.icon}
+                        src={assetUrl(skill.icon)}
                         alt={skill.name}
                         style={{ width: '70%', height: '70%' }}
                         onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
@@ -250,7 +251,7 @@ export function ProfessionsBook({ onClose }: Props) {
                   title={master.name}
                 >
                   <img
-                    src={master.icon}
+                    src={assetUrl(master.icon)}
                     alt={master.name}
                     style={{ width: '70%', height: '70%' }}
                     onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
