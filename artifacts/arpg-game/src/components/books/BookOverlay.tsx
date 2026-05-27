@@ -126,7 +126,11 @@ type Phase = 'OPENING' | 'READING' | 'TURNING_LEFT' | 'TURNING_RIGHT' | 'CLOSING
 
 export function BookOverlay({ kind, pages, onClose, initialPage = 0 }: BookOverlayProps) {
   const base = ASSET_BASE[kind];
-  const [phase, setPhase] = useState<Phase>('OPENING');
+  // Book sprite sheets (open_book.png, close_book.png, turn_*.png) are not
+  // yet on R2. Skip the sprite animation phases and go straight to READING
+  // so the book content is immediately visible. When sprite assets are
+  // uploaded, revert this to 'OPENING'.
+  const [phase, setPhase] = useState<Phase>('READING');
   const [pageIndex, setPageIndex] = useState(initialPage);
   const W = useBookSize();
   const H = W; // book art is square
@@ -220,37 +224,36 @@ export function BookOverlay({ kind, pages, onClose, initialPage = 0 }: BookOverl
       e.stopImmediatePropagation();
       e.preventDefault();
       if (phase !== 'READING') return;
-      if (e.code === 'Escape' || e.code === 'KeyI')                       setPhase('CLOSING');
-      else if (e.code === 'ArrowRight' && pageIndex < pages.length - 1) { setPageIndex(p => p + 1); setPhase('TURNING_RIGHT'); }
-      else if (e.code === 'ArrowLeft'  && pageIndex > 0)                { setPageIndex(p => p - 1); setPhase('TURNING_LEFT'); }
+      if (e.code === 'Escape' || e.code === 'KeyI')                       onCloseRef.current();
+      else if (e.code === 'ArrowRight' && pageIndex < pages.length - 1) { setPageIndex(p => p + 1); }
+      else if (e.code === 'ArrowLeft'  && pageIndex > 0)                { setPageIndex(p => p - 1); }
     };
     window.addEventListener('keydown', handler, { capture: true });
     return () => window.removeEventListener('keydown', handler, { capture: true } as any);
   }, [phase, pageIndex, pages.length]);
 
+  // Because the book sprite assets are missing, bypass animation phases
+  // entirely — close immediately, page-turns are instant index swaps.
+  // When sprites are uploaded, restore the CLOSING / TURNING_* transitions.
   const handleClose = () => {
-    if (phase === 'READING') setPhase('CLOSING');
+    if (phase === 'READING') onCloseRef.current();
   };
 
   const goPrev = () => {
     if (phase === 'READING' && pageIndex > 0) {
       setPageIndex(pageIndex - 1);
-      setPhase('TURNING_LEFT');
     }
   };
   const goNext = () => {
     if (phase === 'READING' && pageIndex < pages.length - 1) {
       setPageIndex(pageIndex + 1);
-      setPhase('TURNING_RIGHT');
     }
   };
   const goTo = (pageId: string) => {
     if (phase !== 'READING') return;
     const idx = pages.findIndex(p => p.id === pageId);
     if (idx < 0 || idx === pageIndex) return;
-    const nextPhase: Phase = idx > pageIndex ? 'TURNING_RIGHT' : 'TURNING_LEFT';
     setPageIndex(idx);
-    setPhase(nextPhase);
   };
 
   const navApi: PageNavApi = {
@@ -309,9 +312,7 @@ export function BookOverlay({ kind, pages, onClose, initialPage = 0 }: BookOverl
                 style={{ background: p.badge.color }}
                 onClick={() => {
                   if (phase !== 'READING' || i === pageIndex) return;
-                  const nextPhase = i > pageIndex ? 'TURNING_RIGHT' : 'TURNING_LEFT';
                   setPageIndex(i);
-                  setPhase(nextPhase);
                 }}
                 title={p.badge.label}
               >
