@@ -12,6 +12,8 @@ import { LAYERS } from '../Layers';
 import type { PhysicsWorld } from '../physics/PhysicsWorld';
 import { GROUPS_PROP } from '../physics/PhysicsGroups';
 import type RAPIER from '@dimforge/rapier3d-compat';
+import { createGLTFLoader } from '../loaders/createGLTFLoader';
+import { assetUrl } from '../../lib/assetUrl';
 
 /**
  * Lightweight axis-Y rotation → quaternion helper for collider rotations.
@@ -283,6 +285,146 @@ function buildCamp(scene: THREE.Scene, def: SettlementDef) {
   }
 }
 
+// ── GLB campsite asset paths ──────────────────────────────────────────────────
+const CAMPSITE_GLBS = {
+  campfire:    '/models/campsite/glb/Campfire_LOWPOLY.glb',
+  tent:        '/models/campsite/glb/Tents_Green.glb',
+  tentScraps:  '/models/campsite/glb/TentScraps_Green.glb',
+  tarp:        '/models/campsite/glb/Tarps_Green.glb',
+  sleepingBag: '/models/campsite/glb/SleepingBags_Green.glb',
+  damagedBag:  '/models/campsite/glb/DamagedSleepingBags_Green.glb',
+  axe:         '/models/campsite/glb/FireAxe.glb',
+  campfireHQ:  '/models/campsite/glb/Campfire_Default.glb',
+} as const;
+
+/** Shared GLTF loader instance. */
+const _glbLoader = createGLTFLoader();
+
+/**
+ * Load a campsite GLB and place a clone at a world position.
+ * Returns immediately — the model appears async when the load finishes.
+ */
+function placeGLBProp(
+  scene: THREE.Scene,
+  glbPath: string,
+  wx: number, wz: number,
+  opts: {
+    scale?: number;
+    ry?: number;
+    yOffset?: number;
+    physics?: PhysicsWorld | null;
+    body?: RAPIER.RigidBody | null;
+    colliderHalfExtents?: [number, number, number];
+  } = {},
+): void {
+  const wy = worldHeight(wx, wz) + (opts.yOffset ?? 0);
+  const scale = opts.scale ?? 1;
+  const ry = opts.ry ?? Math.random() * Math.PI * 2;
+
+  _glbLoader.load(assetUrl(glbPath), (gltf) => {
+    const group = gltf.scene.clone(true) as THREE.Group;
+    group.position.set(wx, wy, wz);
+    group.rotation.y = ry;
+    group.scale.setScalar(scale);
+    group.traverse((child) => {
+      if (child instanceof THREE.Mesh) {
+        child.castShadow = true;
+        child.receiveShadow = true;
+        child.layers.enable(LAYERS.WORLD);
+      }
+    });
+    scene.add(group);
+
+    // Add simple cuboid collider if physics is available
+    if (opts.physics && opts.body && opts.colliderHalfExtents) {
+      const [hw, hh, hd] = opts.colliderHalfExtents;
+      addCuboid(opts.physics, opts.body, hw * scale, hh * scale, hd * scale, wx, wy + hh * scale, wz, ry);
+    }
+  }, undefined, (err) => {
+    console.warn(`[FeaturePlacer] Failed to load campsite GLB: ${glbPath}`, err);
+  });
+}
+
+/**
+ * Build a camp using real campsite GLB assets instead of procedural cones.
+ * Called for every 'camp' settlement alongside the procedural fallback.
+ */
+function buildCampGLB(
+  scene: THREE.Scene,
+  def: SettlementDef,
+  physics: PhysicsWorld | null,
+  body: RAPIER.RigidBody | null,
+) {
+  const { x, z } = def;
+  const pOpts = { physics, body };
+
+  // Central campfire (with collider for the stone ring)
+  placeGLBProp(scene, CAMPSITE_GLBS.campfire, x, z, {
+    scale: 1.2, ry: Math.random() * Math.PI * 2,
+    colliderHalfExtents: [0.8, 0.4, 0.8],
+    ...pOpts,
+  });
+
+  // Add fire light + animated flame marker at center
+  const h = worldHeight(x, z);
+  const fireLight = new THREE.PointLight(0xff7733, 6.0, 22, 2);
+  fireLight.position.set(x, h + 1.5, z);
+  fireLight.castShadow = false;
+  scene.add(fireLight);
+
+  // Tents around the fire (2-3)
+  const tentCount = 2 + Math.floor(Math.random() * 2);
+  for (let i = 0; i < tentCount; i++) {
+    const a = (i / tentCount) * Math.PI * 2 + Math.random() * 0.5;
+    const r = 7 + Math.random() * 5;
+    placeGLBProp(scene, CAMPSITE_GLBS.tent, x + Math.cos(a) * r, z + Math.sin(a) * r, {
+      scale: 0.8 + Math.random() * 0.4,
+      colliderHalfExtents: [1.5, 1.2, 1.5],
+      ...pOpts,
+    });
+  }
+
+  // Sleeping bags near tents (2-4)
+  for (let i = 0; i < 2 + Math.floor(Math.random() * 3); i++) {
+    const a = Math.random() * Math.PI * 2;
+    const r = 4 + Math.random() * 6;
+    const isDamaged = Math.random() < 0.3;
+    placeGLBProp(
+      scene,
+      isDamaged ? CAMPSITE_GLBS.damagedBag : CAMPSITE_GLBS.sleepingBag,
+      x + Math.cos(a) * r, z + Math.sin(a) * r,
+      { scale: 0.9, yOffset: 0.05 },
+    );
+  }
+
+  // Tarp shelter (50% chance)
+  if (Math.random() < 0.5) {
+    const a = Math.random() * Math.PI * 2;
+    const r = 8 + Math.random() * 4;
+    placeGLBProp(scene, CAMPSITE_GLBS.tarp, x + Math.cos(a) * r, z + Math.sin(a) * r, {
+      scale: 0.7,
+      colliderHalfExtents: [1.5, 1.0, 1.0],
+      ...pOpts,
+    });
+  }
+
+  // Axe stuck in the ground near the fire (decorative)
+  placeGLBProp(scene, CAMPSITE_GLBS.axe,
+    x + 1.5 + Math.random(), z + 1.0 + Math.random(),
+    { scale: 1.0, ry: Math.random() * Math.PI },
+  );
+
+  // Tent scraps scattered nearby (1-2, adds lived-in feel)
+  for (let i = 0; i < 1 + Math.floor(Math.random() * 2); i++) {
+    const a = Math.random() * Math.PI * 2;
+    const r = 10 + Math.random() * 6;
+    placeGLBProp(scene, CAMPSITE_GLBS.tentScraps,
+      x + Math.cos(a) * r, z + Math.sin(a) * r,
+      { scale: 0.8 },
+    );
+  }
+}
+
 // ─── Public API ───────────────────────────────────────────────────────────────
 
 export class FeaturePlacer {
@@ -306,7 +448,7 @@ export class FeaturePlacer {
     for (const def of settlements) {
       switch (def.type) {
         case 'town': buildTown(this.scene, def, this.physics, this.body); break;
-        case 'camp': buildCamp(this.scene, def); break;
+        case 'camp': buildCampGLB(this.scene, def, this.physics, this.body); break;
         case 'cave': placeCaveEntrance(this.scene, def.x, def.z, this.physics, this.body); break;
         case 'outpost': placeOutpost(this.scene, def.x, def.z, this.physics, this.body); break;
       }
