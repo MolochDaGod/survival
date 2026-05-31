@@ -177,6 +177,10 @@ export class GameEngine {
    * manager exists. Lets us forbid spawns inside the encampment.
    */
   private _pendingSpawnAnchor: THREE.Vector3 | null = null;
+  /** Cached mixers for named encampment NPCs — avoids scene.traverse every frame. */
+  private _namedNpcMixers: THREE.AnimationMixer[] = [];
+  /** Set true for one frame when the player presses interact near a quest NPC. */
+  private _questInteractPressed = false;
 
   constructor(canvas: HTMLCanvasElement, characterConfig: CharacterConfig = DEFAULT_CHARACTER_CONFIG) {
     this.characterConfig = characterConfig;
@@ -675,8 +679,8 @@ export class GameEngine {
               if (tpl.mixer && tpl.animations.length > 0) {
                 const idleClip = tpl.animations.find(a => /idle|stand/i.test(a.name)) ?? tpl.animations[0];
                 tpl.mixer.clipAction(idleClip).play();
-                // Store mixer for per-frame tick
-                wrapper.userData._mixer = tpl.mixer;
+                // Cache mixer for per-frame tick (avoids scene.traverse)
+                this._namedNpcMixers.push(tpl.mixer);
               }
             }
           }
@@ -697,6 +701,10 @@ export class GameEngine {
           if (this.citySpawner?.recruitNearest(this.player.position)) {
             this.audio.play('pickup');
           }
+        }
+        // E (interact) near a quest NPC — flag for quest system check this frame
+        if (e.code === KEYBINDS.INTERACT && !e.repeat && this.gameState.gameStarted && !this.gameState.paused) {
+          this._questInteractPressed = true;
         }
       });
 
@@ -1042,24 +1050,29 @@ export class GameEngine {
     // Ambient city NPC mixers + talk-prompt picker.
     this.citySpawner?.update(dt, this.player.position);
 
-    // Named NPC mixer ticks (encampment Vendor/Faction/Bank/BattleMaster)
-    this.scene.traverse((obj) => {
-      const mx = obj.userData._mixer as THREE.AnimationMixer | undefined;
-      if (mx) mx.update(dt);
-    });
+    // Named NPC mixer ticks — uses cached array instead of scene.traverse
+    // to avoid walking the entire scene graph (thousands of GLB meshes) every frame.
+    if (this._namedNpcMixers) {
+      for (const mx of this._namedNpcMixers) mx.update(dt);
+    }
 
-    // Quest system proximity checks
+    // Quest system proximity checks — NPC talk requires pressing E (interact)
     if (this.sceneBuilder?.isStarterMapMode()) {
-      // Find nearest named NPC within talk range
+      // Only pass the NPC id to the quest system when the player is both
+      // within range AND pressing interact. This prevents auto-completing
+      // talk steps just by walking past an NPC.
       let nearNpcId: string | null = null;
-      for (const npcDef of ENCAMPMENT_NPCS) {
-        const brain = getNPCManager().getBrain(npcDef.id);
-        if (!brain) continue;
-        const dx = this.player.position.x - brain.vehicle.position.x;
-        const dz = this.player.position.z - brain.vehicle.position.z;
-        if (dx * dx + dz * dz < 5 * 5) {
-          nearNpcId = npcDef.id;
-          break;
+      if (this._questInteractPressed) {
+        this._questInteractPressed = false;
+        for (const npcDef of ENCAMPMENT_NPCS) {
+          const brain = getNPCManager().getBrain(npcDef.id);
+          if (!brain) continue;
+          const dx = this.player.position.x - brain.vehicle.position.x;
+          const dz = this.player.position.z - brain.vehicle.position.z;
+          if (dx * dx + dz * dz < 5 * 5) {
+            nearNpcId = npcDef.id;
+            break;
+          }
         }
       }
       getQuestSystem().update(this.player.position, nearNpcId);
