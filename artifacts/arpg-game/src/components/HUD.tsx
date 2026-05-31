@@ -1,6 +1,32 @@
 import React, { useEffect, useRef } from 'react';
 import { PlayerStats } from '../game/types';
 
+// ─── Craftpix Unit Frame asset paths ───────────────────────────────────────────
+const UF = '/textures/ui/unit-frames';
+const UF_AVATAR_BG      = `${UF}/Avatar/UnitFrame_Avatar_Background.png`;
+const UF_AVATAR_BORDER  = `${UF}/Avatar/UnitFrame_Avatar_Border.png`;
+const UF_AVATAR_OVERLAY = `${UF}/Avatar/UnitFrame_Avatar_Overlay.png`;
+const UF_PB_BG          = `${UF}/Bars/UnitFrame_PB_Background.png`;
+const UF_PB_FILL        = `${UF}/Bars/UnitFrame_PB_Fill.png`;
+const UF_SB_BG          = `${UF}/Bars/UnitFrame_SB_Background.png`;
+const UF_SB_FILL        = `${UF}/Bars/UnitFrame_SB_Fill.png`;
+const UF_LVL_BG         = `${UF}/Level Frame/UnitFrame_LevelFrame_Background.png`;
+const UF_LVL_BORDER     = `${UF}/Level Frame/UnitFrame_LevelFrame_Border.png`;
+const UF_LVL_SKULL      = `${UF}/Level Frame/UnitFrame_LevelFrame_Skull.png`;
+const UF_ROLE_BG        = `${UF}/Role Frame/UnitFrame_RoleFrame_Background.png`;
+const UF_ROLE_BORDER    = `${UF}/Role Frame/UnitFrame_RoleFrame_Border.png`;
+const UF_ROLE_SWORD     = `${UF}/Role Frame/Icons/Sword_Small.png`;
+const UF_ROLE_SHIELD    = `${UF}/Role Frame/Icons/Shield_Small.png`;
+const UF_ROLE_SPELL     = `${UF}/Role Frame/Icons/Spell_Small.png`;
+const UF_COMBO_BG       = `${UF}/Combo Points/UnitFrame_ComboPoints_Background.png`;
+const UF_COMBO_FILL     = `${UF}/Combo Points/UnitFrame_ComboPoints_Fill.png`;
+const UF_BUFF_FRAME     = `${UF}/UnitFrame_Buff_Frame.png`;
+// Mobile (target frame)
+const UF_MOB_BORDER     = `${UF}/Mobile_UnitFrame_Border.png`;
+const UF_MOB_HP_FILL    = `${UF}/Mobile_UnitFrame_Fill_HP.png`;
+const UF_MOB_MP_FILL    = `${UF}/Mobile_UnitFrame_Fill_MP.png`;
+const UF_MOB_SKULL      = `${UF}/Mobile_UnitFrame_Skull.png`;
+
 interface HUDProps {
   stats: PlayerStats;
   abilities: unknown[];
@@ -94,11 +120,14 @@ const StatBar: React.FC<{ value: number; max: number; color: string; label: stri
   );
 };
 
-const HeartbeatRadar: React.FC<{ health: number; maxHealth: number }> = ({ health, maxHealth }) => {
+const HeartbeatRadar: React.FC<{ health: number; maxHealth: number; mana: number; maxMana: number; level: number }> = ({
+  health, maxHealth, mana, maxMana, level,
+}) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const phaseRef  = useRef(0);
   const rafRef    = useRef(0);
   const hpFrac = health / maxHealth;
+  const mpFrac = mana / maxMana;
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -146,41 +175,116 @@ const HeartbeatRadar: React.FC<{ health: number; maxHealth: number }> = ({ healt
     return () => cancelAnimationFrame(rafRef.current);
   }, [hpFrac]);
 
+  const hpPct = Math.max(0, Math.min(100, (health / maxHealth) * 100));
+  const mpPct = Math.max(0, Math.min(100, (mana / maxMana) * 100));
+
   return (
-    <div style={{ ...panelStyle, padding: '10px 12px', width: 200, position: 'fixed', bottom: 20, left: 16, zIndex: 100 }}>
-      <Rivet pos="tl" /><Rivet pos="tr" /><Rivet pos="bl" /><Rivet pos="br" />
-
-      <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 7 }}>
-        <svg width="10" height="10" viewBox="0 0 20 20">
-          <path d="M10 17L3 10a5 5 0 017-7l0 0a5 5 0 017 7z"
-            fill={hpFrac > 0.5 ? '#d45050' : hpFrac > 0.25 ? '#e8a030' : '#ff2222'}
-            style={{ filter: hpFrac < 0.25 ? 'drop-shadow(0 0 4px #ff2222)' : 'none' }} />
-        </svg>
-        <span style={labelStyle}>Vitals</span>
-        <span style={{ ...monoStyle, fontSize: 9, color: hpFrac > 0.5 ? '#6ec96e' : hpFrac > 0.25 ? '#e8a030' : '#d45050', marginLeft: 'auto' }}>
-          {hpFrac > 0.65 ? 'STABLE' : hpFrac > 0.35 ? 'CAUTION' : 'CRITICAL'}
-        </span>
-      </div>
-
-      <canvas ref={canvasRef} width={176} height={32} style={{ display: 'block', marginBottom: 8 }} />
-
-      <div style={{ display: 'flex', gap: 4, alignItems: 'center', marginBottom: 6 }}>
+    <div style={{
+      position: 'fixed', bottom: 20, left: 16, zIndex: 100,
+      display: 'flex', alignItems: 'flex-end', gap: 0,
+    }}>
+      {/* Avatar frame area */}
+      <div style={{
+        width: 72, height: 72, position: 'relative', flexShrink: 0,
+        marginRight: -6, zIndex: 2,
+      }}>
+        <img src={UF_AVATAR_BG} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} />
+        {/* Heartbeat ECG canvas drawn inside avatar circle */}
+        <canvas ref={canvasRef} width={60} height={28} style={{
+          position: 'absolute', bottom: 8, left: 6, borderRadius: 4,
+        }} />
+        {/* Heart icon + vitals text */}
         <div style={{
-          flex: 1, height: 4, borderRadius: 2, overflow: 'hidden',
-          background: 'rgba(0,0,0,0.5)', border: `1px solid ${GOLD2}`,
+          position: 'absolute', top: 6, left: '50%', transform: 'translateX(-50%)',
+          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1,
         }}>
-          <div style={{
-            width: `${(health / maxHealth) * 100}%`, height: '100%',
-            background: 'linear-gradient(90deg,#8b2020,#d44040)',
-            transition: 'width 0.1s',
-          }} />
+          <svg width="14" height="14" viewBox="0 0 20 20">
+            <path d="M10 17L3 10a5 5 0 017-7l0 0a5 5 0 017 7z"
+              fill={hpFrac > 0.5 ? '#d45050' : hpFrac > 0.25 ? '#e8a030' : '#ff2222'}
+              style={{ filter: hpFrac < 0.25 ? 'drop-shadow(0 0 4px #ff2222)' : 'none' }} />
+          </svg>
+          <span style={{ ...monoStyle, fontSize: 7, color: hpFrac > 0.5 ? '#6ec96e' : '#d45050' }}>
+            {hpFrac > 0.65 ? 'OK' : hpFrac > 0.35 ? '!' : '!!'}
+          </span>
         </div>
-        <span style={{ ...monoStyle, fontSize: 9, color: '#d44040', minWidth: 28, textAlign: 'right' }}>
-          {Math.floor(health)}
-        </span>
+        <img src={UF_AVATAR_BORDER} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }} />
+        <img src={UF_AVATAR_OVERLAY} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', opacity: 0.4 }} />
+
+        {/* Level badge */}
+        <div style={{
+          position: 'absolute', bottom: -8, right: -8,
+          width: 28, height: 28,
+        }}>
+          <img src={UF_LVL_BG} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} />
+          <img src={UF_LVL_BORDER} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }} />
+          <span style={{
+            position: 'absolute', inset: 0,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            ...monoStyle, fontSize: 10, fontWeight: 700, color: '#fff',
+            textShadow: '0 1px 2px rgba(0,0,0,0.8)',
+          }}>{level}</span>
+        </div>
       </div>
 
-      <RadarDisplay />
+      {/* Bars panel */}
+      <div style={{
+        ...panelStyle, padding: '8px 12px 8px 14px',
+        minWidth: 170, display: 'flex', flexDirection: 'column', gap: 4,
+      }}>
+        <Rivet pos="tr" /><Rivet pos="br" />
+
+        {/* HP bar — textured */}
+        <div style={{ position: 'relative', height: 16, overflow: 'hidden' }}>
+          <img src={UF_PB_BG} alt="" style={{
+            position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'fill',
+          }} />
+          <div style={{ position: 'absolute', inset: 0, width: `${hpPct}%`, height: '100%', overflow: 'hidden', transition: 'width 0.12s' }}>
+            <img src={UF_PB_FILL} alt="" style={{
+              width: '100%', height: '100%', objectFit: 'fill',
+              filter: hpFrac < 0.25 ? 'hue-rotate(-20deg) saturate(2)' : 'none',
+            }} />
+          </div>
+          <span style={{
+            position: 'absolute', inset: 0,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            ...monoStyle, fontSize: 9, color: '#fff',
+            textShadow: '0 1px 2px rgba(0,0,0,0.8)',
+          }}>{Math.floor(health)} / {maxHealth}</span>
+        </div>
+
+        {/* MP bar — textured */}
+        <div style={{ position: 'relative', height: 14, overflow: 'hidden' }}>
+          <img src={UF_SB_BG} alt="" style={{
+            position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'fill',
+          }} />
+          <div style={{ position: 'absolute', inset: 0, width: `${mpPct}%`, height: '100%', overflow: 'hidden', transition: 'width 0.12s' }}>
+            <img src={UF_SB_FILL} alt="" style={{
+              width: '100%', height: '100%', objectFit: 'fill',
+            }} />
+          </div>
+          <span style={{
+            position: 'absolute', inset: 0,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            ...monoStyle, fontSize: 8, color: '#cce',
+            textShadow: '0 1px 2px rgba(0,0,0,0.8)',
+          }}>{Math.floor(mana)} / {maxMana}</span>
+        </div>
+
+        {/* Role icon */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 2 }}>
+          <div style={{ width: 20, height: 20, position: 'relative', flexShrink: 0 }}>
+            <img src={UF_ROLE_BG} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} />
+            <img src={UF_ROLE_SWORD} alt="" style={{ position: 'absolute', inset: 2, width: 16, height: 16 }} />
+            <img src={UF_ROLE_BORDER} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }} />
+          </div>
+          <span style={labelStyle}>Vitals</span>
+          <span style={{ ...monoStyle, fontSize: 9, color: hpFrac > 0.5 ? '#6ec96e' : hpFrac > 0.25 ? '#e8a030' : '#d45050', marginLeft: 'auto' }}>
+            {hpFrac > 0.65 ? 'STABLE' : hpFrac > 0.35 ? 'CAUTION' : 'CRITICAL'}
+          </span>
+        </div>
+
+        <RadarDisplay />
+      </div>
     </div>
   );
 };
@@ -439,8 +543,8 @@ export const HUD: React.FC<HUDProps> = (props) => {
         </div>
       )}
 
-      {/* Bottom left – heartbeat + radar */}
-      <HeartbeatRadar health={stats.health} maxHealth={stats.maxHealth} />
+      {/* Bottom left – unit frame with heartbeat + radar */}
+      <HeartbeatRadar health={stats.health} maxHealth={stats.maxHealth} mana={stats.mana} maxMana={stats.maxMana} level={stats.level} />
 
       {/* Bottom right – weapon */}
       <div style={{

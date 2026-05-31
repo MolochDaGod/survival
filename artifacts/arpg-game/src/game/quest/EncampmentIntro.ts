@@ -76,7 +76,10 @@ export function createIntroQuest(
     id: 'encampment_intro',
     title: 'Welcome to the Encampment',
     description: 'Meet the key people in camp, then prove yourself in the battle arena.',
-    xpReward: 100,
+    reward: {
+      professionXp: { combat: 50, survival: 30, township: 20 },
+      weaponXp: 60,
+    },
     steps: [
       {
         type: 'talk',

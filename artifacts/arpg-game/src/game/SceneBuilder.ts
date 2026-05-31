@@ -5,6 +5,7 @@ import { GrassSystem } from './world/GrassSystem';
 import { WaterSurface } from './world/water/WaterSurface';
 import { SplashFX } from './world/water/SplashFX';
 import { FeaturePlacer } from './world/FeaturePlacer';
+import { TerrainScatter } from './world/TerrainScatter';
 import { RoadSystem } from './world/RoadSystem';
 import { GLBLocationSystem, DoorProxy } from './world/GLBLocationSystem';
 import { VolumetricSky } from './world/VolumetricSky';
@@ -49,6 +50,8 @@ export class SceneBuilder {
   /** Pooled splash rings. Triggered by SwimController, FishingSystem, BoatSystem. */
   splashFX: SplashFX;
   private features: FeaturePlacer;
+  /** Biome-aware terrain scatter (craftpix palm trees, stones, mountains). */
+  private terrainScatter: TerrainScatter;
   private roads: RoadSystem;
   private markers: ArenaMarkers;
   private sky?: VolumetricSky;
@@ -101,6 +104,7 @@ export class SceneBuilder {
     this.water    = new WaterSurface(scene);
     this.splashFX = new SplashFX(scene);
     this.features = new FeaturePlacer(scene, physics);
+    this.terrainScatter = new TerrainScatter(scene, physics);
     this.roads    = new RoadSystem(scene);
     this.markers  = new ArenaMarkers(scene);
   }
@@ -132,6 +136,13 @@ export class SceneBuilder {
           console.warn('[SceneBuilder] StarterMapGrass build failed:', err);
         }
       }
+
+      // Scatter craftpix terrain models (palm trees, stones, mountains)
+      // around the starter map. Uses a smaller radius + wider spacing
+      // since the playable area is smaller than the procedural world.
+      this.terrainScatter.scatter(800, 50).catch((err) => {
+        console.warn('[SceneBuilder] TerrainScatter failed:', err);
+      });
       return;
     }
 
@@ -151,6 +162,10 @@ export class SceneBuilder {
     this.addTorches();
     this.features.buildAll();
     this.roads.buildAll();
+    // Scatter craftpix terrain models across the procedural world.
+    this.terrainScatter.scatter(2400, 40).catch((err) => {
+      console.warn('[SceneBuilder] TerrainScatter failed:', err);
+    });
 
     this.glbLocations = new GLBLocationSystem(
       this.scene,

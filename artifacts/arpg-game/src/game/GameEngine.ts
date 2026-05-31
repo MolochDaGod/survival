@@ -689,9 +689,18 @@ export class GameEngine {
         // Register + activate the intro quest
         const questSys = getQuestSystem();
         questSys.register(createIntroQuest(cityCentre, this.enemyManager));
-        questSys.onQuestComplete = (qid, xp) => {
-          console.log(`[Quest] "${qid}" complete! +${xp} XP`);
-          this.player?.gainExperience(xp);
+        questSys.onQuestComplete = (qid, reward) => {
+          console.log(`[Quest] "${qid}" complete!`, reward);
+          // Grant profession XP to relevant professions
+          if (reward.professionXp) {
+            for (const [prof, amount] of Object.entries(reward.professionXp)) {
+              ProfessionsService.gainXp(prof as any, amount);
+            }
+          }
+          // Grant weapon XP to the unallocated pool
+          if (reward.weaponXp) {
+            StatProgressionService.addWeaponXp(reward.weaponXp);
+          }
         };
       }
       // Wire recruit key (F) — when near an NPC, pressing interact recruits
@@ -1058,23 +1067,30 @@ export class GameEngine {
 
     // Quest system proximity checks — NPC talk requires pressing E (interact)
     if (this.sceneBuilder?.isStarterMapMode()) {
-      // Only pass the NPC id to the quest system when the player is both
-      // within range AND pressing interact. This prevents auto-completing
-      // talk steps just by walking past an NPC.
+      // Show NPC name/role prompt when player is within 5m of a named NPC
+      let nearestNpcLabel: string | null = null;
       let nearNpcId: string | null = null;
-      if (this._questInteractPressed) {
-        this._questInteractPressed = false;
-        for (const npcDef of ENCAMPMENT_NPCS) {
-          const brain = getNPCManager().getBrain(npcDef.id);
-          if (!brain) continue;
-          const dx = this.player.position.x - brain.vehicle.position.x;
-          const dz = this.player.position.z - brain.vehicle.position.z;
-          if (dx * dx + dz * dz < 5 * 5) {
+      for (const npcDef of ENCAMPMENT_NPCS) {
+        const brain = getNPCManager().getBrain(npcDef.id);
+        if (!brain) continue;
+        const dx = this.player.position.x - brain.vehicle.position.x;
+        const dz = this.player.position.z - brain.vehicle.position.z;
+        if (dx * dx + dz * dz < 5 * 5) {
+          nearestNpcLabel = `Press [E] · ${npcDef.label}`;
+          if (this._questInteractPressed) {
             nearNpcId = npcDef.id;
-            break;
           }
+          break;
         }
       }
+      this._questInteractPressed = false;
+
+      // Emit NPC prompt (feeds into the resolveInteractionPrompt priority chain)
+      if (nearestNpcLabel !== this._lastNpcLabel) {
+        this._lastNpcLabel = nearestNpcLabel;
+        this.resolveInteractionPrompt();
+      }
+
       getQuestSystem().update(this.player.position, nearNpcId);
     }
 

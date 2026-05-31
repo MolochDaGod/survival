@@ -39,13 +39,24 @@ export interface QuestStep {
   onComplete?: () => void;
 }
 
+export interface QuestReward {
+  /** Profession XP grants on completion. Key = profession id, value = amount. */
+  professionXp?: Record<string, number>;
+  /** Weapon XP added to the unallocated pool. */
+  weaponXp?: number;
+  /** Survival item rewards. */
+  items?: Array<{ itemId: string; count: number }>;
+}
+
 export interface QuestDef {
   id: string;
   title: string;
   description: string;
   steps: QuestStep[];
-  /** XP reward on full completion. */
-  xpReward: number;
+  /** Structured rewards on completion (replaces flat xpReward). */
+  reward: QuestReward;
+  /** @deprecated Use reward.professionXp instead. Kept for backward compat. */
+  xpReward?: number;
   /** Optional callback when the entire quest completes. */
   onFinish?: () => void;
 }
@@ -74,8 +85,8 @@ export class QuestSystem {
   onObjectiveChange: ((text: string | null) => void) | null = null;
   /** UI subscribes to this for dialog popups. */
   onDialog: ((speaker: string, text: string) => void) | null = null;
-  /** Called when a quest completes — passes XP reward. */
-  onQuestComplete: ((questId: string, xpReward: number) => void) | null = null;
+  /** Called when a quest completes — passes structured rewards. */
+  onQuestComplete: ((questId: string, reward: QuestReward) => void) | null = null;
 
   // ── Registration ─────────────────────────────────────────────────────────
 
@@ -240,7 +251,7 @@ export class QuestSystem {
 
     state.status = 'complete';
     def.onFinish?.();
-    this.onQuestComplete?.(questId, def.xpReward);
+    this.onQuestComplete?.(questId, def.reward);
     this.onObjectiveChange?.(null);
   }
 

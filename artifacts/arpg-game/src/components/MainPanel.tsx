@@ -112,12 +112,44 @@ const TRACK_COLOR: Record<StatTrack, string> = {
   maker:   '#49de95',
 };
 
-// Sample quest/friend data — no quest/social system yet, but the UI is ready.
-const SAMPLE_QUESTS = [
-  { title: 'The Iron Grudge',     desc: 'Defeat 15 raiders in the Old Mine.',     progress: 60,  reward: '1200 XP, Ironvow Blade' },
-  { title: 'Blood Tribute',       desc: 'Collect 8 Blood Crystals.',              progress: 37,  reward: '800 XP, 500 Gold' },
-  { title: "Warlord's Challenge", desc: 'Survive 3 nights without dying.',        progress: 100, reward: '2500 XP, Title' },
-];
+import { getQuestSystem } from '../game/quest/QuestSystem';
+
+/** Build live quest entries from the QuestSystem singleton. */
+function getLiveQuests() {
+  const sys = getQuestSystem();
+  const quests: Array<{ title: string; desc: string; progress: number; reward: string }> = [];
+  // Iterate all registered quests
+  for (const [id] of (sys as any).quests as Map<string, any>) {
+    const def = (sys as any).quests.get(id);
+    const state = sys.getState(id);
+    if (!def || !state) continue;
+
+    const totalSteps = def.steps.length;
+    const currentStep = state.currentStep;
+    const progress = state.status === 'complete'
+      ? 100
+      : Math.round((currentStep / totalSteps) * 100);
+
+    // Build reward string from structured rewards
+    const rewardParts: string[] = [];
+    if (def.reward?.professionXp) {
+      for (const [prof, amount] of Object.entries(def.reward.professionXp)) {
+        rewardParts.push(`${amount} ${prof} XP`);
+      }
+    }
+    if (def.reward?.weaponXp) rewardParts.push(`${def.reward.weaponXp} weapon XP`);
+
+    quests.push({
+      title: def.title,
+      desc: state.status === 'active'
+        ? (def.steps[currentStep]?.objective ?? def.description)
+        : state.status === 'complete' ? 'Complete!' : def.description,
+      progress,
+      reward: rewardParts.join(', ') || 'None',
+    });
+  }
+  return quests;
+}
 const SAMPLE_FRIENDS = [
   { name: 'Shadowfang',  level: 38, status: 'In Party',  online: true  },
   { name: 'Ironmaul',    level: 35, status: 'Old Mine',  online: true  },
@@ -865,25 +897,28 @@ const EquipmentTab: React.FC<{
 };
 
 // ─── QUEST TAB ────────────────────────────────────────────────────────────
-const QuestTab: React.FC = () => (
-  <>
-    <div className="mp-section-title">Active Quests</div>
-    {SAMPLE_QUESTS.map((q, i) => (
-      <div key={i} className="mp-quest">
-        <div className="head">
-          <div className="title">{q.title}</div>
-          <div className="pct">{q.progress}%</div>
+const QuestTab: React.FC = () => {
+  const quests = getLiveQuests();
+  return (
+    <>
+      <div className="mp-section-title">Active Quests</div>
+      {quests.length === 0 && (
+        <div className="mp-empty">No active quests. Explore the encampment to find quest givers.</div>
+      )}
+      {quests.map((q, i) => (
+        <div key={i} className="mp-quest">
+          <div className="head">
+            <div className="title">{q.title}</div>
+            <div className="pct">{q.progress}%</div>
+          </div>
+          <div className="desc">{q.desc}</div>
+          <div className="bar"><div style={{ width: `${q.progress}%` }} /></div>
+          <div className="reward">⚜ {q.reward}</div>
         </div>
-        <div className="desc">{q.desc}</div>
-        <div className="bar"><div style={{ width: `${q.progress}%` }} /></div>
-        <div className="reward">⚜ {q.reward}</div>
-      </div>
-    ))}
-    <div className="mp-empty" style={{ marginTop: 14 }}>
-      Quests coming soon — full questline system is in development.
-    </div>
-  </>
-);
+      ))}
+    </>
+  );
+};
 
 // ─── SKILLS / PERKS TAB ───────────────────────────────────────────────────
 const SkillsTab: React.FC<{

@@ -2,7 +2,8 @@ import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
 import { BookOverlay } from './BookOverlay';
 import { assetUrl } from '../../lib/assetUrl';
-import { MiniMap, MapMarker } from './MiniMap';
+import { Minimap } from '../../game/ui/Minimap';
+import type { MapMarker } from './MiniMap';
 import {
   HelmGlyph, ChestplateGlyph, LegsGlyph, BootsGlyph,
   AmuletGlyph, RingGlyph, ShieldGlyph, MainhandGlyph,
@@ -229,7 +230,9 @@ export function InventoryBook(props: Props) {
     <>
       <div className="book-page left">
         <h1 className="book-h1">Region Map</h1>
-        <MiniMap player={player} markers={mapMarkers} />
+        <div style={{ width: 240, height: 240, margin: '0 auto' }}>
+          <Minimap playerX={player.x} playerZ={player.z} playerYaw={player.yaw} />
+        </div>
       </div>
       <div className="book-page right">
         <h1 className="book-h1">Notes</h1>

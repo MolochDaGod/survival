@@ -840,15 +840,24 @@ export const CharacterCreation: React.FC<CharacterCreationProps> = ({ onComplete
           <button
             onClick={handleBeginSurvival}
             style={{
-              background: 'linear-gradient(135deg, #c47a2a, #e8a030)',
-              color: '#1a0e04', border: 'none', borderRadius: 6,
-              padding: '9px 24px', fontSize: 13, fontWeight: 800,
+              background: `url(${BOTTOMBAR_BG}) center/cover no-repeat`,
+              color: '#e8d5b0', border: 'none', borderRadius: 0,
+              padding: '12px 28px', fontSize: 13, fontWeight: 800,
               letterSpacing: '0.12em', textTransform: 'uppercase', cursor: 'pointer',
               boxShadow: '0 0 18px rgba(200,120,30,0.4)',
-              transition: 'box-shadow 0.2s ease',
+              transition: 'box-shadow 0.2s ease, transform 0.12s ease',
+              position: 'relative', overflow: 'hidden',
             }}
+            onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.04)'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; }}
           >
-            ▶ Begin Survival
+            {/* Effect shimmer */}
+            <img src={BOTTOMBAR_FX} alt="" style={{
+              position: 'absolute', inset: 0, width: '100%', height: '100%',
+              objectFit: 'cover', pointerEvents: 'none', opacity: 0.5,
+              mixBlendMode: 'screen',
+            }} />
+            <span style={{ position: 'relative', zIndex: 1 }}>▶ Begin Survival</span>
           </button>
         </div>
       </header>
@@ -1351,17 +1360,24 @@ const IdentityTab: React.FC<{
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 20 }}>
       {(['female', 'male'] as Gender[]).map(g => (
         <button key={g} onClick={() => onGenderChange(g)} style={{
-          padding: '18px 10px',
-          background: gender === g
-            ? 'linear-gradient(135deg,rgba(200,120,40,0.35),rgba(200,120,40,0.15))'
-            : 'rgba(255,255,255,0.04)',
-          border: gender === g ? '2px solid #c87820' : '2px solid rgba(255,255,255,0.08)',
-          borderRadius: 9, color: gender === g ? '#e8a030' : '#8899aa', cursor: 'pointer',
+          padding: '14px 10px',
+          background: `url(${gender === g ? CC_BOX_ACTIVE : CC_BOX_BG}) center/cover no-repeat`,
+          border: 'none', borderRadius: 0, color: gender === g ? '#e8a030' : '#8899aa', cursor: 'pointer',
           display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
           transition: 'all 0.15s ease',
+          position: 'relative',
         }}>
-          <span style={{ fontSize: 28 }}>{g === 'female' ? '♀' : '♂'}</span>
-          <span style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'capitalize' }}>{g}</span>
+          {/* Box border overlay */}
+          <img src={CC_BOX_BORDER} alt="" style={{
+            position: 'absolute', inset: 0, width: '100%', height: '100%',
+            pointerEvents: 'none', opacity: gender === g ? 1 : 0.5,
+          }} />
+          <img
+            src={g === 'female' ? GENDER_FEMALE : GENDER_MALE}
+            alt={g}
+            style={{ width: 32, height: 32, position: 'relative', zIndex: 1, filter: gender === g ? 'brightness(1.3)' : 'brightness(0.7)' }}
+          />
+          <span style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'capitalize', position: 'relative', zIndex: 1 }}>{g}</span>
         </button>
       ))}
     </div>
@@ -1862,16 +1878,30 @@ const ColorSwatches: React.FC<{
   selected: string; onChange: (c: string) => void;
 }> = ({ presets, selected, onChange }) => (
   <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7, marginBottom: 4 }}>
-    {presets.map(p => (
-      <button key={p.id} title={p.label} onClick={() => onChange(p.hex)} style={{
-        width: 28, height: 28, borderRadius: 6, background: p.hex,
-        border: selected === p.hex ? '2px solid #e8a030' : '2px solid rgba(255,255,255,0.1)',
-        cursor: 'pointer',
-        transform: selected === p.hex ? 'scale(1.2)' : 'scale(1)',
-        transition: 'all 0.1s ease',
-        boxShadow: selected === p.hex ? `0 0 10px ${p.hex}88` : 'none',
-      }} />
-    ))}
+    {presets.map(p => {
+      const isActive = selected === p.hex;
+      return (
+        <button key={p.id} title={p.label} onClick={() => onChange(p.hex)} style={{
+          width: 30, height: 30, padding: 0,
+          background: p.hex,
+          border: 'none', cursor: 'pointer',
+          position: 'relative',
+          transform: isActive ? 'scale(1.2)' : 'scale(1)',
+          transition: 'all 0.1s ease',
+          boxShadow: isActive ? `0 0 12px ${p.hex}88` : 'none',
+        }}>
+          {/* Color swatch frame */}
+          <img
+            src={isActive ? CC_COLOR_ACTIVE : CC_COLOR_BORDER}
+            alt=""
+            style={{
+              position: 'absolute', inset: -2, width: 'calc(100% + 4px)', height: 'calc(100% + 4px)',
+              pointerEvents: 'none',
+            }}
+          />
+        </button>
+      );
+    })}
   </div>
 );
 
@@ -1885,14 +1915,46 @@ const CustomColorPicker: React.FC<{ label: string; value: string; onChange: (c: 
   </div>
 );
 
+// ─── Craftpix Lobby UI asset paths ─────────────────────────────────────────────
+const LOBBY = '/textures/ui/lobby';
+const SECTION_BG     = `${LOBBY}/Character Create/Section/Section_Header_Background.png`;
+const SECTION_BORDER = `${LOBBY}/Character Create/Section/Section_Header_Border.png`;
+const SECTION_GLOW   = `${LOBBY}/Character Create/Section/Section_Glow.png`;
+const CC_BOX_BG      = `${LOBBY}/Character Create/Box/CC_Box_Background.png`;
+const CC_BOX_BORDER  = `${LOBBY}/Character Create/Box/CC_Box_Border.png`;
+const CC_BOX_ACTIVE  = `${LOBBY}/Character Create/Box/CC_Box_Active.png`;
+const CC_COLOR_BORDER = `${LOBBY}/Character Create/Colors/CC_Color_Border.png`;
+const CC_COLOR_ACTIVE = `${LOBBY}/Character Create/Colors/CC_Color_Active.png`;
+const GENDER_MALE    = `${LOBBY}/Character Create/Genders/Gender_Male.png`;
+const GENDER_FEMALE  = `${LOBBY}/Character Create/Genders/Gender_Female.png`;
+const BOTTOMBAR_BG   = `${LOBBY}/Bottom Bar/BottomBar_Background.png`;
+const BOTTOMBAR_FX   = `${LOBBY}/Bottom Bar/BottomBar_Effect_Large.png`;
+const FACTION_ENG    = `${LOBBY}/Character Create/Factions/Faction_Engineers.png`;
+const FACTION_FED    = `${LOBBY}/Character Create/Factions/Faction_Federation.png`;
+
 const SectionLabel: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <div style={{
+    position: 'relative',
     fontSize: 9, fontWeight: 800, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#c87820',
-    marginBottom: 9, marginTop: 4, display: 'flex', alignItems: 'center', gap: 7,
+    marginBottom: 9, marginTop: 4, display: 'flex', alignItems: 'center', justifyContent: 'center',
+    padding: '6px 12px', minHeight: 24,
   }}>
-    <div style={{ flex: 1, height: 1, background: 'rgba(200,120,40,0.3)' }} />
-    {children}
-    <div style={{ flex: 1, height: 1, background: 'rgba(200,120,40,0.3)' }} />
+    {/* Section header background texture */}
+    <img src={SECTION_BG} alt="" style={{
+      position: 'absolute', inset: 0, width: '100%', height: '100%',
+      objectFit: 'fill', pointerEvents: 'none', opacity: 0.7,
+    }} />
+    {/* Border overlay */}
+    <img src={SECTION_BORDER} alt="" style={{
+      position: 'absolute', inset: 0, width: '100%', height: '100%',
+      objectFit: 'fill', pointerEvents: 'none', opacity: 0.9,
+    }} />
+    {/* Glow accent */}
+    <img src={SECTION_GLOW} alt="" style={{
+      position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)',
+      width: '120%', height: '200%', pointerEvents: 'none', opacity: 0.3,
+    }} />
+    <span style={{ position: 'relative', zIndex: 1 }}>{children}</span>
   </div>
 );
 

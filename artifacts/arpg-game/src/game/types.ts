@@ -2,7 +2,7 @@ import * as THREE from 'three';
 
 // ── Re-export shared types from @workspace/game-systems ─────────────────────
 // Single source of truth — game client re-exports, never redefines.
-export type { WeaponStats, AbilityDef, SkillNode, PlayerStats } from '@workspace/game-systems/types';
+export type { WeaponStats, WeaponType, AbilityDef, SkillNode, PlayerStats } from '@workspace/game-systems/types';
 
 export type CameraMode = 'first-person' | 'third-person' | 'arpg';
 

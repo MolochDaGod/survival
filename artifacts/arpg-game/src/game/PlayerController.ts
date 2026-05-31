@@ -109,6 +109,22 @@ export class PlayerController {
   isReloading: boolean = false;
   reloadTimer: number = 0;
 
+  /**
+   * Seed magazine + reserve ammo for a weapon if it hasn't been initialised
+   * yet. Called when weapons are first equipped (constructor, swap, loot)
+   * so the first shot doesn't dry-fire.
+   */
+  private ensureAmmoFor(weapon: WeaponStats): void {
+    const cap = PlayerController.MAG_CAPACITY[weapon.type];
+    if (cap == null) return; // melee / non-ranged — no ammo needed
+    if (this.currentMag[weapon.id] == null) {
+      this.currentMag[weapon.id] = cap; // start with a full magazine
+    }
+    if (this.reserveAmmo[weapon.type] == null) {
+      this.reserveAmmo[weapon.type] = PlayerController.STARTING_RESERVE[weapon.type] ?? 0;
+    }
+  }
+
   // ── Water / vehicle state (written by SwimController + BoatSystem) ─────
   /** True when the SwimController has the player in the swimming or submerged
    *  band. Disables jump and is read by animation / camera tilt. */

@@ -236,12 +236,23 @@ function placeOutpost(
   scene.add(tlight);
 
   if (physics && body) {
-    // Tower trunk (10 m tall, radius 1.8 — matches the cylinder mesh).
     addCylinder(physics, body, 5, 1.8, bx, h + 5, bz);
-    // Lookout platform (5×1.2×5 cuboid at the top). The torch + flame are
-    // decorative and don't need collision.
     addCuboid(physics, body, 2.5, 0.6, 2.5, bx, h + 10.6, bz);
   }
+
+  // ── Orc prop decoration for outposts ────────────────────────────────
+  // Alarm horn at the watchtower base
+  placeFBXProp(scene, ORC_PROPS.alarmHorn, bx - 3, bz + 1, { scale: 0.012, ry: Math.PI * 0.4 });
+  // Barrels near the tower
+  placeFBXProp(scene, ORC_PROPS.barrel1, bx + 3, bz + 2, { scale: 0.01 });
+  placeFBXProp(scene, ORC_PROPS.barrel2, bx + 4, bz + 1, { scale: 0.01 });
+  // Standing torches flanking approach
+  placeFBXProp(scene, ORC_PROPS.torch, bx - 5, bz + 5, { scale: 0.01 });
+  placeFBXProp(scene, ORC_PROPS.torch, bx + 5, bz + 5, { scale: 0.01 });
+  // Faction flag
+  placeFBXProp(scene, ORC_PROPS.flag, bx, bz + 6, { scale: 0.012, ry: 0 });
+  // Supply crate
+  placeFBXProp(scene, ORC_PROPS.box, bx - 4, bz - 2, { scale: 0.01 });
 }
 
 // ─── Settlement builder ───────────────────────────────────────────────────────
@@ -273,6 +284,45 @@ function buildTown(
     const radius = 16 + Math.random() * 8;
     placeTent(scene, x + Math.cos(angle) * radius, z + Math.sin(angle) * radius);
   }
+
+  // ── Orc prop decoration — adds lived-in atmosphere to towns ─────────────
+  // Faction throne at the town center
+  placeFBXProp(scene, ORC_PROPS.throne, x + 2, z - 3, { scale: 0.012, ry: Math.PI });
+
+  // Barrels and crates near buildings
+  for (let i = 0; i < 4; i++) {
+    const a = Math.random() * Math.PI * 2;
+    const r = 8 + Math.random() * 10;
+    placeFBXProp(scene, i % 2 === 0 ? ORC_PROPS.barrel1 : ORC_PROPS.barrel2,
+      x + Math.cos(a) * r, z + Math.sin(a) * r, { scale: 0.01 });
+  }
+  // Supply crates
+  for (let i = 0; i < 2; i++) {
+    const a = Math.random() * Math.PI * 2;
+    const r = 7 + Math.random() * 8;
+    placeFBXProp(scene, ORC_PROPS.box, x + Math.cos(a) * r, z + Math.sin(a) * r, { scale: 0.01 });
+  }
+  // Standing torches along paths
+  for (let i = 0; i < 4; i++) {
+    const a = (i / 4) * Math.PI * 2 + 0.2;
+    const r = 14 + Math.random() * 4;
+    placeFBXProp(scene, ORC_PROPS.torch, x + Math.cos(a) * r, z + Math.sin(a) * r, { scale: 0.01 });
+  }
+  // Faction banner at entrance
+  placeFBXProp(scene, ORC_PROPS.flag, x + 12, z, { scale: 0.012, ry: 0 });
+  // Signpost
+  placeFBXProp(scene, ORC_PROPS.pointer, x - 14, z + 2, { scale: 0.01, ry: Math.PI * 0.3 });
+  // Table + chairs near fire
+  placeFBXProp(scene, ORC_PROPS.table, x + 4, z + 4, { scale: 0.01 });
+  placeFBXProp(scene, ORC_PROPS.chair, x + 5, z + 3.5, { scale: 0.01, ry: Math.PI * 0.5 });
+  placeFBXProp(scene, ORC_PROPS.chair, x + 3, z + 4.5, { scale: 0.01, ry: -Math.PI * 0.3 });
+  // Clay pots scattered
+  for (let i = 0; i < 3; i++) {
+    const a = Math.random() * Math.PI * 2;
+    const r = 5 + Math.random() * 6;
+    placeFBXProp(scene, i === 0 ? ORC_PROPS.pot2 : ORC_PROPS.pot3,
+      x + Math.cos(a) * r, z + Math.sin(a) * r, { scale: 0.01 });
+  }
 }
 
 function buildCamp(scene: THREE.Scene, def: SettlementDef) {
@@ -285,7 +335,82 @@ function buildCamp(scene: THREE.Scene, def: SettlementDef) {
   }
 }
 
-// ── GLB campsite asset paths ──────────────────────────────────────────────────
+// ── Orc props FBX asset paths (craftpix low-poly settlement decoration) ──────
+const ORC = '/models/props/orc-props';
+const ORC_PROPS = {
+  torch:      `${ORC}/_torch_1.fbx`,
+  wallTorch:  `${ORC}/_torch_2.fbx`,
+  barrel1:    `${ORC}/_barrel_1.fbx`,
+  barrel2:    `${ORC}/_barrel_2.fbx`,
+  box:        `${ORC}/_box.fbx`,
+  flag:       `${ORC}/_flag.fbx`,
+  pointer:    `${ORC}/_pointer.fbx`,
+  pot2:       `${ORC}/_pot_2.fbx`,
+  pot3:       `${ORC}/_pot_3.fbx`,
+  drum1:      `${ORC}/_drum_1.fbx`,
+  drum2:      `${ORC}/_drum_2.fbx`,
+  throne:     `${ORC}/_throne.fbx`,
+  table:      `${ORC}/_table.fbx`,
+  chair:      `${ORC}/_chair1.fbx`,
+  cup:        `${ORC}/_cup.fbx`,
+  bake:       `${ORC}/_bake.fbx`,
+  alarmHorn:  `${ORC}/_alarm_horn.fbx`,
+  waterwheel: `${ORC}/_waterwheel.fbx`,
+  cauldron:   `${ORC}/_pot_1.fbx`,
+  bottle:     `${ORC}/_bottle.fbx`,
+} as const;
+
+import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
+const _fbxLoader = new FBXLoader();
+
+/** Load an FBX prop and place a clone at a world position. */
+function placeFBXProp(
+  scene: THREE.Scene,
+  fbxPath: string,
+  wx: number, wz: number,
+  opts: {
+    scale?: number;
+    ry?: number;
+    yOffset?: number;
+    physics?: PhysicsWorld | null;
+    body?: RAPIER.RigidBody | null;
+    colliderHalfExtents?: [number, number, number];
+  } = {},
+): void {
+  const wy = worldHeight(wx, wz) + (opts.yOffset ?? 0);
+  const scale = opts.scale ?? 0.01;
+  const ry = opts.ry ?? Math.random() * Math.PI * 2;
+
+  _fbxLoader.load(fbxPath, (group) => {
+    const clone = group.clone(true) as THREE.Group;
+    clone.position.set(wx, wy, wz);
+    clone.rotation.y = ry;
+    clone.scale.setScalar(scale);
+    clone.traverse((child) => {
+      if (child instanceof THREE.Mesh) {
+        child.castShadow = true;
+        child.receiveShadow = true;
+        child.layers.enable(LAYERS.WORLD);
+        if (child.material instanceof THREE.MeshPhongMaterial) {
+          const old = child.material;
+          child.material = new THREE.MeshStandardMaterial({
+            map: old.map, color: old.color, roughness: 0.85, metalness: 0.02,
+          });
+        }
+      }
+    });
+    scene.add(clone);
+
+    if (opts.physics && opts.body && opts.colliderHalfExtents) {
+      const [hw, hh, hd] = opts.colliderHalfExtents;
+      addCuboid(opts.physics, opts.body, hw * scale, hh * scale, hd * scale, wx, wy + hh * scale, wz, ry);
+    }
+  }, undefined, (err) => {
+    console.warn(`[FeaturePlacer] Failed to load orc prop: ${fbxPath}`, err);
+  });
+}
+
+// ── GLB campsite asset paths ──────────────────────────────────────────────────────
 const CAMPSITE_GLBS = {
   campfire:    '/models/campsite/glb/Campfire_LOWPOLY.glb',
   tent:        '/models/campsite/glb/Tents_Green.glb',
