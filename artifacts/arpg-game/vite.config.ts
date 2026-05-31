@@ -23,6 +23,34 @@ export default defineConfig({
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
+    // Production chunk splitting — keep main bundle slim
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'three-core': ['three'],
+          'three-addons': [
+            'three/examples/jsm/loaders/GLTFLoader.js',
+            'three/examples/jsm/loaders/FBXLoader.js',
+            'three/examples/jsm/loaders/DRACOLoader.js',
+            'three/examples/jsm/utils/SkeletonUtils.js',
+            'three/examples/jsm/environments/RoomEnvironment.js',
+          ],
+          'postprocessing': ['postprocessing'],
+          'ai-yuka': ['yuka'],
+          'physics': ['@dimforge/rapier3d-compat'],
+          'ui-radix': [
+            '@radix-ui/react-dialog',
+            '@radix-ui/react-tabs',
+            '@radix-ui/react-tooltip',
+            '@radix-ui/react-scroll-area',
+            '@radix-ui/react-select',
+            '@radix-ui/react-slider',
+          ],
+        },
+      },
+    },
+    // Raise the warning threshold — three.js core is ~700 KB and that's expected
+    chunkSizeWarningLimit: 800,
   },
   server: {
     port,

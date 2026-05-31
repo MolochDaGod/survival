@@ -598,8 +598,9 @@ export const STARTING_MODEL: Record<Gender, string> = {
 // when gear is equipped and rebinds their skeleton to the player's armature.
 
 export type GearVariant =
-  | 'adventurer' | 'beach' | 'casual' | 'casual2' | 'farmer'
-  | 'king' | 'punk' | 'spacesuit' | 'suit' | 'swat' | 'worker';
+  | 'adventurer' | 'beach' | 'casual' | 'casual2' | 'casualhoodie' | 'farmer'
+  | 'king' | 'punk' | 'spacesuit' | 'suit' | 'swat' | 'worker'
+  | 'formal' | 'medieval' | 'scifi' | 'soldier' | 'witch';
 
 export interface GearVariantPaths {
   head:  string;
@@ -609,20 +610,36 @@ export interface GearVariantPaths {
   back?: string;
 }
 
-/** CDN paths for every Quaternius modular gear variant (male only for now). */
-export const GEAR_VARIANTS: Record<GearVariant, GearVariantPaths> = {
-  adventurer: { head: '/models/gear/male/head/adventurer.fbx', chest: '/models/gear/male/chest/adventurer.fbx', legs: '/models/gear/male/legs/adventurer.fbx', feet: '/models/gear/male/feet/adventurer.fbx', back: '/models/gear/male/back/adventurer.fbx' },
-  beach:      { head: '/models/gear/male/head/beach.fbx',      chest: '/models/gear/male/chest/beach.fbx',      legs: '/models/gear/male/legs/beach.fbx',      feet: '/models/gear/male/feet/beach.fbx' },
-  casual:     { head: '/models/gear/male/head/casual.fbx',     chest: '/models/gear/male/chest/casual.fbx',     legs: '/models/gear/male/legs/casual.fbx',     feet: '/models/gear/male/feet/casual.fbx' },
-  casual2:    { head: '/models/gear/male/head/casual2.fbx',    chest: '/models/gear/male/chest/casual2.fbx',    legs: '/models/gear/male/legs/casual2.fbx',    feet: '/models/gear/male/feet/casual2.fbx' },
-  farmer:     { head: '/models/gear/male/head/farmer.fbx',     chest: '/models/gear/male/chest/farmer.fbx',     legs: '/models/gear/male/legs/farmer.fbx',     feet: '/models/gear/male/feet/farmer.fbx' },
-  king:       { head: '/models/gear/male/head/king.fbx',       chest: '/models/gear/male/chest/king.fbx',       legs: '/models/gear/male/legs/king.fbx',       feet: '/models/gear/male/feet/king.fbx' },
-  punk:       { head: '/models/gear/male/head/punk.fbx',       chest: '/models/gear/male/chest/punk.fbx',       legs: '/models/gear/male/legs/punk.fbx',       feet: '/models/gear/male/feet/punk.fbx' },
-  spacesuit:  { head: '/models/gear/male/head/spacesuit.fbx',  chest: '/models/gear/male/chest/spacesuit.fbx',  legs: '/models/gear/male/legs/spacesuit.fbx',  feet: '/models/gear/male/feet/spacesuit.fbx' },
-  suit:       { head: '/models/gear/male/head/suit.fbx',       chest: '/models/gear/male/chest/suit.fbx',       legs: '/models/gear/male/legs/suit.fbx',       feet: '/models/gear/male/feet/suit.fbx' },
-  swat:       { head: '/models/gear/male/head/swat.fbx',       chest: '/models/gear/male/chest/swat.fbx',       legs: '/models/gear/male/legs/swat.fbx',       feet: '/models/gear/male/feet/swat.fbx' },
-  worker:     { head: '/models/gear/male/head/worker.fbx',     chest: '/models/gear/male/chest/worker.fbx',     legs: '/models/gear/male/legs/worker.fbx',     feet: '/models/gear/male/feet/worker.fbx' },
+/** Modular gear paths per variant — both male + female packs are extracted. */
+export const GEAR_VARIANTS_MALE: Record<string, GearVariantPaths> = {
+  adventurer:  { head: '/models/gear/male/head/adventurer.fbx',  chest: '/models/gear/male/chest/adventurer.fbx',  legs: '/models/gear/male/legs/adventurer.fbx',  feet: '/models/gear/male/feet/adventurer.fbx',  back: '/models/gear/male/back/adventurer.fbx' },
+  beach:       { head: '/models/gear/male/head/beach.fbx',       chest: '/models/gear/male/chest/beach.fbx',       legs: '/models/gear/male/legs/beach.fbx',       feet: '/models/gear/male/feet/beach.fbx' },
+  casual2:     { head: '/models/gear/male/head/casual2.fbx',     chest: '/models/gear/male/chest/casual2.fbx',     legs: '/models/gear/male/legs/casual2.fbx',     feet: '/models/gear/male/feet/casual2.fbx' },
+  casualhoodie:{ head: '/models/gear/male/head/casualhoodie.fbx',chest: '/models/gear/male/chest/casualhoodie.fbx',legs: '/models/gear/male/legs/casualhoodie.fbx',feet: '/models/gear/male/feet/casualhoodie.fbx' },
+  farmer:      { head: '/models/gear/male/head/farmer.fbx',      chest: '/models/gear/male/chest/farmer.fbx',      legs: '/models/gear/male/legs/farmer.fbx',      feet: '/models/gear/male/feet/farmer.fbx' },
+  king:        { head: '/models/gear/male/head/king.fbx',        chest: '/models/gear/male/chest/king.fbx',        legs: '/models/gear/male/legs/king.fbx',        feet: '/models/gear/male/feet/king.fbx' },
+  punk:        { head: '/models/gear/male/head/punk.fbx',        chest: '/models/gear/male/chest/punk.fbx',        legs: '/models/gear/male/legs/punk.fbx',        feet: '/models/gear/male/feet/punk.fbx' },
+  spacesuit:   { head: '/models/gear/male/head/spacesuit.fbx',   chest: '/models/gear/male/chest/spacesuit.fbx',   legs: '/models/gear/male/legs/spacesuit.fbx',   feet: '/models/gear/male/feet/spacesuit.fbx' },
+  suit:        { head: '/models/gear/male/head/suit.fbx',        chest: '/models/gear/male/chest/suit.fbx',        legs: '/models/gear/male/legs/suit.fbx',        feet: '/models/gear/male/feet/suit.fbx' },
+  swat:        { head: '/models/gear/male/head/swat.fbx',        chest: '/models/gear/male/chest/swat.fbx',        legs: '/models/gear/male/legs/swat.fbx',        feet: '/models/gear/male/feet/swat.fbx' },
+  worker:      { head: '/models/gear/male/head/worker.fbx',      chest: '/models/gear/male/chest/worker.fbx',      legs: '/models/gear/male/legs/worker.fbx',      feet: '/models/gear/male/feet/worker.fbx' },
 };
+
+export const GEAR_VARIANTS_FEMALE: Record<string, GearVariantPaths> = {
+  adventurer:  { head: '/models/gear/female/head/adventurer.fbx',  chest: '/models/gear/female/chest/adventurer.fbx',  legs: '/models/gear/female/legs/adventurer.fbx',  feet: '/models/gear/female/feet/adventurer.fbx',  back: '/models/gear/female/back/adventurer.fbx' },
+  casual:      { head: '/models/gear/female/head/casual.fbx',      chest: '/models/gear/female/chest/casual.fbx',      legs: '/models/gear/female/legs/casual.fbx',      feet: '/models/gear/female/feet/casual.fbx' },
+  formal:      { head: '/models/gear/female/head/formal.fbx',      chest: '/models/gear/female/chest/formal.fbx',      legs: '/models/gear/female/legs/formal.fbx',      feet: '/models/gear/female/feet/formal.fbx' },
+  medieval:    { head: '/models/gear/female/head/medieval.fbx',    chest: '/models/gear/female/chest/medieval.fbx',    legs: '/models/gear/female/legs/medieval.fbx',    feet: '/models/gear/female/feet/medieval.fbx' },
+  punk:        { head: '/models/gear/female/head/punk.fbx',        chest: '/models/gear/female/chest/punk.fbx',        legs: '/models/gear/female/legs/punk.fbx',        feet: '/models/gear/female/feet/punk.fbx' },
+  scifi:       { head: '/models/gear/female/head/scifi.fbx',       chest: '/models/gear/female/chest/scifi.fbx',       legs: '/models/gear/female/legs/scifi.fbx',       feet: '/models/gear/female/feet/scifi.fbx' },
+  soldier:     { head: '/models/gear/female/head/soldier.fbx',     chest: '/models/gear/female/chest/soldier.fbx',     legs: '/models/gear/female/legs/soldier.fbx',     feet: '/models/gear/female/feet/soldier.fbx' },
+  suit:        { head: '/models/gear/female/head/suit.fbx',        chest: '/models/gear/female/chest/suit.fbx',        legs: '/models/gear/female/legs/suit.fbx',        feet: '/models/gear/female/feet/suit.fbx' },
+  witch:       { head: '/models/gear/female/head/witch.fbx',       chest: '/models/gear/female/chest/witch.fbx',       legs: '/models/gear/female/legs/witch.fbx',       feet: '/models/gear/female/feet/witch.fbx' },
+  worker:      { head: '/models/gear/female/head/worker.fbx',      chest: '/models/gear/female/chest/worker.fbx',      legs: '/models/gear/female/legs/worker.fbx',      feet: '/models/gear/female/feet/worker.fbx' },
+};
+
+/** Legacy single-table alias — points to male variants for backward compat. */
+export const GEAR_VARIANTS: Record<string, GearVariantPaths> = GEAR_VARIANTS_MALE;
 
 /** Map item rarity → Quaternius gear variant for auto-resolution. */
 export function rarityToGearVariant(rarity: string): GearVariant {
@@ -636,9 +653,14 @@ export function rarityToGearVariant(rarity: string): GearVariant {
   }
 }
 
-/** Look up the CDN path for a gear slot given a variant name. */
-export function getGearPath(variant: GearVariant, slot: 'head' | 'chest' | 'legs' | 'feet' | 'back'): string | null {
-  return GEAR_VARIANTS[variant]?.[slot] ?? null;
+/** Look up the gear FBX path for a slot, resolving by gender + variant. */
+export function getGearPath(
+  variant: GearVariant | string,
+  slot: 'head' | 'chest' | 'legs' | 'feet' | 'back',
+  gender: Gender = 'male',
+): string | null {
+  const table = gender === 'female' ? GEAR_VARIANTS_FEMALE : GEAR_VARIANTS_MALE;
+  return table[variant]?.[slot] ?? GEAR_VARIANTS_MALE[variant]?.[slot] ?? null;
 }
 
 export const DEFAULT_STATS: GrudgeStats = {

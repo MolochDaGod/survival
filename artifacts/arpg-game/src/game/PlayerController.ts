@@ -363,7 +363,10 @@ export class PlayerController {
     }
 
     if (!this.useRealModel) {
-      this.buildProceduralBody();
+      // No box fallback — load the default GLTF directly as last resort.
+      // The real character model should always load from AssetManager.
+      // If it failed, log a warning but don't render placeholder boxes.
+      console.warn('[PlayerController] No real model loaded — character will be invisible until GLTF loads.');
     }
 
     this.playerGroup.position.copy(this.position);
@@ -374,7 +377,8 @@ export class PlayerController {
     this.fpCamera.add(this.fpWeaponGroup);
     scene.add(this.fpCamera);
 
-    this.buildWeaponMesh();
+    // Weapon visuals are driven entirely by the skeleton-based
+    // WeaponAttachment system (3P) and loadFPHands (1P). No box meshes.
     this.loadFPHands();
     this.setupInput();
 
@@ -537,191 +541,29 @@ export class PlayerController {
     }
   }
 
-  private buildProceduralBody() {
-    const torsoGeo = new THREE.BoxGeometry(0.6, 0.9, 0.28);
-    const torsoMat = new THREE.MeshStandardMaterial({ color: 0x2e4a1e, roughness: 0.85, metalness: 0.05 });
-    const torso = new THREE.Mesh(torsoGeo, torsoMat);
-    torso.position.y = 1.05;
-    torso.castShadow = true;
+  // ── Box character body REMOVED ─────────────────────────────────────────
+  // buildProceduralBody, createArm, createLeg deleted. All characters
+  // render from real Quaternius GLTF models loaded by AssetManager.
+  // The WeaponAttachment system handles 3P weapons via skeleton bones.
+  // FP weapons are handled by loadFPHands + weapon-specific GLTF packs.
 
-    const armorGeo = new THREE.BoxGeometry(0.65, 0.5, 0.3);
-    const armorMat = new THREE.MeshStandardMaterial({ color: 0x4a5568, roughness: 0.6, metalness: 0.3 });
-    const armor = new THREE.Mesh(armorGeo, armorMat);
-    armor.position.y = 0.15;
-    torso.add(armor);
-
-    const beltGeo = new THREE.BoxGeometry(0.65, 0.08, 0.31);
-    const beltMat = new THREE.MeshStandardMaterial({ color: 0x7b3f00, roughness: 0.9 });
-    const belt = new THREE.Mesh(beltGeo, beltMat);
-    belt.position.y = -0.15;
-    torso.add(belt);
-    this.bodyMesh = torso;
-    this.playerGroup.add(torso);
-
-    const headGeo = new THREE.BoxGeometry(0.4, 0.4, 0.35);
-    const headMat = new THREE.MeshStandardMaterial({ color: 0xc68642, roughness: 0.9 });
-    const head = new THREE.Mesh(headGeo, headMat);
-    head.position.y = 1.7;
-    head.castShadow = true;
-
-    const helmetGeo = new THREE.BoxGeometry(0.44, 0.22, 0.38);
-    const helmetMat = new THREE.MeshStandardMaterial({ color: 0x4a5568, roughness: 0.5, metalness: 0.4 });
-    const helmet = new THREE.Mesh(helmetGeo, helmetMat);
-    helmet.position.y = 0.12;
-    head.add(helmet);
-
-    const visorGeo = new THREE.BoxGeometry(0.3, 0.07, 0.39);
-    const visorMat = new THREE.MeshStandardMaterial({ color: 0xff9900, roughness: 0.3, metalness: 0.1, emissive: 0xff6600, emissiveIntensity: 0.3 });
-    const visor = new THREE.Mesh(visorGeo, visorMat);
-    visor.position.set(0, 0.02, 0.02);
-    head.add(visor);
-    this.headMesh = head;
-    this.playerGroup.add(head);
-
-    this.leftArmGroup = this.createArm(true);
-    this.rightArmGroup = this.createArm(false);
-    this.leftLegGroup = this.createLeg(true);
-    this.rightLegGroup = this.createLeg(false);
-
-    this.playerGroup.add(this.leftArmGroup);
-    this.playerGroup.add(this.rightArmGroup);
-    this.playerGroup.add(this.leftLegGroup);
-    this.playerGroup.add(this.rightLegGroup);
-  }
-
-  private createArm(isLeft: boolean): THREE.Group {
-    const group = new THREE.Group();
-    const side = isLeft ? -1 : 1;
-
-    const upperMat = new THREE.MeshStandardMaterial({ color: 0x2e4a1e, roughness: 0.85 });
-    const upper = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.45, 0.18), upperMat);
-    upper.position.y = -0.22;
-    upper.castShadow = true;
-
-    const foreMat = new THREE.MeshStandardMaterial({ color: 0xc68642, roughness: 0.9 });
-    const fore = new THREE.Mesh(new THREE.BoxGeometry(0.15, 0.4, 0.15), foreMat);
-    fore.position.y = -0.6;
-
-    const gaunMat = new THREE.MeshStandardMaterial({ color: 0x4a5568, roughness: 0.5, metalness: 0.4 });
-    const gaunt = new THREE.Mesh(new THREE.BoxGeometry(0.17, 0.2, 0.17), gaunMat);
-    gaunt.position.y = -0.75;
-
-    group.add(upper, fore, gaunt);
-    group.position.set(side * 0.42, 1.35, 0);
-    group.userData.isArm = true;
-    group.userData.isLeft = isLeft;
-    return group;
-  }
-
-  private createLeg(isLeft: boolean): THREE.Group {
-    const group = new THREE.Group();
-    const side = isLeft ? -1 : 1;
-
-    const thighMat = new THREE.MeshStandardMaterial({ color: 0x1a3a0f, roughness: 0.85 });
-    const thigh = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.45, 0.22), thighMat);
-    thigh.position.y = -0.22;
-
-    const shin = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.4, 0.18), thighMat.clone());
-    shin.position.y = -0.6;
-
-    const bootMat = new THREE.MeshStandardMaterial({ color: 0x3d2b1f, roughness: 0.9 });
-    const boot = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.15, 0.28), bootMat);
-    boot.position.set(0, -0.8, 0.05);
-
-    const greaveMat = new THREE.MeshStandardMaterial({ color: 0x4a5568, roughness: 0.5, metalness: 0.4 });
-    const greave = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.25, 0.2), greaveMat);
-    greave.position.y = -0.55;
-
-    group.add(thigh, shin, boot, greave);
-    group.position.set(side * 0.17, 0.62, 0);
-    group.userData.isLeg = true;
-    group.userData.isLeft = isLeft;
-    return group;
-  }
-
+  // ── Box weapons REMOVED ────────────────────────────────────────────────
+  // buildWeaponMesh and buildWeaponModel deleted. 3P weapons are attached
+  // to skeleton bones via WeaponAttachment.attachWeapon(). FP weapons are
+  // loaded by loadFPHands using the animated weapon GLTF packs in
+  // /models/weapons/animated/ (knife, pistol, rifle).
+  //
+  // buildWeaponMesh is still referenced externally (weapon swap) — stub it
+  // to trigger the skeleton attachment path instead of building box meshes.
   buildWeaponMesh() {
-    if (this.weaponMesh && this.rightArmGroup) {
-      this.rightArmGroup.remove(this.weaponMesh);
-      this.weaponMesh = null;
-    }
-
+    // Clear any stale FP weapon children (box-era cleanup)
     while (this.fpWeaponGroup.children.length > 0) {
       this.fpWeaponGroup.remove(this.fpWeaponGroup.children[0]);
     }
-
-    const weapon = this.equippedWeapons[this.activeWeaponIndex];
-
-    if (this.rightArmGroup) {
-      this.weaponMesh = this.buildWeaponModel(weapon, false);
-      this.weaponMesh.position.set(0.05, -0.9, 0.12);
-      this.weaponMesh.rotation.set(Math.PI / 2, 0, 0);
-      this.rightArmGroup.add(this.weaponMesh);
-    }
-
-    const fpWeapon = this.buildWeaponModel(weapon, true);
-    fpWeapon.position.set(0.3, -0.25, -0.5);
-    this.fpWeaponGroup.add(fpWeapon);
-
-    const armMat = new THREE.MeshStandardMaterial({ color: 0x2e4a1e, roughness: 0.85 });
-    const fpArm = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.35, 0.12), armMat);
-    fpArm.position.set(0.22, -0.35, -0.4);
-    this.fpWeaponGroup.add(fpArm);
-
-    const foreMat = new THREE.MeshStandardMaterial({ color: 0xc68642, roughness: 0.9 });
-    const fpFore = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.3, 0.1), foreMat);
-    fpFore.position.set(0.22, -0.52, -0.38);
-    this.fpWeaponGroup.add(fpFore);
-  }
-
-  private buildWeaponModel(weapon: WeaponStats, fp: boolean): THREE.Mesh {
-    const s = fp ? 1.2 : 1;
-    const metalMat = new THREE.MeshStandardMaterial({ color: weapon.color, roughness: 0.3, metalness: 0.8 });
-    const woodMat = new THREE.MeshStandardMaterial({ color: 0x7b3f00, roughness: 0.9, metalness: 0.0 });
-    const darkMat = new THREE.MeshStandardMaterial({ color: 0x333333, roughness: 0.6, metalness: 0.5 });
-
-    switch (weapon.type) {
-      case 'sword': {
-        const mesh = new THREE.Mesh(new THREE.BoxGeometry(0.06 * s, 0.9 * s, 0.06 * s), metalMat);
-        const guard = new THREE.Mesh(new THREE.BoxGeometry(0.3 * s, 0.06 * s, 0.08 * s), woodMat);
-        guard.position.y = -0.35 * s;
-        mesh.add(guard);
-        return mesh;
-      }
-      case 'axe': {
-        const mesh = new THREE.Mesh(new THREE.BoxGeometry(0.07 * s, 0.8 * s, 0.07 * s), woodMat);
-        const head = new THREE.Mesh(new THREE.BoxGeometry(0.35 * s, 0.3 * s, 0.05 * s), metalMat);
-        head.position.y = 0.35 * s;
-        mesh.add(head);
-        return mesh;
-      }
-      case 'dagger': {
-        const mesh = new THREE.Mesh(new THREE.BoxGeometry(0.05 * s, 0.5 * s, 0.04 * s), metalMat);
-        const guard = new THREE.Mesh(new THREE.BoxGeometry(0.2 * s, 0.05 * s, 0.07 * s), darkMat);
-        guard.position.y = -0.2 * s;
-        mesh.add(guard);
-        return mesh;
-      }
-      case 'mace': {
-        const mesh = new THREE.Mesh(new THREE.BoxGeometry(0.07 * s, 0.7 * s, 0.07 * s), woodMat);
-        const head = new THREE.Mesh(new THREE.SphereGeometry(0.15 * s, 8, 8), metalMat);
-        head.position.y = 0.4 * s;
-        mesh.add(head);
-        return mesh;
-      }
-      case 'gun': {
-        const frame = new THREE.Mesh(new THREE.BoxGeometry(0.1 * s, 0.2 * s, 0.45 * s), metalMat);
-        const barrel = new THREE.Mesh(new THREE.BoxGeometry(0.06 * s, 0.06 * s, 0.5 * s), darkMat);
-        barrel.position.set(0, 0.09 * s, -0.2 * s);
-        const grip = new THREE.Mesh(new THREE.BoxGeometry(0.09 * s, 0.22 * s, 0.12 * s), woodMat);
-        grip.position.set(0, -0.19 * s, 0.1 * s);
-        const tg = new THREE.Mesh(new THREE.BoxGeometry(0.04 * s, 0.06 * s, 0.16 * s), metalMat);
-        tg.position.set(0, -0.1 * s, 0.02 * s);
-        frame.add(barrel, grip, tg);
-        return frame;
-      }
-      default:
-        return new THREE.Mesh(new THREE.BoxGeometry(0.06 * s, 0.9 * s, 0.06 * s), metalMat);
-    }
+    // 3P: WeaponAttachment handles bone-attached models via syncWeaponAttachments.
+    // 1P: loadFPHands already loaded fists_fp.glb; weapon-swap just toggles visibility.
+    // Trigger the attachment sync so the correct weapon shows on the skeleton.
+    this.syncWeaponAttachments();
   }
 
   setCameraMode(mode: CameraMode) {

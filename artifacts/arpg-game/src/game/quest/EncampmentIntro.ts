@@ -85,34 +85,27 @@ export function createIntroQuest(
         type: 'talk',
         npcId: 'npc_faction',
         objective: 'Talk to Commander Voss',
-        dialog: 'Welcome, survivor. This camp is the last holdout. Meet our Quartermaster for supplies, check the Vault for safekeeping, then see Battle Master Rokar when you\u2019re ready to fight.',
+        dialog: 'Welcome, survivor. This camp is the last holdout against The Way\'s abandonment. Five factions have carved the surface into territories. Meet our Quartermaster for supplies, check the Vault for safekeeping, then see Battle Master Rokar when you\'re ready to fight.',
       },
       {
         type: 'talk',
         npcId: 'npc_vendor',
         objective: 'Visit the Quartermaster',
-        dialog: 'Here\u2019s the deal \u2014 I sell what I salvage. Browse freely. First purchase is on the house.',
+        dialog: 'Here\'s the deal \u2014 I sell what I salvage from the ruins The Way left behind. Browse freely. First purchase is on the house.',
       },
       {
         type: 'talk',
         npcId: 'npc_bank',
         objective: 'Secure your supplies at the Vault',
-        dialog: 'Store anything you can\u2019t afford to lose. The vault holds through raids.',
+        dialog: 'Store anything you can\'t afford to lose. The Hollow Lords raid every season. The vault holds through raids.',
       },
       {
         type: 'talk',
         npcId: 'npc_battlemaster',
         objective: 'Report to Battle Master Rokar',
-        dialog: 'So Voss sent you. Good. Let\u2019s see what you\u2019re made of. I\u2019ll send a few hostiles your way \u2014 survive, and you\u2019ve earned your place.',
+        dialog: 'So Voss sent you. Good. The surface is unforgiving \u2014 The Way stripped everything and left us to rot. Let\'s see what you\'re made of. I\'ll send a few hostiles your way \u2014 survive, and you\'ve earned your place.',
         onComplete: () => {
-          // Spawn 3 enemies at the battle arena position
-          const arenaX = cx + BATTLE_ARENA_OFFSET.x;
-          const arenaZ = cz + BATTLE_ARENA_OFFSET.z;
           for (let i = 0; i < 3; i++) {
-            const angle = (i / 3) * Math.PI * 2;
-            const spawnX = arenaX + Math.cos(angle) * 4;
-            const spawnZ = arenaZ + Math.sin(angle) * 4;
-            // Use a delayed spawn so enemies don't pop in on top of the NPC
             setTimeout(() => {
               enemyManager.spawnEnemy();
             }, i * 800);
@@ -128,8 +121,83 @@ export function createIntroQuest(
         type: 'return',
         npcId: 'npc_battlemaster',
         objective: 'Return to Battle Master Rokar',
-        dialog: 'Not bad, survivor. You\u2019ve earned your place in this camp. The real fight starts outside those walls.',
+        dialog: 'Not bad, survivor. You\'ve earned your place in this camp. The real fight is out there \u2014 five factions, five territories. Talk to Voss about which road to take. The Pilgrim Road leads north to the Keepers, the Scrap Highway east to the Scavengers, Descent Road south to The Pit, Rail Line west to the Network, and the Tidal Path southeast to the Forgotten.',
       },
     ],
   };
+}
+
+// \u2500\u2500 Sector exploration quests \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+// Unlock after encampment_intro completes. Each sends the player to a
+// faction capital to meet their leader and start earning reputation.
+
+export function createSectorQuests(): QuestDef[] {
+  return [
+    {
+      id: 'quest_keepers',
+      title: 'The Pilgrim Road',
+      description: 'Travel north to the Cathedral Highlands and meet the Keepers of the Old Faith.',
+      reward: { professionXp: { survival: 80, gathering: 40 }, weaponXp: 40 },
+      steps: [
+        { type: 'talk', npcId: 'npc_faction', objective: 'Ask Commander Voss about the Keepers',
+          dialog: 'The Keepers hold the highlands north of here. They believe The Way wounded the living land and only hallowed harvest can heal it. Follow the Pilgrim Road \u2014 they\'ll test your faith before your blade.' },
+        { type: 'goto', objective: 'Reach the Cathedral Highlands', targetPos: { x: 0, z: -6000 }, radius: 200 },
+        { type: 'kill', killCount: 5, objective: 'Clear highland hostiles (0/5)' },
+        { type: 'goto', objective: 'Find the Old Cathedral', targetPos: { x: 0, z: -6000 }, radius: 50 },
+      ],
+    },
+    {
+      id: 'quest_scavengers',
+      title: 'The Scrap Highway',
+      description: 'Travel east to The Junkyards and meet the Tech-Scavengers.',
+      reward: { professionXp: { survival: 80, crafting: 50 }, weaponXp: 40 },
+      steps: [
+        { type: 'talk', npcId: 'npc_faction', objective: 'Ask Commander Voss about the Scavengers',
+          dialog: 'East along the Scrap Highway you\'ll find The Junkyards. The Tech-Scavengers were the mechanics who kept The Way\'s machines alive. Now they keep them alive for themselves. Bring scrap \u2014 they respect parts more than words.' },
+        { type: 'goto', objective: 'Reach The Junkyards', targetPos: { x: 6000, z: 0 }, radius: 200 },
+        { type: 'kill', killCount: 5, objective: 'Clear junkyard hostiles (0/5)' },
+        { type: 'goto', objective: 'Find The Workshops', targetPos: { x: 6000, z: 0 }, radius: 50 },
+      ],
+    },
+    {
+      id: 'quest_hollow_lords',
+      title: 'Descent Road',
+      description: 'Travel south to The Pit and face the Hollow Lords.',
+      reward: { professionXp: { combat: 100, hunting: 40 }, weaponXp: 60 },
+      steps: [
+        { type: 'talk', npcId: 'npc_faction', objective: 'Ask Commander Voss about the Hollow Lords',
+          dialog: 'South lies The Pit. The Hollow Lords were miners trapped when The Way sealed the elevators. Now they rule by iron law \u2014 rank through strength, oaths in blood. Don\'t go unarmed.' },
+        { type: 'goto', objective: 'Reach The Pit', targetPos: { x: 0, z: 6000 }, radius: 200 },
+        { type: 'kill', killCount: 8, objective: 'Survive the warband patrols (0/8)' },
+        { type: 'goto', objective: 'Find Iron Pit', targetPos: { x: 0, z: 6000 }, radius: 50 },
+      ],
+    },
+    {
+      id: 'quest_network',
+      title: 'Rail Line West',
+      description: 'Travel west to The Switchyard and meet The Network.',
+      reward: { professionXp: { survival: 60, township: 60 }, weaponXp: 30,
+        items: [{ itemId: 'compass', count: 1 }, { itemId: 'radio', count: 1 }] },
+      steps: [
+        { type: 'talk', npcId: 'npc_faction', objective: 'Ask Commander Voss about the Network',
+          dialog: 'West along the old rail line is The Switchyard. The Network were rail workers who became traders, then intelligence brokers. They never raid \u2014 they sell information. Bring something worth trading.' },
+        { type: 'goto', objective: 'Reach The Switchyard', targetPos: { x: -6000, z: 0 }, radius: 200 },
+        { type: 'kill', killCount: 3, objective: 'Clear bandit scouts on the rail line (0/3)' },
+        { type: 'goto', objective: 'Find The Exchange', targetPos: { x: -6000, z: 0 }, radius: 50 },
+      ],
+    },
+    {
+      id: 'quest_forgotten',
+      title: 'The Tidal Path',
+      description: 'Travel southeast to The Drowned Quarter and find the Forgotten.',
+      reward: { professionXp: { survival: 80, chemistry: 50 }, weaponXp: 40 },
+      steps: [
+        { type: 'talk', npcId: 'npc_faction', objective: 'Ask Commander Voss about the Forgotten',
+          dialog: 'Southeast, where the coast floods, you\'ll find The Drowned Quarter. The Forgotten were dockworkers and fishers left behind when The Way over-extracted the aquifers. They coat blades in tide toxins and remember every name The Way abandoned. Tread carefully \u2014 they move with the water.' },
+        { type: 'goto', objective: 'Reach The Drowned Quarter', targetPos: { x: 4800, z: 4800 }, radius: 200 },
+        { type: 'kill', killCount: 5, objective: 'Clear marsh hostiles (0/5)' },
+        { type: 'goto', objective: 'Find Tidewatch', targetPos: { x: 4800, z: 4800 }, radius: 50 },
+      ],
+    },
+  ];
 }

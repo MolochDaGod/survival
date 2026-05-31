@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { worldHeight, getBiome, getBiomeColor, getSettlements, WORLD_HALF } from '../game/world/WorldGen';
-import { SECTORS } from '../data/sectors';
+import { SECTORS, TRAVEL_ROUTES, getAllPOIs } from '../data/sectors';
 import { FACTIONS } from '../data/factions';
 
 // ─── Map generation (lazy, cached after first render) ────────────────────────
@@ -130,6 +130,42 @@ export function WorldMapOverlay({ player, onClose }: WorldMapOverlayProps) {
             ctx.fillText(sector.name, cx, cy - rp * 0.55);
         });
 
+        // Travel routes (drawn before markers so routes are behind dots)
+        ctx.lineWidth = 1.5;
+        ctx.setLineDash([4, 4]);
+        TRAVEL_ROUTES.forEach(route => {
+            if (route.waypoints.length < 2) return;
+            ctx.beginPath();
+            const w0 = route.waypoints[0];
+            ctx.moveTo(worldToPx(w0.x), worldToPx(w0.z));
+            for (let i = 1; i < route.waypoints.length; i++) {
+                ctx.lineTo(worldToPx(route.waypoints[i].x), worldToPx(route.waypoints[i].z));
+            }
+            ctx.strokeStyle = 'rgba(200,180,120,0.35)';
+            ctx.stroke();
+        });
+        ctx.setLineDash([]);
+
+        // POI markers (sector-specific points of interest)
+        const POI_ICON: Record<string, string> = {
+            vendor: '🛒', dungeon: '💀', boss: '👹', harvest: '⛏',
+            camp: '⛺', landmark: '🏛', gate: '🚧',
+        };
+        const allPois = getAllPOIs();
+        allPois.forEach(poi => {
+            const px2 = worldToPx(poi.worldX);
+            const py2 = worldToPx(poi.worldZ);
+            const factionColor = FACTIONS[poi.factionId].color;
+            // Small dot
+            ctx.beginPath();
+            ctx.arc(px2, py2, 3.5, 0, Math.PI * 2);
+            ctx.fillStyle = factionColor + 'cc';
+            ctx.fill();
+            ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+        });
+
         // Settlement markers
         settlements.forEach(s => {
             const fx = worldToFrac(s.x) * SIZE;
@@ -147,6 +183,21 @@ export function WorldMapOverlay({ player, onClose }: WorldMapOverlayProps) {
             ctx.lineWidth = 1;
             ctx.stroke();
         });
+
+        // Encampment marker (world origin — safe zone)
+        const encX = worldToPx(0);
+        const encY = worldToPx(0);
+        ctx.beginPath();
+        ctx.arc(encX, encY, 8, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255,215,0,0.2)';
+        ctx.fill();
+        ctx.strokeStyle = '#ffd700';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.font = '600 9px Cinzel, serif';
+        ctx.textAlign = 'center';
+        ctx.fillStyle = '#ffd700';
+        ctx.fillText('ENCAMPMENT', encX, encY + 16);
 
         // Player dot (white pulsing glow — static here)
         const px = worldToFrac(player.x) * SIZE;
@@ -393,7 +444,7 @@ style = {{
             fontSize: 9, color: '#556677', fontFamily: 'monospace',
         }
 }>
-    <div style={ { width: Math.round(CANVAS_SIZE / 6.4), height: 3, background: '#e8d5b0', borderRadius: 1 } } />
+    <div style={ { width: Math.round(CANVAS_SIZE / 20), height: 3, background: '#e8d5b0', borderRadius: 1 } } />
         < span > 1 000 m </span>
             </div>
             </div>

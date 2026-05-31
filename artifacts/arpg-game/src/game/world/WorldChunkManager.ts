@@ -22,9 +22,9 @@ import {
   type ChunkColliderHandle,
 } from '../physics/ChunkColliders';
 
-const CHUNK_SIZE  = 256;        // metres per side
-const CHUNK_RES   = 64;         // quad segments per side  (4 m vertex spacing)
-const KEEP_RADIUS = 3;          // 7×7 = 49 resident chunks  ~896 m view
+const CHUNK_SIZE  = 512;        // metres per side (scaled for 20 km world)
+const CHUNK_RES   = 64;         // quad segments per side  (8 m vertex spacing)
+const KEEP_RADIUS = 3;          // 7×7 = 49 resident chunks  ~1.8 km view
 
 type WithBVH = THREE.BufferGeometry & { computeBoundsTree?: () => void };
 

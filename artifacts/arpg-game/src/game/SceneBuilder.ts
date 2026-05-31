@@ -17,21 +17,22 @@ import type { PhysicsWorld } from './physics/PhysicsWorld';
 import { LAYERS } from './Layers';
 
 /**
- * Master toggle: when true, the procedural infinite world is skipped and the
- * city GLB chosen by `STARTER_MAP_NAME` is loaded as the playable area.
- * Player spawns at the marker baked into the source scene if a sidecar JSON
- * exists, otherwise StarterMap derives a spawn from the bounding-box centre.
- * Set this to `false` to restore the streamed-noise world (TerrainBuilder +
- * WorldChunkManager + features + roads + grass + GLB-location streaming).
+ * The encampment GLB is always loaded as the safe starting zone at the world
+ * origin. The procedural open world (chunks, terrain, features, roads) streams
+ * around it once the player leaves the encampment perimeter. Both systems
+ * coexist: the encampment is a static GLB island planted at (0,0), and the
+ * chunk manager fills the rest of the 20 km world procedurally.
  */
 const STARTER_MAP_MODE = true;
-/**
- * Which preprocessed city to load when STARTER_MAP_MODE is on.
- * Available: 'main-town' (51 MB, full city), 'encampment' (18 MB, military
- * outpost — primary game entry), 'misty-town' (20 MB, foggy village),
- * 'market-district' (13 MB, dense bazaar), 'town3f2' (12 MB, original tiny).
- */
+/** Encampment GLB map. Loaded at world origin as the safe starting zone. */
 const STARTER_MAP_NAME = 'encampment';
+/**
+ * Distance from world origin at which the open-world terrain chunks begin
+ * streaming. Must be larger than the encampment's footprint (~200 m) so the
+ * procedural terrain doesn't poke through the GLB. The WorldChunkManager
+ * starts ticking once the player crosses this radius.
+ */
+export const OPEN_WORLD_STREAM_RADIUS = 250;
 
 export class SceneBuilder {
   scene: THREE.Scene;

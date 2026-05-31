@@ -52,7 +52,7 @@ import { SlashVFX } from './vfx/SlashVFX';
 import { ShockwaveVFX } from './vfx/ShockwaveVFX';
 import { SurvivorSpawner, type SurvivorSpawnerSnapshot } from './township/SurvivorSpawner';
 import { getQuestSystem } from './quest/QuestSystem';
-import { createIntroQuest, ENCAMPMENT_NPCS } from './quest/EncampmentIntro';
+import { createIntroQuest, createSectorQuests, ENCAMPMENT_NPCS } from './quest/EncampmentIntro';
 import { getMilestoneEffects, mergeEffectBags, readEffect, type MilestoneEffectBag } from '@workspace/game-systems/perks';
 import { sumPassives, getUnlockedPerks, getUnlockedCombos, type StatTrack } from './progression/PerkSystem';
 
@@ -686,9 +686,12 @@ export class GameEngine {
           }
         }
 
-        // Register + activate the intro quest
+        // Register + activate the intro quest, then sector quests on completion
         const questSys = getQuestSystem();
         questSys.register(createIntroQuest(cityCentre, this.enemyManager));
+        // Pre-register sector exploration quests (inactive until intro finishes)
+        const sectorQuests = createSectorQuests();
+        for (const sq of sectorQuests) questSys.register(sq);
         questSys.onQuestComplete = (qid, reward) => {
           console.log(`[Quest] "${qid}" complete!`, reward);
           // Grant profession XP to relevant professions
@@ -700,6 +703,13 @@ export class GameEngine {
           // Grant weapon XP to the unallocated pool
           if (reward.weaponXp) {
             StatProgressionService.addWeaponXp(reward.weaponXp);
+          }
+          // When the intro quest finishes, unlock all 5 sector exploration quests
+          if (qid === 'encampment_intro') {
+            for (const sq of sectorQuests) {
+              questSys.activate(sq.id);
+              console.log(`[Quest] Activated sector quest: ${sq.title}`);
+            }
           }
         };
       }
