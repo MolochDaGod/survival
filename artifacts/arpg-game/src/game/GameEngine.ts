@@ -51,6 +51,8 @@ import { ImpactSparks } from './vfx/ImpactSparks';
 import { SlashVFX } from './vfx/SlashVFX';
 import { ShockwaveVFX } from './vfx/ShockwaveVFX';
 import { SurvivorSpawner, type SurvivorSpawnerSnapshot } from './township/SurvivorSpawner';
+import { getQuestSystem } from './quest/QuestSystem';
+import { createIntroQuest, ENCAMPMENT_NPCS } from './quest/EncampmentIntro';
 import { getMilestoneEffects, mergeEffectBags, readEffect, type MilestoneEffectBag } from '@workspace/game-systems/perks';
 import { sumPassives, getUnlockedPerks, getUnlockedCombos, type StatTrack } from './progression/PerkSystem';
 
@@ -517,7 +519,9 @@ export class GameEngine {
       // Open a 20-second intro grace so the player can get oriented before
       // anything wanders in. `startGameplay()` calls `spawnWave(1)` and the
       // per-frame trickle ticks immediately — both are gated on this timer.
-      this.enemyManager.setIntroGrace(20);
+      // Extended intro grace for encampment — player needs time to meet NPCs
+      // and accept the intro quest before enemies wander in.
+      this.enemyManager.setIntroGrace(this.sceneBuilder.isStarterMapMode() ? 45 : 20);
       this.enemyManager.onEnemyKilledAt = (exp, position, tier) => {
         this.gameState.killCount++;
         this.gameState.score += 100 + this.wave * 25;
@@ -542,6 +546,9 @@ export class GameEngine {
         const weaponXp = tier === 'boss' ? 60 : tier === 'elite' ? 25 : 10;
         StatProgressionService.addWeaponXp(weaponXp);
         this.onGameStateUpdate?.(this.gameState);
+
+        // Feed kill into quest system for kill-step tracking
+        getQuestSystem().onEnemyKilled();
       };
       // Hook every damage event for floating numbers + impact SFX.
       this.enemyManager.onEnemyDamaged = (pos, dmg) => {
@@ -622,14 +629,67 @@ export class GameEngine {
       // (NPCBrain.onPlayerAngered flips faction → ATTACK goal).
       this.citySpawner = new CitySpawner(this.scene, getNPCManager(), this.assetManager);
       const cityCentre = this._pendingSpawnAnchor ?? new THREE.Vector3();
-      // 14 ambient NPCs felt like a flea market — dialed back to 6 so the
-      // town reads as inhabited but not crowded. Talk-prompt collisions
-      // were also a problem at the higher count.
-      this.citySpawner.populate(cityCentre, 6, 35);
+      // In encampment mode, spawn fewer generic NPCs (named NPCs fill the key roles).
+      // In open-world mode, keep the original 6.
+      const genericCount = this.sceneBuilder.isStarterMapMode() ? 3 : 6;
+      this.citySpawner.populate(cityCentre, genericCount, 35);
       this.citySpawner.onTalkPrompt = (label) => {
         this._lastNpcLabel = label;
         this.resolveInteractionPrompt();
       };
+
+      // ── Named encampment NPCs (Vendor, Faction, Bank, Battle Master) ─────
+      // Spawned at fixed positions from EncampmentIntro.ts. Each gets a
+      // unique id that the QuestSystem references in 'talk'/'return' steps.
+      if (this.sceneBuilder.isStarterMapMode()) {
+        for (const npcDef of ENCAMPMENT_NPCS) {
+          const pos = new THREE.Vector3(
+            cityCentre.x + npcDef.offset.x,
+            cityCentre.y,
+            cityCentre.z + npcDef.offset.z,
+          );
+          const brain = getNPCManager().spawn({
+            id: npcDef.id,
+            faction: 'friendly' as any,
+            walkSpeed: 0.4,
+            runSpeed: 2,
+            visionRange: 20,
+            homePosition: pos.clone(),
+          });
+          // Named NPCs stand still near their post
+          brain.setPosition(pos.x, pos.y, pos.z);
+          brain.vehicle.maxSpeed = 0;
+          // Reuse an enemy template mesh for visual (same as CitySpawner)
+          const tplKey = [...(this.assetManager.enemyTemplates.keys())][0];
+          if (tplKey) {
+            const tpl = this.assetManager.cloneEnemyTemplate(tplKey);
+            if (tpl) {
+              const wrapper = new THREE.Group();
+              wrapper.name = npcDef.id;
+              tpl.group.position.y = tpl.footOffsetY;
+              wrapper.add(tpl.group);
+              wrapper.position.copy(pos);
+              this.scene.add(wrapper);
+              brain.mesh = wrapper;
+              // Idle animation
+              if (tpl.mixer && tpl.animations.length > 0) {
+                const idleClip = tpl.animations.find(a => /idle|stand/i.test(a.name)) ?? tpl.animations[0];
+                tpl.mixer.clipAction(idleClip).play();
+                // Store mixer for per-frame tick
+                wrapper.userData._mixer = tpl.mixer;
+              }
+            }
+          }
+        }
+
+        // Register + activate the intro quest
+        const questSys = getQuestSystem();
+        questSys.register(createIntroQuest(cityCentre, this.enemyManager));
+        questSys.onQuestComplete = (qid, xp) => {
+          console.log(`[Quest] "${qid}" complete! +${xp} XP`);
+          this.player?.gainExperience(xp);
+        };
+      }
       // Wire recruit key (F) — when near an NPC, pressing interact recruits
       // them as a follower using the FollowBrain system.
       document.addEventListener('keydown', (e) => {
@@ -743,6 +803,14 @@ export class GameEngine {
     this.gameState.paused = false;
     this.onGameStateUpdate?.(this.gameState);
     this.startGameplay();
+
+    // Activate the encampment intro quest after a short delay
+    // so the player has time to see the world load in.
+    if (this.sceneBuilder?.isStarterMapMode()) {
+      setTimeout(() => {
+        getQuestSystem().activate('encampment_intro');
+      }, 3000);
+    }
 
     // Begin cloud save auto-save loop, and hydrate any persisted SWG-style
     // profession state. This is additive on top of the existing engine
@@ -973,6 +1041,29 @@ export class GameEngine {
 
     // Ambient city NPC mixers + talk-prompt picker.
     this.citySpawner?.update(dt, this.player.position);
+
+    // Named NPC mixer ticks (encampment Vendor/Faction/Bank/BattleMaster)
+    this.scene.traverse((obj) => {
+      const mx = obj.userData._mixer as THREE.AnimationMixer | undefined;
+      if (mx) mx.update(dt);
+    });
+
+    // Quest system proximity checks
+    if (this.sceneBuilder?.isStarterMapMode()) {
+      // Find nearest named NPC within talk range
+      let nearNpcId: string | null = null;
+      for (const npcDef of ENCAMPMENT_NPCS) {
+        const brain = getNPCManager().getBrain(npcDef.id);
+        if (!brain) continue;
+        const dx = this.player.position.x - brain.vehicle.position.x;
+        const dz = this.player.position.z - brain.vehicle.position.z;
+        if (dx * dx + dz * dz < 5 * 5) {
+          nearNpcId = npcDef.id;
+          break;
+        }
+      }
+      getQuestSystem().update(this.player.position, nearNpcId);
+    }
 
     // Breakable wall physics (fragment gravity, fade-out).
     this.breakableWallSystem?.update(dt);

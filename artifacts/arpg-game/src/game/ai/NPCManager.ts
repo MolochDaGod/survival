@@ -83,6 +83,11 @@ export class NPCManager {
     return brain;
   }
 
+  /** Look up a brain by id. Used by QuestSystem for proximity checks. */
+  getBrain(id: string): NPCBrain | undefined {
+    return this.npcs.get(id);
+  }
+
   /** Remove an NPC from the world */
   despawn(id: string): void {
     const brain = this.npcs.get(id);

@@ -23,14 +23,14 @@ import { LAYERS } from './Layers';
  * Set this to `false` to restore the streamed-noise world (TerrainBuilder +
  * WorldChunkManager + features + roads + grass + GLB-location streaming).
  */
-const STARTER_MAP_MODE = false;
+const STARTER_MAP_MODE = true;
 /**
  * Which preprocessed city to load when STARTER_MAP_MODE is on.
- * Available: 'main-town' (51 MB, full city), 'encampment' (31 MB, military
- * outpost), 'misty-town' (20 MB, foggy village), 'market-district' (13 MB,
- * dense bazaar), 'town3f2' (12 MB, original tiny starter).
+ * Available: 'main-town' (51 MB, full city), 'encampment' (18 MB, military
+ * outpost — primary game entry), 'misty-town' (20 MB, foggy village),
+ * 'market-district' (13 MB, dense bazaar), 'town3f2' (12 MB, original tiny).
  */
-const STARTER_MAP_NAME = 'main-town';
+const STARTER_MAP_NAME = 'encampment';
 
 export class SceneBuilder {
   scene: THREE.Scene;
