@@ -228,8 +228,17 @@ export const BODY_TYPES: BodyTypeConfig[] = [
   { id: 'suit',          gender: 'male', label: 'Commander',  icon: '🕴️', category: 'civilian', scaleX: 1.00, scaleY: 1.00, gltfPath: '/models/characters/male/suit.gltf' },
   { id: 'swat',          gender: 'male', label: 'Enforcer',   icon: '🛡️', category: 'civilian', scaleX: 1.00, scaleY: 1.00, gltfPath: '/models/characters/male/swat.gltf' },
   { id: 'worker',        gender: 'male', label: 'Builder',    icon: '🔧',  category: 'civilian', scaleX: 1.00, scaleY: 1.00, gltfPath: '/models/characters/male/worker.gltf' },
-  // ── Female (adventurer only until female modular pack is sourced) ────────
-  { id: 'adventurer',    gender: 'female', label: 'Adventurer', icon: '⚔️', category: 'civilian', scaleX: 1.00, scaleY: 1.00, gltfPath: '/models/characters/female/adventurer.gltf' },
+  // ── Female Quaternius variants ───────────────────────────────────────────────
+  { id: 'adventurer', gender: 'female', label: 'Adventurer',  icon: '⚔️',  category: 'civilian', scaleX: 1.00, scaleY: 1.00, gltfPath: '/models/characters/female/adventurer.gltf' },
+  { id: 'casual',     gender: 'female', label: 'Survivor',    icon: '🧥',  category: 'civilian', scaleX: 1.00, scaleY: 1.00, gltfPath: '/models/characters/female/casual.gltf' },
+  { id: 'formal',     gender: 'female', label: 'Diplomat',    icon: '👗',  category: 'civilian', scaleX: 1.00, scaleY: 1.00, gltfPath: '/models/characters/female/formal.gltf' },
+  { id: 'medieval',   gender: 'female', label: 'Knight',      icon: '🏰',  category: 'civilian', scaleX: 1.00, scaleY: 1.00, gltfPath: '/models/characters/female/medieval.gltf' },
+  { id: 'punk',       gender: 'female', label: 'Raider',      icon: '⚡',  category: 'civilian', scaleX: 1.00, scaleY: 1.00, gltfPath: '/models/characters/female/punk.gltf' },
+  { id: 'scifi',      gender: 'female', label: 'Vanguard',    icon: '🚀',  category: 'civilian', scaleX: 1.00, scaleY: 1.00, gltfPath: '/models/characters/female/scifi.gltf' },
+  { id: 'soldier',    gender: 'female', label: 'Enforcer',    icon: '🪖',  category: 'civilian', scaleX: 1.00, scaleY: 1.00, gltfPath: '/models/characters/female/soldier.gltf' },
+  { id: 'suit',       gender: 'female', label: 'Commander',   icon: '💼',  category: 'civilian', scaleX: 1.00, scaleY: 1.00, gltfPath: '/models/characters/female/suit.gltf' },
+  { id: 'witch',      gender: 'female', label: 'Witch',       icon: '🔮',  category: 'civilian', scaleX: 1.00, scaleY: 1.00, gltfPath: '/models/characters/female/witch.gltf' },
+  { id: 'worker',     gender: 'female', label: 'Engineer',    icon: '🔧',  category: 'civilian', scaleX: 1.00, scaleY: 1.00, gltfPath: '/models/characters/female/worker.gltf' },
 ];
 
 /** Body types available for the given gender. */
