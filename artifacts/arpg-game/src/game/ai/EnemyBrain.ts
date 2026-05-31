@@ -60,6 +60,16 @@ export class EnemyBrain {
   /** Set true by this brain; cleared by EnemyManager after spawning a shot. */
   pendingShot   = false;
 
+  // ── Melee attack cooldown (annihilate-style FSM) ──────────────────────────
+  // Without this, melee enemies attack every frame they're in range — the
+  // player gets ground into paste instantly. This timer gates damage the
+  // same way annihilate's `canAttack → canNotAttack → 4s → canAttack` FSM
+  // does, but without an external state-machine library.
+  meleeAttackTimer = 0;
+  readonly meleeAttackCooldown: number;
+  /** Set true for one frame when the melee strike should land. */
+  pendingMeleeStrike = false;
+
   // Ranged strafe
   private strafeDir   = 1;
   private strafeTimer = 0;
@@ -99,15 +109,17 @@ export class EnemyBrain {
 
     // Archetype settings
     if (opts.role === EnemyRole.RANGED) {
-      this.alertRange   = 40;
-      this.engageRange  = 17;
-      this.shootCooldown = 2.5;
-      this.fleeHP       = 0.25; // ranged enemies flee earlier
+      this.alertRange        = 40;
+      this.engageRange       = 17;
+      this.shootCooldown     = 2.5;
+      this.meleeAttackCooldown = 0;  // ranged enemies don't melee
+      this.fleeHP            = 0.25;
     } else {
-      this.alertRange   = 32;
-      this.engageRange  = 2.2;
-      this.shootCooldown = 0;
-      this.fleeHP       = 0.12;
+      this.alertRange        = 32;
+      this.engageRange       = 2.2;
+      this.shootCooldown     = 0;
+      this.meleeAttackCooldown = 2.0 + Math.random() * 1.5; // 2–3.5s between swings
+      this.fleeHP            = 0.12;
     }
 
     // Build YUKA vehicle
@@ -230,6 +242,19 @@ export class EnemyBrain {
         this.shootTimer  = this.shootCooldown * (0.75 + Math.random() * 0.5);
         this.pendingShot = true;
       }
+    }
+
+    // ── Melee attack cooldown (annihilate-pattern) ────────────────────────
+    // Gate melee strikes on a timer so enemies don't damage-per-frame.
+    if (this.role === EnemyRole.MELEE && this.state === CombatState.COMBAT) {
+      this.meleeAttackTimer -= dt;
+      if (this.meleeAttackTimer <= 0 && !this.pendingMeleeStrike && dist < this.engageRange + 1.5) {
+        this.meleeAttackTimer   = this.meleeAttackCooldown * (0.8 + Math.random() * 0.4);
+        this.pendingMeleeStrike = true;
+      }
+    } else {
+      // Reset so the first swing after re-entering combat is immediate
+      this.pendingMeleeStrike = false;
     }
   }
 

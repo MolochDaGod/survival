@@ -848,11 +848,78 @@ export class EnemyManager {
     return this.enemies.filter(e => e.state !== 'dead').length;
   }
 
+  /**
+   * Knockdown — launch nearby enemies into the air (annihilate knockDown pattern).
+   * Called on combo finishers and heavy-weapon crits. Enemies are lifted ~3m
+   * via a position tween and their attack timer is reset so they can't damage
+   * the player while airborne.
+   */
+  knockDownNearby(
+    origin: THREE.Vector3,
+    fwd: THREE.Vector3,
+    range: number,
+    arcDot: number = 0.3,
+  ): void {
+    for (const enemy of this.enemies) {
+      if (enemy.state === 'dead') continue;
+      const toEnemy = enemy.mesh.position.clone().sub(origin);
+      toEnemy.y = 0;
+      const dist = toEnemy.length();
+      const dir  = toEnemy.clone().normalize();
+      if (dist > range || dir.dot(fwd) < arcDot) continue;
+
+      // Launch upward
+      const startY = enemy.mesh.position.y;
+      const launchHeight = 3.0 + Math.random() * 1.5;
+      const duration = 400; // ms
+      const start = Date.now();
+
+      // Push away horizontally
+      if (!enemy.knockback) enemy.knockback = new THREE.Vector3();
+      enemy.knockback.add(dir.multiplyScalar(8));
+
+      // Reset attack timer so the enemy can't hit while airborne
+      enemy.attackTimer = enemy.attackCooldown;
+      const brain = this.brains.get(enemy);
+      if (brain) {
+        brain.meleeAttackTimer = brain.meleeAttackCooldown;
+        brain.pendingMeleeStrike = false;
+      }
+
+      // Vertical launch tween
+      const iv = setInterval(() => {
+        const t = Math.min((Date.now() - start) / duration, 1);
+        // Parabolic arc: up then down
+        const arc = 4 * t * (1 - t); // peaks at t=0.5
+        enemy.mesh.position.y = startY + launchHeight * arc;
+        if (t >= 1) {
+          clearInterval(iv);
+          // Snap back to ground
+          enemy.mesh.position.y = startY;
+        }
+      }, 16);
+    }
+  }
+
   checkEnemyAttack(playerPos: THREE.Vector3): number {
     let total = 0;
     for (const enemy of this.enemies) {
-      if (enemy.state === 'attack' && enemy.attackTimer <= 0.05) {
-        total += enemy.damage;
+      if (enemy.state === 'dead') continue;
+      // Use brain's melee cooldown FSM if available — only deal damage on
+      // the frame the brain flags pendingMeleeStrike. This prevents melee
+      // enemies from dealing damage every frame they're in range (the
+      // annihilate-trainer pattern: canAttack → hit → canNotAttack → delay).
+      const brain = this.brains.get(enemy);
+      if (brain && brain.role === 'melee') {
+        if (brain.pendingMeleeStrike && enemy.distanceToPlayer < 3.0) {
+          brain.pendingMeleeStrike = false;
+          total += enemy.damage;
+        }
+      } else {
+        // Legacy path (no brain or ranged) — use timer-based attack
+        if (enemy.state === 'attack' && enemy.attackTimer <= 0.05) {
+          total += enemy.damage;
+        }
       }
     }
     return total;

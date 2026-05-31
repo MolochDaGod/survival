@@ -48,6 +48,8 @@ import { ProjectileSystem } from './projectiles/ProjectileSystem';
 import { getBulletTemplate, DEFAULT_BULLET_OPTS } from './projectiles/Bullets';
 import { MuzzleFlash } from './vfx/MuzzleFlash';
 import { ImpactSparks } from './vfx/ImpactSparks';
+import { SlashVFX } from './vfx/SlashVFX';
+import { ShockwaveVFX } from './vfx/ShockwaveVFX';
 import { SurvivorSpawner, type SurvivorSpawnerSnapshot } from './township/SurvivorSpawner';
 import { getMilestoneEffects, mergeEffectBags, readEffect, type MilestoneEffectBag } from '@workspace/game-systems/perks';
 import { sumPassives, getUnlockedPerks, getUnlockedCombos, type StatTrack } from './progression/PerkSystem';
@@ -151,6 +153,8 @@ export class GameEngine {
   private projectileSystem!: ProjectileSystem;
   private muzzleFlash!: MuzzleFlash;
   private impactSparks!: ImpactSparks;
+  private slashVFX!: SlashVFX;
+  private shockwaveVFX!: ShockwaveVFX;
   private bulletTemplate: THREE.Object3D | null = null;
   assetsLoaded: boolean = false;
 
@@ -351,6 +355,8 @@ export class GameEngine {
       this.projectileSystem = new ProjectileSystem(this.scene);
       this.muzzleFlash = new MuzzleFlash(this.scene);
       this.impactSparks = new ImpactSparks(this.scene);
+      this.slashVFX = new SlashVFX(this.scene);
+      this.shockwaveVFX = new ShockwaveVFX(this.scene);
       getBulletTemplate().then(tmpl => { this.bulletTemplate = tmpl; }).catch(() => { });
       this.debugPanel = new DebugPanel({
         scene: this.scene,
@@ -995,6 +1001,8 @@ export class GameEngine {
     }
 
     this.updateBullets(dt);
+    this.slashVFX?.update(dt, this.camera);
+    this.shockwaveVFX?.update(dt);
 
     if (this.lootManager) {
       this.lootManager.update(dt, performance.now() * 0.001, this.player.position);
@@ -1032,12 +1040,31 @@ export class GameEngine {
           // given enemy once because checkPlayerAttack is called per-enemy
           // within one frame.
           this.player.meleeHitPending = false;
+
+          // ── Slash VFX at the weapon bone position (annihilate SwordBlink) ─
+          if (this.slashVFX) {
+            const slashPos = weaponBone
+              ? weaponBone.getWorldPosition(new THREE.Vector3())
+              : this.player.position.clone().add(fwd.clone().multiplyScalar(1.5));
+            const slashColor = isHeavy ? 0xff6600 : combo.isFinisher ? 0xffcc00 : 0xffffff;
+            this.slashVFX.fire(slashPos, slashColor, isHeavy ? 1.4 : 1.0);
+          }
+
           // Hitstop only on heavy weapons or the finisher of the combo —
           // light hits stay snappy. Shake scales with weight so a finisher
           // really thumps.
           if (isHeavy || combo.isFinisher) {
             this.combatFX.hitStop(combo.isFinisher ? 5 : 3);
             this.combatFX.shake(0.18 * (combo.isFinisher ? 1.5 : 1), 0.18);
+
+            // ── Knockdown on finishers (annihilate knockDown pattern) ─────
+            if (combo.isFinisher) {
+              this.enemyManager.knockDownNearby(
+                sweepOrigin, fwd,
+                this.player.getAttackRange() * combo.rangeMul,
+                combo.arcDot,
+              );
+            }
           } else {
             this.combatFX.shake(0.07, 0.12);
           }
