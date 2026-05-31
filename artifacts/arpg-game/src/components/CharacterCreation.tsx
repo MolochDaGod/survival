@@ -774,7 +774,7 @@ export const CharacterCreation: React.FC<CharacterCreationProps> = ({ onComplete
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         padding: '10px 24px',
         background: 'rgba(0,0,0,0.55)',
-        borderBottom: '1px solid rgba(180,130,60,0.3)',
+        borderBottom: '1px solid rgba(56,189,248,0.15)',
         backdropFilter: 'blur(8px)',
         flexShrink: 0, zIndex: 10,
       }}>
@@ -785,11 +785,11 @@ export const CharacterCreation: React.FC<CharacterCreationProps> = ({ onComplete
             style={{ width: 44, height: 44, objectFit: 'contain', filter: 'drop-shadow(0 0 8px #38bdf8)' }}
           />
           <div>
-            <div style={{ fontSize: 20, fontWeight: 900, letterSpacing: '0.15em', color: '#ff8c42', textTransform: 'uppercase' }}>
+            <div style={{ fontSize: 20, fontWeight: 900, letterSpacing: '0.15em', color: '#38bdf8', textTransform: 'uppercase' }}>
               Grudges
             </div>
-            <div style={{ fontSize: 10, letterSpacing: '0.3em', color: '#8899aa', textTransform: 'uppercase' }}>
-              Character Creation
+            <div style={{ fontSize: 10, letterSpacing: '0.3em', color: '#64748b', textTransform: 'uppercase' }}>
+              Nexus Era · Character Creation
             </div>
           </div>
         </div>
@@ -858,7 +858,7 @@ export const CharacterCreation: React.FC<CharacterCreationProps> = ({ onComplete
           width: 340, flexShrink: 0,
           display: 'flex', flexDirection: 'column',
           background: 'rgba(8,12,20,0.9)',
-          borderRight: '1px solid rgba(180,130,60,0.2)',
+          borderRight: '1px solid rgba(56,189,248,0.12)',
           backdropFilter: 'blur(12px)',
           overflow: 'hidden',
         }}>
@@ -983,13 +983,22 @@ onBodyProportionChange = { b => setConfig(p => ({ ...p, bodyProportion: b }))}
             </div>
           )}
 
+          {/* Scanline overlay for sci-fi vibe */}
+          <div style={{
+            position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 1,
+            background: 'repeating-linear-gradient(0deg, rgba(0,255,255,0.012) 0px, rgba(0,255,255,0.012) 1px, transparent 1px, transparent 3px)',
+            mixBlendMode: 'screen',
+          }} />
+
           {!webglFailed && (
             <div style={{
               position: 'absolute', bottom: 16, left: '50%', transform: 'translateX(-50%)',
-              background: 'rgba(8,12,20,0.7)', border: '1px solid rgba(180,130,60,0.18)',
+              background: 'rgba(4,10,20,0.8)', border: '1px solid rgba(56,189,248,0.2)',
               borderRadius: 6, padding: '6px 16px',
-              fontSize: 11, color: '#6677aa', letterSpacing: '0.1em', backdropFilter: 'blur(6px)',
-              pointerEvents: 'none',
+              fontSize: 11, color: '#38bdf8', letterSpacing: '0.12em', backdropFilter: 'blur(6px)',
+              pointerEvents: 'none', zIndex: 2,
+              textTransform: 'uppercase', fontWeight: 600,
+              boxShadow: '0 0 12px rgba(56,189,248,0.08)',
             }}>
               Drag to rotate · Scroll to zoom
             </div>
