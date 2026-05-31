@@ -90,19 +90,19 @@ export const TIER4_BY_STAT: Record<keyof GrudgeStats, [ActiveSkillDef, ActiveSki
     {
       id: 'bio_adrenaline_surge', name: 'Adrenaline Surge',
       description: 'Inject combat stims. Heal 30 HP and absorb the next 25 damage for 4 s.',
-      icon: '💉', kind: 'self_buff', cooldownS: 18, energyCost: 25, damage: 0, color: '#4caf50',
+      icon: '/icons/genetics/Icon11_08.png', kind: 'self_buff', cooldownS: 18, energyCost: 25, damage: 0, color: '#4caf50',
       params: { healFlat: 30, shieldHp: 25, durationS: 4 }, hotkeyHint: '1',
     },
     {
       id: 'bio_toxic_counter', name: 'Toxic Counter',
       description: 'Release a 4 m toxin cloud. 8 DPS to enemies inside for 6 s.',
-      icon: '☣️', kind: 'aoe_burst', cooldownS: 22, energyCost: 30, damage: 48, color: '#4caf50',
+      icon: '/icons/genetics/Icon11_05.png', kind: 'aoe_burst', cooldownS: 22, energyCost: 30, damage: 48, color: '#4caf50',
       params: { radius: 4, durationS: 6, dps: 8 }, hotkeyHint: '1',
     },
     {
       id: 'bio_cellular_lockdown', name: 'Cellular Lockdown',
       description: 'Become invulnerable for 1.5 s. You cannot move or attack while active.',
-      icon: '🛡️', kind: 'self_buff', cooldownS: 35, energyCost: 20, damage: 0, color: '#4caf50',
+      icon: '/icons/genetics/Icon11_10.png', kind: 'self_buff', cooldownS: 35, energyCost: 20, damage: 0, color: '#4caf50',
       params: { durationS: 1.5, immobile: true, invulnerable: true }, hotkeyHint: '1',
     },
   ],
@@ -110,19 +110,19 @@ export const TIER4_BY_STAT: Record<keyof GrudgeStats, [ActiveSkillDef, ActiveSki
     {
       id: 'neu_mind_spike', name: 'Mind Spike',
       description: 'Hurl a psionic spike at your target. 50 damage, 25 m range.',
-      icon: '🧠', kind: 'projectile', cooldownS: 6, energyCost: 25, damage: 50, color: '#00bcd4',
+      icon: '/icons/genetics/Icon11_03.png', kind: 'projectile', cooldownS: 6, energyCost: 25, damage: 50, color: '#00bcd4',
       params: { speed: 30, range: 25, element: 'psionic' }, hotkeyHint: '2',
     },
     {
       id: 'neu_neural_overclock', name: 'Neural Overclock',
       description: '+30 % attack speed and +20 % move speed for 8 s.',
-      icon: '⚡', kind: 'self_buff', cooldownS: 25, energyCost: 35, damage: 0, color: '#00bcd4',
+      icon: '/icons/genetics/Icon11_16.png', kind: 'self_buff', cooldownS: 25, energyCost: 35, damage: 0, color: '#00bcd4',
       params: { durationS: 8, atkSpeed: 0.30, moveSpeed: 0.20 }, hotkeyHint: '2',
     },
     {
       id: 'neu_psionic_shield', name: 'Psionic Shield',
       description: 'Generate a 60 HP shield around you for 12 s.',
-      icon: '🔵', kind: 'self_buff', cooldownS: 30, energyCost: 40, damage: 0, color: '#00bcd4',
+      icon: '/icons/genetics/Icon11_23.png', kind: 'self_buff', cooldownS: 30, energyCost: 40, damage: 0, color: '#00bcd4',
       params: { shieldHp: 60, durationS: 12 }, hotkeyHint: '2',
     },
   ],
@@ -130,19 +130,19 @@ export const TIER4_BY_STAT: Record<keyof GrudgeStats, [ActiveSkillDef, ActiveSki
     {
       id: 'kin_phase_dash', name: 'Phase Dash',
       description: 'Blink 8 m forward, passing through obstacles and enemies.',
-      icon: '🏃', kind: 'mobility', cooldownS: 8, energyCost: 20, damage: 0, color: '#ff9800',
+      icon: '/icons/cyberpunk-weapons/Icon1_05.png', kind: 'mobility', cooldownS: 8, energyCost: 20, damage: 0, color: '#ff9800',
       params: { distance: 8, iframes: 0.4 }, hotkeyHint: '3',
     },
     {
       id: 'kin_ground_pound', name: 'Ground Pound',
       description: 'Leap and slam down. 60 damage in a 4 m radius, knocks enemies back.',
-      icon: '💥', kind: 'aoe_burst', cooldownS: 12, energyCost: 30, damage: 60, color: '#ff9800',
+      icon: '/icons/cyberpunk-weapons/Icon1_01.png', kind: 'aoe_burst', cooldownS: 12, energyCost: 30, damage: 60, color: '#ff9800',
       params: { radius: 4, knockback: 5 }, hotkeyHint: '3',
     },
     {
       id: 'kin_combat_dance', name: 'Combat Dance',
       description: '4 invincibility-frame rolls over 3 s. Reset your stamina to full.',
-      icon: '🌀', kind: 'self_buff', cooldownS: 18, energyCost: 25, damage: 0, color: '#ff9800',
+      icon: '/icons/cyberpunk-artifacts/Icon22_09.png', kind: 'self_buff', cooldownS: 18, energyCost: 25, damage: 0, color: '#ff9800',
       params: { durationS: 3, rollCount: 4, restoreStamina: true }, hotkeyHint: '3',
     },
   ],
@@ -150,19 +150,19 @@ export const TIER4_BY_STAT: Record<keyof GrudgeStats, [ActiveSkillDef, ActiveSki
     {
       id: 'qnt_quantum_grenade', name: 'Quantum Grenade',
       description: 'Throw a quantum charge that detonates in 1.5 s. 70 damage in 4 m.',
-      icon: '🧨', kind: 'projectile', cooldownS: 10, energyCost: 30, damage: 70, color: '#9c27b0',
+      icon: '/icons/cyberpunk-weapons/Icon1_06.png', kind: 'projectile', cooldownS: 10, energyCost: 30, damage: 70, color: '#9c27b0',
       params: { speed: 18, range: 20, fuseS: 1.5, radius: 4, element: 'quantum' }, hotkeyHint: '4',
     },
     {
       id: 'qnt_phase_step', name: 'Phase Step',
       description: 'Phase 12 m forward and become invisible for 0.8 s.',
-      icon: '👻', kind: 'mobility', cooldownS: 15, energyCost: 35, damage: 0, color: '#9c27b0',
+      icon: '/icons/genetics/Icon11_30.png', kind: 'mobility', cooldownS: 15, energyCost: 35, damage: 0, color: '#9c27b0',
       params: { distance: 12, invisS: 0.8 }, hotkeyHint: '4',
     },
     {
       id: 'qnt_probability_bubble', name: 'Probability Bubble',
       description: 'Slow enemy projectiles 70 % inside a 5 m bubble around you for 6 s.',
-      icon: '🫧', kind: 'aoe_burst', cooldownS: 22, energyCost: 40, damage: 0, color: '#9c27b0',
+      icon: '/icons/genetics/Icon11_19.png', kind: 'aoe_burst', cooldownS: 22, energyCost: 40, damage: 0, color: '#9c27b0',
       params: { radius: 5, durationS: 6, projectileSlowPct: 0.70 }, hotkeyHint: '4',
     },
   ],
@@ -170,19 +170,19 @@ export const TIER4_BY_STAT: Record<keyof GrudgeStats, [ActiveSkillDef, ActiveSki
     {
       id: 'syn_combat_drone', name: 'Combat Drone',
       description: 'Deploy a hover drone that auto-fires at nearby enemies for 15 s.',
-      icon: '🤖', kind: 'summon', cooldownS: 25, energyCost: 35, damage: 0, color: '#2196f3',
+      icon: '/icons/genetics/Icon11_17.png', kind: 'summon', cooldownS: 25, energyCost: 35, damage: 0, color: '#2196f3',
       params: { count: 1, durationS: 15, dpsPerUnit: 12, leashRange: 18 }, hotkeyHint: '5',
     },
     {
       id: 'syn_emp_burst', name: 'EMP Burst',
       description: '5 m radius pulse. 30 damage and disables enemy abilities for 4 s.',
-      icon: '📡', kind: 'aoe_burst', cooldownS: 14, energyCost: 30, damage: 30, color: '#2196f3',
+      icon: '/icons/cyberpunk-weapons/Icon1_07.png', kind: 'aoe_burst', cooldownS: 14, energyCost: 30, damage: 30, color: '#2196f3',
       params: { radius: 5, disableS: 4 }, hotkeyHint: '5',
     },
     {
       id: 'syn_override_protocol', name: 'Override Protocol',
       description: 'Hack a target enemy. They fight for you for 5 s.',
-      icon: '🕹️', kind: 'single_target', cooldownS: 30, energyCost: 45, damage: 0, color: '#2196f3',
+      icon: '/icons/genetics/Icon11_21.png', kind: 'single_target', cooldownS: 30, energyCost: 45, damage: 0, color: '#2196f3',
       params: { range: 18, controlS: 5 }, hotkeyHint: '5',
     },
   ],
@@ -196,7 +196,7 @@ export const TIER4_BY_STAT: Record<keyof GrudgeStats, [ActiveSkillDef, ActiveSki
     {
       id: 'chr_rewind', name: 'Rewind',
       description: 'Teleport back to your location 3 s ago. Restore HP to that point.',
-      icon: '⏪', kind: 'mobility', cooldownS: 25, energyCost: 40, damage: 0, color: '#ffeb3b',
+      icon: '/icons/genetics/Icon11_35.png', kind: 'mobility', cooldownS: 25, energyCost: 40, damage: 0, color: '#ffeb3b',
       params: { rewindS: 3, restoreHp: true }, hotkeyHint: '6',
     },
     {
@@ -210,7 +210,7 @@ export const TIER4_BY_STAT: Record<keyof GrudgeStats, [ActiveSkillDef, ActiveSki
     {
       id: 'ent_decay_wave', name: 'Decay Wave',
       description: 'Cone wave 8 m forward. 40 damage and corrodes enemy armor 30 % for 6 s.',
-      icon: '🌊', kind: 'aoe_burst', cooldownS: 12, energyCost: 30, damage: 40, color: '#f44336',
+      icon: '/icons/genetics/Icon11_06.png', kind: 'aoe_burst', cooldownS: 12, energyCost: 30, damage: 40, color: '#f44336',
       params: { radius: 8, cone: true, armorCorrodePct: 0.30, durationS: 6 }, hotkeyHint: '7',
     },
     {
@@ -230,7 +230,7 @@ export const TIER4_BY_STAT: Record<keyof GrudgeStats, [ActiveSkillDef, ActiveSki
     {
       id: 'gra_grav_pulse', name: 'Grav Pulse',
       description: 'Push enemies in a 6 m radius back 5 m. 25 damage on contact.',
-      icon: '🌀', kind: 'aoe_burst', cooldownS: 10, energyCost: 25, damage: 25, color: '#009688',
+      icon: '/icons/cyberpunk-artifacts/Icon22_19.png', kind: 'aoe_burst', cooldownS: 10, energyCost: 25, damage: 25, color: '#009688',
       params: { radius: 6, knockback: 5 }, hotkeyHint: '8',
     },
     {
@@ -242,7 +242,7 @@ export const TIER4_BY_STAT: Record<keyof GrudgeStats, [ActiveSkillDef, ActiveSki
     {
       id: 'gra_anchor_slam', name: 'Anchor Slam',
       description: 'Pin a target enemy to the ground for 3 s. 50 damage on impact.',
-      icon: '⚓', kind: 'single_target', cooldownS: 12, energyCost: 35, damage: 50, color: '#009688',
+      icon: '/icons/cyberpunk-artifacts/Icon22_13.png', kind: 'single_target', cooldownS: 12, energyCost: 35, damage: 50, color: '#009688',
       params: { range: 12, pinS: 3 }, hotkeyHint: '8',
     },
   ],
@@ -259,20 +259,20 @@ export const TIER6_BY_BASE_ID: Record<string, ActiveSkillDef> = {
   bio_adrenaline_surge: {
     id: 'bio_adrenaline_cascade', name: 'Adrenaline Cascade', upgradeOf: 'bio_adrenaline_surge',
     description: 'Heal 60 HP, absorb 50 dmg for 8 s, and cleanse bleed + infection.',
-    icon: '💉', kind: 'self_buff', cooldownS: 18, energyCost: 25, damage: 0, color: '#4caf50',
+    icon: '/icons/genetics/Icon11_08.png', kind: 'self_buff', cooldownS: 18, energyCost: 25, damage: 0, color: '#4caf50',
     params: { healFlat: 60, shieldHp: 50, durationS: 8, cleanseBleed: true, cleanseInfection: true },
     hotkeyHint: 'Shift+1',
   },
   bio_toxic_counter: {
     id: 'bio_necrotoxin_bloom', name: 'Necrotoxin Bloom', upgradeOf: 'bio_toxic_counter',
     description: '6 m cloud. 14 DPS for 9 s. Enemies inside slowed 25 %.',
-    icon: '☣️', kind: 'aoe_burst', cooldownS: 22, energyCost: 30, damage: 126, color: '#4caf50',
+    icon: '/icons/genetics/Icon11_05.png', kind: 'aoe_burst', cooldownS: 22, energyCost: 30, damage: 126, color: '#4caf50',
     params: { radius: 6, durationS: 9, dps: 14, slowPct: 0.25 }, hotkeyHint: 'Shift+1',
   },
   bio_cellular_lockdown: {
     id: 'bio_stasis_pod', name: 'Stasis Pod', upgradeOf: 'bio_cellular_lockdown',
     description: '3 s invulnerability, regen 40 HP over duration, move at 50 % speed.',
-    icon: '🛡️', kind: 'self_buff', cooldownS: 35, energyCost: 20, damage: 0, color: '#4caf50',
+    icon: '/icons/genetics/Icon11_10.png', kind: 'self_buff', cooldownS: 35, energyCost: 20, damage: 0, color: '#4caf50',
     params: { durationS: 3, invulnerable: true, healFlat: 40, moveSpeed: -0.50 }, hotkeyHint: 'Shift+1',
   },
 
@@ -280,19 +280,19 @@ export const TIER6_BY_BASE_ID: Record<string, ActiveSkillDef> = {
   neu_mind_spike: {
     id: 'neu_mind_lance', name: 'Mind Lance', upgradeOf: 'neu_mind_spike',
     description: '80 damage psionic lance. Pierces up to 3 enemies in a line.',
-    icon: '🧠', kind: 'projectile', cooldownS: 6, energyCost: 25, damage: 80, color: '#00bcd4',
+    icon: '/icons/genetics/Icon11_03.png', kind: 'projectile', cooldownS: 6, energyCost: 25, damage: 80, color: '#00bcd4',
     params: { speed: 40, range: 30, pierce: 3, element: 'psionic' }, hotkeyHint: 'Shift+2',
   },
   neu_neural_overclock: {
     id: 'neu_synaptic_surge', name: 'Synaptic Surge', upgradeOf: 'neu_neural_overclock',
     description: '+50 % attack speed, +30 % move speed, +20 % damage for 10 s.',
-    icon: '⚡', kind: 'self_buff', cooldownS: 25, energyCost: 35, damage: 0, color: '#00bcd4',
+    icon: '/icons/genetics/Icon11_16.png', kind: 'self_buff', cooldownS: 25, energyCost: 35, damage: 0, color: '#00bcd4',
     params: { durationS: 10, atkSpeed: 0.50, moveSpeed: 0.30, dmgBonus: 0.20 }, hotkeyHint: 'Shift+2',
   },
   neu_psionic_shield: {
     id: 'neu_aegis_lattice', name: 'Aegis Lattice', upgradeOf: 'neu_psionic_shield',
     description: '120 HP shield for 15 s. Reflects 25 % of damage taken back to attackers.',
-    icon: '🔵', kind: 'self_buff', cooldownS: 30, energyCost: 40, damage: 0, color: '#00bcd4',
+    icon: '/icons/genetics/Icon11_23.png', kind: 'self_buff', cooldownS: 30, energyCost: 40, damage: 0, color: '#00bcd4',
     params: { shieldHp: 120, durationS: 15, reflectPct: 0.25 }, hotkeyHint: 'Shift+2',
   },
 
@@ -300,19 +300,19 @@ export const TIER6_BY_BASE_ID: Record<string, ActiveSkillDef> = {
   kin_phase_dash: {
     id: 'kin_slipstream', name: 'Slipstream', upgradeOf: 'kin_phase_dash',
     description: 'Blink 14 m. Leaves a damage trail (40 dmg). Removes all slows on use.',
-    icon: '🏃', kind: 'mobility', cooldownS: 8, energyCost: 20, damage: 40, color: '#ff9800',
+    icon: '/icons/cyberpunk-weapons/Icon1_05.png', kind: 'mobility', cooldownS: 8, energyCost: 20, damage: 40, color: '#ff9800',
     params: { distance: 14, iframes: 0.5, leavesTrail: true, cleanseSlow: true }, hotkeyHint: 'Shift+3',
   },
   kin_ground_pound: {
     id: 'kin_seismic_slam', name: 'Seismic Slam', upgradeOf: 'kin_ground_pound',
     description: '100 damage in a 6 m radius. Stuns hit enemies for 1.5 s.',
-    icon: '💥', kind: 'aoe_burst', cooldownS: 12, energyCost: 30, damage: 100, color: '#ff9800',
+    icon: '/icons/cyberpunk-weapons/Icon1_01.png', kind: 'aoe_burst', cooldownS: 12, energyCost: 30, damage: 100, color: '#ff9800',
     params: { radius: 6, knockback: 7, stunS: 1.5 }, hotkeyHint: 'Shift+3',
   },
   kin_combat_dance: {
     id: 'kin_whirling_gale', name: 'Whirling Gale', upgradeOf: 'kin_combat_dance',
     description: '6 i-frame rolls over 4 s. Each roll leaves a slash dealing 25 damage.',
-    icon: '🌀', kind: 'self_buff', cooldownS: 18, energyCost: 25, damage: 150, color: '#ff9800',
+    icon: '/icons/cyberpunk-artifacts/Icon22_09.png', kind: 'self_buff', cooldownS: 18, energyCost: 25, damage: 150, color: '#ff9800',
     params: { durationS: 4, rollCount: 6, restoreStamina: true, slashDamage: 25 }, hotkeyHint: 'Shift+3',
   },
 
@@ -320,20 +320,20 @@ export const TIER6_BY_BASE_ID: Record<string, ActiveSkillDef> = {
   qnt_quantum_grenade: {
     id: 'qnt_antimatter_charge', name: 'Antimatter Charge', upgradeOf: 'qnt_quantum_grenade',
     description: '120 damage in 6 m. Leaves a probability rift slowing enemies 30 % for 4 s.',
-    icon: '🧨', kind: 'projectile', cooldownS: 10, energyCost: 30, damage: 120, color: '#9c27b0',
+    icon: '/icons/cyberpunk-weapons/Icon1_06.png', kind: 'projectile', cooldownS: 10, energyCost: 30, damage: 120, color: '#9c27b0',
     params: { speed: 22, range: 24, fuseS: 1.5, radius: 6, riftSlowPct: 0.30, riftDurationS: 4 },
     hotkeyHint: 'Shift+4',
   },
   qnt_phase_step: {
     id: 'qnt_reality_skip', name: 'Reality Skip', upgradeOf: 'qnt_phase_step',
     description: '20 m teleport, 2 s invisibility, +25 % damage on next attack.',
-    icon: '👻', kind: 'mobility', cooldownS: 15, energyCost: 35, damage: 0, color: '#9c27b0',
+    icon: '/icons/genetics/Icon11_30.png', kind: 'mobility', cooldownS: 15, energyCost: 35, damage: 0, color: '#9c27b0',
     params: { distance: 20, invisS: 2, nextAttackBonus: 0.25 }, hotkeyHint: 'Shift+4',
   },
   qnt_probability_bubble: {
     id: 'qnt_causality_field', name: 'Causality Field', upgradeOf: 'qnt_probability_bubble',
     description: '8 m field. Slows projectiles 90 % and grants 30 % deflect chance for 9 s.',
-    icon: '🫧', kind: 'aoe_burst', cooldownS: 22, energyCost: 40, damage: 0, color: '#9c27b0',
+    icon: '/icons/genetics/Icon11_19.png', kind: 'aoe_burst', cooldownS: 22, energyCost: 40, damage: 0, color: '#9c27b0',
     params: { radius: 8, durationS: 9, projectileSlowPct: 0.90, deflectChance: 0.30 },
     hotkeyHint: 'Shift+4',
   },
@@ -342,19 +342,19 @@ export const TIER6_BY_BASE_ID: Record<string, ActiveSkillDef> = {
   syn_combat_drone: {
     id: 'syn_hk_swarm', name: 'Hunter-Killer Swarm', upgradeOf: 'syn_combat_drone',
     description: 'Deploy 3 drones for 25 s. Each does 20 DPS and seeks separate targets.',
-    icon: '🤖', kind: 'summon', cooldownS: 25, energyCost: 35, damage: 0, color: '#2196f3',
+    icon: '/icons/genetics/Icon11_17.png', kind: 'summon', cooldownS: 25, energyCost: 35, damage: 0, color: '#2196f3',
     params: { count: 3, durationS: 25, dpsPerUnit: 20, leashRange: 22 }, hotkeyHint: 'Shift+5',
   },
   syn_emp_burst: {
     id: 'syn_cascade_emp', name: 'Cascade EMP', upgradeOf: 'syn_emp_burst',
     description: '8 m pulse. 60 damage, disables 7 s, drains 50 % enemy energy.',
-    icon: '📡', kind: 'aoe_burst', cooldownS: 14, energyCost: 30, damage: 60, color: '#2196f3',
+    icon: '/icons/cyberpunk-weapons/Icon1_07.png', kind: 'aoe_burst', cooldownS: 14, energyCost: 30, damage: 60, color: '#2196f3',
     params: { radius: 8, disableS: 7, energyDrainPct: 0.50 }, hotkeyHint: 'Shift+5',
   },
   syn_override_protocol: {
     id: 'syn_hostile_takeover', name: 'Hostile Takeover', upgradeOf: 'syn_override_protocol',
     description: 'Hacked target fights for you for 8 s. Retains its buffs and debuffs.',
-    icon: '🕹️', kind: 'single_target', cooldownS: 30, energyCost: 45, damage: 0, color: '#2196f3',
+    icon: '/icons/genetics/Icon11_21.png', kind: 'single_target', cooldownS: 30, energyCost: 45, damage: 0, color: '#2196f3',
     params: { range: 22, controlS: 8, retainEffects: true }, hotkeyHint: 'Shift+5',
   },
 
@@ -368,7 +368,7 @@ export const TIER6_BY_BASE_ID: Record<string, ActiveSkillDef> = {
   chr_rewind: {
     id: 'chr_causal_loop', name: 'Causal Loop', upgradeOf: 'chr_rewind',
     description: 'Rewind 6 s. Restores HP, energy, and clears debuffs.',
-    icon: '⏪', kind: 'mobility', cooldownS: 25, energyCost: 40, damage: 0, color: '#ffeb3b',
+    icon: '/icons/genetics/Icon11_35.png', kind: 'mobility', cooldownS: 25, energyCost: 40, damage: 0, color: '#ffeb3b',
     params: { rewindS: 6, restoreHp: true, restoreEnergy: true, cleanseAll: true },
     hotkeyHint: 'Shift+6',
   },
@@ -383,7 +383,7 @@ export const TIER6_BY_BASE_ID: Record<string, ActiveSkillDef> = {
   ent_decay_wave: {
     id: 'ent_annihilation_pulse', name: 'Annihilation Pulse', upgradeOf: 'ent_decay_wave',
     description: '12 m cone. 70 damage and 60 % armor corrosion for 10 s.',
-    icon: '🌊', kind: 'aoe_burst', cooldownS: 12, energyCost: 30, damage: 70, color: '#f44336',
+    icon: '/icons/genetics/Icon11_06.png', kind: 'aoe_burst', cooldownS: 12, energyCost: 30, damage: 70, color: '#f44336',
     params: { radius: 12, cone: true, armorCorrodePct: 0.60, durationS: 10 }, hotkeyHint: 'Shift+7',
   },
   ent_entropic_shroud: {
@@ -404,7 +404,7 @@ export const TIER6_BY_BASE_ID: Record<string, ActiveSkillDef> = {
   gra_grav_pulse: {
     id: 'gra_singularity_burst', name: 'Singularity Burst', upgradeOf: 'gra_grav_pulse',
     description: 'Pull enemies in then explode. 60 damage in 8 m.',
-    icon: '🌀', kind: 'aoe_burst', cooldownS: 10, energyCost: 25, damage: 60, color: '#009688',
+    icon: '/icons/cyberpunk-artifacts/Icon22_19.png', kind: 'aoe_burst', cooldownS: 10, energyCost: 25, damage: 60, color: '#009688',
     params: { radius: 8, pullFirst: true, knockback: 0 }, hotkeyHint: 'Shift+8',
   },
   gra_levitate: {
@@ -416,7 +416,7 @@ export const TIER6_BY_BASE_ID: Record<string, ActiveSkillDef> = {
   gra_anchor_slam: {
     id: 'gra_gravity_coffin', name: 'Gravity Coffin', upgradeOf: 'gra_anchor_slam',
     description: 'Pin target for 5 s, 90 damage. Effect spreads to all enemies within 3 m of target.',
-    icon: '⚓', kind: 'single_target', cooldownS: 12, energyCost: 35, damage: 90, color: '#009688',
+    icon: '/icons/cyberpunk-artifacts/Icon22_13.png', kind: 'single_target', cooldownS: 12, energyCost: 35, damage: 90, color: '#009688',
     params: { range: 14, pinS: 5, splashRadius: 3 }, hotkeyHint: 'Shift+8',
   },
 };
@@ -437,7 +437,7 @@ export const TIER5_BY_STAT: Record<keyof GrudgeStats, [PassivePerkDef, PassivePe
   ],
   neu: [
     { id: 'neu_pass_quick_synapse', name: 'Quick Synapse',
-      description: '−20 % cooldown on all active skills.', icon: '⚡',
+      description: '−20 % cooldown on all active skills.', icon: '/icons/cyberpunk-artifacts/Icon22_18.png',
       effect: { cooldownReductionPct: 0.20 } },
     { id: 'neu_pass_mental_fortitude', name: 'Mental Fortitude',
       description: '60 % psionic resistance. Immune to fear and confusion.', icon: '🧱',
@@ -451,7 +451,7 @@ export const TIER5_BY_STAT: Record<keyof GrudgeStats, [PassivePerkDef, PassivePe
       description: '+15 % movement speed. +25 % stamina regeneration.', icon: '🌬️',
       effect: { moveSpeedPct: 0.15, staminaRegenPct: 0.25 } },
     { id: 'kin_pass_momentum', name: 'Momentum Build',
-      description: 'Each kill grants +5 % move speed for 6 s. Stacks up to 3.', icon: '🔥',
+      description: 'Each kill grants +5 % move speed for 6 s. Stacks up to 3.', icon: '/icons/genetics/Icon11_39.png',
       effect: { killMoveStackPct: 0.05, killMoveStackMax: 3, killMoveDurationS: 6 } },
     { id: 'kin_pass_counter_reflex', name: 'Counter Reflexes',
       description: '25 % chance to dodge incoming melee attacks.', icon: '💨',
@@ -487,12 +487,12 @@ export const TIER5_BY_STAT: Record<keyof GrudgeStats, [PassivePerkDef, PassivePe
       description: 'All cooldowns tick 25 % faster.', icon: '⏰',
       effect: { cooldownReductionPct: 0.25 } },
     { id: 'chr_pass_paradox_resilience', name: 'Paradox Resilience',
-      description: 'Once per zone, revive at 50 % HP after a fatal blow.', icon: '🔮',
+      description: 'Once per zone, revive at 50 % HP after a fatal blow.', icon: '/icons/genetics/Icon11_12.png',
       effect: { reviveCharges: 1, reviveHpPct: 0.50 } },
   ],
   ent: [
     { id: 'ent_pass_indestructible', name: 'Indestructible Gear',
-      description: 'Equipment never breaks below 20 % durability.', icon: '🛡️',
+      description: 'Equipment never breaks below 20 % durability.', icon: '/icons/cyberpunk-artifacts/Icon22_17.png',
       effect: { gearDurabilityFloor: 0.20 } },
     { id: 'ent_pass_salvager_eye', name: "Salvager's Eye",
       description: '+50 % scrap yield. Identify rare materials on the ground.', icon: '🔎',
@@ -503,7 +503,7 @@ export const TIER5_BY_STAT: Record<keyof GrudgeStats, [PassivePerkDef, PassivePe
   ],
   gra: [
     { id: 'gra_pass_featherfall', name: 'Featherfall',
-      description: 'Total fall damage immunity. +10 % jump height.', icon: '🪂',
+      description: 'Total fall damage immunity. +10 % jump height.', icon: '/icons/genetics/Icon11_04.png',
       effect: { fallDamageImmune: true, jumpHeightPct: 0.10 } },
     { id: 'gra_pass_grav_reservoir', name: 'Grav Reservoir',
       description: '+1 grav-tech device slot. Grav abilities cost 25 % less energy.', icon: '🛸',

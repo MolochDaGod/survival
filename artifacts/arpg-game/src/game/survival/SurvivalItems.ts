@@ -153,6 +153,15 @@ export const SURVIVAL_ITEMS: Record<string, SurvivalItemDef> = {
   clock_9mm:{ id: 'clock_9mm',name: 'Glock 9mm',     category: 'weapon_pistol', icon: '🔫', weight: 0.9, stack: 1, modelPath: `${M_ITEM}/Clock9mm.fbx`, description: 'Reliable sidearm.', damage: 24, range: 30, ammoId: 'ammo_9mm', magazine: 17, rateOfFire: 360 },
   ammo_308: { id: 'ammo_308', name: '.308 Rounds',   category: 'ammo',          icon: '🟫', weight: 0.02,stack:60, modelPath: `${M_ITEM}/Ammo.308.fbx`, description: 'Hunting rifle ammunition.' },
   ammo_9mm: { id: 'ammo_9mm', name: '9mm Rounds',    category: 'ammo',          icon: '🟡', weight: 0.01,stack:90, modelPath: `${M_ITEM}/Ammo9mm.fbx`,  description: 'Standard pistol ammunition.' },
+  ammo_556: { id: 'ammo_556', name: '5.56 NATO', category: 'ammo', icon: '🟢', weight: 0.012, stack: 90, modelPath: `${M_ITEM}/Ammo.308.fbx`, description: 'Intermediate rifle ammunition (M27, modern carbines).' },
+  ammo_12ga: { id: 'ammo_12ga', name: '12 Gauge Shell', category: 'ammo', icon: '🔴', weight: 0.05, stack: 30, modelPath: `${M_ITEM}/Ammo.308.fbx`, description: 'Shotgun shell. Also fits the Executioner revolver.' },
+
+  // ===== MODERN WEAPONS (player-uploaded GLBs) =====
+  // Riot/assault shield: bash weapon now; block stamina hooks pending in
+  // combat layer — treated as durable melee with low DPS, high HP.
+  assault_shield: { id: 'assault_shield', name: 'Assault Shield', category: 'weapon_melee', icon: '🛡️', weight: 8.0, stack: 1, modelPath: 'models/weapons/modern/assault_shield.glb', description: 'Ballistic riot shield. Bash with primary; intended off-hand defender.', damage: 14, range: 1.2, durability: 300 },
+  bo2_executioner: { id: 'bo2_executioner', name: 'Executioner', category: 'weapon_pistol', icon: '🔫', weight: 1.4, stack: 1, modelPath: 'models/weapons/modern/black_ops_2_executioner.glb', description: 'Five-shot revolver chambered for 12 ga shells. Devastating close-range.', damage: 55, range: 12, ammoId: 'ammo_12ga', magazine: 5, rateOfFire: 90, durability: 220 },
+  bo2_m27: { id: 'bo2_m27', name: 'M27 IAR', category: 'weapon_rifle', icon: '🔫', weight: 4.2, stack: 1, modelPath: 'models/weapons/modern/black_ops_2_m27.glb', description: 'Infantry automatic rifle. 30-round mag, sustained fire.', damage: 28, range: 60, ammoId: 'ammo_556', magazine: 30, rateOfFire: 750, durability: 260 },
 
   // ===== MATERIALS / RESOURCES =====
   wood_chopped:{ id: 'wood_chopped', name: 'Chopped Wood', category: 'material', icon: '🪵', weight: 1.5, stack: 30, modelPath: `${M_ITEM}/ChopedWood.fbx`, description: 'Burns in campfires; planks for crafting.' },
@@ -185,6 +194,22 @@ export const SURVIVAL_ITEMS: Record<string, SurvivalItemDef> = {
   mb_floor:       { id: 'mb_floor',       name: 'Floor',          category: 'structure', icon: '◼️', weight: 4.0, stack: 24, modelPath: 'models/environment/kaykit_dungeon/floorDecoration_wood.gltf.glb',       description: 'Walkable second-storey wooden floor.', placeable: true },
   mb_stairs:      { id: 'mb_stairs',      name: 'Stairs',         category: 'structure', icon: '🪜', weight: 5.0, stack: 8,  modelPath: 'models/environment/kaykit_dungeon/stairs.gltf.glb',                     description: 'Lets you reach a second storey.', placeable: true },
   mb_roof:        { id: 'mb_roof',        name: 'Roof',           category: 'structure', icon: '🏠', weight: 4.0, stack: 16, modelPath: 'models/environment/kaykit_dungeon/floorDecoration_tilesLarge.gltf.glb', description: 'Caps a wall ring at 3 m height.', placeable: true },
+
+  // medieval_village palette — alternative wall/roof finishes for variety.
+  mb_wall_plaster: { id: 'mb_wall_plaster', name: 'Plaster Wall', category: 'structure', icon: '🧱', weight: 3.0, stack: 40, modelPath: 'models/environment/medieval_village/glTF/Wall_Plaster_Straight.gltf', description: 'Whitewashed plaster wall segment.', placeable: true },
+  mb_wall_brick: { id: 'mb_wall_brick', name: 'Brick Wall', category: 'structure', icon: '🧱', weight: 4.0, stack: 40, modelPath: 'models/environment/medieval_village/glTF/Wall_UnevenBrick_Straight.gltf', description: 'Heavier brick wall — better visual mass.', placeable: true },
+  mb_roof_tile: { id: 'mb_roof_tile', name: 'Tiled Roof', category: 'structure', icon: '🏠', weight: 5.0, stack: 12, modelPath: 'models/environment/medieval_village/glTF/Roof_RoundTiles_4x4.gltf', description: '4×4 round-tile roof cap. Sits at 3 m above grid.', placeable: true },
+  mb_stairs_solid: { id: 'mb_stairs_solid', name: 'Solid Stairs', category: 'structure', icon: '🪜', weight: 6.0, stack: 6, modelPath: 'models/environment/medieval_village/glTF/Stair_Interior_Solid.gltf', description: 'Solid interior staircase.', placeable: true },
+
+  // fantasy_megakit furniture — interior decoration / crafting stations.
+  mb_workbench: { id: 'mb_workbench', name: 'Workbench', category: 'structure', icon: '🛠️', weight: 12.0, stack: 1, modelPath: 'models/props/fantasy_megakit/Exports/glTF/Workbench.gltf', description: 'Crafting station for basic tools.', placeable: true },
+  mb_anvil: { id: 'mb_anvil', name: 'Anvil', category: 'structure', icon: '⚒️', weight: 25.0, stack: 1, modelPath: 'models/props/fantasy_megakit/Exports/glTF/Anvil.gltf', description: 'Forge weapons and armour.', placeable: true },
+  mb_table: { id: 'mb_table', name: 'Table', category: 'structure', icon: '🪑', weight: 8.0, stack: 2, modelPath: 'models/props/fantasy_megakit/Exports/glTF/Table_Large.gltf', description: 'Large interior table.', placeable: true },
+  mb_bed: { id: 'mb_bed', name: 'Bed', category: 'structure', icon: '🛏️', weight: 10.0, stack: 1, modelPath: 'models/props/fantasy_megakit/Exports/glTF/Bed_Twin1.gltf', description: 'Sets respawn point. Faster fatigue recovery.', placeable: true },
+  mb_chest: { id: 'mb_chest', name: 'Storage Chest', category: 'structure', icon: '🧰', weight: 6.0, stack: 4, modelPath: 'models/props/fantasy_megakit/Exports/glTF/Chest_Wood.gltf', description: 'Persistent shared storage container.', placeable: true },
+  mb_bookcase: { id: 'mb_bookcase', name: 'Bookcase', category: 'structure', icon: '📚', weight: 8.0, stack: 2, modelPath: 'models/props/fantasy_megakit/Exports/glTF/Bookcase_2.gltf', description: 'Stores recipes and lore notes.', placeable: true },
+  mb_bench: { id: 'mb_bench', name: 'Bench', category: 'structure', icon: '🪑', weight: 5.0, stack: 4, modelPath: 'models/props/fantasy_megakit/Exports/glTF/Bench.gltf', description: 'Seat. NPCs will use it when idle.', placeable: true },
+  mb_lantern: { id: 'mb_lantern', name: 'Wall Lantern', category: 'structure', icon: '🏮', weight: 1.0, stack: 8, modelPath: 'models/props/fantasy_megakit/Exports/glTF/Lantern_Wall.gltf', description: 'Wall-mounted interior light.', placeable: true },
 
   campfire:    { id: 'campfire',    name: 'Campfire',    category: 'structure', icon: '🔥', weight: 5.0, stack: 1, modelPath: `${M_ITEM}/Campfire.fbx`,    description: 'Warmth, light, cooking.', placeable: true },
   shelter:     { id: 'shelter',     name: 'Shelter',     category: 'structure', icon: '🛖', weight: 8.0, stack: 1, modelPath: `${M_ITEM}/Shelter.fbx`,     description: 'Basic sleep spot.', placeable: true },

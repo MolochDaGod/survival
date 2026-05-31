@@ -87,7 +87,7 @@ const StatBar: React.FC<{ value: number; max: number; color: string; label: stri
           background: `linear-gradient(90deg, ${color}88, ${color})`,
           borderRadius: 3,
           boxShadow: `0 0 6px ${color}66`,
-          transition: 'width 0.2s',
+          transition: 'width 0.1s',
         }} />
       </div>
     </div>
@@ -172,7 +172,7 @@ const HeartbeatRadar: React.FC<{ health: number; maxHealth: number }> = ({ healt
           <div style={{
             width: `${(health / maxHealth) * 100}%`, height: '100%',
             background: 'linear-gradient(90deg,#8b2020,#d44040)',
-            transition: 'width 0.3s',
+            transition: 'width 0.1s',
           }} />
         </div>
         <span style={{ ...monoStyle, fontSize: 9, color: '#d44040', minWidth: 28, textAlign: 'right' }}>

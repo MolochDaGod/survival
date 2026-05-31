@@ -15,6 +15,12 @@ import { createBiomeTerrainMaterial, updateTerrainUniforms } from './BiomeTerrai
 import { getResourceSystem } from './ResourceSystem';
 import { getWinterTreeSystem } from './WinterTreeSystem';
 import type { GrassSystem } from './GrassSystem';
+import type { PhysicsWorld } from '../physics/PhysicsWorld';
+import {
+  attachChunkHeightfield,
+  attachChunkTrunks,
+  type ChunkColliderHandle,
+} from '../physics/ChunkColliders';
 
 const CHUNK_SIZE  = 256;        // metres per side
 const CHUNK_RES   = 64;         // quad segments per side  (4 m vertex spacing)
@@ -29,6 +35,10 @@ interface ChunkEntry {
   trees: THREE.InstancedMesh | null;
   winterTrees?: THREE.InstancedMesh[];
   rocks?: THREE.InstancedMesh | null;
+  /** Heightfield rigid body matching `terrain` — null when no physics. */
+  physicsTerrain?: ChunkColliderHandle | null;
+  /** Static body carrying one cuboid per tree trunk in this chunk. */
+  physicsTrunks?: ChunkColliderHandle | null;
 }
 
 // ─── Shared materials ─────────────────────────────────────────────────────────
@@ -86,9 +96,40 @@ export class WorldChunkManager {
   // Optional decorative-grass overlay. Receives chunk load/evict events so
   // grass streams in/out alongside the terrain it sits on.
   private grass: GrassSystem | null = null;
+  // Optional Rapier physics. When present, every chunk also produces a
+  // heightfield collider so the player's kinematic capsule has a real
+  // ground to stand on (and trees to bump into). Null skips physics
+  // baking entirely — keeps unit-test scenes cheap.
+  private physics: PhysicsWorld | null = null;
 
-  constructor(scene: THREE.Scene) {
+  constructor(scene: THREE.Scene, physics: PhysicsWorld | null = null) {
     this.scene = scene;
+    this.physics = physics;
+  }
+
+  /**
+   * Hand a physics world to the chunk manager after construction (used when
+   * Rapier finishes its async WASM init after the scene has already started
+   * streaming). Back-fills heightfield colliders for any chunks that are
+   * already resident so the player doesn't need to walk out and back to
+   * trigger collider creation.
+   */
+  setPhysics(physics: PhysicsWorld | null) {
+    if (this.physics === physics) return;
+    this.physics = physics;
+    if (!physics) return;
+    for (const entry of this.chunks.values()) {
+      if (!entry.physicsTerrain) {
+        entry.physicsTerrain = attachChunkHeightfield(
+          physics,
+          entry.cx * CHUNK_SIZE + CHUNK_SIZE * 0.5,
+          entry.cz * CHUNK_SIZE + CHUNK_SIZE * 0.5,
+          CHUNK_SIZE,
+          CHUNK_RES,
+          worldHeight,
+        );
+      }
+    }
   }
 
   /**
@@ -203,6 +244,9 @@ export class WorldChunkManager {
     // ── Trees ─────────────────────────────────────────────────────────────────
     let trees: THREE.InstancedMesh | null = null;
     let winterTrees: THREE.InstancedMesh[] | undefined;
+    // Per-trunk cuboid data — bagged here so we can hand them to Rapier as
+    // a single static body after the visual pass finishes.
+    const trunkPhysics: { x: number; y: number; z: number; halfHeight: number; halfWidth: number }[] = [];
 
     const isWinterChunk =
       chunkCentreBiome === Biome.Mountain || chunkCentreBiome === Biome.SnowPeak;
@@ -241,6 +285,18 @@ export class WorldChunkManager {
           dummy.updateMatrix();
           folInst.setMatrixAt(placed, dummy.matrix);
           placed++;
+
+          // Cuboid approximation of the trunk for the player capsule to
+          // bump into. The visual trunk is a 7-tall cylinder of radius
+          // ~0.4 m; we use a slightly slimmer cuboid (0.35 half-width) so
+          // the collider sits inside the bark instead of poking through.
+          trunkPhysics.push({
+            x: wx,
+            y: h + 3.5 * scale,
+            z: wz,
+            halfHeight: 3.5 * scale,
+            halfWidth: 0.35 * scale,
+          });
         }
 
         trunkInst.count = placed;
@@ -287,8 +343,36 @@ export class WorldChunkManager {
     // Seed harvestable resource nodes for this chunk (safe no-op if duplicate).
     try { getResourceSystem().seedChunk(cx, cz, CHUNK_SIZE); } catch { /* scene not ready */ }
 
+    // ── Physics colliders ────────────────────────────────────────────────────
+    // Heightfield mirrors `worldHeight()` at the same resolution as the
+    // visual mesh, so the kinematic capsule walks on the exact surface
+    // it sees. Tree cuboids are attached to one shared static body to keep
+    // the broad-phase node count down.
+    let physicsTerrain: ChunkColliderHandle | null = null;
+    let physicsTrunks: ChunkColliderHandle | null = null;
+    if (this.physics) {
+      physicsTerrain = attachChunkHeightfield(
+        this.physics,
+        baseX,
+        baseZ,
+        CHUNK_SIZE,
+        CHUNK_RES,
+        worldHeight,
+      );
+      physicsTrunks = attachChunkTrunks(this.physics, trunkPhysics);
+    }
+
     const key = `${cx},${cz}`;
-    this.chunks.set(key, { cx, cz, terrain, trees, winterTrees, rocks: rockInst });
+    this.chunks.set(key, {
+      cx,
+      cz,
+      terrain,
+      trees,
+      winterTrees,
+      rocks: rockInst,
+      physicsTerrain,
+      physicsTrunks,
+    });
 
     // Plant decorative grass on top of this chunk (only on Grass/Forest
     // biomes — the GrassSystem itself filters out water, beach, mountain).
@@ -317,6 +401,10 @@ export class WorldChunkManager {
     // Tear down the grass instance for this chunk so it doesn't leak GPU
     // memory as the player moves across the world.
     this.grass?.destroyChunk(entry.cx, entry.cz);
+    // Drop the matching Rapier bodies. Safe to call even if physics was
+    // never attached (handle is null in that case).
+    entry.physicsTerrain?.dispose();
+    entry.physicsTrunks?.dispose();
     this.chunks.delete(key);
   }
 

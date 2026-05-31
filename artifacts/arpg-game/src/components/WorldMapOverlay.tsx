@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { worldHeight, getBiome, getBiomeColor, getSettlements, WORLD_HALF } from '../game/world/WorldGen';
+import { SECTORS } from '../data/sectors';
+import { FACTIONS } from '../data/factions';
 
 // ─── Map generation (lazy, cached after first render) ────────────────────────
 
@@ -94,6 +96,39 @@ export function WorldMapOverlay({ player, onClose }: WorldMapOverlayProps) {
         vignette.addColorStop(1, 'rgba(0,0,0,0.55)');
         ctx.fillStyle = vignette;
         ctx.fillRect(0, 0, SIZE, SIZE);
+
+        // Faction territory discs (rendered under markers and labels)
+        const worldToPx = (w: number) => (w + WORLD_HALF) / (WORLD_HALF * 2) * SIZE;
+        const radiusToPx = (r: number) => r / (WORLD_HALF * 2) * SIZE;
+        SECTORS.forEach(sector => {
+            const cx = worldToPx(sector.center.x);
+            const cy = worldToPx(sector.center.z);
+            const rp = radiusToPx(sector.radius);
+            const color = FACTIONS[sector.owner].color;
+            // Soft fill
+            const fillGrad = ctx.createRadialGradient(cx, cy, rp * 0.1, cx, cy, rp);
+            fillGrad.addColorStop(0, color + '38'); // ~22% alpha at centre
+            fillGrad.addColorStop(1, color + '08'); // ~3% alpha at edge
+            ctx.beginPath();
+            ctx.arc(cx, cy, rp, 0, Math.PI * 2);
+            ctx.fillStyle = fillGrad;
+            ctx.fill();
+            // Dashed border
+            ctx.beginPath();
+            ctx.arc(cx, cy, rp, 0, Math.PI * 2);
+            ctx.setLineDash([6, 5]);
+            ctx.strokeStyle = color + 'aa';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+            ctx.setLineDash([]);
+            // Territory label
+            ctx.font = '600 11px Cinzel, serif';
+            ctx.textAlign = 'center';
+            ctx.fillStyle = 'rgba(0,0,0,0.7)';
+            ctx.fillText(sector.name, cx + 1, cy - rp * 0.55 + 1);
+            ctx.fillStyle = color;
+            ctx.fillText(sector.name, cx, cy - rp * 0.55);
+        });
 
         // Settlement markers
         settlements.forEach(s => {

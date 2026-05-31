@@ -38,7 +38,7 @@ import { StatBook } from './books/StatBook';
 import { SKILL_TREE } from '../game/constants';
 import { assetUrl } from '../lib/assetUrl';
 
-type Tab = 'identity' | 'appearance' | 'outfit' | 'stats' | 'background';
+type Tab = 'identity' | 'appearance' | 'origin' | 'stats';
 
 interface CharacterCreationProps {
   onComplete: (config: CharacterConfig) => void;
@@ -579,8 +579,19 @@ export const CharacterCreation: React.FC<CharacterCreationProps> = ({ onComplete
     controls.enablePan      = false;
     controls.enableDamping  = true;
     controls.dampingFactor  = 0.08;
-    controls.autoRotate     = false;
+    controls.autoRotate     = true;
+    controls.autoRotateSpeed = 0.6;
     controlsRef.current = controls;
+
+    // Pause auto-rotate while user interacts, resume after 3s idle
+    let idleTimer: ReturnType<typeof setTimeout> | null = null;
+    const pauseAuto = () => {
+      controls.autoRotate = false;
+      if (idleTimer) clearTimeout(idleTimer);
+      idleTimer = setTimeout(() => { controls.autoRotate = true; }, 3000);
+    };
+    renderer.domElement.addEventListener('pointerdown', pauseAuto);
+    renderer.domElement.addEventListener('wheel', pauseAuto);
 
     const tick = () => {
       frameRef.current = requestAnimationFrame(tick);
@@ -747,9 +758,8 @@ export const CharacterCreation: React.FC<CharacterCreationProps> = ({ onComplete
   const tabs: { id: Tab; label: string; icon: string }[] = [
     { id: 'identity',   label: 'Identity',   icon: '👤' },
     { id: 'appearance', label: 'Looks',       icon: '🎨' },
-    { id: 'outfit',     label: 'Outfit',      icon: '👕' },
+    { id: 'origin',     label: 'Origin',      icon: '🏷️' },
     { id: 'stats',      label: 'Stats',       icon: '📊' },
-    { id: 'background', label: 'Origin',      icon: '🏷️' },
   ];
 
   return (
@@ -770,9 +780,9 @@ export const CharacterCreation: React.FC<CharacterCreationProps> = ({ onComplete
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <img
-            src="/grudges-logo.png"
+            src="logo-256.png"
             alt="Grudges"
-            style={{ width: 44, height: 44, objectFit: 'contain', filter: 'drop-shadow(0 0 8px #ff6b35)' }}
+            style={{ width: 44, height: 44, objectFit: 'contain', filter: 'drop-shadow(0 0 8px #38bdf8)' }}
           />
           <div>
             <div style={{ fontSize: 20, fontWeight: 900, letterSpacing: '0.15em', color: '#ff8c42', textTransform: 'uppercase' }}>
@@ -788,7 +798,7 @@ export const CharacterCreation: React.FC<CharacterCreationProps> = ({ onComplete
             <div style={{ fontSize: 14, fontWeight: 700, color: '#e8d5b0' }}>{nameInput || 'Survivor'}</div>
             <div style={{ fontSize: 10, color: '#8899aa' }}>
               {config.gender === 'female' ? '♀ ' : '♂ '}
-              <span role="button" tabIndex={0} className="summary-link" onClick={() => setActiveTab('background')} onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && setActiveTab('background')} title="Jump to Origin tab">{activeBg?.label ?? 'No Origin'}</span>
+              <span role="button" tabIndex={0} className="summary-link" onClick={() => setActiveTab('origin')} onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && setActiveTab('origin')} title="Jump to Origin tab">{activeBg?.label ?? 'No Origin'}</span>
               {' · '}
               <span role="button" tabIndex={0} className="summary-link" onClick={() => { setActiveTab('appearance'); setAppearanceScrollTarget('height'); }} onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { setActiveTab('appearance'); setAppearanceScrollTarget('height'); } }} title="Jump to Height slider">{heightLabel(config.heightCm)}</span>
               {' · '}
@@ -796,7 +806,6 @@ export const CharacterCreation: React.FC<CharacterCreationProps> = ({ onComplete
               {' · '}
               <span role="button" tabIndex={0} className="summary-link" onClick={() => setActiveTab('appearance')} onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && setActiveTab('appearance')} title="Jump to Looks tab (hair section)">{activeHair?.label ?? 'No Hair'}</span>
               {' · '}
-              <span role="button" tabIndex={0} className="summary-link" onClick={() => setActiveTab('outfit')} onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && setActiveTab('outfit')} title="Jump to Outfit tab">{config.outfitId === 'none' ? 'Default' : (activeOutfit?.label ?? 'No Outfit')}</span>
             </div>
           </div>
           <div style={{
@@ -920,13 +929,6 @@ onBodyProportionChange = { b => setConfig(p => ({ ...p, bodyProportion: b }))}
                 </div>
               </>
             )}
-            {activeTab === 'outfit' && (
-              <OutfitTab
-                gender={config.gender}
-                selectedId={config.outfitId}
-                onChange={id => setConfig(p => ({ ...p, outfitId: id }))}
-              />
-            )}
             {activeTab === 'stats' && (
               <StatsTab
                 stats={config.stats}
@@ -936,7 +938,7 @@ onBodyProportionChange = { b => setConfig(p => ({ ...p, bodyProportion: b }))}
                 onShowCatalog={() => setShowPerkCatalog(true)}
               />
             )}
-            {activeTab === 'background' && (
+            {activeTab === 'origin' && (
               <BackgroundTab
                 selectedId={config.backgroundId}
                 onChange={id => setConfig(p => ({ ...p, backgroundId: id }))}

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Grudges — The Bestiary</title>
+<meta name="description" content="Field records of every creature stalking the surface — from Hollow Jesters and Frost Surgeons to the Tide Caller of the Drowned Basilica." />
+<meta property="og:title" content="Grudges — The Bestiary" />
+<meta property="og:description" content="Field records of every creature stalking the surface." />
+<meta property="og:image" content="opengraph.png" />
+<meta property="og:type" content="website" />
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+<link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=EB+Garamond:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap" />
+<style>
+  :root {
+    --bg-deep:#0a0604; --bg:#14100a; --panel:#1c1610; --panel-2:#221a12;
+    --gold:#c5a059; --gold-bright:#f0d088; --gold-dim:rgba(197,160,89,0.4);
+    --parchment:#e8d8a8; --ink:#2a1810; --muted:#9a8a6a; --dim:#6a5a3a;
+    --ember:#d4602a; --blood:#8a2020; --moss:#6e8a3a; --chill:#5a9ad8; --bone:#c8b890;
+    --rule:rgba(197,160,89,0.25); --rule-strong:rgba(197,160,89,0.55);
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+    --display:'Cinzel',serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg-deep);color:var(--parchment);font-family:'EB Garamond',Georgia,serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+  a{color:var(--gold-bright);text-decoration:none;transition:color .15s}
+  a:hover{color:var(--ember)}
+  h1,h2,h3,h4{font-family:var(--display);color:var(--gold-bright);letter-spacing:.03em;margin:0 0 .6rem;line-height:1.2}
+  h1{font-size:clamp(2.2rem,4vw,3.4rem);font-weight:900}
+  h2{font-size:clamp(1.5rem,2.4vw,2.1rem);font-weight:700;color:var(--gold)}
+  h3{font-size:1.05rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.12em}
+
+  nav.site{position:sticky;top:0;z-index:50;background:linear-gradient(to bottom,rgba(10,6,4,0.96),rgba(10,6,4,0.85));border-bottom:1px solid var(--rule);backdrop-filter:blur(8px)}
+  nav.site .inner{display:flex;align-items:center;justify-content:space-between;padding:.85rem 1.5rem;max-width:1180px;margin:0 auto;gap:1rem}
+  nav.site .brand{display:flex;align-items:center;gap:.65rem;font-family:var(--display);font-weight:700;font-size:1.2rem;color:var(--gold-bright)}
+  nav.site .brand img{width:32px;height:32px}
+  nav.site ul{list-style:none;display:flex;gap:1.4rem;margin:0;padding:0;flex-wrap:wrap}
+  nav.site ul a{color:var(--parchment);font-family:var(--display);font-size:.85rem;letter-spacing:.12em;text-transform:uppercase}
+  nav.site ul a.active{color:var(--gold-bright)}
+  nav.site ul a:hover{color:var(--ember)}
+  nav.site .play{background:linear-gradient(to bottom,var(--gold),#8a6a30);color:var(--ink);font-family:var(--display);font-weight:700;padding:.55rem 1.1rem;border-radius:2px;letter-spacing:.15em;text-transform:uppercase;font-size:.8rem;border:1px solid var(--gold-bright)}
+  nav.site .play:hover{background:linear-gradient(to bottom,var(--gold-bright),var(--gold));color:var(--ink)}
+
+  .container{max-width:1180px;margin:0 auto;padding:0 1.5rem}
+  .page-hero{padding:3.4rem 1.5rem 2.4rem;text-align:center;background:linear-gradient(to bottom,rgba(10,6,4,0.10),rgba(10,6,4,0.55));border-bottom:1px solid var(--rule)}
+  .page-hero .eyebrow{font-family:var(--display);color:var(--ember);letter-spacing:.25em;text-transform:uppercase;font-size:.82rem}
+  .page-hero p.lead{font-size:1.05rem;max-width:780px;margin:.8rem auto 0;opacity:.9}
+
+  /* Controls bar */
+  .controls{position:sticky;top:62px;z-index:40;background:rgba(20,16,10,0.96);border-bottom:1px solid var(--rule);backdrop-filter:blur(8px);padding:.9rem 0}
+  .controls .row{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap}
+  .controls input[type="search"]{flex:1 1 220px;min-width:200px;background:rgba(0,0,0,0.4);border:1px solid var(--rule);color:var(--parchment);padding:.55rem .85rem;border-radius:2px;font-family:'EB Garamond',Georgia,serif;font-size:.95rem;letter-spacing:.02em}
+  .controls input[type="search"]:focus{outline:none;border-color:var(--gold);background:rgba(0,0,0,0.55)}
+  .controls .chips{display:flex;gap:.4rem;flex-wrap:wrap}
+  .chip{background:rgba(0,0,0,0.35);border:1px solid var(--rule);color:var(--parchment);padding:.32rem .7rem;border-radius:2px;font-family:var(--display);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:all .15s;user-select:none}
+  .chip:hover{border-color:var(--gold)}
+  .chip.active{background:linear-gradient(to bottom,var(--gold),#8a6a30);color:var(--ink);border-color:var(--gold-bright)}
+  .chip .ct{display:inline-block;margin-left:.4em;color:var(--muted);font-family:var(--mono);font-size:.66rem}
+  .chip.active .ct{color:rgba(42,24,16,0.6)}
+  .controls .count{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin-left:auto;letter-spacing:.06em}
+
+  .grid-wrap{padding:2.2rem 0 4rem;background:var(--bg-deep)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.2rem}
+
+  .card{background:linear-gradient(to bottom,var(--panel),var(--panel-2));border:1px solid var(--rule);border-left:4px solid var(--accent,var(--gold));border-radius:0 4px 4px 0;padding:1.1rem 1.2rem 1rem;transition:transform .15s,border-color .15s;display:flex;flex-direction:column;gap:.55rem;position:relative;overflow:hidden}
+  .card:hover{transform:translateY(-2px);border-left-color:var(--gold-bright)}
+  .card.stub{opacity:.78}
+  .card.stub::after{content:'Field Report Pending';position:absolute;top:.7rem;right:.7rem;font-family:var(--display);font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);background:rgba(0,0,0,0.3);border:1px solid var(--rule);padding:2px 8px;border-radius:2px}
+
+  .card-head{display:flex;align-items:flex-start;gap:.85rem}
+  .portrait{width:64px;height:64px;flex-shrink:0;border:1px solid var(--rule-strong);border-radius:3px;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;overflow:hidden}
+  .portrait img{width:100%;height:100%;object-fit:cover;display:block}
+  .portrait .mono{font-family:var(--display);font-size:1.9rem;font-weight:900;color:var(--accent,var(--gold));text-shadow:0 1px 4px rgba(0,0,0,0.7)}
+  .card-titles{flex:1;min-width:0}
+  .card-titles h3.name{margin:0;font-family:var(--display);color:var(--gold-bright);font-size:1.1rem;text-transform:none;letter-spacing:.02em;line-height:1.2}
+  .card-titles .class{font-size:.78rem;color:var(--muted);letter-spacing:.04em;margin-top:.18em}
+  .threat{display:flex;gap:2px;margin-top:.4em}
+  .threat .dot{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,0.08);border:1px solid var(--rule)}
+  .threat .dot.on{background:var(--accent,var(--ember));border-color:var(--accent,var(--ember));box-shadow:0 0 6px var(--accent,var(--ember))}
+
+  .habitat{font-size:.82rem;color:var(--muted);font-style:italic;margin-top:.2rem}
+  .lore-excerpt{font-size:.92rem;line-height:1.55;color:var(--parchment);opacity:.92;margin:.2rem 0 .3rem;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+
+  .stat-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:.3rem;margin:.4rem 0 .5rem;border-top:1px dashed var(--rule);padding-top:.55rem}
+  .stat-strip .st{text-align:center}
+  .stat-strip .sv{font-family:var(--mono);color:var(--gold-bright);font-size:.95rem;font-weight:600}
+  .stat-strip .sl{font-family:var(--display);font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+
+  .open-btn{margin-top:auto;align-self:flex-start;background:transparent;border:1px solid var(--rule-strong);color:var(--gold);font-family:var(--display);font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;padding:.5rem .9rem;border-radius:2px;cursor:pointer;transition:all .15s}
+  .open-btn:hover{background:rgba(197,160,89,0.1);border-color:var(--gold);color:var(--gold-bright)}
+
+  /* Modal */
+  .modal-back{position:fixed;inset:0;background:rgba(5,3,2,0.82);backdrop-filter:blur(4px);z-index:100;display:none;align-items:center;justify-content:center;padding:2rem 1rem;overflow-y:auto}
+  .modal-back.open{display:flex}
+  .modal{background:linear-gradient(to bottom,var(--panel),var(--panel-2));border:1px solid var(--gold-dim);border-left:4px solid var(--accent,var(--gold));border-radius:0 4px 4px 0;max-width:780px;width:100%;padding:1.8rem 2rem 2rem;max-height:90vh;overflow-y:auto;box-shadow:0 30px 80px rgba(0,0,0,0.7);position:relative}
+  .modal .x{position:absolute;top:.8rem;right:1rem;background:transparent;border:0;color:var(--muted);font-size:1.8rem;cursor:pointer;line-height:1;padding:.1rem .5rem}
+  .modal .x:hover{color:var(--ember)}
+  .modal h2{color:var(--gold-bright);font-size:1.8rem;margin:0 0 .2rem}
+  .modal .sub{color:var(--muted);font-size:.88rem;letter-spacing:.05em;margin-bottom:.9rem}
+  .modal .row2{display:grid;grid-template-columns:120px 1fr;gap:1.2rem;align-items:start;margin-bottom:1rem}
+  .modal .portrait-lg{width:120px;height:120px;border:1px solid var(--rule-strong);border-radius:3px;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;overflow:hidden}
+  .modal .portrait-lg img{width:100%;height:100%;object-fit:cover}
+  .modal .portrait-lg .mono{font-family:var(--display);font-size:3.6rem;font-weight:900;color:var(--accent,var(--gold))}
+  .modal .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.4rem}
+  .modal .stats-grid .si{background:rgba(0,0,0,0.3);border:1px solid var(--rule);border-radius:2px;padding:.45rem .7rem}
+  .modal .stats-grid .sv{font-family:var(--mono);color:var(--gold-bright);font-size:1.1rem;font-weight:600}
+  .modal .stats-grid .sl{font-family:var(--display);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+
+  .modal section{border-top:1px solid var(--rule);padding-top:.9rem;margin-top:.9rem}
+  .modal section h4{font-family:var(--display);color:var(--gold);font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;margin:0 0 .35rem}
+  .modal section p{margin:0 0 .5rem;font-size:.96rem}
+  .modal .tag-row{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.3rem}
+  .modal .tag{background:rgba(0,0,0,0.3);border:1px solid var(--rule);color:var(--parchment);padding:.22rem .55rem;border-radius:2px;font-family:var(--mono);font-size:.74rem;letter-spacing:.02em}
+  .modal .tag.weak{border-color:rgba(212,96,42,0.5);color:#f0a880}
+  .modal .tag.resist{border-color:rgba(90,154,216,0.5);color:#a8c8e8}
+  .modal .tag.loot{border-color:rgba(110,138,58,0.5);color:#b8d088}
+  .modal .first{font-style:italic;color:var(--bone);opacity:.85;font-size:.92rem}
+
+  footer.site{padding:2.5rem 1.5rem;border-top:1px solid var(--rule);background:var(--bg-deep);text-align:center}
+  footer.site .brand-row{display:flex;align-items:center;justify-content:center;gap:.6rem;font-family:var(--display);font-weight:700;font-size:1rem;color:var(--gold-bright);margin-bottom:.5rem}
+  footer.site .brand-row img{width:28px;height:28px}
+  footer.site .links{display:flex;justify-content:center;gap:1.4rem;flex-wrap:wrap;margin-top:.5rem}
+  footer.site .links a{font-family:var(--display);font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--parchment)}
+  footer.site p{color:var(--muted);font-size:.85rem;margin-top:.6rem;font-style:italic}
+
+  .empty{text-align:center;padding:3rem 1rem;color:var(--muted);font-style:italic}
+
+  @media (max-width:600px){
+    .controls input[type="search"]{flex-basis:100%}
+    .controls .count{margin-left:0}
+    .modal{padding:1.4rem 1.2rem 1.6rem}
+    .modal .row2{grid-template-columns:1fr;gap:.6rem}
+    .modal .portrait-lg{width:100%;height:auto;aspect-ratio:1}
+  }
+</style>
+</head>
+<body>
+
+<nav class="site">
+  <div class="inner">
+    <a href="./" class="brand"><img src="logo-256.png" alt="" /> GRUDGES</a>
+    <ul>
+      <li><a href="./">Home</a></li>
+      <li><a href="info.html">Gameplay</a></li>
+      <li><a href="lore.html">Lore &amp; Factions</a></li>
+      <li><a href="bestiary.html" class="active">Bestiary</a></li>
+      <li><a href="stats-guide.html">Stats</a></li>
+    </ul>
+    <a href="/arpg-game/" class="play">▶ Play Now</a>
+  </div>
+</nav>
+
+<section class="page-hero">
+  <div class="container">
+    <span class="eyebrow">Field Records · Year 87 of Salt</span>
+    <h1>The Bestiary</h1>
+    <p class="lead">
+      Every creature catalogued by the Network's field analysts, the Keepers' herbalists, and survivors who lived long enough to write it down.
+      Threat levels are conservative — the dead do not file errata. Curated entries carry full tactical notes; the rest are field reports pending.
+    </p>
+  </div>
+</section>
+
+<section class="controls">
+  <div class="container">
+    <div class="row">
+      <input type="search" id="q" placeholder="Search by name, classification, habitat, or behaviour…" autocomplete="off" />
+      <div class="chips" id="threat-chips">
+        <button class="chip active" data-threat="all">All Threats</button>
+        <button class="chip" data-threat="1">1 <span class="ct" id="ct-1"></span></button>
+        <button class="chip" data-threat="2">2 <span class="ct" id="ct-2"></span></button>
+        <button class="chip" data-threat="3">3 <span class="ct" id="ct-3"></span></button>
+        <button class="chip" data-threat="4">4 <span class="ct" id="ct-4"></span></button>
+        <button class="chip" data-threat="5">5 <span class="ct" id="ct-5"></span></button>
+      </div>
+      <div class="chips" id="role-chips">
+        <button class="chip active" data-role="all">All</button>
+        <button class="chip" data-role="hostile-other">Anomalous</button>
+        <button class="chip" data-role="hostile-easy">Beasts</button>
+        <button class="chip" data-role="hostile-scifi">Sci-Fi</button>
+        <button class="chip" data-role="hostile-mech">Mechs</button>
+        <button class="chip" data-role="huntable-farm">Farm</button>
+        <button class="chip" data-role="huntable-fish">Aquatic</button>
+        <button class="chip" data-role="curated">Curated</button>
+      </div>
+      <span class="count" id="count"></span>
+    </div>
+  </div>
+</section>
+
+<section class="grid-wrap">
+  <div class="container">
+    <div id="grid" class="grid"></div>
+    <div id="empty" class="empty" hidden>No creatures match those filters. Salt the wells and try again.</div>
+  </div>
+</section>
+
+<div class="modal-back" id="modal-back" role="dialog" aria-modal="true">
+  <div class="modal" id="modal" tabindex="-1"></div>
+</div>
+
+<footer class="site">
+  <div class="brand-row">
+    <img src="grudges-logo.png" alt="" />
+    <span>GRUDGES</span>
+  </div>
+  <p>Bind a grudge. Bear it forward.</p>
+  <div class="links">
+    <a href="./">Home</a>
+    <a href="info.html">Gameplay</a>
+    <a href="lore.html">Lore &amp; Factions</a>
+    <a href="bestiary.html">Bestiary</a>
+    <a href="stats-guide.html">Stats</a>
+    <a href="/arpg-game/">Play</a>
+  </div>
+</footer>
+
+<script type="module" src="/src/bestiary-page.ts"></script>
+</body>
+</html>

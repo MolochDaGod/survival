@@ -132,6 +132,47 @@ export const CREATURES: CreatureDef[] = [
     scale: 0.014, yOffset: 0, tintColor: 0x3377cc, threatLevel: 3, ai: 'ranged',
     biomes: ['water', 'derelict-sprawl'], drops: ['brass_helmet', 'air_hose', 'pearl_shard', 'pressurized_brine'],
     notes: 'Quest-specific.' },
+  // Lizard mule — fully-animated dual-role GLB (7 clips: idle, walk, run,
+  // death, hit, attack_1, attack_2). Ships in the anomaly-field as a tanky
+  // pack-beast; designers may also flag as a player mount later (out of
+  // scope here).
+  {
+    key: 'lizard_mule', displayName: 'Lizard Mule', role: 'hostile-other',
+    fbxPath: '/models/enemies/lizard_mule/lizard_mule.glb',
+    scale: 0.014, yOffset: 0, tintColor: 0x6a8a4a, threatLevel: 3, ai: 'heavy_melee',
+    biomes: ['anomaly-field', 'cinder-wastes', 'glasslands'],
+    drops: ['~bio', 'leather', 'bone', 'pack_strap'],
+    notes: 'GLB w/ 7 clips — idle/walk/run/hit/death + 2 attacks.'
+  },
+  // Skeletons — single-clip CINEMA_4D rigs. Treated as static-ish hazards
+  // until rigs are split into idle/attack/die. Used in graveyards and the
+  // ruined cathedral set-piece.
+  {
+    key: 'skeleton_swordman', displayName: 'Skeleton Swordsman', role: 'hostile-other',
+    fbxPath: '/models/enemies/skeleton_swordman/skeleton_swordman.glb',
+    scale: 0.014, yOffset: 0, tintColor: 0xb8b0a0, threatLevel: 2, ai: 'melee',
+    biomes: ['derelict-sprawl', 'anomaly-field'],
+    drops: ['~bio', 'bone', 'rusted_blade'],
+    notes: 'GLB — single CINEMA_4D clip; awaiting split into idle/attack/die.'
+  },
+  {
+    key: 'skeleton_axe', displayName: 'Skeleton Axe-Bearer', role: 'hostile-other',
+    fbxPath: '/models/enemies/skeleton_axe/skeleton_axe.glb',
+    scale: 0.014, yOffset: 0, tintColor: 0xa89888, threatLevel: 2, ai: 'heavy_melee',
+    biomes: ['derelict-sprawl', 'anomaly-field'],
+    drops: ['~bio', 'bone', 'rusted_axe'],
+    notes: 'GLB — single CINEMA_4D clip; awaiting split into idle/attack/die.'
+  },
+  // Tide Caller — static unrigged GLB used as a shrine boss. AI archetype
+  // sentinel_static plus a procedural float bob handled by the renderer.
+  {
+    key: 'tide_caller', displayName: 'Tide Caller', role: 'hostile-other',
+    fbxPath: '/models/enemies/tide_caller/tide_caller.glb',
+    scale: 0.018, yOffset: 0.5, tintColor: 0x3a7080, threatLevel: 4, ai: 'sentinel_static',
+    biomes: ['water', 'derelict-sprawl'],
+    drops: ['pearl_shard', 'pressurized_brine', 'tide_sigil', 'coral_charm'],
+    notes: 'Static rig. Procedural float + tidal-pulse AoE at intervals.'
+  },
 
   // ── hostile-easy (animated creature pack) ────────────────────────────────
   { key: 'frog',         displayName: 'Bog Frog',        role: 'hostile-easy',
@@ -206,6 +247,17 @@ export const CREATURES: CreatureDef[] = [
     scale: 0.018, yOffset: 0, tintColor: 0x707870, threatLevel: 5, ai: 'heavy_melee',
     biomes: ['cinder-wastes', 'anomaly-field'], drops: ['scrap_heavy', 'armour_plate', 'energy_cell', 'rare_alloy'],
     notes: 'Quaternius Mech.' },
+  // Robot T-1 — high-fidelity 55 MB GLB boss frame. Dual-role: spawns as a
+  // siege-tier enemy in the Cinder Wastes, and also surfaces in deployables.ts
+  // (kind: 'mech') as a SYN-6 pilotable shell. Shares the mech tint family.
+  {
+    key: 'robot_t1', displayName: 'Robot T-1', role: 'hostile-mech',
+    fbxPath: '/models/mechs/robot_t1/robot_t1.glb',
+    scale: 0.022, yOffset: 0, tintColor: 0x506070, threatLevel: 5, ai: 'heavy_melee',
+    biomes: ['cinder-wastes', 'anomaly-field', 'derelict-sprawl'],
+    drops: ['scrap_heavy', 'armour_plate', 'energy_cell', 'rare_alloy', 'fusion_core'],
+    notes: 'GLB single-asset boss frame (~55 MB). Dual-role — see deployables.ts.'
+  },
 
   // ── attached_assets GLB — Nexus-era surface creatures ──────────────────────
   // Lore-named after the five-faction world: Hollow Lords control the shafts,
@@ -330,77 +382,81 @@ export const CREATURES: CreatureDef[] = [
     notes: 'GLB. Ambient — flees on approach; drops feathers.' },
 
   // ── huntable-farm (passive; flee on hit) ─────────────────────────────────
+  // Sourced from the Quaternius "Farm Animals" pack — pre-rigged FBX with a
+  // shared anim set (idle, walk, run, hit, death). Path is the literal FBX
+  // file shipped under /public; AssetManager dispatches on extension.
   { key: 'cow',    displayName: 'Cow',    role: 'huntable-farm',
-    fbxPath: '/models/animals/farm/glb/Cow.glb',
+    fbxPath: '/models/creatures/farm/FBX/Cow.fbx',
     scale: 0.012, yOffset: 0, tintColor: 0xb0a090, threatLevel: 1, ai: 'passive_flee',
     biomes: ['glasslands', 'settlement'], drops: ['meat_beef', 'bio', 'leather', 'bone'],
     notes: 'Heaviest drops; slow.' },
   { key: 'horse',  displayName: 'Horse',  role: 'huntable-farm',
-    fbxPath: '/models/animals/farm/glb/Horse.glb',
+    fbxPath: '/models/creatures/farm/FBX/Horse.fbx',
     scale: 0.012, yOffset: 0, tintColor: 0x8a6040, threatLevel: 1, ai: 'passive_flee',
     biomes: ['glasslands'], drops: ['meat_horse', 'bio', 'leather', 'bone'],
     notes: 'Fast — uses passive_flee at high speed.' },
   { key: 'llama',  displayName: 'Llama',  role: 'huntable-farm',
-    fbxPath: '/models/animals/farm/glb/Llama.glb',
+    fbxPath: '/models/creatures/farm/FBX/Llama.fbx',
     scale: 0.012, yOffset: 0, tintColor: 0xc0a070, threatLevel: 1, ai: 'passive_flee',
     biomes: ['cinder-wastes'], drops: ['meat_llama', 'bio', 'leather', 'bone'],
     notes: 'Mid drops.' },
   { key: 'pig',    displayName: 'Pig',    role: 'huntable-farm',
-    fbxPath: '/models/animals/farm/glb/Pig.glb',
+    fbxPath: '/models/creatures/farm/FBX/Pig.fbx',
     scale: 0.012, yOffset: 0, tintColor: 0xd09080, threatLevel: 1, ai: 'passive_flee',
     biomes: ['glasslands', 'settlement'], drops: ['meat_pork', 'bio', 'leather', 'bone'],
     notes: 'Common low-tier hunt.' },
   { key: 'pug',    displayName: 'Pug',    role: 'huntable-farm',
-    fbxPath: '/models/animals/farm/glb/Pug.glb',
+    fbxPath: '/models/creatures/farm/FBX/Pug.fbx',
     scale: 0.012, yOffset: 0, tintColor: 0xc09060, threatLevel: 1, ai: 'passive_flee',
     biomes: ['settlement'], drops: ['bio', 'leather', 'bone'],
     notes: 'Settlement pet by default — only drops if killed (no meat).' },
   { key: 'sheep',  displayName: 'Sheep',  role: 'huntable-farm',
-    fbxPath: '/models/animals/farm/glb/Sheep.glb',
+    fbxPath: '/models/creatures/farm/FBX/Sheep.fbx',
     scale: 0.012, yOffset: 0, tintColor: 0xe0e0d0, threatLevel: 1, ai: 'passive_flee',
     biomes: ['glasslands'], drops: ['meat_mutton', 'bio', 'leather', 'bone', 'wool'],
     notes: 'Adds wool drop.' },
   { key: 'zebra',  displayName: 'Zebra',  role: 'huntable-farm',
-    fbxPath: '/models/animals/farm/glb/Zebra.glb',
+    fbxPath: '/models/creatures/farm/FBX/Zebra.fbx',
     scale: 0.012, yOffset: 0, tintColor: 0xf0f0f0, threatLevel: 1, ai: 'passive_flee',
     biomes: ['cinder-wastes'], drops: ['meat_zebra', 'bio', 'leather', 'bone'],
     notes: 'Same skeleton as Horse; different palette.' },
 
   // ── huntable-fish (water biome) — depends on Phase 4 aquatic AI ──────────
+  // Sourced from the Quaternius "Animated Fish Pack" — pre-rigged FBX.
   { key: 'dolphin',   displayName: 'Dolphin',   role: 'huntable-fish',
-    fbxPath: '/models/animals/fish/glb/Dolphin.glb',
+    fbxPath: '/models/creatures/fish/FBX/Dolphin.fbx',
     scale: 0.012, yOffset: 0, tintColor: 0x6090b0, threatLevel: 2, ai: 'aquatic_passive',
     biomes: ['water'], drops: ['meat_fish', 'bio', 'fat'],
     notes: 'Harpoon-tier; deferred until fishing pass.' },
   { key: 'fish1',     displayName: 'River Fish', role: 'huntable-fish',
-    fbxPath: '/models/animals/fish/glb/Fish1.glb',
+    fbxPath: '/models/creatures/fish/FBX/Fish1.fbx',
     scale: 0.012, yOffset: 0, tintColor: 0x80a0c0, threatLevel: 1, ai: 'aquatic_passive',
     biomes: ['water'], drops: ['meat_fish', 'bio'],
     notes: 'Small generic fish.' },
   { key: 'fish2',     displayName: 'Reef Fish',  role: 'huntable-fish',
-    fbxPath: '/models/animals/fish/glb/Fish2.glb',
+    fbxPath: '/models/creatures/fish/FBX/Fish2.fbx',
     scale: 0.012, yOffset: 0, tintColor: 0xc09060, threatLevel: 1, ai: 'aquatic_passive',
     biomes: ['water'], drops: ['meat_fish', 'bio'],
     notes: 'Small generic fish.' },
   { key: 'fish3',     displayName: 'Deep Fish',  role: 'huntable-fish',
-    fbxPath: '/models/animals/fish/glb/Fish3.glb',
+    fbxPath: '/models/creatures/fish/FBX/Fish3.fbx',
     scale: 0.012, yOffset: 0, tintColor: 0x506070, threatLevel: 1, ai: 'aquatic_passive',
     biomes: ['water'], drops: ['meat_fish', 'bio'],
     notes: 'Small generic fish.' },
-  // Source asset is "Manta ray.fbx" (with space). Converted to MantaRay.glb
-  // so the URL has no whitespace to escape.
+  // Source asset is "Manta ray.fbx" (with space). Renamed at extraction to
+  // MantaRay.fbx so the URL has no whitespace to escape.
   { key: 'manta_ray', displayName: 'Manta Ray',  role: 'huntable-fish',
-    fbxPath: '/models/animals/fish/glb/MantaRay.glb',
+    fbxPath: '/models/creatures/fish/FBX/MantaRay.fbx',
     scale: 0.012, yOffset: 0, tintColor: 0x303040, threatLevel: 2, ai: 'aquatic_passive',
     biomes: ['water'], drops: ['meat_fish', 'bio', 'leather'],
     notes: 'Large flat — leather candidate.' },
   { key: 'shark',     displayName: 'Shark',      role: 'huntable-fish',
-    fbxPath: '/models/animals/fish/glb/Shark.glb',
+    fbxPath: '/models/creatures/fish/FBX/Shark.fbx',
     scale: 0.012, yOffset: 0, tintColor: 0x405060, threatLevel: 4, ai: 'aquatic_predator',
     biomes: ['water'], drops: ['meat_fish', 'bio', 'leather', 'bone'],
     notes: 'Predator AI — pursues swimmers (Phase 4).' },
   { key: 'whale',     displayName: 'Whale',      role: 'huntable-fish',
-    fbxPath: '/models/animals/fish/glb/Whale.glb',
+    fbxPath: '/models/creatures/fish/FBX/Whale.fbx',
     scale: 0.012, yOffset: 0, tintColor: 0x405060, threatLevel: 3, ai: 'aquatic_passive',
     biomes: ['water'], drops: ['meat_fish', 'bio', 'fat', 'bone'],
     notes: 'Largest; deep-water spawn.' },

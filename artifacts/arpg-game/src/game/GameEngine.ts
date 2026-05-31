@@ -313,24 +313,27 @@ export class GameEngine {
     }, this.characterConfig).then(async () => {
       this.assetsLoaded = true;
 
-      // Bring up Rapier in parallel with scene building. The WASM blob is
-      // ~600 KB and cached aggressively so this is usually a no-op after
-      // the first visit, but doing it here means by the time we wire the
-      // PlayerController below, `this.physics` is ready.
-      const physicsReady = initPhysics().then(() => {
+      // Bring up Rapier BEFORE SceneBuilder. The WASM blob is ~600 KB and
+      // cached aggressively (init typically <100 ms after first visit), so
+      // the parallelism we used to chase here was negligible compared to
+      // GLB loading inside buildEnvironment(). Initialising up-front lets
+      // TerrainBuilder + WorldChunkManager bake matching Rapier colliders
+      // for the arena disk and every streamed heightfield as the world is
+      // assembled — no second pass needed.
+      try {
+        await initPhysics();
         this.physics = new PhysicsWorld();
-      }).catch((err) => {
+      } catch (err) {
         // Don't crash the boot — PlayerController falls back to its
         // legacy BVH-raycast path when physics is null. We just lose the
         // real-walls/real-ground behaviour.
         console.error('[GameEngine] Rapier init failed; continuing without physics:', err);
-      });
+      }
 
-      this.sceneBuilder = new SceneBuilder(this.scene, this.assetManager);
+      this.sceneBuilder = new SceneBuilder(this.scene, this.assetManager, this.physics);
       // Awaiting ensures all 4 GLB world locations are in the scene before
       // gameplay starts. GLB progress is reported via assetManager.onProgress.
       await this.sceneBuilder.buildEnvironment();
-      await physicsReady;
 
       // With both the map and the physics world ready, bake static trimesh
       // colliders against every mesh in the loaded starter map root. This
@@ -522,6 +525,12 @@ export class GameEngine {
         ProfessionsService.gainXp('hunting', Math.round(baseHuntXp * (1 + huntXpBonus)));
         // Survival XP — staying alive long enough to make a kill counts.
         ProfessionsService.gainXp('survival', Math.max(1, Math.round(baseHuntXp * 0.4)));
+        // Combat XP — credited per kill. Signature weapon (matches a learned
+        // Combat branch) earns the spec's +25% bonus.
+        const baseCombatXp = tier === 'boss' ? 40 : tier === 'elite' ? 12 : 4;
+        const activeType = this.player.equippedWeapons[this.player.activeWeaponIndex]?.type ?? 'unarmed';
+        const isSignature = ProfessionsService.isSignatureCombatWeapon(activeType);
+        ProfessionsService.gainXp('combat', Math.round(baseCombatXp * (isSignature ? 1.25 : 1)));
         // Weapon XP — each kill feeds the unallocated pool that the player
         // routes onto the 8 Grudge Stats from the MainPanel.
         const weaponXp = tier === 'boss' ? 60 : tier === 'elite' ? 25 : 10;

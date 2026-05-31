@@ -12,6 +12,7 @@ import { StarterMap } from './world/StarterMap';
 import { StarterMapGrass } from './world/StarterMapGrass';
 import { getWinterTreeSystem } from './world/WinterTreeSystem';
 import type { AssetManager } from './AssetManager';
+import type { PhysicsWorld } from './physics/PhysicsWorld';
 import { LAYERS } from './Layers';
 
 /**
@@ -65,7 +66,12 @@ export class SceneBuilder {
   private sun!: THREE.DirectionalLight;
   private sunOffset = new THREE.Vector3(100, 160, 100);
 
-  constructor(scene: THREE.Scene, assets: AssetManager) {
+  /**
+   * Construct the scene builder. `physics` is optional — when null the
+   * terrain + chunks skip Rapier collider baking and the player falls
+   * back to the legacy BVH-only ground sampler.
+   */
+  constructor(scene: THREE.Scene, assets: AssetManager, physics: PhysicsWorld | null = null) {
     this.scene = scene;
     this.assets = assets;
 
@@ -86,15 +92,15 @@ export class SceneBuilder {
       envMapIntensity: 0.5,
     });
 
-    this.terrain  = new TerrainBuilder(scene, assets);
-    this.chunks   = new WorldChunkManager(scene);
+    this.terrain = new TerrainBuilder(scene, assets, physics);
+    this.chunks = new WorldChunkManager(scene, physics);
     // Grass is created here (so it can register with the chunk manager
     // before the first chunk loads) and ticked from GameEngine.update().
     this.grass    = new GrassSystem(scene);
     this.chunks.setGrassSystem(this.grass);
     this.water    = new WaterSurface(scene);
     this.splashFX = new SplashFX(scene);
-    this.features = new FeaturePlacer(scene);
+    this.features = new FeaturePlacer(scene, physics);
     this.roads    = new RoadSystem(scene);
     this.markers  = new ArenaMarkers(scene);
   }

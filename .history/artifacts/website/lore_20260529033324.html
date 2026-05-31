@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Grudges — Lore &amp; the Five Factions</title>
+<meta name="description" content="The world of Grudges. The colonies left. We didn't. Five factions claw for the surface. Choose one, oppose four." />
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+<link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=EB+Garamond:ital,wght@0,400;0,500;0,700;1,400&display=swap" />
+<style>
+  :root {
+    --bg-deep:#0a0604; --bg:#14100a; --panel:#1c1610; --panel-2:#221a12;
+    --gold:#c5a059; --gold-bright:#f0d088; --parchment:#e8d8a8; --ink:#2a1810;
+    --ember:#d4602a; --blood:#8a2020; --moss:#6e8a3a; --chill:#5a9ad8; --bone:#c8b890;
+    --rule:rgba(197,160,89,0.25); --rule-strong:rgba(197,160,89,0.55);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg-deep);color:var(--parchment);font-family:'EB Garamond',Georgia,serif;line-height:1.65;-webkit-font-smoothing:antialiased}
+  a{color:var(--gold-bright);text-decoration:none;transition:color .15s}a:hover{color:var(--ember)}
+  h1,h2,h3,h4{font-family:'Cinzel',serif;color:var(--gold-bright);letter-spacing:.03em;margin:0 0 .6rem;line-height:1.2}
+  h1{font-size:clamp(2.2rem,4vw,3.4rem);font-weight:900}
+  h2{font-size:clamp(1.7rem,2.6vw,2.3rem);font-weight:700}
+  h3{font-size:1.15rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.12em}
+  p{margin:0 0 1rem}
+  ul{padding-left:1.3rem}
+  li{margin:.3rem 0}
+  hr{border:0;border-top:1px solid var(--rule);margin:2.5rem 0}
+  .container{max-width:1080px;margin:0 auto;padding:0 1.5rem}
+
+  nav.site{position:sticky;top:0;z-index:50;background:linear-gradient(to bottom,rgba(10,6,4,0.96),rgba(10,6,4,0.85));border-bottom:1px solid var(--rule);backdrop-filter:blur(8px)}
+  nav.site .inner{display:flex;align-items:center;justify-content:space-between;padding:.85rem 1.5rem;max-width:1180px;margin:0 auto;gap:1rem}
+  nav.site .brand{display:flex;align-items:center;gap:.65rem;font-family:'Cinzel',serif;font-weight:700;font-size:1.2rem;color:var(--gold-bright)}
+  nav.site .brand img{width:32px;height:32px}
+  nav.site ul{list-style:none;display:flex;gap:1.4rem;margin:0;padding:0;flex-wrap:wrap}
+  nav.site ul a{color:var(--parchment);font-family:'Cinzel',serif;font-size:.85rem;letter-spacing:.12em;text-transform:uppercase}
+  nav.site ul a.active{color:var(--gold-bright)}
+  nav.site ul a:hover{color:var(--ember)}
+  nav.site .play{background:linear-gradient(to bottom,var(--gold),#8a6a30);color:var(--ink);font-family:'Cinzel',serif;font-weight:700;padding:.55rem 1.1rem;border-radius:2px;letter-spacing:.15em;text-transform:uppercase;font-size:.8rem;border:1px solid var(--gold-bright)}
+  nav.site .play:hover{background:linear-gradient(to bottom,var(--gold-bright),var(--gold));color:var(--ink)}
+
+  .page-hero{
+    padding:5rem 1.5rem 4rem;text-align:center;
+    background:linear-gradient(to bottom,rgba(10,6,4,0.10),rgba(10,6,4,0.55));
+    border-bottom:1px solid var(--rule);
+  }
+  .page-hero .eyebrow{font-family:'Cinzel',serif;color:var(--ember);letter-spacing:.25em;text-transform:uppercase;font-size:.85rem}
+  .page-hero p.lead{font-size:1.15rem;max-width:700px;margin:1rem auto 0;opacity:.92}
+
+  /* World setup band */
+  .world{padding:4rem 0;background:var(--bg)}
+  .world .split{display:grid;grid-template-columns:1.1fr .9fr;gap:2.5rem;align-items:center}
+  .world .split-img{border:1px solid var(--rule-strong);border-radius:4px;overflow:hidden;box-shadow:0 12px 36px rgba(0,0,0,0.5)}
+  .world .split-img img{width:100%;height:auto;display:block}
+  @media (max-width:800px){.world .split{grid-template-columns:1fr}}
+
+  /* Factions */
+  .factions-band{padding:4rem 0;background:var(--bg-deep)}
+  .factions-band h2{text-align:center;margin-bottom:.4rem}
+  .factions-band .lead{text-align:center;max-width:680px;margin:0 auto 2.5rem;opacity:.9;font-size:1.1rem}
+
+  .faction{
+    background:linear-gradient(to bottom,var(--panel),var(--panel-2));
+    border:1px solid var(--rule);border-left:4px solid var(--gold);
+    border-radius:0 4px 4px 0;padding:2rem 2rem 1.6rem;margin-bottom:1.6rem;
+    scroll-margin-top:5rem;
+  }
+  .faction.keepers{border-left-color:var(--moss)}
+  .faction.keepers .crest-circle{background:rgba(110,138,58,0.12);border-color:rgba(110,138,58,0.5)}
+  .faction.keepers .accent{color:#a8c878}
+
+  .faction.scavs{border-left-color:var(--ember)}
+  .faction.scavs .crest-circle{background:rgba(212,96,42,0.12);border-color:rgba(212,96,42,0.5)}
+  .faction.scavs .accent{color:#e88858}
+
+  .faction.hollow{border-left-color:var(--blood)}
+  .faction.hollow .crest-circle{background:rgba(138,32,32,0.15);border-color:rgba(138,32,32,0.55)}
+  .faction.hollow .accent{color:#c85858}
+
+  .faction.network{border-left-color:var(--chill)}
+  .faction.network .crest-circle{background:rgba(90,154,216,0.12);border-color:rgba(90,154,216,0.5)}
+  .faction.network .accent{color:#88bce8}
+
+  .faction.forgotten{border-left-color:var(--bone)}
+  .faction.forgotten .crest-circle{background:rgba(200,184,144,0.10);border-color:rgba(200,184,144,0.45)}
+  .faction.forgotten .accent{color:#d8c8a0}
+
+  .faction-head{display:flex;align-items:center;gap:1.3rem;margin-bottom:1rem}
+  .crest-circle{
+    width:78px;height:78px;flex:0 0 78px;
+    border:1.5px solid var(--rule-strong);border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    background:rgba(0,0,0,0.4);
+  }
+  .crest-circle img{width:64px;height:64px;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.6))}
+  .faction-head .titles h2{margin:0 0 .2rem;font-size:1.6rem}
+  .faction-head .titles .subtitle{font-family:'Cinzel',serif;letter-spacing:.18em;text-transform:uppercase;font-size:.78rem;opacity:.75}
+
+  .faction-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:1.8rem;margin-top:1rem}
+  @media (max-width:760px){.faction-grid{grid-template-columns:1fr}}
+  .faction-grid .meta-card{background:rgba(0,0,0,0.3);border:1px solid var(--rule);border-radius:4px;padding:1rem 1.2rem}
+  .faction-grid .meta-card h4{font-family:'Cinzel',serif;font-size:.78rem;color:var(--gold);text-transform:uppercase;letter-spacing:.15em;margin:0 0 .5rem}
+  .faction-grid .meta-card ul{margin:0;padding-left:1.1rem;font-size:.92rem}
+
+  .creed{font-style:italic;border-left:2px solid currentColor;padding-left:1rem;opacity:.95;margin:1rem 0;font-size:1.02rem}
+  .creed cite{display:block;margin-top:.3rem;font-style:normal;opacity:.7;font-size:.78rem;letter-spacing:.1em}
+
+  /* Choose-a-side band */
+  .choose{padding:4rem 0;background:var(--bg);text-align:center;border-top:1px solid var(--rule)}
+  .choose h2{margin-bottom:.5rem}
+  .choose p{max-width:640px;margin:0 auto 2rem;opacity:.9;font-size:1.05rem}
+  .btn{display:inline-block;padding:.85rem 1.8rem;border-radius:2px;font-family:'Cinzel',serif;font-weight:700;font-size:.95rem;letter-spacing:.15em;text-transform:uppercase;transition:all .2s;border:1px solid var(--gold)}
+  .btn-primary{background:linear-gradient(to bottom,var(--gold),#8a6a30);color:var(--ink)}
+  .btn-primary:hover{background:linear-gradient(to bottom,var(--gold-bright),var(--gold));transform:translateY(-1px);color:var(--ink)}
+
+  /* TOC */
+  .faction-toc{display:flex;flex-wrap:wrap;gap:.6rem;justify-content:center;margin-bottom:2.5rem}
+  .faction-toc a{
+    background:var(--panel);border:1px solid var(--rule);
+    padding:.5rem 1rem;border-radius:2px;
+    font-family:'Cinzel',serif;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--parchment);transition:all .15s;
+  }
+  .faction-toc a:hover{border-color:var(--gold);color:var(--gold-bright)}
+  .faction-toc a.k{border-left:2px solid var(--moss)}
+  .faction-toc a.s{border-left:2px solid var(--ember)}
+  .faction-toc a.h{border-left:2px solid var(--blood)}
+  .faction-toc a.n{border-left:2px solid var(--chill)}
+  .faction-toc a.f{border-left:2px solid var(--bone)}
+
+  blockquote{border-left:3px solid var(--gold);padding:.25rem 0 .25rem 1rem;margin:1.4rem 0;font-style:italic;color:var(--parchment);opacity:.9}
+  blockquote cite{display:block;margin-top:.4rem;font-style:normal;color:var(--gold);font-size:.85rem;letter-spacing:.1em}
+
+  footer.site{background:var(--bg-deep);padding:3rem 0 2rem;text-align:center;color:rgba(232,216,168,0.55);font-size:.9rem;border-top:1px solid var(--rule)}
+  footer.site .brand-row{display:flex;align-items:center;justify-content:center;gap:.8rem;margin-bottom:1rem}
+  footer.site .brand-row img{width:36px;height:36px}
+  footer.site .brand-row span{font-family:'Cinzel',serif;font-weight:700;color:var(--gold);letter-spacing:.15em}
+  footer.site .links a{color:var(--parchment);margin:0 .8rem;font-family:'Cinzel',serif;font-size:.8rem;letter-spacing:.12em;text-transform:uppercase}
+</style>
+</head>
+<body>
+
+<nav class="site">
+  <div class="inner">
+    <a href="./" class="brand"><img src="grudges-logo.png" alt="" /> GRUDGES</a>
+    <ul>
+      <li><a href="./">Home</a></li>
+      <li><a href="info.html">Gameplay</a></li>
+      <li><a href="lore.html" class="active">Lore &amp; Factions</a></li>
+      <li><a href="bestiary.html">Bestiary</a></li>
+      <li><a href="stats-guide.html">Stats</a></li>
+    </ul>
+    <a href="/arpg-game/" class="play">▶ Play Now</a>
+  </div>
+</nav>
+
+<header class="page-hero">
+  <div class="container">
+    <span class="eyebrow">The World</span>
+    <h1>The Way Left. We Didn't.</h1>
+    <p class="lead">
+      A century after the colonial mining consortium sealed the orbital elevators, the surface remembers everything. Five factions hold what's left. Choose one. The rest become enemies.
+    </p>
+  </div>
+</header>
+
+<section class="world">
+  <div class="container">
+    <div class="split">
+      <div>
+        <span style="font-family:'Cinzel',serif;color:var(--ember);letter-spacing:.25em;text-transform:uppercase;font-size:.8rem">Backstory</span>
+        <h2>A Century Without the Sky</h2>
+        <p>
+          They called themselves <strong>The Way</strong>. A consortium of orbital colonies that arrived hungry and stayed long enough to gut a planet.
+          For three generations they sank shaft after shaft into the crust, lifting metal, ore, water, and biomass to the upper rings.
+          They left nothing on the surface that wasn't broken or radioactive.
+        </p>
+        <p>
+          When the last shaft collapsed and the price of orbital lift exceeded the price of what was being lifted, they sealed the elevators behind them.
+          The colonies still float overhead. They watch us through old satellites. They do not answer when we transmit.
+        </p>
+        <p>
+          On the surface, the wells run yellow. The trees grow strange. The seasons came back wrong.
+          But people stayed — the ones who couldn't afford a lift ticket, the ones who refused to leave family graves, the ones who simply weren't told.
+          That's who we are. The ones who weren't worth taking.
+        </p>
+        <blockquote>
+          "They called it Earth. We call it ours now. The difference is that we stayed."
+          <cite>— inscription, abandoned Hollow Lord shaft entrance</cite>
+        </blockquote>
+      </div>
+      <div class="split-img">
+        <img src="grudges-landing.png" alt="A surface settler beneath a colonial sky" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="factions-band">
+  <div class="container">
+    <h2>The Five Banners</h2>
+    <p class="lead">Pledge yourself to one to unlock its territory, gear, and contracts. The other four will turn on you.</p>
+
+    <div class="faction-toc">
+      <a href="#keepers" class="k">Keepers of the Old Faith</a>
+      <a href="#scavengers" class="s">Tech-Scavengers</a>
+      <a href="#hollow" class="h">Hollow Lords</a>
+      <a href="#network" class="n">The Network</a>
+      <a href="#forgotten" class="f">The Forgotten</a>
+    </div>
+
+    <article class="faction keepers" id="keepers">
+      <div class="faction-head">
+        <div class="crest-circle"><img src="icons/factions/keepers.png" alt="" /></div>
+        <div class="titles">
+          <h2 class="accent">The Keepers of the Old Faith</h2>
+          <div class="subtitle">Heal the land</div>
+        </div>
+      </div>
+      <p>
+        Religious movements that believe Earth is a living entity and that <em>The Way</em> was a parasite drawing blood from a wounded body.
+        They perform rituals to heal the land — burning offerings of pre-contact technology, anointing wells with herb-water, walking the perimeter of every wound the consortium left in the rock.
+        They hoard pre-contact technology not to use it, but to keep it from being used.
+      </p>
+      <p class="creed">
+        "The shafts are the wounds. The runoff is the bleeding. We are the bandage. We do not stop pressing."
+        <cite>— Keeper homily, recited at every solstice</cite>
+      </p>
+      <div class="faction-grid">
+        <div class="meta-card">
+          <h4>Doctrine</h4>
+          <ul>
+            <li>Earth is a living being and was wounded by The Way.</li>
+            <li>Pre-contact technology is sacred and must be quarantined, not destroyed.</li>
+            <li>Every settler owes the land a tithe of restoration — herbs planted, wells purified, shafts sealed.</li>
+            <li>Industrial-scale mining is heresy. Hand-tools and rituals only.</li>
+          </ul>
+        </div>
+        <div class="meta-card">
+          <h4>What They Offer You</h4>
+          <ul>
+            <li>Sanctuary in groves and shrine-camps across the wilderness.</li>
+            <li>Access to ritual herbalism — antidotes, water purification, radiation resist.</li>
+            <li>Bonus reputation for sealing collapsed Hollow Lord shafts.</li>
+            <li>Blessed weapons — slow but with stacking restoration effects.</li>
+          </ul>
+        </div>
+        <div class="meta-card">
+          <h4>What They Want From You</h4>
+          <ul>
+            <li>Recover sealed pre-contact tech and bring it to Keeper sanctuaries.</li>
+            <li>Plant moonleaf at marked rift-wound sites.</li>
+            <li>Refuse to trade with the Tech-Scavengers and Hollow Lords.</li>
+          </ul>
+        </div>
+        <div class="meta-card">
+          <h4>Standing Enemies</h4>
+          <ul>
+            <li><strong>Hollow Lords</strong> — they reopen shafts the Keepers seal.</li>
+            <li><strong>Tech-Scavengers</strong> — they sell the corpse of Earth to anyone with coin.</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <article class="faction scavs" id="scavengers">
+      <div class="faction-head">
+        <div class="crest-circle"><img src="icons/factions/scavengers.png" alt="" /></div>
+        <div class="titles">
+          <h2 class="accent">The Tech-Scavengers</h2>
+          <div class="subtitle">The ruins are a market</div>
+        </div>
+      </div>
+      <p>
+        Nomadic clans that hunt for old-world technology in the ruins. They are the surface's best mechanics, chemists, and hackers — almost everything that still functions has passed through scavenger hands at least once.
+        They keep no shrines and no kingdoms. They keep <em>routes</em>. They trade with the orbital colonies through black-market drop sites, smuggling salvage up and bringing medicine, optics, and credit chips down.
+      </p>
+      <p class="creed">
+        "Worship is what you do when you can't fix it yourself."
+        <cite>— scrawled on the side of a salvage rig, attributed to no one</cite>
+      </p>
+      <div class="faction-grid">
+        <div class="meta-card">
+          <h4>Doctrine</h4>
+          <ul>
+            <li>Old-world tech is neither sacred nor cursed — it's inventory.</li>
+            <li>Routes matter more than territory. A camp that doesn't move dies.</li>
+            <li>Loyalty is a contract with an expiration date.</li>
+            <li>If the colonies will pay for it, scavenge it.</li>
+          </ul>
+        </div>
+        <div class="meta-card">
+          <h4>What They Offer You</h4>
+          <ul>
+            <li>Black-market vendor access — buy contraband, sell stolen goods.</li>
+            <li>Best gun attachments, scopes, silencers, and prototype gadgets.</li>
+            <li>Caravan routes — passive gold income from trade posts.</li>
+            <li>Hacker contacts who can decrypt pre-contact data caches.</li>
+          </ul>
+        </div>
+        <div class="meta-card">
+          <h4>What They Want From You</h4>
+          <ul>
+            <li>Recover specific tech assets from named ruin sites.</li>
+            <li>Run smuggling caravans between scavenger waypoints.</li>
+            <li>Disrupt Network checkpoints that interfere with their routes.</li>
+          </ul>
+        </div>
+        <div class="meta-card">
+          <h4>Standing Enemies</h4>
+          <ul>
+            <li><strong>Keepers</strong> — they hoard what scavengers want to sell.</li>
+            <li><strong>The Network</strong> — checkpoints, tariffs, registries. Scavengers hate registries.</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <article class="faction hollow" id="hollow">
+      <div class="faction-head">
+        <div class="crest-circle"><img src="icons/factions/hollow.png" alt="" /></div>
+        <div class="titles">
+          <h2 class="accent">The Hollow Lords</h2>
+          <div class="subtitle">Shelter is the only currency</div>
+        </div>
+      </div>
+      <p>
+        Warlords who control access to the deep shaft mines — the abandoned tunnel networks left behind by The Way's extraction operations.
+        The shafts are the only reliably safe shelter on the surface: stable temperature, no radiation, defensible chokepoints.
+        The Hollow Lords charge for entry. Sometimes in coin. Sometimes in years of indenture. They rule through fear because the alternative they offer — the open surface — is worse.
+      </p>
+      <p class="creed">
+        "Above ground, you die at the weather's pace. Below it, you die at mine. I am slower."
+        <cite>— attributed to a Hollow Lord at the gate of Shaft Seventeen</cite>
+      </p>
+      <div class="faction-grid">
+        <div class="meta-card">
+          <h4>Doctrine</h4>
+          <ul>
+            <li>The shafts belong to whoever can hold them. Right now, that's us.</li>
+            <li>Shelter is a service. Services have prices.</li>
+            <li>Loyalty is enforced. Sentiment is not required.</li>
+            <li>The surface is for raiding. The deep is for keeping.</li>
+          </ul>
+        </div>
+        <div class="meta-card">
+          <h4>What They Offer You</h4>
+          <ul>
+            <li>Shaft fortress access — the safest base locations on the surface.</li>
+            <li>Heavy weapon and turret schematics; armor with deep-rock plating.</li>
+            <li>Conscript crews — cheap, expendable NPC labor.</li>
+            <li>Toll-bridge politics — ally with one Lord and the others fall in line.</li>
+          </ul>
+        </div>
+        <div class="meta-card">
+          <h4>What They Want From You</h4>
+          <ul>
+            <li>Raid rival camps and bring the spoils back as tribute.</li>
+            <li>Defend a shaft entrance against a coordinated assault.</li>
+            <li>Eliminate Network informants and Keeper sealers.</li>
+          </ul>
+        </div>
+        <div class="meta-card">
+          <h4>Standing Enemies</h4>
+          <ul>
+            <li><strong>Keepers</strong> — they want every shaft sealed.</li>
+            <li><strong>The Network</strong> — they organize the people Hollow Lords want compliant.</li>
+            <li><strong>Each other</strong> — Hollow Lord politics is mostly internal civil war.</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <article class="faction network" id="network">
+      <div class="faction-head">
+        <div class="crest-circle"><img src="icons/factions/network.png" alt="" /></div>
+        <div class="titles">
+          <h2 class="accent">The Network</h2>
+          <div class="subtitle">The closest thing to law</div>
+        </div>
+      </div>
+      <p>
+        A loose alliance of surface communities connected by a hardline data network running through the old fiber-optic lines that, against all odds, still function.
+        They share weather data. They share raid warnings. They share grain prices and antibiotic supplies. They share the names of people who have broken treaties.
+        They are the closest thing the surface has to a government, but they are not a government — they are an agreement, renewed daily.
+      </p>
+      <p class="creed">
+        "We share warnings before we share food. That order matters."
+        <cite>— Network charter, fragment</cite>
+      </p>
+      <div class="faction-grid">
+        <div class="meta-card">
+          <h4>Doctrine</h4>
+          <ul>
+            <li>Information is the only thing that scales. Hoard it and the network dies.</li>
+            <li>Treaties are public. Violations are public. Memory is public.</li>
+            <li>Voluntary cooperation, enforced by reputation, backed by collective action.</li>
+            <li>The colonies don't watch. We do.</li>
+          </ul>
+        </div>
+        <div class="meta-card">
+          <h4>What They Offer You</h4>
+          <ul>
+            <li>Real-time raid warnings broadcast to allied camps.</li>
+            <li>Trade post protection — caravans on Network routes are escorted.</li>
+            <li>Reputation system that follows you across every Network camp.</li>
+            <li>Diplomatic seals that grant safe passage through neutral territory.</li>
+          </ul>
+        </div>
+        <div class="meta-card">
+          <h4>What They Want From You</h4>
+          <ul>
+            <li>Repair fiber-optic relay stations to extend network reach.</li>
+            <li>Extract testimony from Hollow Lord prisoners.</li>
+            <li>Refuse to harbor known oath-breakers.</li>
+            <li>Stand a militia call — Network camps defend each other.</li>
+          </ul>
+        </div>
+        <div class="meta-card">
+          <h4>Standing Enemies</h4>
+          <ul>
+            <li><strong>Hollow Lords</strong> — they jam relays and traffic in conscripts.</li>
+            <li><strong>Tech-Scavengers</strong> — they evade tariffs and run unregistered routes.</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <article class="faction forgotten" id="forgotten">
+      <div class="faction-head">
+        <div class="crest-circle"><img src="icons/factions/forgotten.png" alt="" /></div>
+        <div class="titles">
+          <h2 class="accent">The Forgotten</h2>
+          <div class="subtitle">Their gods do not answer to ours</div>
+        </div>
+      </div>
+      <p>
+        Isolated communities that have reverted to pre-industrial subsistence. They have no contact with the colonies and no interest in The Way.
+        Many do not know the colonies still exist. They have their own gods, their own wars, their own peace.
+        They are not hostile by default — but they are not asking to be saved, either, and they will defend their borders against any banner that arrives flying.
+      </p>
+      <p class="creed">
+        "We do not need your wires. We do not need your shafts. We do not need your faith. Leave the seed-bag at the boundary stone and walk away."
+        <cite>— Forgotten welcome ritual, translated</cite>
+      </p>
+      <div class="faction-grid">
+        <div class="meta-card">
+          <h4>Doctrine</h4>
+          <ul>
+            <li>Subsistence is sufficient. Surplus invites theft.</li>
+            <li>The colonies are a story we no longer tell.</li>
+            <li>Strangers are tolerated. Banners are not.</li>
+            <li>Our dead remain in our ground.</li>
+          </ul>
+        </div>
+        <div class="meta-card">
+          <h4>What They Offer You</h4>
+          <ul>
+            <li>Untouched biomes — the only places with full clean water and unmutated game.</li>
+            <li>Heritage seeds, hand-forged tools, herbal medicine recipes lost elsewhere.</li>
+            <li>Genuine peace if you arrive without a banner and stay quiet.</li>
+            <li>Refuge from any other faction — the Forgotten honor parley.</li>
+          </ul>
+        </div>
+        <div class="meta-card">
+          <h4>What They Want From You</h4>
+          <ul>
+            <li>Unbind from your current faction before crossing their border.</li>
+            <li>Trade in goods, not in coin. Coin is suspect.</li>
+            <li>Carry warnings between Forgotten villages — they have no Network.</li>
+            <li>Defend a village from a raid that doesn't touch your camp at all.</li>
+          </ul>
+        </div>
+        <div class="meta-card">
+          <h4>Standing Enemies</h4>
+          <ul>
+            <li>None by default. They will become enemies of any faction that ignores their borders.</li>
+            <li>In practice: <strong>Hollow Lords</strong> raid them most often.</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<section class="choose">
+  <div class="container">
+    <h2>Bind a Grudge. Bear It Forward.</h2>
+    <p>
+      You don't have to pledge on day one. The surface will let you wander. But sooner or later every camp flies a colour, every raid arrives under a name, and every grudge you carry comes from a banner you can point to.
+    </p>
+    <a href="/arpg-game/" class="btn btn-primary">▶ Enter the Surface</a>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="container">
+    <div class="brand-row">
+      <img src="grudges-logo.png" alt="" />
+      <span>GRUDGES</span>
+    </div>
+    <div class="links">
+      <a href="./">Home</a>
+      <a href="info.html">Gameplay</a>
+      <a href="lore.html">Lore &amp; Factions</a>
+      <a href="bestiary.html">Bestiary</a>
+      <a href="stats-guide.html">Stats</a>
+      <a href="/arpg-game/">Play</a>
+    </div>
+    <p>Bind a grudge. Bear it forward.</p>
+  </div>
+</footer>
+
+<script src="/the-way-bg.js" defer></script>
+</body>
+</html>

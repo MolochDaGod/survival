@@ -22,6 +22,7 @@
  */
 
 import * as THREE from 'three';
+import { decorateFloor } from './BuildingPropPatterns';
 import { v4 as uuid } from 'uuid';
 import { getNPCManager } from '../ai/NPCManager';
 import { getSpatialTracker, EntityType, TrackedEntity } from '../SpatialTracker';
@@ -295,6 +296,12 @@ export class BuildingSystem {
         group:  floorGroup,
         zones:  fDef.zones,
       });
+
+      // Dress the floor with kit props per zone. Loads are async + cached;
+      // the floor renders immediately and props pop in as the cache fills.
+      for (const zone of fDef.zones) {
+        decorateFloor(floorGroup, def, zone, `${bldg.trackId}/${fi}`);
+      }
 
       rootGroup.add(floorGroup);
       cumulativeY += H;

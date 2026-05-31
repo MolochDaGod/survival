@@ -10,6 +10,8 @@ import { ThirdPersonCamera, TUNING_THIRD_PERSON, TUNING_ARPG } from './ThirdPers
 import { groundY as groundFloor } from './GroundSampler';
 import { LocomotionAnimator } from './LocomotionAnimator';
 import { PhysicsWorld } from './physics/PhysicsWorld';
+import { GROUPS_PLAYER } from './physics/PhysicsGroups';
+import { LedgeClimbController } from './LedgeClimbController';
 import { StatProgressionService } from './progression/StatProgressionService';
 import { WeaponAttachment } from './WeaponAttachment';
 import { GearVisualManager, resolveGearModelPath } from './GearVisualManager';
@@ -86,6 +88,26 @@ export class PlayerController {
   gunRecoilTimer: number = 0;
   /** Crosshair spread 0 (tight) → 1 (max). Decays at rest, grows on fire/move. */
   public spreadValue: number = 0;
+
+  // ── Ammo / magazine state ──────────────────────────────────────────────
+  // Magazine capacity (rounds per reload) per WeaponType. Anything not
+  // listed here is treated as not-ranged and skips the ammo gate entirely.
+  private static readonly MAG_CAPACITY: Partial<Record<string, number>> = {
+    pistol: 12, gun: 12, rifle: 30, smg: 30, shotgun: 6,
+    bow: 1, crossbow: 1,
+  };
+  // Starting reserve ammo per WeaponType when a player first equips one.
+  private static readonly STARTING_RESERVE: Partial<Record<string, number>> = {
+    pistol: 60, gun: 60, rifle: 120, smg: 120, shotgun: 24,
+    bow: 30, crossbow: 20,
+  };
+  /** Rounds currently chambered, keyed by weapon *id* (per-instance). */
+  private currentMag: Record<string, number> = {};
+  /** Spare ammo pool, keyed by WeaponType (shared across weapons of a type). */
+  private reserveAmmo: Record<string, number> = {};
+  /** True while the reload animation is running; gates further fire. */
+  isReloading: boolean = false;
+  reloadTimer: number = 0;
 
   // ── Water / vehicle state (written by SwimController + BoatSystem) ─────
   /** True when the SwimController has the player in the swimming or submerged
@@ -206,6 +228,10 @@ export class PlayerController {
    * letting them clip through after gravity moves them down a frame. */
   private _pendingMoveX: number = 0;
   private _pendingMoveZ: number = 0;
+  /** Mantle / ledge-climb state machine. Built in `initRapierBody` once
+   * the Rapier capsule body exists; null on the legacy BVH-only path
+   * because the probe needs a real physics world to raycast against. */
+  private ledgeClimb: LedgeClimbController | null = null;
 
   stats: PlayerStats;
   onStatChange: (() => void) | null = null;
@@ -232,6 +258,8 @@ export class PlayerController {
     // starting two-weapon set. Fallback pair preserves the historical
     // sword + dagger combo for any callsite that doesn't pass weapons.
     this.equippedWeapons = startingWeapons ?? [WEAPONS[0], WEAPONS[2]];
+    // Seed magazines + reserves for any ranged weapon in the starting pair.
+    for (const w of this.equippedWeapons) this.ensureAmmoFor(w);
 
     if (this.inventory) {
       this.inventory.onChange = () => {
@@ -380,7 +408,7 @@ export class PlayerController {
     const colliderDesc = RAPIER.ColliderDesc.capsule(
       CAPSULE_HALF_HEIGHT,
       CAPSULE_RADIUS,
-    );
+    ).setCollisionGroups(GROUPS_PLAYER);
     this.rapierCollider = world.createCollider(colliderDesc, this.rapierBody);
 
     // Character controller — Rapier owns slope handling, autostep, and
@@ -400,6 +428,16 @@ export class PlayerController {
     // Slide on walls instead of sticking — prevents getting stuck on corners.
     ctrl.setSlideEnabled(true);
     this.rapierController = ctrl;
+
+    // Ledge / mantle controller. Owns position while a climb is in
+    // progress; PlayerController short-circuits handleMovement and
+    // handleGravity for those frames. Plays `ClimbUp_1m_RM` (UAL2) via
+    // the existing playAnimation routing so the visual matches the lerp.
+    this.ledgeClimb = new LedgeClimbController(
+      this.physics,
+      this.rapierBody,
+      (clipName) => { this.playAnimation(clipName); },
+    );
   }
 
   /**
@@ -412,6 +450,9 @@ export class PlayerController {
     this.position.copy(pos);
     this.vy = 0;
     this.jumpVelocity = 0;
+    // Cancel any in-flight mantle — its anchor points are stale once
+    // we've yanked the capsule somewhere else in the world.
+    this.ledgeClimb?.cancel();
     // Anchor the kill-plane recovery to wherever we just teleported to.
     // Every legitimate teleport (initial spawn, debug reset, fast-travel)
     // is by definition a known-good position, so falling far below it is
@@ -753,8 +794,21 @@ export class PlayerController {
     if (!this.isGrounded) return;
     // Can't jump while in the water (SwimController owns vertical motion),
     // while piloting a boat (BoatSystem owns the player position), or while
-    // climbing (ClimbController owns position — Space detaches from wall).
+    // attached to a wall via ClimbController (Space detaches from the wall).
     if (this.isSwimming || this.mountedBoat || this.isClimbing) return;
+    // Ledge mantle takes priority over a normal jump when the player is
+    // facing a climbable surface. The probe only fires on key-press
+    // (never per-frame) so the raycast cost stays negligible.
+    if (this.ledgeClimb && !this.ledgeClimb.isActive && !this.isRolling && !this.isAttacking) {
+      const feetPos = new THREE.Vector3(
+        this.position.x,
+        this.position.y - PLAYER_HEIGHT,
+        this.position.z,
+      );
+      if (this.ledgeClimb.tryStart(feetPos, this.getForwardDir())) {
+        return;
+      }
+    }
     this.jumpVelocity = 8;
     this.isGrounded = false;
     this.playAnimation('Jump');
@@ -782,6 +836,7 @@ export class PlayerController {
 
   startAttack() {
     if (this.isAttacking) return;
+    if (this.isReloading) return;
 
     // FP hands punch animation
     if (this.cameraMode === 'first-person' && this.fpHandsMixer && this.fpHandsPunchAction) {
@@ -795,9 +850,16 @@ export class PlayerController {
 
     const weapon = this.equippedWeapons[this.activeWeaponIndex];
     const isRanged = weapon.type === 'gun' || weapon.type === 'rifle' || weapon.type === 'shotgun'
-      || weapon.type === 'smg' || weapon.type === 'bow' || weapon.type === 'crossbow';
+      || weapon.type === 'smg' || weapon.type === 'bow' || weapon.type === 'crossbow' || weapon.type === 'pistol';
 
     if (isRanged) {
+      // Ammo gate: dry-fire if mag empty, auto-trigger a reload when reserves exist.
+      this.ensureAmmoFor(weapon);
+      if ((this.currentMag[weapon.id] ?? 0) <= 0) {
+        if ((this.reserveAmmo[weapon.type] ?? 0) > 0) this.startReload();
+        return;
+      }
+      this.currentMag[weapon.id]! -= 1;
       const fireCooldown = 0.6 / weapon.speed;
       this.isAttacking = true;
       this.attackTimer = fireCooldown;
@@ -1059,8 +1121,24 @@ export class PlayerController {
   update(dt: number) {
     this._lastDt = dt;
     this.handleMouse(dt);
-    this.handleMovement(dt);
-    this.handleGravity(dt);
+    // While a mantle is playing the climb controller owns position; we
+    // bypass handleMovement/handleGravity so input and gravity can't
+    // fight the scripted lerp. WASD/locomotion weights are zeroed so the
+    // model isn't trying to run-cycle in mid-air.
+    const mantling = this.ledgeClimb?.update(dt, this.position) ?? false;
+    if (mantling) {
+      this.lastLocoForward = 0;
+      this.lastLocoStrafe = 0;
+      this.lastLocoSpeed01 = 0;
+      this._pendingMoveX = 0;
+      this._pendingMoveZ = 0;
+      this.vy = 0;
+      this.jumpVelocity = 0;
+      this.isGrounded = true;
+    } else {
+      this.handleMovement(dt);
+      this.handleGravity(dt);
+    }
     this.handleTimers(dt);
     this.updatePlayerBody(dt);
     this.updateCamera();
@@ -1082,7 +1160,10 @@ export class PlayerController {
     if (this.fpHandsMixer) this.fpHandsMixer.update(dt);
     // Root motion: after mixer has advanced, apply the bone delta to movement
     // and suppress the code-driven lunge so RM clips self-propel the character.
-    if (this.locomotion?.isRootMotionActive) {
+    // During a mantle the climb controller already owns translation — we
+    // skip the RM application so the two systems don't double-move the
+    // capsule (mantle would overshoot the ledge).
+    if (this.locomotion?.isRootMotionActive && !mantling) {
       const rmDelta = this.locomotion.computeRootMotionDelta();
       // Replace lunge with root-motion displacement.
       this.lungeVelocity.set(0, 0, 0);
@@ -1652,7 +1733,11 @@ export class PlayerController {
     if (this.fpHandsGroup) this.fpCamera.remove(this.fpHandsGroup);
 
     // Tear down Rapier resources so a re-init (new game, character swap)
-    // doesn't leak bodies into the world.
+    // doesn't leak bodies into the world. Drop the ledge controller
+    // BEFORE removing the body so it can't write a stale translation
+    // into freed WASM memory if a mantle was mid-flight.
+    this.ledgeClimb?.cancel();
+    this.ledgeClimb = null;
     if (this.physics) {
       const world = this.physics.world;
       if (this.rapierController) {

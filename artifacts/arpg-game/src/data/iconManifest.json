@@ -1,0 +1,3100 @@
+{
+  "genetics": {
+    "Icon11_01.png": {
+      "uuid": "grudge-16fe1dd5-e68c-441e-44ae-2788fea6887b",
+      "r2Key": "grudge-nexus/icons/genetics/grudge-16fe1dd5-e68c-441e-44ae-2788fea6887b.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/genetics/grudge-16fe1dd5-e68c-441e-44ae-2788fea6887b.png",
+      "localPath": "/icons/genetics/Icon11_01.png"
+    },
+    "Icon11_02.png": {
+      "uuid": "grudge-9b0f25ba-2f8a-04e2-012b-f55697a1e85a",
+      "r2Key": "grudge-nexus/icons/genetics/grudge-9b0f25ba-2f8a-04e2-012b-f55697a1e85a.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/genetics/grudge-9b0f25ba-2f8a-04e2-012b-f55697a1e85a.png",
+      "localPath": "/icons/genetics/Icon11_02.png"
+    },
+    "Icon11_03.png": {
+      "uuid": "grudge-cd95e05d-fa7d-73e5-378a-056abca837bb",
+      "r2Key": "grudge-nexus/icons/genetics/grudge-cd95e05d-fa7d-73e5-378a-056abca837bb.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/genetics/grudge-cd95e05d-fa7d-73e5-378a-056abca837bb.png",
+      "localPath": "/icons/genetics/Icon11_03.png"
+    },
+    "Icon11_04.png": {
+      "uuid": "grudge-7685f0e5-1819-61c7-cba1-c6d1cb72133f",
+      "r2Key": "grudge-nexus/icons/genetics/grudge-7685f0e5-1819-61c7-cba1-c6d1cb72133f.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/genetics/grudge-7685f0e5-1819-61c7-cba1-c6d1cb72133f.png",
+      "localPath": "/icons/genetics/Icon11_04.png"
+    },
+    "Icon11_05.png": {
+      "uuid": "grudge-d550fc0c-7f71-8348-d27f-12b8550d67c7",
+      "r2Key": "grudge-nexus/icons/genetics/grudge-d550fc0c-7f71-8348-d27f-12b8550d67c7.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/genetics/grudge-d550fc0c-7f71-8348-d27f-12b8550d67c7.png",
+      "localPath": "/icons/genetics/Icon11_05.png"
+    },
+    "Icon11_06.png": {
+      "uuid": "grudge-23ab9329-0e2c-88d3-152f-0153d854293b",
+      "r2Key": "grudge-nexus/icons/genetics/grudge-23ab9329-0e2c-88d3-152f-0153d854293b.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/genetics/grudge-23ab9329-0e2c-88d3-152f-0153d854293b.png",
+      "localPath": "/icons/genetics/Icon11_06.png"
+    },
+    "Icon11_07.png": {
+      "uuid": "grudge-1d911957-6b6e-f6e7-6edb-3ea320692ead",
+      "r2Key": "grudge-nexus/icons/genetics/grudge-1d911957-6b6e-f6e7-6edb-3ea320692ead.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/genetics/grudge-1d911957-6b6e-f6e7-6edb-3ea320692ead.png",
+      "localPath": "/icons/genetics/Icon11_07.png"
+    },
+    "Icon11_08.png": {
+      "uuid": "grudge-4bf4210b-40a4-05f5-2b3d-ce2b53f9747d",
+      "r2Key": "grudge-nexus/icons/genetics/grudge-4bf4210b-40a4-05f5-2b3d-ce2b53f9747d.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/genetics/grudge-4bf4210b-40a4-05f5-2b3d-ce2b53f9747d.png",
+      "localPath": "/icons/genetics/Icon11_08.png"
+    },
+    "Icon11_09.png": {
+      "uuid": "grudge-9d733c1d-ad7c-c80a-e843-738c4cf1b594",
+      "r2Key": "grudge-nexus/icons/genetics/grudge-9d733c1d-ad7c-c80a-e843-738c4cf1b594.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/genetics/grudge-9d733c1d-ad7c-c80a-e843-738c4cf1b594.png",
+      "localPath": "/icons/genetics/Icon11_09.png"
+    },
+    "Icon11_10.png": {
+      "uuid": "grudge-d66033e1-d5a6-856e-aab9-52a8cc2190d8",
+      "r2Key": "grudge-nexus/icons/genetics/grudge-d66033e1-d5a6-856e-aab9-52a8cc2190d8.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/genetics/grudge-d66033e1-d5a6-856e-aab9-52a8cc2190d8.png",
+      "localPath": "/icons/genetics/Icon11_10.png"
+    },
+    "Icon11_11.png": {
+      "uuid": "grudge-350b1220-14e1-25f0-bd12-fbc163f1b8dd",
+      "r2Key": "grudge-nexus/icons/genetics/grudge-350b1220-14e1-25f0-bd12-fbc163f1b8dd.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/genetics/grudge-350b1220-14e1-25f0-bd12-fbc163f1b8dd.png",
+      "localPath": "/icons/genetics/Icon11_11.png"
+    },
+    "Icon11_12.png": {
+      "uuid": "grudge-7ccc1bb8-4802-bc38-d20e-13a7f3924614",
+      "r2Key": "grudge-nexus/icons/genetics/grudge-7ccc1bb8-4802-bc38-d20e-13a7f3924614.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/genetics/grudge-7ccc1bb8-4802-bc38-d20e-13a7f3924614.png",
+      "localPath": "/icons/genetics/Icon11_12.png"
+    },
+    "Icon11_13.png": {
+      "uuid": "grudge-245873d8-18f6-7c76-7aad-97f3eae6dd39",
+      "r2Key": "grudge-nexus/icons/genetics/grudge-245873d8-18f6-7c76-7aad-97f3eae6dd39.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/genetics/grudge-245873d8-18f6-7c76-7aad-97f3eae6dd39.png",
+      "localPath": "/icons/genetics/Icon11_13.png"
+    },
+    "Icon11_14.png": {
+      "uuid": "grudge-cb8c8cc0-de6b-107c-7094-92447407f16c",
+      "r2Key": "grudge-nexus/icons/genetics/grudge-cb8c8cc0-de6b-107c-7094-92447407f16c.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/genetics/grudge-cb8c8cc0-de6b-107c-7094-92447407f16c.png",
+      "localPath": "/icons/genetics/Icon11_14.png"
+    },
+    "Icon11_15.png": {
+      "uuid": "grudge-18e117ed-1c6d-4ed3-d278-932a2be680d3",
+      "r2Key": "grudge-nexus/icons/genetics/grudge-18e117ed-1c6d-4ed3-d278-932a2be680d3.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/genetics/grudge-18e117ed-1c6d-4ed3-d278-932a2be680d3.png",
+      "localPath": "/icons/genetics/Icon11_15.png"
+    },
+    "Icon11_16.png": {
+      "uuid": "grudge-3601b85f-2d20-5a53-ea6a-e110fad01084",
+      "r2Key": "grudge-nexus/icons/genetics/grudge-3601b85f-2d20-5a53-ea6a-e110fad01084.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/genetics/grudge-3601b85f-2d20-5a53-ea6a-e110fad01084.png",
+      "localPath": "/icons/genetics/Icon11_16.png"
+    },
+    "Icon11_17.png": {
+      "uuid": "grudge-82018031-c1c3-520b-0d5f-08eebf766616",
+      "r2Key": "grudge-nexus/icons/genetics/grudge-82018031-c1c3-520b-0d5f-08eebf766616.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/genetics/grudge-82018031-c1c3-520b-0d5f-08eebf766616.png",
+      "localPath": "/icons/genetics/Icon11_17.png"
+    },
+    "Icon11_18.png": {
+      "uuid": "grudge-2b6a5f03-338e-eb3f-c1f8-c0c75f573d8d",
+      "r2Key": "grudge-nexus/icons/genetics/grudge-2b6a5f03-338e-eb3f-c1f8-c0c75f573d8d.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/genetics/grudge-2b6a5f03-338e-eb3f-c1f8-c0c75f573d8d.png",
+      "localPath": "/icons/genetics/Icon11_18.png"
+    },
+    "Icon11_19.png": {
+      "uuid": "grudge-23ae71af-84de-74ba-f283-87baeb922c1a",
+      "r2Key": "grudge-nexus/icons/genetics/grudge-23ae71af-84de-74ba-f283-87baeb922c1a.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/genetics/grudge-23ae71af-84de-74ba-f283-87baeb922c1a.png",
+      "localPath": "/icons/genetics/Icon11_19.png"
+    },
+    "Icon11_20.png": {
+      "uuid": "grudge-0ad4d5d7-5987-194a-1649-d68b27ff16a4",
+      "r2Key": "grudge-nexus/icons/genetics/grudge-0ad4d5d7-5987-194a-1649-d68b27ff16a4.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/genetics/grudge-0ad4d5d7-5987-194a-1649-d68b27ff16a4.png",
+      "localPath": "/icons/genetics/Icon11_20.png"
+    },
+    "Icon11_21.png": {
+      "uuid": "grudge-1f29a301-d94d-b57b-0dbf-48ec10bdf32b",
+      "r2Key": "grudge-nexus/icons/genetics/grudge-1f29a301-d94d-b57b-0dbf-48ec10bdf32b.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/genetics/grudge-1f29a301-d94d-b57b-0dbf-48ec10bdf32b.png",
+      "localPath": "/icons/genetics/Icon11_21.png"
+    },
+    "Icon11_22.png": {
+      "uuid": "grudge-055f5196-0fe2-1aab-54a6-197ec8021768",
+      "r2Key": "grudge-nexus/icons/genetics/grudge-055f5196-0fe2-1aab-54a6-197ec8021768.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/genetics/grudge-055f5196-0fe2-1aab-54a6-197ec8021768.png",
+      "localPath": "/icons/genetics/Icon11_22.png"
+    },
+    "Icon11_23.png": {
+      "uuid": "grudge-8f00d39e-b374-be8f-181e-cefadf445ae5",
+      "r2Key": "grudge-nexus/icons/genetics/grudge-8f00d39e-b374-be8f-181e-cefadf445ae5.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/genetics/grudge-8f00d39e-b374-be8f-181e-cefadf445ae5.png",
+      "localPath": "/icons/genetics/Icon11_23.png"
+    },
+    "Icon11_24.png": {
+      "uuid": "grudge-545986c0-a827-0b13-8a6a-f8d5757c9ed3",
+      "r2Key": "grudge-nexus/icons/genetics/grudge-545986c0-a827-0b13-8a6a-f8d5757c9ed3.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/genetics/grudge-545986c0-a827-0b13-8a6a-f8d5757c9ed3.png",
+      "localPath": "/icons/genetics/Icon11_24.png"
+    },
+    "Icon11_25.png": {
+      "uuid": "grudge-f2cbcba8-52aa-cfa7-c460-1a6eababbd78",
+      "r2Key": "grudge-nexus/icons/genetics/grudge-f2cbcba8-52aa-cfa7-c460-1a6eababbd78.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/genetics/grudge-f2cbcba8-52aa-cfa7-c460-1a6eababbd78.png",
+      "localPath": "/icons/genetics/Icon11_25.png"
+    },
+    "Icon11_26.png": {
+      "uuid": "grudge-6a022cce-915b-bdaa-bf62-6c242910e48c",
+      "r2Key": "grudge-nexus/icons/genetics/grudge-6a022cce-915b-bdaa-bf62-6c242910e48c.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/genetics/grudge-6a022cce-915b-bdaa-bf62-6c242910e48c.png",
+      "localPath": "/icons/genetics/Icon11_26.png"
+    },
+    "Icon11_27.png": {
+      "uuid": "grudge-455ebcb8-2e53-0529-215b-88ed15cf60cc",
+      "r2Key": "grudge-nexus/icons/genetics/grudge-455ebcb8-2e53-0529-215b-88ed15cf60cc.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/genetics/grudge-455ebcb8-2e53-0529-215b-88ed15cf60cc.png",
+      "localPath": "/icons/genetics/Icon11_27.png"
+    },
+    "Icon11_28.png": {
+      "uuid": "grudge-418087fe-5df9-e792-557f-42857702299b",
+      "r2Key": "grudge-nexus/icons/genetics/grudge-418087fe-5df9-e792-557f-42857702299b.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/genetics/grudge-418087fe-5df9-e792-557f-42857702299b.png",
+      "localPath": "/icons/genetics/Icon11_28.png"
+    },
+    "Icon11_29.png": {
+      "uuid": "grudge-9cd2dbd8-2e89-07a6-de6f-b62ebf89aa57",
+      "r2Key": "grudge-nexus/icons/genetics/grudge-9cd2dbd8-2e89-07a6-de6f-b62ebf89aa57.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/genetics/grudge-9cd2dbd8-2e89-07a6-de6f-b62ebf89aa57.png",
+      "localPath": "/icons/genetics/Icon11_29.png"
+    },
+    "Icon11_30.png": {
+      "uuid": "grudge-cc3d198c-b526-03a1-6bcd-bc31ab9d7bce",
+      "r2Key": "grudge-nexus/icons/genetics/grudge-cc3d198c-b526-03a1-6bcd-bc31ab9d7bce.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/genetics/grudge-cc3d198c-b526-03a1-6bcd-bc31ab9d7bce.png",
+      "localPath": "/icons/genetics/Icon11_30.png"
+    },
+    "Icon11_31.png": {
+      "uuid": "grudge-8fd3e419-6e2d-43d7-aad2-3e9b010d4428",
+      "r2Key": "grudge-nexus/icons/genetics/grudge-8fd3e419-6e2d-43d7-aad2-3e9b010d4428.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/genetics/grudge-8fd3e419-6e2d-43d7-aad2-3e9b010d4428.png",
+      "localPath": "/icons/genetics/Icon11_31.png"
+    },
+    "Icon11_32.png": {
+      "uuid": "grudge-fd796c3b-035c-d727-b1d1-e65e80ede876",
+      "r2Key": "grudge-nexus/icons/genetics/grudge-fd796c3b-035c-d727-b1d1-e65e80ede876.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/genetics/grudge-fd796c3b-035c-d727-b1d1-e65e80ede876.png",
+      "localPath": "/icons/genetics/Icon11_32.png"
+    },
+    "Icon11_33.png": {
+      "uuid": "grudge-25bfa1ec-fd48-b256-bed2-5a8bcd658994",
+      "r2Key": "grudge-nexus/icons/genetics/grudge-25bfa1ec-fd48-b256-bed2-5a8bcd658994.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/genetics/grudge-25bfa1ec-fd48-b256-bed2-5a8bcd658994.png",
+      "localPath": "/icons/genetics/Icon11_33.png"
+    },
+    "Icon11_34.png": {
+      "uuid": "grudge-baa46e18-55a6-966f-bdf2-e5cddf6ec656",
+      "r2Key": "grudge-nexus/icons/genetics/grudge-baa46e18-55a6-966f-bdf2-e5cddf6ec656.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/genetics/grudge-baa46e18-55a6-966f-bdf2-e5cddf6ec656.png",
+      "localPath": "/icons/genetics/Icon11_34.png"
+    },
+    "Icon11_35.png": {
+      "uuid": "grudge-6771d844-93a5-9af7-cb9d-e7157c1a7483",
+      "r2Key": "grudge-nexus/icons/genetics/grudge-6771d844-93a5-9af7-cb9d-e7157c1a7483.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/genetics/grudge-6771d844-93a5-9af7-cb9d-e7157c1a7483.png",
+      "localPath": "/icons/genetics/Icon11_35.png"
+    },
+    "Icon11_36.png": {
+      "uuid": "grudge-bd715fb6-dd4c-162f-2d04-f3a5ea5b5d57",
+      "r2Key": "grudge-nexus/icons/genetics/grudge-bd715fb6-dd4c-162f-2d04-f3a5ea5b5d57.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/genetics/grudge-bd715fb6-dd4c-162f-2d04-f3a5ea5b5d57.png",
+      "localPath": "/icons/genetics/Icon11_36.png"
+    },
+    "Icon11_37.png": {
+      "uuid": "grudge-801d1587-cb77-bb64-ea32-e2a9bfd7011d",
+      "r2Key": "grudge-nexus/icons/genetics/grudge-801d1587-cb77-bb64-ea32-e2a9bfd7011d.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/genetics/grudge-801d1587-cb77-bb64-ea32-e2a9bfd7011d.png",
+      "localPath": "/icons/genetics/Icon11_37.png"
+    },
+    "Icon11_38.png": {
+      "uuid": "grudge-f8f2a071-97f5-d6c0-7509-42119bb057be",
+      "r2Key": "grudge-nexus/icons/genetics/grudge-f8f2a071-97f5-d6c0-7509-42119bb057be.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/genetics/grudge-f8f2a071-97f5-d6c0-7509-42119bb057be.png",
+      "localPath": "/icons/genetics/Icon11_38.png"
+    },
+    "Icon11_39.png": {
+      "uuid": "grudge-0f0f2752-4edd-356a-6f44-4bfc398d80bc",
+      "r2Key": "grudge-nexus/icons/genetics/grudge-0f0f2752-4edd-356a-6f44-4bfc398d80bc.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/genetics/grudge-0f0f2752-4edd-356a-6f44-4bfc398d80bc.png",
+      "localPath": "/icons/genetics/Icon11_39.png"
+    },
+    "Icon11_40.png": {
+      "uuid": "grudge-de80eec1-c8b5-76ce-c6ee-8e2fb94d1b39",
+      "r2Key": "grudge-nexus/icons/genetics/grudge-de80eec1-c8b5-76ce-c6ee-8e2fb94d1b39.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/genetics/grudge-de80eec1-c8b5-76ce-c6ee-8e2fb94d1b39.png",
+      "localPath": "/icons/genetics/Icon11_40.png"
+    }
+  },
+  "cyberpunk-food": {
+    "Icon3_01.png": {
+      "uuid": "grudge-a98c3f6d-0a51-fd35-a911-99eecb67b63c",
+      "r2Key": "grudge-nexus/icons/cyberpunk-food/grudge-a98c3f6d-0a51-fd35-a911-99eecb67b63c.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-food/grudge-a98c3f6d-0a51-fd35-a911-99eecb67b63c.png",
+      "localPath": "/icons/cyberpunk-food/Icon3_01.png"
+    },
+    "Icon3_02.png": {
+      "uuid": "grudge-eb879d87-6db7-ea5c-6a4c-db131039dad0",
+      "r2Key": "grudge-nexus/icons/cyberpunk-food/grudge-eb879d87-6db7-ea5c-6a4c-db131039dad0.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-food/grudge-eb879d87-6db7-ea5c-6a4c-db131039dad0.png",
+      "localPath": "/icons/cyberpunk-food/Icon3_02.png"
+    },
+    "Icon3_03.png": {
+      "uuid": "grudge-75807aff-8eb1-611a-737b-fea20767442b",
+      "r2Key": "grudge-nexus/icons/cyberpunk-food/grudge-75807aff-8eb1-611a-737b-fea20767442b.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-food/grudge-75807aff-8eb1-611a-737b-fea20767442b.png",
+      "localPath": "/icons/cyberpunk-food/Icon3_03.png"
+    },
+    "Icon3_04.png": {
+      "uuid": "grudge-8a645df2-f3c3-327f-e724-04d8fecd691d",
+      "r2Key": "grudge-nexus/icons/cyberpunk-food/grudge-8a645df2-f3c3-327f-e724-04d8fecd691d.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-food/grudge-8a645df2-f3c3-327f-e724-04d8fecd691d.png",
+      "localPath": "/icons/cyberpunk-food/Icon3_04.png"
+    },
+    "Icon3_05.png": {
+      "uuid": "grudge-7945778a-f51f-4fa6-0ad8-3026eff11814",
+      "r2Key": "grudge-nexus/icons/cyberpunk-food/grudge-7945778a-f51f-4fa6-0ad8-3026eff11814.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-food/grudge-7945778a-f51f-4fa6-0ad8-3026eff11814.png",
+      "localPath": "/icons/cyberpunk-food/Icon3_05.png"
+    },
+    "Icon3_06.png": {
+      "uuid": "grudge-98ed6c03-0990-57f0-320d-5e400e65a929",
+      "r2Key": "grudge-nexus/icons/cyberpunk-food/grudge-98ed6c03-0990-57f0-320d-5e400e65a929.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-food/grudge-98ed6c03-0990-57f0-320d-5e400e65a929.png",
+      "localPath": "/icons/cyberpunk-food/Icon3_06.png"
+    },
+    "Icon3_07.png": {
+      "uuid": "grudge-1303b82e-63d6-5df6-cc09-c5515450f670",
+      "r2Key": "grudge-nexus/icons/cyberpunk-food/grudge-1303b82e-63d6-5df6-cc09-c5515450f670.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-food/grudge-1303b82e-63d6-5df6-cc09-c5515450f670.png",
+      "localPath": "/icons/cyberpunk-food/Icon3_07.png"
+    },
+    "Icon3_08.png": {
+      "uuid": "grudge-09818518-2cb8-d503-395a-75efc93ccfbd",
+      "r2Key": "grudge-nexus/icons/cyberpunk-food/grudge-09818518-2cb8-d503-395a-75efc93ccfbd.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-food/grudge-09818518-2cb8-d503-395a-75efc93ccfbd.png",
+      "localPath": "/icons/cyberpunk-food/Icon3_08.png"
+    },
+    "Icon3_09.png": {
+      "uuid": "grudge-e0ac4099-1e77-b134-f00f-95b5ded85114",
+      "r2Key": "grudge-nexus/icons/cyberpunk-food/grudge-e0ac4099-1e77-b134-f00f-95b5ded85114.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-food/grudge-e0ac4099-1e77-b134-f00f-95b5ded85114.png",
+      "localPath": "/icons/cyberpunk-food/Icon3_09.png"
+    },
+    "Icon3_10.png": {
+      "uuid": "grudge-cfb79142-7df2-b497-e584-5a1c2cc47f05",
+      "r2Key": "grudge-nexus/icons/cyberpunk-food/grudge-cfb79142-7df2-b497-e584-5a1c2cc47f05.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-food/grudge-cfb79142-7df2-b497-e584-5a1c2cc47f05.png",
+      "localPath": "/icons/cyberpunk-food/Icon3_10.png"
+    },
+    "Icon3_11.png": {
+      "uuid": "grudge-cfc5d2bd-7cc7-04e4-20d7-d585da8e4fac",
+      "r2Key": "grudge-nexus/icons/cyberpunk-food/grudge-cfc5d2bd-7cc7-04e4-20d7-d585da8e4fac.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-food/grudge-cfc5d2bd-7cc7-04e4-20d7-d585da8e4fac.png",
+      "localPath": "/icons/cyberpunk-food/Icon3_11.png"
+    },
+    "Icon3_12.png": {
+      "uuid": "grudge-830eaa0b-1ba2-f809-c64f-94243eec413b",
+      "r2Key": "grudge-nexus/icons/cyberpunk-food/grudge-830eaa0b-1ba2-f809-c64f-94243eec413b.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-food/grudge-830eaa0b-1ba2-f809-c64f-94243eec413b.png",
+      "localPath": "/icons/cyberpunk-food/Icon3_12.png"
+    },
+    "Icon3_13.png": {
+      "uuid": "grudge-81b06daa-6266-0853-036c-7afa8a11a8a2",
+      "r2Key": "grudge-nexus/icons/cyberpunk-food/grudge-81b06daa-6266-0853-036c-7afa8a11a8a2.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-food/grudge-81b06daa-6266-0853-036c-7afa8a11a8a2.png",
+      "localPath": "/icons/cyberpunk-food/Icon3_13.png"
+    },
+    "Icon3_14.png": {
+      "uuid": "grudge-db1ba206-c67a-0864-9b1b-593482bbafb6",
+      "r2Key": "grudge-nexus/icons/cyberpunk-food/grudge-db1ba206-c67a-0864-9b1b-593482bbafb6.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-food/grudge-db1ba206-c67a-0864-9b1b-593482bbafb6.png",
+      "localPath": "/icons/cyberpunk-food/Icon3_14.png"
+    },
+    "Icon3_15.png": {
+      "uuid": "grudge-929cfebd-a694-c6ca-42a8-b4a55bf27982",
+      "r2Key": "grudge-nexus/icons/cyberpunk-food/grudge-929cfebd-a694-c6ca-42a8-b4a55bf27982.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-food/grudge-929cfebd-a694-c6ca-42a8-b4a55bf27982.png",
+      "localPath": "/icons/cyberpunk-food/Icon3_15.png"
+    },
+    "Icon3_16.png": {
+      "uuid": "grudge-636977c9-9e60-4ea6-7fa2-2fa2cb07d419",
+      "r2Key": "grudge-nexus/icons/cyberpunk-food/grudge-636977c9-9e60-4ea6-7fa2-2fa2cb07d419.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-food/grudge-636977c9-9e60-4ea6-7fa2-2fa2cb07d419.png",
+      "localPath": "/icons/cyberpunk-food/Icon3_16.png"
+    },
+    "Icon3_17.png": {
+      "uuid": "grudge-edd5ec58-8580-6a69-c3ba-ea3faeafb741",
+      "r2Key": "grudge-nexus/icons/cyberpunk-food/grudge-edd5ec58-8580-6a69-c3ba-ea3faeafb741.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-food/grudge-edd5ec58-8580-6a69-c3ba-ea3faeafb741.png",
+      "localPath": "/icons/cyberpunk-food/Icon3_17.png"
+    },
+    "Icon3_18.png": {
+      "uuid": "grudge-53c99662-126c-7da6-7dfb-158f3c7d4a50",
+      "r2Key": "grudge-nexus/icons/cyberpunk-food/grudge-53c99662-126c-7da6-7dfb-158f3c7d4a50.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-food/grudge-53c99662-126c-7da6-7dfb-158f3c7d4a50.png",
+      "localPath": "/icons/cyberpunk-food/Icon3_18.png"
+    },
+    "Icon3_19.png": {
+      "uuid": "grudge-acb49f65-d0a4-050d-c884-ea34aa42ced0",
+      "r2Key": "grudge-nexus/icons/cyberpunk-food/grudge-acb49f65-d0a4-050d-c884-ea34aa42ced0.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-food/grudge-acb49f65-d0a4-050d-c884-ea34aa42ced0.png",
+      "localPath": "/icons/cyberpunk-food/Icon3_19.png"
+    },
+    "Icon3_20.png": {
+      "uuid": "grudge-84828ef7-4514-2a7b-2add-da3f33813380",
+      "r2Key": "grudge-nexus/icons/cyberpunk-food/grudge-84828ef7-4514-2a7b-2add-da3f33813380.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-food/grudge-84828ef7-4514-2a7b-2add-da3f33813380.png",
+      "localPath": "/icons/cyberpunk-food/Icon3_20.png"
+    },
+    "Icon3_21.png": {
+      "uuid": "grudge-562eacca-55a3-27cc-6f45-79eb43d345c2",
+      "r2Key": "grudge-nexus/icons/cyberpunk-food/grudge-562eacca-55a3-27cc-6f45-79eb43d345c2.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-food/grudge-562eacca-55a3-27cc-6f45-79eb43d345c2.png",
+      "localPath": "/icons/cyberpunk-food/Icon3_21.png"
+    },
+    "Icon3_22.png": {
+      "uuid": "grudge-4c7b16dc-391f-2b3e-a12e-b8d7e1090483",
+      "r2Key": "grudge-nexus/icons/cyberpunk-food/grudge-4c7b16dc-391f-2b3e-a12e-b8d7e1090483.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-food/grudge-4c7b16dc-391f-2b3e-a12e-b8d7e1090483.png",
+      "localPath": "/icons/cyberpunk-food/Icon3_22.png"
+    },
+    "Icon3_23.png": {
+      "uuid": "grudge-ed365644-ea16-943f-c6f8-25d952682244",
+      "r2Key": "grudge-nexus/icons/cyberpunk-food/grudge-ed365644-ea16-943f-c6f8-25d952682244.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-food/grudge-ed365644-ea16-943f-c6f8-25d952682244.png",
+      "localPath": "/icons/cyberpunk-food/Icon3_23.png"
+    },
+    "Icon3_24.png": {
+      "uuid": "grudge-ccff1a17-dd25-e94d-3843-e9eb2581cf91",
+      "r2Key": "grudge-nexus/icons/cyberpunk-food/grudge-ccff1a17-dd25-e94d-3843-e9eb2581cf91.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-food/grudge-ccff1a17-dd25-e94d-3843-e9eb2581cf91.png",
+      "localPath": "/icons/cyberpunk-food/Icon3_24.png"
+    },
+    "Icon3_25.png": {
+      "uuid": "grudge-265ca6a7-7c8d-788a-8c4c-b0827fc36ece",
+      "r2Key": "grudge-nexus/icons/cyberpunk-food/grudge-265ca6a7-7c8d-788a-8c4c-b0827fc36ece.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-food/grudge-265ca6a7-7c8d-788a-8c4c-b0827fc36ece.png",
+      "localPath": "/icons/cyberpunk-food/Icon3_25.png"
+    },
+    "Icon3_26.png": {
+      "uuid": "grudge-eb3386aa-2dfa-4fbc-eada-2efaf8253b61",
+      "r2Key": "grudge-nexus/icons/cyberpunk-food/grudge-eb3386aa-2dfa-4fbc-eada-2efaf8253b61.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-food/grudge-eb3386aa-2dfa-4fbc-eada-2efaf8253b61.png",
+      "localPath": "/icons/cyberpunk-food/Icon3_26.png"
+    },
+    "Icon3_27.png": {
+      "uuid": "grudge-b6c50bcd-7667-f54e-9a18-e1afb36daad0",
+      "r2Key": "grudge-nexus/icons/cyberpunk-food/grudge-b6c50bcd-7667-f54e-9a18-e1afb36daad0.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-food/grudge-b6c50bcd-7667-f54e-9a18-e1afb36daad0.png",
+      "localPath": "/icons/cyberpunk-food/Icon3_27.png"
+    },
+    "Icon3_28.png": {
+      "uuid": "grudge-155ac3ef-2cc1-6c4b-bb4b-0f0c7d55cd00",
+      "r2Key": "grudge-nexus/icons/cyberpunk-food/grudge-155ac3ef-2cc1-6c4b-bb4b-0f0c7d55cd00.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-food/grudge-155ac3ef-2cc1-6c4b-bb4b-0f0c7d55cd00.png",
+      "localPath": "/icons/cyberpunk-food/Icon3_28.png"
+    },
+    "Icon3_29.png": {
+      "uuid": "grudge-6e963488-baaf-0c0b-d858-f62c4b15872a",
+      "r2Key": "grudge-nexus/icons/cyberpunk-food/grudge-6e963488-baaf-0c0b-d858-f62c4b15872a.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-food/grudge-6e963488-baaf-0c0b-d858-f62c4b15872a.png",
+      "localPath": "/icons/cyberpunk-food/Icon3_29.png"
+    },
+    "Icon3_30.png": {
+      "uuid": "grudge-f4b9bc6c-1fcf-6b0e-c237-0e1d76714167",
+      "r2Key": "grudge-nexus/icons/cyberpunk-food/grudge-f4b9bc6c-1fcf-6b0e-c237-0e1d76714167.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-food/grudge-f4b9bc6c-1fcf-6b0e-c237-0e1d76714167.png",
+      "localPath": "/icons/cyberpunk-food/Icon3_30.png"
+    },
+    "Icon3_31.png": {
+      "uuid": "grudge-01c64507-f4f0-43a7-d2cb-8649863589f0",
+      "r2Key": "grudge-nexus/icons/cyberpunk-food/grudge-01c64507-f4f0-43a7-d2cb-8649863589f0.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-food/grudge-01c64507-f4f0-43a7-d2cb-8649863589f0.png",
+      "localPath": "/icons/cyberpunk-food/Icon3_31.png"
+    },
+    "Icon3_32.png": {
+      "uuid": "grudge-321ac4fa-d8a1-8c8e-4d78-b02fc902d894",
+      "r2Key": "grudge-nexus/icons/cyberpunk-food/grudge-321ac4fa-d8a1-8c8e-4d78-b02fc902d894.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-food/grudge-321ac4fa-d8a1-8c8e-4d78-b02fc902d894.png",
+      "localPath": "/icons/cyberpunk-food/Icon3_32.png"
+    },
+    "Icon3_33.png": {
+      "uuid": "grudge-eba2a0ac-b57c-a1b2-f811-53e624eadb89",
+      "r2Key": "grudge-nexus/icons/cyberpunk-food/grudge-eba2a0ac-b57c-a1b2-f811-53e624eadb89.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-food/grudge-eba2a0ac-b57c-a1b2-f811-53e624eadb89.png",
+      "localPath": "/icons/cyberpunk-food/Icon3_33.png"
+    },
+    "Icon3_34.png": {
+      "uuid": "grudge-dec1bb5c-af1f-60f1-0621-23ad26fb5850",
+      "r2Key": "grudge-nexus/icons/cyberpunk-food/grudge-dec1bb5c-af1f-60f1-0621-23ad26fb5850.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-food/grudge-dec1bb5c-af1f-60f1-0621-23ad26fb5850.png",
+      "localPath": "/icons/cyberpunk-food/Icon3_34.png"
+    },
+    "Icon3_35.png": {
+      "uuid": "grudge-83d81a57-e309-037c-83c3-d57eb19f943f",
+      "r2Key": "grudge-nexus/icons/cyberpunk-food/grudge-83d81a57-e309-037c-83c3-d57eb19f943f.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-food/grudge-83d81a57-e309-037c-83c3-d57eb19f943f.png",
+      "localPath": "/icons/cyberpunk-food/Icon3_35.png"
+    },
+    "Icon3_36.png": {
+      "uuid": "grudge-29eb7abd-e867-11e1-ecbc-b8180cee9f69",
+      "r2Key": "grudge-nexus/icons/cyberpunk-food/grudge-29eb7abd-e867-11e1-ecbc-b8180cee9f69.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-food/grudge-29eb7abd-e867-11e1-ecbc-b8180cee9f69.png",
+      "localPath": "/icons/cyberpunk-food/Icon3_36.png"
+    },
+    "Icon3_37.png": {
+      "uuid": "grudge-452e60cb-ec72-2e0c-365e-6481a8eff327",
+      "r2Key": "grudge-nexus/icons/cyberpunk-food/grudge-452e60cb-ec72-2e0c-365e-6481a8eff327.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-food/grudge-452e60cb-ec72-2e0c-365e-6481a8eff327.png",
+      "localPath": "/icons/cyberpunk-food/Icon3_37.png"
+    },
+    "Icon3_38.png": {
+      "uuid": "grudge-3d7dc52b-74de-c8ed-e2f1-e033f246844f",
+      "r2Key": "grudge-nexus/icons/cyberpunk-food/grudge-3d7dc52b-74de-c8ed-e2f1-e033f246844f.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-food/grudge-3d7dc52b-74de-c8ed-e2f1-e033f246844f.png",
+      "localPath": "/icons/cyberpunk-food/Icon3_38.png"
+    },
+    "Icon3_39.png": {
+      "uuid": "grudge-809f9064-de2f-bcf1-3e44-e192c6dcfb50",
+      "r2Key": "grudge-nexus/icons/cyberpunk-food/grudge-809f9064-de2f-bcf1-3e44-e192c6dcfb50.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-food/grudge-809f9064-de2f-bcf1-3e44-e192c6dcfb50.png",
+      "localPath": "/icons/cyberpunk-food/Icon3_39.png"
+    },
+    "Icon3_40.png": {
+      "uuid": "grudge-8e298a48-fd2f-f686-eca7-114b193fa4e7",
+      "r2Key": "grudge-nexus/icons/cyberpunk-food/grudge-8e298a48-fd2f-f686-eca7-114b193fa4e7.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-food/grudge-8e298a48-fd2f-f686-eca7-114b193fa4e7.png",
+      "localPath": "/icons/cyberpunk-food/Icon3_40.png"
+    },
+    "Iconset3.png": {
+      "uuid": "grudge-6f216148-1d44-2b76-857b-81a69a1bbf17",
+      "r2Key": "grudge-nexus/icons/cyberpunk-food/grudge-6f216148-1d44-2b76-857b-81a69a1bbf17.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-food/grudge-6f216148-1d44-2b76-857b-81a69a1bbf17.png",
+      "localPath": "/icons/cyberpunk-food/Iconset3.png"
+    }
+  },
+  "cyberpunk-weapons": {
+    "Icon1_01.png": {
+      "uuid": "grudge-00cff7a5-e934-1a2a-0be0-0d50d55e89c2",
+      "r2Key": "grudge-nexus/icons/cyberpunk-weapons/grudge-00cff7a5-e934-1a2a-0be0-0d50d55e89c2.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-weapons/grudge-00cff7a5-e934-1a2a-0be0-0d50d55e89c2.png",
+      "localPath": "/icons/cyberpunk-weapons/Icon1_01.png"
+    },
+    "Icon1_02.png": {
+      "uuid": "grudge-1e571c18-e9d4-3a53-71f8-9ef38d688b27",
+      "r2Key": "grudge-nexus/icons/cyberpunk-weapons/grudge-1e571c18-e9d4-3a53-71f8-9ef38d688b27.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-weapons/grudge-1e571c18-e9d4-3a53-71f8-9ef38d688b27.png",
+      "localPath": "/icons/cyberpunk-weapons/Icon1_02.png"
+    },
+    "Icon1_03.png": {
+      "uuid": "grudge-f60e5bf5-fb32-0271-a7e0-5efe85b67e33",
+      "r2Key": "grudge-nexus/icons/cyberpunk-weapons/grudge-f60e5bf5-fb32-0271-a7e0-5efe85b67e33.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-weapons/grudge-f60e5bf5-fb32-0271-a7e0-5efe85b67e33.png",
+      "localPath": "/icons/cyberpunk-weapons/Icon1_03.png"
+    },
+    "Icon1_04.png": {
+      "uuid": "grudge-45f22837-9148-2ecd-6ea3-bb00acf0c177",
+      "r2Key": "grudge-nexus/icons/cyberpunk-weapons/grudge-45f22837-9148-2ecd-6ea3-bb00acf0c177.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-weapons/grudge-45f22837-9148-2ecd-6ea3-bb00acf0c177.png",
+      "localPath": "/icons/cyberpunk-weapons/Icon1_04.png"
+    },
+    "Icon1_05.png": {
+      "uuid": "grudge-fca63105-9db7-5028-6fa0-8a89e1426b7b",
+      "r2Key": "grudge-nexus/icons/cyberpunk-weapons/grudge-fca63105-9db7-5028-6fa0-8a89e1426b7b.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-weapons/grudge-fca63105-9db7-5028-6fa0-8a89e1426b7b.png",
+      "localPath": "/icons/cyberpunk-weapons/Icon1_05.png"
+    },
+    "Icon1_06.png": {
+      "uuid": "grudge-bbabe5d1-a3ad-ace8-fa67-7eb9646ba564",
+      "r2Key": "grudge-nexus/icons/cyberpunk-weapons/grudge-bbabe5d1-a3ad-ace8-fa67-7eb9646ba564.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-weapons/grudge-bbabe5d1-a3ad-ace8-fa67-7eb9646ba564.png",
+      "localPath": "/icons/cyberpunk-weapons/Icon1_06.png"
+    },
+    "Icon1_07.png": {
+      "uuid": "grudge-4fecf75d-7cc0-0f5c-7a60-6b5f286e5ab7",
+      "r2Key": "grudge-nexus/icons/cyberpunk-weapons/grudge-4fecf75d-7cc0-0f5c-7a60-6b5f286e5ab7.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-weapons/grudge-4fecf75d-7cc0-0f5c-7a60-6b5f286e5ab7.png",
+      "localPath": "/icons/cyberpunk-weapons/Icon1_07.png"
+    },
+    "Icon1_08.png": {
+      "uuid": "grudge-15791a4a-5492-25cc-432a-05119ef9410c",
+      "r2Key": "grudge-nexus/icons/cyberpunk-weapons/grudge-15791a4a-5492-25cc-432a-05119ef9410c.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-weapons/grudge-15791a4a-5492-25cc-432a-05119ef9410c.png",
+      "localPath": "/icons/cyberpunk-weapons/Icon1_08.png"
+    },
+    "Icon1_09.png": {
+      "uuid": "grudge-19a8b999-eac0-9c37-1977-02d5debdaa44",
+      "r2Key": "grudge-nexus/icons/cyberpunk-weapons/grudge-19a8b999-eac0-9c37-1977-02d5debdaa44.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-weapons/grudge-19a8b999-eac0-9c37-1977-02d5debdaa44.png",
+      "localPath": "/icons/cyberpunk-weapons/Icon1_09.png"
+    },
+    "Icon1_10.png": {
+      "uuid": "grudge-db63a7c8-e2f9-bdc6-4304-5f8b9dd985f9",
+      "r2Key": "grudge-nexus/icons/cyberpunk-weapons/grudge-db63a7c8-e2f9-bdc6-4304-5f8b9dd985f9.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-weapons/grudge-db63a7c8-e2f9-bdc6-4304-5f8b9dd985f9.png",
+      "localPath": "/icons/cyberpunk-weapons/Icon1_10.png"
+    },
+    "Icon1_11.png": {
+      "uuid": "grudge-d34ae3a2-a155-625f-ced6-fb52ef3cc922",
+      "r2Key": "grudge-nexus/icons/cyberpunk-weapons/grudge-d34ae3a2-a155-625f-ced6-fb52ef3cc922.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-weapons/grudge-d34ae3a2-a155-625f-ced6-fb52ef3cc922.png",
+      "localPath": "/icons/cyberpunk-weapons/Icon1_11.png"
+    },
+    "Icon1_12.png": {
+      "uuid": "grudge-736b0799-4be6-db14-6cd9-7ad584836510",
+      "r2Key": "grudge-nexus/icons/cyberpunk-weapons/grudge-736b0799-4be6-db14-6cd9-7ad584836510.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-weapons/grudge-736b0799-4be6-db14-6cd9-7ad584836510.png",
+      "localPath": "/icons/cyberpunk-weapons/Icon1_12.png"
+    },
+    "Icon1_13.png": {
+      "uuid": "grudge-ab259573-a61e-0159-4854-942cbc73c96b",
+      "r2Key": "grudge-nexus/icons/cyberpunk-weapons/grudge-ab259573-a61e-0159-4854-942cbc73c96b.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-weapons/grudge-ab259573-a61e-0159-4854-942cbc73c96b.png",
+      "localPath": "/icons/cyberpunk-weapons/Icon1_13.png"
+    },
+    "Icon1_14.png": {
+      "uuid": "grudge-f461d66c-e7e4-4092-09a1-e1e1a54bdccd",
+      "r2Key": "grudge-nexus/icons/cyberpunk-weapons/grudge-f461d66c-e7e4-4092-09a1-e1e1a54bdccd.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-weapons/grudge-f461d66c-e7e4-4092-09a1-e1e1a54bdccd.png",
+      "localPath": "/icons/cyberpunk-weapons/Icon1_14.png"
+    },
+    "Icon1_15.png": {
+      "uuid": "grudge-8696bdec-f41c-c4e3-026e-1c23ba36952d",
+      "r2Key": "grudge-nexus/icons/cyberpunk-weapons/grudge-8696bdec-f41c-c4e3-026e-1c23ba36952d.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-weapons/grudge-8696bdec-f41c-c4e3-026e-1c23ba36952d.png",
+      "localPath": "/icons/cyberpunk-weapons/Icon1_15.png"
+    },
+    "Icon1_16.png": {
+      "uuid": "grudge-124c9b1a-8740-1e6d-d4e0-e59a74aae531",
+      "r2Key": "grudge-nexus/icons/cyberpunk-weapons/grudge-124c9b1a-8740-1e6d-d4e0-e59a74aae531.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-weapons/grudge-124c9b1a-8740-1e6d-d4e0-e59a74aae531.png",
+      "localPath": "/icons/cyberpunk-weapons/Icon1_16.png"
+    },
+    "Icon1_17.png": {
+      "uuid": "grudge-5911436e-b0c8-0d18-91f5-b2e4ae6a21ab",
+      "r2Key": "grudge-nexus/icons/cyberpunk-weapons/grudge-5911436e-b0c8-0d18-91f5-b2e4ae6a21ab.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-weapons/grudge-5911436e-b0c8-0d18-91f5-b2e4ae6a21ab.png",
+      "localPath": "/icons/cyberpunk-weapons/Icon1_17.png"
+    },
+    "Icon1_18.png": {
+      "uuid": "grudge-9b438802-3f75-d87c-58e3-7521302ccc48",
+      "r2Key": "grudge-nexus/icons/cyberpunk-weapons/grudge-9b438802-3f75-d87c-58e3-7521302ccc48.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-weapons/grudge-9b438802-3f75-d87c-58e3-7521302ccc48.png",
+      "localPath": "/icons/cyberpunk-weapons/Icon1_18.png"
+    },
+    "Icon1_19.png": {
+      "uuid": "grudge-251de989-ad33-5284-5b7d-3d22aacb5643",
+      "r2Key": "grudge-nexus/icons/cyberpunk-weapons/grudge-251de989-ad33-5284-5b7d-3d22aacb5643.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-weapons/grudge-251de989-ad33-5284-5b7d-3d22aacb5643.png",
+      "localPath": "/icons/cyberpunk-weapons/Icon1_19.png"
+    },
+    "Icon1_20.png": {
+      "uuid": "grudge-d57f828d-428e-d6d2-6ce2-75212abf138b",
+      "r2Key": "grudge-nexus/icons/cyberpunk-weapons/grudge-d57f828d-428e-d6d2-6ce2-75212abf138b.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-weapons/grudge-d57f828d-428e-d6d2-6ce2-75212abf138b.png",
+      "localPath": "/icons/cyberpunk-weapons/Icon1_20.png"
+    },
+    "Icon1_21.png": {
+      "uuid": "grudge-1db795a9-bdc3-efb8-4b04-d730033f1741",
+      "r2Key": "grudge-nexus/icons/cyberpunk-weapons/grudge-1db795a9-bdc3-efb8-4b04-d730033f1741.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-weapons/grudge-1db795a9-bdc3-efb8-4b04-d730033f1741.png",
+      "localPath": "/icons/cyberpunk-weapons/Icon1_21.png"
+    },
+    "Icon1_22.png": {
+      "uuid": "grudge-69a80f33-3456-4a14-cd2e-66f0faca99cd",
+      "r2Key": "grudge-nexus/icons/cyberpunk-weapons/grudge-69a80f33-3456-4a14-cd2e-66f0faca99cd.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-weapons/grudge-69a80f33-3456-4a14-cd2e-66f0faca99cd.png",
+      "localPath": "/icons/cyberpunk-weapons/Icon1_22.png"
+    },
+    "Icon1_23.png": {
+      "uuid": "grudge-f700941d-9f4f-9a8c-eae8-4ff85b246d5f",
+      "r2Key": "grudge-nexus/icons/cyberpunk-weapons/grudge-f700941d-9f4f-9a8c-eae8-4ff85b246d5f.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-weapons/grudge-f700941d-9f4f-9a8c-eae8-4ff85b246d5f.png",
+      "localPath": "/icons/cyberpunk-weapons/Icon1_23.png"
+    },
+    "Icon1_24.png": {
+      "uuid": "grudge-878a55b9-e1b0-89eb-cdde-a84fcf2d96b2",
+      "r2Key": "grudge-nexus/icons/cyberpunk-weapons/grudge-878a55b9-e1b0-89eb-cdde-a84fcf2d96b2.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-weapons/grudge-878a55b9-e1b0-89eb-cdde-a84fcf2d96b2.png",
+      "localPath": "/icons/cyberpunk-weapons/Icon1_24.png"
+    },
+    "Icon1_25.png": {
+      "uuid": "grudge-6c623f6d-777c-9859-1167-a70f0d4bc5df",
+      "r2Key": "grudge-nexus/icons/cyberpunk-weapons/grudge-6c623f6d-777c-9859-1167-a70f0d4bc5df.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-weapons/grudge-6c623f6d-777c-9859-1167-a70f0d4bc5df.png",
+      "localPath": "/icons/cyberpunk-weapons/Icon1_25.png"
+    },
+    "Icon1_26.png": {
+      "uuid": "grudge-e9e18790-4cfc-457a-b6fb-e12b1240cd2f",
+      "r2Key": "grudge-nexus/icons/cyberpunk-weapons/grudge-e9e18790-4cfc-457a-b6fb-e12b1240cd2f.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-weapons/grudge-e9e18790-4cfc-457a-b6fb-e12b1240cd2f.png",
+      "localPath": "/icons/cyberpunk-weapons/Icon1_26.png"
+    },
+    "Icon1_27.png": {
+      "uuid": "grudge-89a3c1ec-f171-bacd-be59-17781ccef913",
+      "r2Key": "grudge-nexus/icons/cyberpunk-weapons/grudge-89a3c1ec-f171-bacd-be59-17781ccef913.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-weapons/grudge-89a3c1ec-f171-bacd-be59-17781ccef913.png",
+      "localPath": "/icons/cyberpunk-weapons/Icon1_27.png"
+    },
+    "Icon1_28.png": {
+      "uuid": "grudge-92505ce7-d720-974b-e867-573e657f28b0",
+      "r2Key": "grudge-nexus/icons/cyberpunk-weapons/grudge-92505ce7-d720-974b-e867-573e657f28b0.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-weapons/grudge-92505ce7-d720-974b-e867-573e657f28b0.png",
+      "localPath": "/icons/cyberpunk-weapons/Icon1_28.png"
+    },
+    "Icon1_29.png": {
+      "uuid": "grudge-fddde67c-a598-3be3-3f10-fb63f2bf2d69",
+      "r2Key": "grudge-nexus/icons/cyberpunk-weapons/grudge-fddde67c-a598-3be3-3f10-fb63f2bf2d69.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-weapons/grudge-fddde67c-a598-3be3-3f10-fb63f2bf2d69.png",
+      "localPath": "/icons/cyberpunk-weapons/Icon1_29.png"
+    },
+    "Icon1_30.png": {
+      "uuid": "grudge-4cdfc90b-2bb5-4932-14ae-520aa2b933ef",
+      "r2Key": "grudge-nexus/icons/cyberpunk-weapons/grudge-4cdfc90b-2bb5-4932-14ae-520aa2b933ef.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-weapons/grudge-4cdfc90b-2bb5-4932-14ae-520aa2b933ef.png",
+      "localPath": "/icons/cyberpunk-weapons/Icon1_30.png"
+    },
+    "Icon1_31.png": {
+      "uuid": "grudge-a58803b1-c1be-c484-a281-41f6644cae78",
+      "r2Key": "grudge-nexus/icons/cyberpunk-weapons/grudge-a58803b1-c1be-c484-a281-41f6644cae78.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-weapons/grudge-a58803b1-c1be-c484-a281-41f6644cae78.png",
+      "localPath": "/icons/cyberpunk-weapons/Icon1_31.png"
+    },
+    "Icon1_32.png": {
+      "uuid": "grudge-a60554c6-c6cc-89ea-b8fe-5e8478145a98",
+      "r2Key": "grudge-nexus/icons/cyberpunk-weapons/grudge-a60554c6-c6cc-89ea-b8fe-5e8478145a98.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-weapons/grudge-a60554c6-c6cc-89ea-b8fe-5e8478145a98.png",
+      "localPath": "/icons/cyberpunk-weapons/Icon1_32.png"
+    },
+    "Icon1_33.png": {
+      "uuid": "grudge-06886b7c-7f92-5c07-3517-bbcb8d9612fa",
+      "r2Key": "grudge-nexus/icons/cyberpunk-weapons/grudge-06886b7c-7f92-5c07-3517-bbcb8d9612fa.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-weapons/grudge-06886b7c-7f92-5c07-3517-bbcb8d9612fa.png",
+      "localPath": "/icons/cyberpunk-weapons/Icon1_33.png"
+    },
+    "Icon1_34.png": {
+      "uuid": "grudge-0e22edf6-3a13-cc19-80f1-d5576b0181c9",
+      "r2Key": "grudge-nexus/icons/cyberpunk-weapons/grudge-0e22edf6-3a13-cc19-80f1-d5576b0181c9.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-weapons/grudge-0e22edf6-3a13-cc19-80f1-d5576b0181c9.png",
+      "localPath": "/icons/cyberpunk-weapons/Icon1_34.png"
+    },
+    "Icon1_35.png": {
+      "uuid": "grudge-ea62954d-f42f-e588-3b70-45825655ac45",
+      "r2Key": "grudge-nexus/icons/cyberpunk-weapons/grudge-ea62954d-f42f-e588-3b70-45825655ac45.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-weapons/grudge-ea62954d-f42f-e588-3b70-45825655ac45.png",
+      "localPath": "/icons/cyberpunk-weapons/Icon1_35.png"
+    },
+    "Icon1_36.png": {
+      "uuid": "grudge-4f3833ea-db8d-c604-cb7c-4e398788f3c9",
+      "r2Key": "grudge-nexus/icons/cyberpunk-weapons/grudge-4f3833ea-db8d-c604-cb7c-4e398788f3c9.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-weapons/grudge-4f3833ea-db8d-c604-cb7c-4e398788f3c9.png",
+      "localPath": "/icons/cyberpunk-weapons/Icon1_36.png"
+    },
+    "Icon1_37.png": {
+      "uuid": "grudge-2648eac9-81d5-5b72-f546-45fc850f2653",
+      "r2Key": "grudge-nexus/icons/cyberpunk-weapons/grudge-2648eac9-81d5-5b72-f546-45fc850f2653.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-weapons/grudge-2648eac9-81d5-5b72-f546-45fc850f2653.png",
+      "localPath": "/icons/cyberpunk-weapons/Icon1_37.png"
+    },
+    "Icon1_38.png": {
+      "uuid": "grudge-55df230c-ff56-b613-da34-9b9158ffdc21",
+      "r2Key": "grudge-nexus/icons/cyberpunk-weapons/grudge-55df230c-ff56-b613-da34-9b9158ffdc21.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-weapons/grudge-55df230c-ff56-b613-da34-9b9158ffdc21.png",
+      "localPath": "/icons/cyberpunk-weapons/Icon1_38.png"
+    },
+    "Icon1_39.png": {
+      "uuid": "grudge-5ae5bcb2-bece-ef1f-fe37-873e14887331",
+      "r2Key": "grudge-nexus/icons/cyberpunk-weapons/grudge-5ae5bcb2-bece-ef1f-fe37-873e14887331.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-weapons/grudge-5ae5bcb2-bece-ef1f-fe37-873e14887331.png",
+      "localPath": "/icons/cyberpunk-weapons/Icon1_39.png"
+    },
+    "Icon1_40.png": {
+      "uuid": "grudge-e356dacf-57fd-c715-ad31-d2eba6ff4d8d",
+      "r2Key": "grudge-nexus/icons/cyberpunk-weapons/grudge-e356dacf-57fd-c715-ad31-d2eba6ff4d8d.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-weapons/grudge-e356dacf-57fd-c715-ad31-d2eba6ff4d8d.png",
+      "localPath": "/icons/cyberpunk-weapons/Icon1_40.png"
+    },
+    "Iconset1.png": {
+      "uuid": "grudge-b4c86eda-b641-c595-090c-51c08cc9c25e",
+      "r2Key": "grudge-nexus/icons/cyberpunk-weapons/grudge-b4c86eda-b641-c595-090c-51c08cc9c25e.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-weapons/grudge-b4c86eda-b641-c595-090c-51c08cc9c25e.png",
+      "localPath": "/icons/cyberpunk-weapons/Iconset1.png"
+    }
+  },
+  "cyberpunk-artifacts": {
+    "1.png": {
+      "uuid": "grudge-7d982bdc-61bc-b739-cdf8-6a1e56cf4ef6",
+      "r2Key": "grudge-nexus/icons/cyberpunk-artifacts/grudge-7d982bdc-61bc-b739-cdf8-6a1e56cf4ef6.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-artifacts/grudge-7d982bdc-61bc-b739-cdf8-6a1e56cf4ef6.png",
+      "localPath": "/icons/cyberpunk-artifacts/1.png"
+    },
+    "10.png": {
+      "uuid": "grudge-a3b6118b-3201-774a-f1d8-02913b2fb550",
+      "r2Key": "grudge-nexus/icons/cyberpunk-artifacts/grudge-a3b6118b-3201-774a-f1d8-02913b2fb550.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-artifacts/grudge-a3b6118b-3201-774a-f1d8-02913b2fb550.png",
+      "localPath": "/icons/cyberpunk-artifacts/10.png"
+    },
+    "11.png": {
+      "uuid": "grudge-b782e331-0dcd-3564-3bff-cb9fcc0296b2",
+      "r2Key": "grudge-nexus/icons/cyberpunk-artifacts/grudge-b782e331-0dcd-3564-3bff-cb9fcc0296b2.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-artifacts/grudge-b782e331-0dcd-3564-3bff-cb9fcc0296b2.png",
+      "localPath": "/icons/cyberpunk-artifacts/11.png"
+    },
+    "12.png": {
+      "uuid": "grudge-36d900d0-021c-7cc3-7659-79124a92ac26",
+      "r2Key": "grudge-nexus/icons/cyberpunk-artifacts/grudge-36d900d0-021c-7cc3-7659-79124a92ac26.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-artifacts/grudge-36d900d0-021c-7cc3-7659-79124a92ac26.png",
+      "localPath": "/icons/cyberpunk-artifacts/12.png"
+    },
+    "13.png": {
+      "uuid": "grudge-054ac4a8-c1c1-c053-ee45-cac2f6bc19f9",
+      "r2Key": "grudge-nexus/icons/cyberpunk-artifacts/grudge-054ac4a8-c1c1-c053-ee45-cac2f6bc19f9.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-artifacts/grudge-054ac4a8-c1c1-c053-ee45-cac2f6bc19f9.png",
+      "localPath": "/icons/cyberpunk-artifacts/13.png"
+    },
+    "14.png": {
+      "uuid": "grudge-a247c144-6eb4-7c4a-59ec-fe462f3a1c4b",
+      "r2Key": "grudge-nexus/icons/cyberpunk-artifacts/grudge-a247c144-6eb4-7c4a-59ec-fe462f3a1c4b.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-artifacts/grudge-a247c144-6eb4-7c4a-59ec-fe462f3a1c4b.png",
+      "localPath": "/icons/cyberpunk-artifacts/14.png"
+    },
+    "15.png": {
+      "uuid": "grudge-79f022c1-6158-01b8-8fd6-45665e3c43a7",
+      "r2Key": "grudge-nexus/icons/cyberpunk-artifacts/grudge-79f022c1-6158-01b8-8fd6-45665e3c43a7.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-artifacts/grudge-79f022c1-6158-01b8-8fd6-45665e3c43a7.png",
+      "localPath": "/icons/cyberpunk-artifacts/15.png"
+    },
+    "16.png": {
+      "uuid": "grudge-57e7fbea-087d-4216-5024-76710eaa2b33",
+      "r2Key": "grudge-nexus/icons/cyberpunk-artifacts/grudge-57e7fbea-087d-4216-5024-76710eaa2b33.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-artifacts/grudge-57e7fbea-087d-4216-5024-76710eaa2b33.png",
+      "localPath": "/icons/cyberpunk-artifacts/16.png"
+    },
+    "17.png": {
+      "uuid": "grudge-be62534d-77dc-5403-d9ee-f8c951ffa160",
+      "r2Key": "grudge-nexus/icons/cyberpunk-artifacts/grudge-be62534d-77dc-5403-d9ee-f8c951ffa160.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-artifacts/grudge-be62534d-77dc-5403-d9ee-f8c951ffa160.png",
+      "localPath": "/icons/cyberpunk-artifacts/17.png"
+    },
+    "18.png": {
+      "uuid": "grudge-672ae981-0f9c-c022-ef1e-cefa89c086e4",
+      "r2Key": "grudge-nexus/icons/cyberpunk-artifacts/grudge-672ae981-0f9c-c022-ef1e-cefa89c086e4.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-artifacts/grudge-672ae981-0f9c-c022-ef1e-cefa89c086e4.png",
+      "localPath": "/icons/cyberpunk-artifacts/18.png"
+    },
+    "19.png": {
+      "uuid": "grudge-b1a776e3-9021-da80-d83e-b0319cef9cb5",
+      "r2Key": "grudge-nexus/icons/cyberpunk-artifacts/grudge-b1a776e3-9021-da80-d83e-b0319cef9cb5.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-artifacts/grudge-b1a776e3-9021-da80-d83e-b0319cef9cb5.png",
+      "localPath": "/icons/cyberpunk-artifacts/19.png"
+    },
+    "2.png": {
+      "uuid": "grudge-383af028-537e-fd8e-afaf-feb75645a7d5",
+      "r2Key": "grudge-nexus/icons/cyberpunk-artifacts/grudge-383af028-537e-fd8e-afaf-feb75645a7d5.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-artifacts/grudge-383af028-537e-fd8e-afaf-feb75645a7d5.png",
+      "localPath": "/icons/cyberpunk-artifacts/2.png"
+    },
+    "20.png": {
+      "uuid": "grudge-cb644b0b-421f-0f9c-77ec-150d5c2049df",
+      "r2Key": "grudge-nexus/icons/cyberpunk-artifacts/grudge-cb644b0b-421f-0f9c-77ec-150d5c2049df.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-artifacts/grudge-cb644b0b-421f-0f9c-77ec-150d5c2049df.png",
+      "localPath": "/icons/cyberpunk-artifacts/20.png"
+    },
+    "3.png": {
+      "uuid": "grudge-2d52909c-0d6c-27e7-dc02-988bd65ca5f2",
+      "r2Key": "grudge-nexus/icons/cyberpunk-artifacts/grudge-2d52909c-0d6c-27e7-dc02-988bd65ca5f2.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-artifacts/grudge-2d52909c-0d6c-27e7-dc02-988bd65ca5f2.png",
+      "localPath": "/icons/cyberpunk-artifacts/3.png"
+    },
+    "4.png": {
+      "uuid": "grudge-d7c5a92f-94b3-c17f-335a-3832789c91ea",
+      "r2Key": "grudge-nexus/icons/cyberpunk-artifacts/grudge-d7c5a92f-94b3-c17f-335a-3832789c91ea.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-artifacts/grudge-d7c5a92f-94b3-c17f-335a-3832789c91ea.png",
+      "localPath": "/icons/cyberpunk-artifacts/4.png"
+    },
+    "5.png": {
+      "uuid": "grudge-8f82015c-809e-7ec0-679a-85290571fbc3",
+      "r2Key": "grudge-nexus/icons/cyberpunk-artifacts/grudge-8f82015c-809e-7ec0-679a-85290571fbc3.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-artifacts/grudge-8f82015c-809e-7ec0-679a-85290571fbc3.png",
+      "localPath": "/icons/cyberpunk-artifacts/5.png"
+    },
+    "6.png": {
+      "uuid": "grudge-df84d17a-f71e-e11e-400b-67093f777604",
+      "r2Key": "grudge-nexus/icons/cyberpunk-artifacts/grudge-df84d17a-f71e-e11e-400b-67093f777604.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-artifacts/grudge-df84d17a-f71e-e11e-400b-67093f777604.png",
+      "localPath": "/icons/cyberpunk-artifacts/6.png"
+    },
+    "7.png": {
+      "uuid": "grudge-667233a3-f7cc-1443-ca48-957e637660cf",
+      "r2Key": "grudge-nexus/icons/cyberpunk-artifacts/grudge-667233a3-f7cc-1443-ca48-957e637660cf.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-artifacts/grudge-667233a3-f7cc-1443-ca48-957e637660cf.png",
+      "localPath": "/icons/cyberpunk-artifacts/7.png"
+    },
+    "8.png": {
+      "uuid": "grudge-1043bc67-04f6-5066-a4a7-009fe68b5f79",
+      "r2Key": "grudge-nexus/icons/cyberpunk-artifacts/grudge-1043bc67-04f6-5066-a4a7-009fe68b5f79.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-artifacts/grudge-1043bc67-04f6-5066-a4a7-009fe68b5f79.png",
+      "localPath": "/icons/cyberpunk-artifacts/8.png"
+    },
+    "9.png": {
+      "uuid": "grudge-5f83532b-135c-3f2a-f20b-35657aa64a5c",
+      "r2Key": "grudge-nexus/icons/cyberpunk-artifacts/grudge-5f83532b-135c-3f2a-f20b-35657aa64a5c.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-artifacts/grudge-5f83532b-135c-3f2a-f20b-35657aa64a5c.png",
+      "localPath": "/icons/cyberpunk-artifacts/9.png"
+    },
+    "Icon22_01.png": {
+      "uuid": "grudge-0def4a22-30ea-4401-cd95-38625d7c0083",
+      "r2Key": "grudge-nexus/icons/cyberpunk-artifacts/grudge-0def4a22-30ea-4401-cd95-38625d7c0083.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-artifacts/grudge-0def4a22-30ea-4401-cd95-38625d7c0083.png",
+      "localPath": "/icons/cyberpunk-artifacts/Icon22_01.png"
+    },
+    "Icon22_02.png": {
+      "uuid": "grudge-c1be60a9-382d-00f3-e316-a15ad833aed9",
+      "r2Key": "grudge-nexus/icons/cyberpunk-artifacts/grudge-c1be60a9-382d-00f3-e316-a15ad833aed9.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-artifacts/grudge-c1be60a9-382d-00f3-e316-a15ad833aed9.png",
+      "localPath": "/icons/cyberpunk-artifacts/Icon22_02.png"
+    },
+    "Icon22_03.png": {
+      "uuid": "grudge-04106d7f-0cd4-51fa-7df3-18815d3ed62f",
+      "r2Key": "grudge-nexus/icons/cyberpunk-artifacts/grudge-04106d7f-0cd4-51fa-7df3-18815d3ed62f.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-artifacts/grudge-04106d7f-0cd4-51fa-7df3-18815d3ed62f.png",
+      "localPath": "/icons/cyberpunk-artifacts/Icon22_03.png"
+    },
+    "Icon22_04.png": {
+      "uuid": "grudge-fc1a65ff-3514-ccc4-f036-f167b116b876",
+      "r2Key": "grudge-nexus/icons/cyberpunk-artifacts/grudge-fc1a65ff-3514-ccc4-f036-f167b116b876.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-artifacts/grudge-fc1a65ff-3514-ccc4-f036-f167b116b876.png",
+      "localPath": "/icons/cyberpunk-artifacts/Icon22_04.png"
+    },
+    "Icon22_05.png": {
+      "uuid": "grudge-3b372b54-52d9-d781-842e-6605a5bb5c92",
+      "r2Key": "grudge-nexus/icons/cyberpunk-artifacts/grudge-3b372b54-52d9-d781-842e-6605a5bb5c92.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-artifacts/grudge-3b372b54-52d9-d781-842e-6605a5bb5c92.png",
+      "localPath": "/icons/cyberpunk-artifacts/Icon22_05.png"
+    },
+    "Icon22_06.png": {
+      "uuid": "grudge-0e8410e7-202e-090a-529f-44863f25b728",
+      "r2Key": "grudge-nexus/icons/cyberpunk-artifacts/grudge-0e8410e7-202e-090a-529f-44863f25b728.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-artifacts/grudge-0e8410e7-202e-090a-529f-44863f25b728.png",
+      "localPath": "/icons/cyberpunk-artifacts/Icon22_06.png"
+    },
+    "Icon22_07.png": {
+      "uuid": "grudge-96ff05a1-a254-2532-610e-8b4cc71b4aa0",
+      "r2Key": "grudge-nexus/icons/cyberpunk-artifacts/grudge-96ff05a1-a254-2532-610e-8b4cc71b4aa0.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-artifacts/grudge-96ff05a1-a254-2532-610e-8b4cc71b4aa0.png",
+      "localPath": "/icons/cyberpunk-artifacts/Icon22_07.png"
+    },
+    "Icon22_08.png": {
+      "uuid": "grudge-88126b0b-afeb-e0de-3f51-33d516f638de",
+      "r2Key": "grudge-nexus/icons/cyberpunk-artifacts/grudge-88126b0b-afeb-e0de-3f51-33d516f638de.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-artifacts/grudge-88126b0b-afeb-e0de-3f51-33d516f638de.png",
+      "localPath": "/icons/cyberpunk-artifacts/Icon22_08.png"
+    },
+    "Icon22_09.png": {
+      "uuid": "grudge-c2df8342-6360-73ba-2081-47aa3a48643c",
+      "r2Key": "grudge-nexus/icons/cyberpunk-artifacts/grudge-c2df8342-6360-73ba-2081-47aa3a48643c.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-artifacts/grudge-c2df8342-6360-73ba-2081-47aa3a48643c.png",
+      "localPath": "/icons/cyberpunk-artifacts/Icon22_09.png"
+    },
+    "Icon22_10.png": {
+      "uuid": "grudge-712ba14b-ec4b-39a5-6455-af76afc52108",
+      "r2Key": "grudge-nexus/icons/cyberpunk-artifacts/grudge-712ba14b-ec4b-39a5-6455-af76afc52108.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-artifacts/grudge-712ba14b-ec4b-39a5-6455-af76afc52108.png",
+      "localPath": "/icons/cyberpunk-artifacts/Icon22_10.png"
+    },
+    "Icon22_11.png": {
+      "uuid": "grudge-f0d2638c-42f1-8e94-454e-e53c469e7fba",
+      "r2Key": "grudge-nexus/icons/cyberpunk-artifacts/grudge-f0d2638c-42f1-8e94-454e-e53c469e7fba.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-artifacts/grudge-f0d2638c-42f1-8e94-454e-e53c469e7fba.png",
+      "localPath": "/icons/cyberpunk-artifacts/Icon22_11.png"
+    },
+    "Icon22_12.png": {
+      "uuid": "grudge-a8983cec-9eb2-2eb8-066d-1975027bbd85",
+      "r2Key": "grudge-nexus/icons/cyberpunk-artifacts/grudge-a8983cec-9eb2-2eb8-066d-1975027bbd85.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-artifacts/grudge-a8983cec-9eb2-2eb8-066d-1975027bbd85.png",
+      "localPath": "/icons/cyberpunk-artifacts/Icon22_12.png"
+    },
+    "Icon22_13.png": {
+      "uuid": "grudge-7dbf5c87-f052-f4a6-fb4e-cf052480c348",
+      "r2Key": "grudge-nexus/icons/cyberpunk-artifacts/grudge-7dbf5c87-f052-f4a6-fb4e-cf052480c348.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-artifacts/grudge-7dbf5c87-f052-f4a6-fb4e-cf052480c348.png",
+      "localPath": "/icons/cyberpunk-artifacts/Icon22_13.png"
+    },
+    "Icon22_14.png": {
+      "uuid": "grudge-cba67c60-d81f-52a2-fdba-ba1a344b7df2",
+      "r2Key": "grudge-nexus/icons/cyberpunk-artifacts/grudge-cba67c60-d81f-52a2-fdba-ba1a344b7df2.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-artifacts/grudge-cba67c60-d81f-52a2-fdba-ba1a344b7df2.png",
+      "localPath": "/icons/cyberpunk-artifacts/Icon22_14.png"
+    },
+    "Icon22_15.png": {
+      "uuid": "grudge-7827f2e4-692a-151c-9649-e15859965ee7",
+      "r2Key": "grudge-nexus/icons/cyberpunk-artifacts/grudge-7827f2e4-692a-151c-9649-e15859965ee7.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-artifacts/grudge-7827f2e4-692a-151c-9649-e15859965ee7.png",
+      "localPath": "/icons/cyberpunk-artifacts/Icon22_15.png"
+    },
+    "Icon22_16.png": {
+      "uuid": "grudge-2ce07c0e-6fbf-eaa2-b596-4281070eca8d",
+      "r2Key": "grudge-nexus/icons/cyberpunk-artifacts/grudge-2ce07c0e-6fbf-eaa2-b596-4281070eca8d.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-artifacts/grudge-2ce07c0e-6fbf-eaa2-b596-4281070eca8d.png",
+      "localPath": "/icons/cyberpunk-artifacts/Icon22_16.png"
+    },
+    "Icon22_17.png": {
+      "uuid": "grudge-cdf06e33-b8b9-f8a1-0140-e32604fcbdd4",
+      "r2Key": "grudge-nexus/icons/cyberpunk-artifacts/grudge-cdf06e33-b8b9-f8a1-0140-e32604fcbdd4.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-artifacts/grudge-cdf06e33-b8b9-f8a1-0140-e32604fcbdd4.png",
+      "localPath": "/icons/cyberpunk-artifacts/Icon22_17.png"
+    },
+    "Icon22_18.png": {
+      "uuid": "grudge-e1d1d0fe-a149-5400-1f1b-2aa42731fad4",
+      "r2Key": "grudge-nexus/icons/cyberpunk-artifacts/grudge-e1d1d0fe-a149-5400-1f1b-2aa42731fad4.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-artifacts/grudge-e1d1d0fe-a149-5400-1f1b-2aa42731fad4.png",
+      "localPath": "/icons/cyberpunk-artifacts/Icon22_18.png"
+    },
+    "Icon22_19.png": {
+      "uuid": "grudge-eedd0f48-837a-7fc8-531a-b6e2c34d3346",
+      "r2Key": "grudge-nexus/icons/cyberpunk-artifacts/grudge-eedd0f48-837a-7fc8-531a-b6e2c34d3346.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-artifacts/grudge-eedd0f48-837a-7fc8-531a-b6e2c34d3346.png",
+      "localPath": "/icons/cyberpunk-artifacts/Icon22_19.png"
+    },
+    "Icon22_20.png": {
+      "uuid": "grudge-5d023013-e525-e68c-29e5-3a472a79478e",
+      "r2Key": "grudge-nexus/icons/cyberpunk-artifacts/grudge-5d023013-e525-e68c-29e5-3a472a79478e.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/cyberpunk-artifacts/grudge-5d023013-e525-e68c-29e5-3a472a79478e.png",
+      "localPath": "/icons/cyberpunk-artifacts/Icon22_20.png"
+    }
+  },
+  "scifi-items": {
+    "1.jpg": {
+      "uuid": "grudge-d94eda43-e37b-fda1-13b5-c1ab9ecdcd62",
+      "r2Key": "grudge-nexus/icons/scifi-items/grudge-d94eda43-e37b-fda1-13b5-c1ab9ecdcd62.jpg",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-items/grudge-d94eda43-e37b-fda1-13b5-c1ab9ecdcd62.jpg",
+      "localPath": "/icons/scifi-items/1.jpg"
+    },
+    "1.png": {
+      "uuid": "grudge-38ddd97b-b34b-8e77-e92b-9222b54f6f0f",
+      "r2Key": "grudge-nexus/icons/scifi-items/grudge-38ddd97b-b34b-8e77-e92b-9222b54f6f0f.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-items/grudge-38ddd97b-b34b-8e77-e92b-9222b54f6f0f.png",
+      "localPath": "/icons/scifi-items/1.png"
+    },
+    "10.jpg": {
+      "uuid": "grudge-5c4999aa-0692-2c95-7831-228f25d45fdd",
+      "r2Key": "grudge-nexus/icons/scifi-items/grudge-5c4999aa-0692-2c95-7831-228f25d45fdd.jpg",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-items/grudge-5c4999aa-0692-2c95-7831-228f25d45fdd.jpg",
+      "localPath": "/icons/scifi-items/10.jpg"
+    },
+    "10.png": {
+      "uuid": "grudge-4708d9ff-483d-c0d9-002e-f8a1057ce142",
+      "r2Key": "grudge-nexus/icons/scifi-items/grudge-4708d9ff-483d-c0d9-002e-f8a1057ce142.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-items/grudge-4708d9ff-483d-c0d9-002e-f8a1057ce142.png",
+      "localPath": "/icons/scifi-items/10.png"
+    },
+    "11.jpg": {
+      "uuid": "grudge-1b73a073-7176-f6a3-d475-2dde7c936ef4",
+      "r2Key": "grudge-nexus/icons/scifi-items/grudge-1b73a073-7176-f6a3-d475-2dde7c936ef4.jpg",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-items/grudge-1b73a073-7176-f6a3-d475-2dde7c936ef4.jpg",
+      "localPath": "/icons/scifi-items/11.jpg"
+    },
+    "11.png": {
+      "uuid": "grudge-3cf3ef3f-0d5e-42fe-4082-ba462c54d1c7",
+      "r2Key": "grudge-nexus/icons/scifi-items/grudge-3cf3ef3f-0d5e-42fe-4082-ba462c54d1c7.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-items/grudge-3cf3ef3f-0d5e-42fe-4082-ba462c54d1c7.png",
+      "localPath": "/icons/scifi-items/11.png"
+    },
+    "12.jpg": {
+      "uuid": "grudge-c810610a-b07f-cfcf-cf4f-c167f3200baf",
+      "r2Key": "grudge-nexus/icons/scifi-items/grudge-c810610a-b07f-cfcf-cf4f-c167f3200baf.jpg",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-items/grudge-c810610a-b07f-cfcf-cf4f-c167f3200baf.jpg",
+      "localPath": "/icons/scifi-items/12.jpg"
+    },
+    "12.png": {
+      "uuid": "grudge-f01e5aa8-1e35-402f-61e1-0bbd8258b95f",
+      "r2Key": "grudge-nexus/icons/scifi-items/grudge-f01e5aa8-1e35-402f-61e1-0bbd8258b95f.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-items/grudge-f01e5aa8-1e35-402f-61e1-0bbd8258b95f.png",
+      "localPath": "/icons/scifi-items/12.png"
+    },
+    "13.jpg": {
+      "uuid": "grudge-cb7c4e5a-5c34-0a2b-3df3-f1ab4f75a6c5",
+      "r2Key": "grudge-nexus/icons/scifi-items/grudge-cb7c4e5a-5c34-0a2b-3df3-f1ab4f75a6c5.jpg",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-items/grudge-cb7c4e5a-5c34-0a2b-3df3-f1ab4f75a6c5.jpg",
+      "localPath": "/icons/scifi-items/13.jpg"
+    },
+    "13.png": {
+      "uuid": "grudge-af6872cf-b5e3-5fbe-f0fd-75afaa7d1b3a",
+      "r2Key": "grudge-nexus/icons/scifi-items/grudge-af6872cf-b5e3-5fbe-f0fd-75afaa7d1b3a.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-items/grudge-af6872cf-b5e3-5fbe-f0fd-75afaa7d1b3a.png",
+      "localPath": "/icons/scifi-items/13.png"
+    },
+    "14.jpg": {
+      "uuid": "grudge-a66142af-161f-dea9-5657-514c55e8780c",
+      "r2Key": "grudge-nexus/icons/scifi-items/grudge-a66142af-161f-dea9-5657-514c55e8780c.jpg",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-items/grudge-a66142af-161f-dea9-5657-514c55e8780c.jpg",
+      "localPath": "/icons/scifi-items/14.jpg"
+    },
+    "14.png": {
+      "uuid": "grudge-ba461a18-dd1e-650e-c962-9bafa51eb76f",
+      "r2Key": "grudge-nexus/icons/scifi-items/grudge-ba461a18-dd1e-650e-c962-9bafa51eb76f.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-items/grudge-ba461a18-dd1e-650e-c962-9bafa51eb76f.png",
+      "localPath": "/icons/scifi-items/14.png"
+    },
+    "15.jpg": {
+      "uuid": "grudge-149bb1e9-6ccf-e7be-e86c-9077896a4f30",
+      "r2Key": "grudge-nexus/icons/scifi-items/grudge-149bb1e9-6ccf-e7be-e86c-9077896a4f30.jpg",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-items/grudge-149bb1e9-6ccf-e7be-e86c-9077896a4f30.jpg",
+      "localPath": "/icons/scifi-items/15.jpg"
+    },
+    "15.png": {
+      "uuid": "grudge-e70e8cb1-e36c-5660-3003-5fd78a821ba7",
+      "r2Key": "grudge-nexus/icons/scifi-items/grudge-e70e8cb1-e36c-5660-3003-5fd78a821ba7.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-items/grudge-e70e8cb1-e36c-5660-3003-5fd78a821ba7.png",
+      "localPath": "/icons/scifi-items/15.png"
+    },
+    "16.jpg": {
+      "uuid": "grudge-6fdd3f66-89ad-5ac9-0c49-539029ef8427",
+      "r2Key": "grudge-nexus/icons/scifi-items/grudge-6fdd3f66-89ad-5ac9-0c49-539029ef8427.jpg",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-items/grudge-6fdd3f66-89ad-5ac9-0c49-539029ef8427.jpg",
+      "localPath": "/icons/scifi-items/16.jpg"
+    },
+    "16.png": {
+      "uuid": "grudge-bbe293e6-d1af-c5fe-9aa5-29ceea5c9203",
+      "r2Key": "grudge-nexus/icons/scifi-items/grudge-bbe293e6-d1af-c5fe-9aa5-29ceea5c9203.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-items/grudge-bbe293e6-d1af-c5fe-9aa5-29ceea5c9203.png",
+      "localPath": "/icons/scifi-items/16.png"
+    },
+    "17.jpg": {
+      "uuid": "grudge-46288977-8d80-4dc1-4df8-ba82449ac25c",
+      "r2Key": "grudge-nexus/icons/scifi-items/grudge-46288977-8d80-4dc1-4df8-ba82449ac25c.jpg",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-items/grudge-46288977-8d80-4dc1-4df8-ba82449ac25c.jpg",
+      "localPath": "/icons/scifi-items/17.jpg"
+    },
+    "17.png": {
+      "uuid": "grudge-7d6518e1-7889-0626-127c-301011241898",
+      "r2Key": "grudge-nexus/icons/scifi-items/grudge-7d6518e1-7889-0626-127c-301011241898.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-items/grudge-7d6518e1-7889-0626-127c-301011241898.png",
+      "localPath": "/icons/scifi-items/17.png"
+    },
+    "18.jpg": {
+      "uuid": "grudge-1f124895-2540-86d1-941a-80badfbd3758",
+      "r2Key": "grudge-nexus/icons/scifi-items/grudge-1f124895-2540-86d1-941a-80badfbd3758.jpg",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-items/grudge-1f124895-2540-86d1-941a-80badfbd3758.jpg",
+      "localPath": "/icons/scifi-items/18.jpg"
+    },
+    "18.png": {
+      "uuid": "grudge-8cfb07b8-d0c5-eeea-378a-d29e69851958",
+      "r2Key": "grudge-nexus/icons/scifi-items/grudge-8cfb07b8-d0c5-eeea-378a-d29e69851958.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-items/grudge-8cfb07b8-d0c5-eeea-378a-d29e69851958.png",
+      "localPath": "/icons/scifi-items/18.png"
+    },
+    "19.jpg": {
+      "uuid": "grudge-e78ea1f9-bd48-2158-dcf7-ed8fe17e3eba",
+      "r2Key": "grudge-nexus/icons/scifi-items/grudge-e78ea1f9-bd48-2158-dcf7-ed8fe17e3eba.jpg",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-items/grudge-e78ea1f9-bd48-2158-dcf7-ed8fe17e3eba.jpg",
+      "localPath": "/icons/scifi-items/19.jpg"
+    },
+    "19.png": {
+      "uuid": "grudge-68276a0a-4584-7f02-2dab-e6582dc946b9",
+      "r2Key": "grudge-nexus/icons/scifi-items/grudge-68276a0a-4584-7f02-2dab-e6582dc946b9.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-items/grudge-68276a0a-4584-7f02-2dab-e6582dc946b9.png",
+      "localPath": "/icons/scifi-items/19.png"
+    },
+    "2.jpg": {
+      "uuid": "grudge-064bc975-bb35-eedd-352e-9826bd74d9f5",
+      "r2Key": "grudge-nexus/icons/scifi-items/grudge-064bc975-bb35-eedd-352e-9826bd74d9f5.jpg",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-items/grudge-064bc975-bb35-eedd-352e-9826bd74d9f5.jpg",
+      "localPath": "/icons/scifi-items/2.jpg"
+    },
+    "2.png": {
+      "uuid": "grudge-f0f4e6b2-4135-3fd3-7c30-51f90bae80d1",
+      "r2Key": "grudge-nexus/icons/scifi-items/grudge-f0f4e6b2-4135-3fd3-7c30-51f90bae80d1.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-items/grudge-f0f4e6b2-4135-3fd3-7c30-51f90bae80d1.png",
+      "localPath": "/icons/scifi-items/2.png"
+    },
+    "20.jpg": {
+      "uuid": "grudge-0ec492a3-2938-e50d-b7e1-ced50d4114cf",
+      "r2Key": "grudge-nexus/icons/scifi-items/grudge-0ec492a3-2938-e50d-b7e1-ced50d4114cf.jpg",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-items/grudge-0ec492a3-2938-e50d-b7e1-ced50d4114cf.jpg",
+      "localPath": "/icons/scifi-items/20.jpg"
+    },
+    "20.png": {
+      "uuid": "grudge-3a8e8ae6-6b1a-c877-8bd9-8ef0634f6107",
+      "r2Key": "grudge-nexus/icons/scifi-items/grudge-3a8e8ae6-6b1a-c877-8bd9-8ef0634f6107.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-items/grudge-3a8e8ae6-6b1a-c877-8bd9-8ef0634f6107.png",
+      "localPath": "/icons/scifi-items/20.png"
+    },
+    "3.jpg": {
+      "uuid": "grudge-44e3532d-2d4a-7e19-bb9f-d034c5b85294",
+      "r2Key": "grudge-nexus/icons/scifi-items/grudge-44e3532d-2d4a-7e19-bb9f-d034c5b85294.jpg",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-items/grudge-44e3532d-2d4a-7e19-bb9f-d034c5b85294.jpg",
+      "localPath": "/icons/scifi-items/3.jpg"
+    },
+    "3.png": {
+      "uuid": "grudge-1f83a9e1-8103-c183-444c-d0ba5bb1c45e",
+      "r2Key": "grudge-nexus/icons/scifi-items/grudge-1f83a9e1-8103-c183-444c-d0ba5bb1c45e.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-items/grudge-1f83a9e1-8103-c183-444c-d0ba5bb1c45e.png",
+      "localPath": "/icons/scifi-items/3.png"
+    },
+    "4.jpg": {
+      "uuid": "grudge-672097ec-5912-45bb-a332-3458b30fe571",
+      "r2Key": "grudge-nexus/icons/scifi-items/grudge-672097ec-5912-45bb-a332-3458b30fe571.jpg",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-items/grudge-672097ec-5912-45bb-a332-3458b30fe571.jpg",
+      "localPath": "/icons/scifi-items/4.jpg"
+    },
+    "4.png": {
+      "uuid": "grudge-2b94aca3-d6d6-db23-4d07-6779298e77fa",
+      "r2Key": "grudge-nexus/icons/scifi-items/grudge-2b94aca3-d6d6-db23-4d07-6779298e77fa.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-items/grudge-2b94aca3-d6d6-db23-4d07-6779298e77fa.png",
+      "localPath": "/icons/scifi-items/4.png"
+    },
+    "5.jpg": {
+      "uuid": "grudge-6f3ef729-2f70-3a6e-8808-17f498a1adbd",
+      "r2Key": "grudge-nexus/icons/scifi-items/grudge-6f3ef729-2f70-3a6e-8808-17f498a1adbd.jpg",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-items/grudge-6f3ef729-2f70-3a6e-8808-17f498a1adbd.jpg",
+      "localPath": "/icons/scifi-items/5.jpg"
+    },
+    "5.png": {
+      "uuid": "grudge-fd485cb6-74c2-47a2-2cae-c72e2fb66036",
+      "r2Key": "grudge-nexus/icons/scifi-items/grudge-fd485cb6-74c2-47a2-2cae-c72e2fb66036.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-items/grudge-fd485cb6-74c2-47a2-2cae-c72e2fb66036.png",
+      "localPath": "/icons/scifi-items/5.png"
+    },
+    "6.jpg": {
+      "uuid": "grudge-f2281e09-bea4-5abd-cb6c-359dc2bb7a83",
+      "r2Key": "grudge-nexus/icons/scifi-items/grudge-f2281e09-bea4-5abd-cb6c-359dc2bb7a83.jpg",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-items/grudge-f2281e09-bea4-5abd-cb6c-359dc2bb7a83.jpg",
+      "localPath": "/icons/scifi-items/6.jpg"
+    },
+    "6.png": {
+      "uuid": "grudge-7617a94f-d08b-69b4-bd6b-3c9998def8a4",
+      "r2Key": "grudge-nexus/icons/scifi-items/grudge-7617a94f-d08b-69b4-bd6b-3c9998def8a4.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-items/grudge-7617a94f-d08b-69b4-bd6b-3c9998def8a4.png",
+      "localPath": "/icons/scifi-items/6.png"
+    },
+    "7.jpg": {
+      "uuid": "grudge-ee5d324e-443d-4c31-1d7d-7cfd906be7af",
+      "r2Key": "grudge-nexus/icons/scifi-items/grudge-ee5d324e-443d-4c31-1d7d-7cfd906be7af.jpg",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-items/grudge-ee5d324e-443d-4c31-1d7d-7cfd906be7af.jpg",
+      "localPath": "/icons/scifi-items/7.jpg"
+    },
+    "7.png": {
+      "uuid": "grudge-71fc5ae6-b2ee-717c-694c-43efb51d4254",
+      "r2Key": "grudge-nexus/icons/scifi-items/grudge-71fc5ae6-b2ee-717c-694c-43efb51d4254.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-items/grudge-71fc5ae6-b2ee-717c-694c-43efb51d4254.png",
+      "localPath": "/icons/scifi-items/7.png"
+    },
+    "8.jpg": {
+      "uuid": "grudge-a7bb5905-bc7b-2867-ba88-bb65221d4c28",
+      "r2Key": "grudge-nexus/icons/scifi-items/grudge-a7bb5905-bc7b-2867-ba88-bb65221d4c28.jpg",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-items/grudge-a7bb5905-bc7b-2867-ba88-bb65221d4c28.jpg",
+      "localPath": "/icons/scifi-items/8.jpg"
+    },
+    "8.png": {
+      "uuid": "grudge-c5ed10d4-a22f-c7e7-cdd1-74fa8d139f46",
+      "r2Key": "grudge-nexus/icons/scifi-items/grudge-c5ed10d4-a22f-c7e7-cdd1-74fa8d139f46.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-items/grudge-c5ed10d4-a22f-c7e7-cdd1-74fa8d139f46.png",
+      "localPath": "/icons/scifi-items/8.png"
+    },
+    "9.jpg": {
+      "uuid": "grudge-09a8b3d9-7750-ba63-9283-95e4a2e2efbf",
+      "r2Key": "grudge-nexus/icons/scifi-items/grudge-09a8b3d9-7750-ba63-9283-95e4a2e2efbf.jpg",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-items/grudge-09a8b3d9-7750-ba63-9283-95e4a2e2efbf.jpg",
+      "localPath": "/icons/scifi-items/9.jpg"
+    },
+    "9.png": {
+      "uuid": "grudge-5f37b8f4-7206-d7bc-e058-c663f98ac7c7",
+      "r2Key": "grudge-nexus/icons/scifi-items/grudge-5f37b8f4-7206-d7bc-e058-c663f98ac7c7.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-items/grudge-5f37b8f4-7206-d7bc-e058-c663f98ac7c7.png",
+      "localPath": "/icons/scifi-items/9.png"
+    }
+  },
+  "scifi-misc": {
+    "1.jpg": {
+      "uuid": "grudge-a7b691ed-eaef-fef0-cfb3-86a6b90f04fc",
+      "r2Key": "grudge-nexus/icons/scifi-misc/grudge-a7b691ed-eaef-fef0-cfb3-86a6b90f04fc.jpg",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-misc/grudge-a7b691ed-eaef-fef0-cfb3-86a6b90f04fc.jpg",
+      "localPath": "/icons/scifi-misc/1.jpg"
+    },
+    "1.png": {
+      "uuid": "grudge-ae0724ae-af1d-59db-3619-fea53f579fb0",
+      "r2Key": "grudge-nexus/icons/scifi-misc/grudge-ae0724ae-af1d-59db-3619-fea53f579fb0.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-misc/grudge-ae0724ae-af1d-59db-3619-fea53f579fb0.png",
+      "localPath": "/icons/scifi-misc/1.png"
+    },
+    "10.jpg": {
+      "uuid": "grudge-abf10a63-ff07-11d3-d5cf-18dc4e11313f",
+      "r2Key": "grudge-nexus/icons/scifi-misc/grudge-abf10a63-ff07-11d3-d5cf-18dc4e11313f.jpg",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-misc/grudge-abf10a63-ff07-11d3-d5cf-18dc4e11313f.jpg",
+      "localPath": "/icons/scifi-misc/10.jpg"
+    },
+    "10.png": {
+      "uuid": "grudge-3652119e-3348-3f67-8463-6e5adf6af075",
+      "r2Key": "grudge-nexus/icons/scifi-misc/grudge-3652119e-3348-3f67-8463-6e5adf6af075.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-misc/grudge-3652119e-3348-3f67-8463-6e5adf6af075.png",
+      "localPath": "/icons/scifi-misc/10.png"
+    },
+    "11.jpg": {
+      "uuid": "grudge-5404b5af-6033-d53f-9100-3d0075042677",
+      "r2Key": "grudge-nexus/icons/scifi-misc/grudge-5404b5af-6033-d53f-9100-3d0075042677.jpg",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-misc/grudge-5404b5af-6033-d53f-9100-3d0075042677.jpg",
+      "localPath": "/icons/scifi-misc/11.jpg"
+    },
+    "11.png": {
+      "uuid": "grudge-d423c444-c128-e72c-7968-aa8ae8a79a6f",
+      "r2Key": "grudge-nexus/icons/scifi-misc/grudge-d423c444-c128-e72c-7968-aa8ae8a79a6f.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-misc/grudge-d423c444-c128-e72c-7968-aa8ae8a79a6f.png",
+      "localPath": "/icons/scifi-misc/11.png"
+    },
+    "12.jpg": {
+      "uuid": "grudge-5afb6c30-7b85-1386-5161-c5748290d422",
+      "r2Key": "grudge-nexus/icons/scifi-misc/grudge-5afb6c30-7b85-1386-5161-c5748290d422.jpg",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-misc/grudge-5afb6c30-7b85-1386-5161-c5748290d422.jpg",
+      "localPath": "/icons/scifi-misc/12.jpg"
+    },
+    "12.png": {
+      "uuid": "grudge-212caebb-e1a6-1451-2104-5356fc977f56",
+      "r2Key": "grudge-nexus/icons/scifi-misc/grudge-212caebb-e1a6-1451-2104-5356fc977f56.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-misc/grudge-212caebb-e1a6-1451-2104-5356fc977f56.png",
+      "localPath": "/icons/scifi-misc/12.png"
+    },
+    "13.jpg": {
+      "uuid": "grudge-817477af-3d11-cbf6-d552-d491fea171bd",
+      "r2Key": "grudge-nexus/icons/scifi-misc/grudge-817477af-3d11-cbf6-d552-d491fea171bd.jpg",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-misc/grudge-817477af-3d11-cbf6-d552-d491fea171bd.jpg",
+      "localPath": "/icons/scifi-misc/13.jpg"
+    },
+    "13.png": {
+      "uuid": "grudge-da370b2d-98ac-b434-4d3a-ad1b342e9e69",
+      "r2Key": "grudge-nexus/icons/scifi-misc/grudge-da370b2d-98ac-b434-4d3a-ad1b342e9e69.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-misc/grudge-da370b2d-98ac-b434-4d3a-ad1b342e9e69.png",
+      "localPath": "/icons/scifi-misc/13.png"
+    },
+    "14.jpg": {
+      "uuid": "grudge-a3d61797-d44b-2306-c9c6-b8a16ea4bd37",
+      "r2Key": "grudge-nexus/icons/scifi-misc/grudge-a3d61797-d44b-2306-c9c6-b8a16ea4bd37.jpg",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-misc/grudge-a3d61797-d44b-2306-c9c6-b8a16ea4bd37.jpg",
+      "localPath": "/icons/scifi-misc/14.jpg"
+    },
+    "14.png": {
+      "uuid": "grudge-4b8fb495-f854-3769-fa13-e1363863938e",
+      "r2Key": "grudge-nexus/icons/scifi-misc/grudge-4b8fb495-f854-3769-fa13-e1363863938e.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-misc/grudge-4b8fb495-f854-3769-fa13-e1363863938e.png",
+      "localPath": "/icons/scifi-misc/14.png"
+    },
+    "15.jpg": {
+      "uuid": "grudge-2cb06aba-8fe5-a797-0a6e-579bac5750f9",
+      "r2Key": "grudge-nexus/icons/scifi-misc/grudge-2cb06aba-8fe5-a797-0a6e-579bac5750f9.jpg",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-misc/grudge-2cb06aba-8fe5-a797-0a6e-579bac5750f9.jpg",
+      "localPath": "/icons/scifi-misc/15.jpg"
+    },
+    "15.png": {
+      "uuid": "grudge-f1766210-b7b7-bf8d-5514-46e6de7172d6",
+      "r2Key": "grudge-nexus/icons/scifi-misc/grudge-f1766210-b7b7-bf8d-5514-46e6de7172d6.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-misc/grudge-f1766210-b7b7-bf8d-5514-46e6de7172d6.png",
+      "localPath": "/icons/scifi-misc/15.png"
+    },
+    "16.jpg": {
+      "uuid": "grudge-75df390c-9f43-73db-03f4-64ddfa10a6fc",
+      "r2Key": "grudge-nexus/icons/scifi-misc/grudge-75df390c-9f43-73db-03f4-64ddfa10a6fc.jpg",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-misc/grudge-75df390c-9f43-73db-03f4-64ddfa10a6fc.jpg",
+      "localPath": "/icons/scifi-misc/16.jpg"
+    },
+    "16.png": {
+      "uuid": "grudge-0cb69cde-5427-5e1e-443c-a886911da6a7",
+      "r2Key": "grudge-nexus/icons/scifi-misc/grudge-0cb69cde-5427-5e1e-443c-a886911da6a7.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-misc/grudge-0cb69cde-5427-5e1e-443c-a886911da6a7.png",
+      "localPath": "/icons/scifi-misc/16.png"
+    },
+    "17.jpg": {
+      "uuid": "grudge-4bf8c3d9-ceb6-fa4e-f0c2-c8034019b187",
+      "r2Key": "grudge-nexus/icons/scifi-misc/grudge-4bf8c3d9-ceb6-fa4e-f0c2-c8034019b187.jpg",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-misc/grudge-4bf8c3d9-ceb6-fa4e-f0c2-c8034019b187.jpg",
+      "localPath": "/icons/scifi-misc/17.jpg"
+    },
+    "17.png": {
+      "uuid": "grudge-dfbf4f6f-61e0-9f03-de6e-aff47f900773",
+      "r2Key": "grudge-nexus/icons/scifi-misc/grudge-dfbf4f6f-61e0-9f03-de6e-aff47f900773.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-misc/grudge-dfbf4f6f-61e0-9f03-de6e-aff47f900773.png",
+      "localPath": "/icons/scifi-misc/17.png"
+    },
+    "18.jpg": {
+      "uuid": "grudge-8d436344-735f-5d48-7124-66b62eea723a",
+      "r2Key": "grudge-nexus/icons/scifi-misc/grudge-8d436344-735f-5d48-7124-66b62eea723a.jpg",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-misc/grudge-8d436344-735f-5d48-7124-66b62eea723a.jpg",
+      "localPath": "/icons/scifi-misc/18.jpg"
+    },
+    "18.png": {
+      "uuid": "grudge-8c72436c-60aa-efbb-6864-5a03fb9660bf",
+      "r2Key": "grudge-nexus/icons/scifi-misc/grudge-8c72436c-60aa-efbb-6864-5a03fb9660bf.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-misc/grudge-8c72436c-60aa-efbb-6864-5a03fb9660bf.png",
+      "localPath": "/icons/scifi-misc/18.png"
+    },
+    "19.jpg": {
+      "uuid": "grudge-f9b028a7-b918-d6c6-a7a6-105e3db8e889",
+      "r2Key": "grudge-nexus/icons/scifi-misc/grudge-f9b028a7-b918-d6c6-a7a6-105e3db8e889.jpg",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-misc/grudge-f9b028a7-b918-d6c6-a7a6-105e3db8e889.jpg",
+      "localPath": "/icons/scifi-misc/19.jpg"
+    },
+    "19.png": {
+      "uuid": "grudge-957ffbd2-2f07-1b54-4266-4bb89862ba63",
+      "r2Key": "grudge-nexus/icons/scifi-misc/grudge-957ffbd2-2f07-1b54-4266-4bb89862ba63.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-misc/grudge-957ffbd2-2f07-1b54-4266-4bb89862ba63.png",
+      "localPath": "/icons/scifi-misc/19.png"
+    },
+    "2.jpg": {
+      "uuid": "grudge-63e21bfa-982e-6b23-85c2-0d116d00ac00",
+      "r2Key": "grudge-nexus/icons/scifi-misc/grudge-63e21bfa-982e-6b23-85c2-0d116d00ac00.jpg",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-misc/grudge-63e21bfa-982e-6b23-85c2-0d116d00ac00.jpg",
+      "localPath": "/icons/scifi-misc/2.jpg"
+    },
+    "2.png": {
+      "uuid": "grudge-e9709729-7e24-6935-c9b1-a3bc8a105327",
+      "r2Key": "grudge-nexus/icons/scifi-misc/grudge-e9709729-7e24-6935-c9b1-a3bc8a105327.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-misc/grudge-e9709729-7e24-6935-c9b1-a3bc8a105327.png",
+      "localPath": "/icons/scifi-misc/2.png"
+    },
+    "20.jpg": {
+      "uuid": "grudge-8daab7d4-2dfd-4e8c-91dd-042c6645f490",
+      "r2Key": "grudge-nexus/icons/scifi-misc/grudge-8daab7d4-2dfd-4e8c-91dd-042c6645f490.jpg",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-misc/grudge-8daab7d4-2dfd-4e8c-91dd-042c6645f490.jpg",
+      "localPath": "/icons/scifi-misc/20.jpg"
+    },
+    "20.png": {
+      "uuid": "grudge-85ef9c69-9eb6-c17e-fd65-3d20633bbcf8",
+      "r2Key": "grudge-nexus/icons/scifi-misc/grudge-85ef9c69-9eb6-c17e-fd65-3d20633bbcf8.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-misc/grudge-85ef9c69-9eb6-c17e-fd65-3d20633bbcf8.png",
+      "localPath": "/icons/scifi-misc/20.png"
+    },
+    "3.jpg": {
+      "uuid": "grudge-56d4d022-91e8-7832-b38c-7bcc2a645ce0",
+      "r2Key": "grudge-nexus/icons/scifi-misc/grudge-56d4d022-91e8-7832-b38c-7bcc2a645ce0.jpg",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-misc/grudge-56d4d022-91e8-7832-b38c-7bcc2a645ce0.jpg",
+      "localPath": "/icons/scifi-misc/3.jpg"
+    },
+    "3.png": {
+      "uuid": "grudge-e6f50f23-490a-2eb2-03c5-7c7b8061bbe4",
+      "r2Key": "grudge-nexus/icons/scifi-misc/grudge-e6f50f23-490a-2eb2-03c5-7c7b8061bbe4.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-misc/grudge-e6f50f23-490a-2eb2-03c5-7c7b8061bbe4.png",
+      "localPath": "/icons/scifi-misc/3.png"
+    },
+    "4.jpg": {
+      "uuid": "grudge-c680b126-f218-bb97-5057-7c72f17cb395",
+      "r2Key": "grudge-nexus/icons/scifi-misc/grudge-c680b126-f218-bb97-5057-7c72f17cb395.jpg",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-misc/grudge-c680b126-f218-bb97-5057-7c72f17cb395.jpg",
+      "localPath": "/icons/scifi-misc/4.jpg"
+    },
+    "4.png": {
+      "uuid": "grudge-da20ec6d-24a6-5374-cbbb-49e1223ed14f",
+      "r2Key": "grudge-nexus/icons/scifi-misc/grudge-da20ec6d-24a6-5374-cbbb-49e1223ed14f.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-misc/grudge-da20ec6d-24a6-5374-cbbb-49e1223ed14f.png",
+      "localPath": "/icons/scifi-misc/4.png"
+    },
+    "5.jpg": {
+      "uuid": "grudge-3de36b3e-f15b-2e37-814b-70f3832a7372",
+      "r2Key": "grudge-nexus/icons/scifi-misc/grudge-3de36b3e-f15b-2e37-814b-70f3832a7372.jpg",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-misc/grudge-3de36b3e-f15b-2e37-814b-70f3832a7372.jpg",
+      "localPath": "/icons/scifi-misc/5.jpg"
+    },
+    "5.png": {
+      "uuid": "grudge-f9fb77ce-8a9f-3f33-e8d9-6957f31ebef4",
+      "r2Key": "grudge-nexus/icons/scifi-misc/grudge-f9fb77ce-8a9f-3f33-e8d9-6957f31ebef4.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-misc/grudge-f9fb77ce-8a9f-3f33-e8d9-6957f31ebef4.png",
+      "localPath": "/icons/scifi-misc/5.png"
+    },
+    "6.jpg": {
+      "uuid": "grudge-a34cf8a7-8f65-4307-7eb9-4d471febab2c",
+      "r2Key": "grudge-nexus/icons/scifi-misc/grudge-a34cf8a7-8f65-4307-7eb9-4d471febab2c.jpg",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-misc/grudge-a34cf8a7-8f65-4307-7eb9-4d471febab2c.jpg",
+      "localPath": "/icons/scifi-misc/6.jpg"
+    },
+    "6.png": {
+      "uuid": "grudge-0a3a1b54-8d1c-4a4a-6343-a5e6f59f1d07",
+      "r2Key": "grudge-nexus/icons/scifi-misc/grudge-0a3a1b54-8d1c-4a4a-6343-a5e6f59f1d07.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-misc/grudge-0a3a1b54-8d1c-4a4a-6343-a5e6f59f1d07.png",
+      "localPath": "/icons/scifi-misc/6.png"
+    },
+    "7.jpg": {
+      "uuid": "grudge-1b472fe2-4ad2-810f-6985-10dd60f5e876",
+      "r2Key": "grudge-nexus/icons/scifi-misc/grudge-1b472fe2-4ad2-810f-6985-10dd60f5e876.jpg",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-misc/grudge-1b472fe2-4ad2-810f-6985-10dd60f5e876.jpg",
+      "localPath": "/icons/scifi-misc/7.jpg"
+    },
+    "7.png": {
+      "uuid": "grudge-54864cf4-238a-c516-bb1b-a683583cffdb",
+      "r2Key": "grudge-nexus/icons/scifi-misc/grudge-54864cf4-238a-c516-bb1b-a683583cffdb.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-misc/grudge-54864cf4-238a-c516-bb1b-a683583cffdb.png",
+      "localPath": "/icons/scifi-misc/7.png"
+    },
+    "8.jpg": {
+      "uuid": "grudge-8ff32927-7eb2-be16-428a-03e82c111ac8",
+      "r2Key": "grudge-nexus/icons/scifi-misc/grudge-8ff32927-7eb2-be16-428a-03e82c111ac8.jpg",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-misc/grudge-8ff32927-7eb2-be16-428a-03e82c111ac8.jpg",
+      "localPath": "/icons/scifi-misc/8.jpg"
+    },
+    "8.png": {
+      "uuid": "grudge-7b8ea2bc-60c3-4050-1472-6f6edcfccb3e",
+      "r2Key": "grudge-nexus/icons/scifi-misc/grudge-7b8ea2bc-60c3-4050-1472-6f6edcfccb3e.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-misc/grudge-7b8ea2bc-60c3-4050-1472-6f6edcfccb3e.png",
+      "localPath": "/icons/scifi-misc/8.png"
+    },
+    "9.jpg": {
+      "uuid": "grudge-d70bc411-1dd0-7302-6f3a-83b8d85f544c",
+      "r2Key": "grudge-nexus/icons/scifi-misc/grudge-d70bc411-1dd0-7302-6f3a-83b8d85f544c.jpg",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-misc/grudge-d70bc411-1dd0-7302-6f3a-83b8d85f544c.jpg",
+      "localPath": "/icons/scifi-misc/9.jpg"
+    },
+    "9.png": {
+      "uuid": "grudge-6453dc83-beae-15df-6229-651a4e8851cb",
+      "r2Key": "grudge-nexus/icons/scifi-misc/grudge-6453dc83-beae-15df-6229-651a4e8851cb.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/scifi-misc/grudge-6453dc83-beae-15df-6229-651a4e8851cb.png",
+      "localPath": "/icons/scifi-misc/9.png"
+    }
+  },
+  "rpg-gui": {
+    "1.png": {
+      "uuid": "grudge-54d47445-eeb7-1462-d76d-9f53bc4a0100",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-54d47445-eeb7-1462-d76d-9f53bc4a0100.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-54d47445-eeb7-1462-d76d-9f53bc4a0100.png",
+      "localPath": "/icons/rpg-gui/1.png"
+    },
+    "10.png": {
+      "uuid": "grudge-2ed0b490-cd99-f80c-ee39-2b8fcb67e45e",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-2ed0b490-cd99-f80c-ee39-2b8fcb67e45e.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-2ed0b490-cd99-f80c-ee39-2b8fcb67e45e.png",
+      "localPath": "/icons/rpg-gui/10.png"
+    },
+    "11.png": {
+      "uuid": "grudge-81b7a05c-10b4-6202-6144-1bc25d01bb64",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-81b7a05c-10b4-6202-6144-1bc25d01bb64.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-81b7a05c-10b4-6202-6144-1bc25d01bb64.png",
+      "localPath": "/icons/rpg-gui/11.png"
+    },
+    "12.png": {
+      "uuid": "grudge-0c17df51-9c1b-1cbe-264c-9b5252656d1d",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-0c17df51-9c1b-1cbe-264c-9b5252656d1d.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-0c17df51-9c1b-1cbe-264c-9b5252656d1d.png",
+      "localPath": "/icons/rpg-gui/12.png"
+    },
+    "13.png": {
+      "uuid": "grudge-a8e82cab-dda4-628b-e9f5-0112dfaf51ee",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-a8e82cab-dda4-628b-e9f5-0112dfaf51ee.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-a8e82cab-dda4-628b-e9f5-0112dfaf51ee.png",
+      "localPath": "/icons/rpg-gui/13.png"
+    },
+    "14.png": {
+      "uuid": "grudge-c3bedc72-8a12-ef51-c938-43084f4d0dd9",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-c3bedc72-8a12-ef51-c938-43084f4d0dd9.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-c3bedc72-8a12-ef51-c938-43084f4d0dd9.png",
+      "localPath": "/icons/rpg-gui/14.png"
+    },
+    "15.png": {
+      "uuid": "grudge-4d959cb8-cb6f-1d98-c30c-d49d5a244712",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-4d959cb8-cb6f-1d98-c30c-d49d5a244712.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-4d959cb8-cb6f-1d98-c30c-d49d5a244712.png",
+      "localPath": "/icons/rpg-gui/15.png"
+    },
+    "16.png": {
+      "uuid": "grudge-776edd15-0514-a856-fe17-3c0c122279bc",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-776edd15-0514-a856-fe17-3c0c122279bc.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-776edd15-0514-a856-fe17-3c0c122279bc.png",
+      "localPath": "/icons/rpg-gui/16.png"
+    },
+    "17.png": {
+      "uuid": "grudge-ee5ff630-70ec-6bd3-3947-192314984e23",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-ee5ff630-70ec-6bd3-3947-192314984e23.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-ee5ff630-70ec-6bd3-3947-192314984e23.png",
+      "localPath": "/icons/rpg-gui/17.png"
+    },
+    "18.png": {
+      "uuid": "grudge-905140a0-2c66-9372-b062-7afc11f7dbf6",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-905140a0-2c66-9372-b062-7afc11f7dbf6.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-905140a0-2c66-9372-b062-7afc11f7dbf6.png",
+      "localPath": "/icons/rpg-gui/18.png"
+    },
+    "19.png": {
+      "uuid": "grudge-850c422b-991e-4aa6-76bd-eb2fa76f4b56",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-850c422b-991e-4aa6-76bd-eb2fa76f4b56.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-850c422b-991e-4aa6-76bd-eb2fa76f4b56.png",
+      "localPath": "/icons/rpg-gui/19.png"
+    },
+    "2.png": {
+      "uuid": "grudge-cec7cba6-4421-4d78-4fbc-f9fee1a51db8",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-cec7cba6-4421-4d78-4fbc-f9fee1a51db8.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-cec7cba6-4421-4d78-4fbc-f9fee1a51db8.png",
+      "localPath": "/icons/rpg-gui/2.png"
+    },
+    "20.png": {
+      "uuid": "grudge-3e022756-e41c-48fd-321e-a2d3ae6bb970",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-3e022756-e41c-48fd-321e-a2d3ae6bb970.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-3e022756-e41c-48fd-321e-a2d3ae6bb970.png",
+      "localPath": "/icons/rpg-gui/20.png"
+    },
+    "21.png": {
+      "uuid": "grudge-b5276e0f-dee3-87b2-f9ba-13790fb5ec38",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-b5276e0f-dee3-87b2-f9ba-13790fb5ec38.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-b5276e0f-dee3-87b2-f9ba-13790fb5ec38.png",
+      "localPath": "/icons/rpg-gui/21.png"
+    },
+    "22.png": {
+      "uuid": "grudge-c5c9cf21-e94c-f817-6fd1-832e72795f60",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-c5c9cf21-e94c-f817-6fd1-832e72795f60.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-c5c9cf21-e94c-f817-6fd1-832e72795f60.png",
+      "localPath": "/icons/rpg-gui/22.png"
+    },
+    "23.png": {
+      "uuid": "grudge-ef9bf332-e5f1-6930-b6e4-6efb6a42e602",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-ef9bf332-e5f1-6930-b6e4-6efb6a42e602.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-ef9bf332-e5f1-6930-b6e4-6efb6a42e602.png",
+      "localPath": "/icons/rpg-gui/23.png"
+    },
+    "24.png": {
+      "uuid": "grudge-8efde6b8-cb94-dbd4-d5e8-f37d5d4a3b58",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-8efde6b8-cb94-dbd4-d5e8-f37d5d4a3b58.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-8efde6b8-cb94-dbd4-d5e8-f37d5d4a3b58.png",
+      "localPath": "/icons/rpg-gui/24.png"
+    },
+    "25.png": {
+      "uuid": "grudge-9cd745fc-4341-3c27-7885-8ea48e845946",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-9cd745fc-4341-3c27-7885-8ea48e845946.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-9cd745fc-4341-3c27-7885-8ea48e845946.png",
+      "localPath": "/icons/rpg-gui/25.png"
+    },
+    "26.png": {
+      "uuid": "grudge-a053d47c-b45f-c005-afa8-5c4fa338fc80",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-a053d47c-b45f-c005-afa8-5c4fa338fc80.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-a053d47c-b45f-c005-afa8-5c4fa338fc80.png",
+      "localPath": "/icons/rpg-gui/26.png"
+    },
+    "27.png": {
+      "uuid": "grudge-8b96d341-2525-d9c8-6cfa-e3b1c09a8974",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-8b96d341-2525-d9c8-6cfa-e3b1c09a8974.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-8b96d341-2525-d9c8-6cfa-e3b1c09a8974.png",
+      "localPath": "/icons/rpg-gui/27.png"
+    },
+    "28.png": {
+      "uuid": "grudge-29bf8997-6164-cc5c-cf61-b92c1854fdb0",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-29bf8997-6164-cc5c-cf61-b92c1854fdb0.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-29bf8997-6164-cc5c-cf61-b92c1854fdb0.png",
+      "localPath": "/icons/rpg-gui/28.png"
+    },
+    "29.png": {
+      "uuid": "grudge-da7ffb66-9c15-a7d1-07e8-41cc7d2411c2",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-da7ffb66-9c15-a7d1-07e8-41cc7d2411c2.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-da7ffb66-9c15-a7d1-07e8-41cc7d2411c2.png",
+      "localPath": "/icons/rpg-gui/29.png"
+    },
+    "3.png": {
+      "uuid": "grudge-77d15999-fd7c-0c07-194e-cd5ca97b939f",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-77d15999-fd7c-0c07-194e-cd5ca97b939f.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-77d15999-fd7c-0c07-194e-cd5ca97b939f.png",
+      "localPath": "/icons/rpg-gui/3.png"
+    },
+    "30.png": {
+      "uuid": "grudge-cd234deb-041b-3c98-c939-07da6f1d17f6",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-cd234deb-041b-3c98-c939-07da6f1d17f6.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-cd234deb-041b-3c98-c939-07da6f1d17f6.png",
+      "localPath": "/icons/rpg-gui/30.png"
+    },
+    "31.png": {
+      "uuid": "grudge-26757cb5-b73f-a3a4-9aed-988fbfb624a0",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-26757cb5-b73f-a3a4-9aed-988fbfb624a0.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-26757cb5-b73f-a3a4-9aed-988fbfb624a0.png",
+      "localPath": "/icons/rpg-gui/31.png"
+    },
+    "32.png": {
+      "uuid": "grudge-23b671f5-978f-8876-46d1-622fb1477dd1",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-23b671f5-978f-8876-46d1-622fb1477dd1.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-23b671f5-978f-8876-46d1-622fb1477dd1.png",
+      "localPath": "/icons/rpg-gui/32.png"
+    },
+    "33.png": {
+      "uuid": "grudge-3151863a-bf46-b822-166f-78d174eae646",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-3151863a-bf46-b822-166f-78d174eae646.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-3151863a-bf46-b822-166f-78d174eae646.png",
+      "localPath": "/icons/rpg-gui/33.png"
+    },
+    "34.png": {
+      "uuid": "grudge-5edeea28-8b7f-c5fc-6ca7-f042e6e7b1de",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-5edeea28-8b7f-c5fc-6ca7-f042e6e7b1de.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-5edeea28-8b7f-c5fc-6ca7-f042e6e7b1de.png",
+      "localPath": "/icons/rpg-gui/34.png"
+    },
+    "35.png": {
+      "uuid": "grudge-1f1781ef-ecb4-471b-c989-9218c2c8664e",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-1f1781ef-ecb4-471b-c989-9218c2c8664e.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-1f1781ef-ecb4-471b-c989-9218c2c8664e.png",
+      "localPath": "/icons/rpg-gui/35.png"
+    },
+    "36.png": {
+      "uuid": "grudge-883ffd32-16cf-336e-d479-36e1f12b703a",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-883ffd32-16cf-336e-d479-36e1f12b703a.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-883ffd32-16cf-336e-d479-36e1f12b703a.png",
+      "localPath": "/icons/rpg-gui/36.png"
+    },
+    "37.png": {
+      "uuid": "grudge-608fdac5-a5b2-aea6-98a0-a4feca49658c",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-608fdac5-a5b2-aea6-98a0-a4feca49658c.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-608fdac5-a5b2-aea6-98a0-a4feca49658c.png",
+      "localPath": "/icons/rpg-gui/37.png"
+    },
+    "38.png": {
+      "uuid": "grudge-d57db5a0-c2e1-e59a-4d62-aa49473887b1",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-d57db5a0-c2e1-e59a-4d62-aa49473887b1.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-d57db5a0-c2e1-e59a-4d62-aa49473887b1.png",
+      "localPath": "/icons/rpg-gui/38.png"
+    },
+    "39.png": {
+      "uuid": "grudge-bcbe542d-0922-92c4-e519-c50196d5fc25",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-bcbe542d-0922-92c4-e519-c50196d5fc25.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-bcbe542d-0922-92c4-e519-c50196d5fc25.png",
+      "localPath": "/icons/rpg-gui/39.png"
+    },
+    "4.png": {
+      "uuid": "grudge-6eaf6a71-a7cb-a714-6d4e-14983a86b1b4",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-6eaf6a71-a7cb-a714-6d4e-14983a86b1b4.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-6eaf6a71-a7cb-a714-6d4e-14983a86b1b4.png",
+      "localPath": "/icons/rpg-gui/4.png"
+    },
+    "40.png": {
+      "uuid": "grudge-634b06de-62a7-db2e-276b-4b47bde9d713",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-634b06de-62a7-db2e-276b-4b47bde9d713.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-634b06de-62a7-db2e-276b-4b47bde9d713.png",
+      "localPath": "/icons/rpg-gui/40.png"
+    },
+    "41.png": {
+      "uuid": "grudge-05ffb0db-04a7-23b8-c362-33a79cfe8d75",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-05ffb0db-04a7-23b8-c362-33a79cfe8d75.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-05ffb0db-04a7-23b8-c362-33a79cfe8d75.png",
+      "localPath": "/icons/rpg-gui/41.png"
+    },
+    "42.png": {
+      "uuid": "grudge-b8e41d8c-63b8-a7c7-0f34-1f1da99de0e2",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-b8e41d8c-63b8-a7c7-0f34-1f1da99de0e2.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-b8e41d8c-63b8-a7c7-0f34-1f1da99de0e2.png",
+      "localPath": "/icons/rpg-gui/42.png"
+    },
+    "43.png": {
+      "uuid": "grudge-20bfd3dc-eddd-0712-d0c3-0c39aedba684",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-20bfd3dc-eddd-0712-d0c3-0c39aedba684.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-20bfd3dc-eddd-0712-d0c3-0c39aedba684.png",
+      "localPath": "/icons/rpg-gui/43.png"
+    },
+    "44.png": {
+      "uuid": "grudge-c14881cb-a2c6-2c34-b67f-ef67fa0220bc",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-c14881cb-a2c6-2c34-b67f-ef67fa0220bc.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-c14881cb-a2c6-2c34-b67f-ef67fa0220bc.png",
+      "localPath": "/icons/rpg-gui/44.png"
+    },
+    "45.png": {
+      "uuid": "grudge-0c4d234d-21fb-dd5d-c83d-0517cb8bf350",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-0c4d234d-21fb-dd5d-c83d-0517cb8bf350.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-0c4d234d-21fb-dd5d-c83d-0517cb8bf350.png",
+      "localPath": "/icons/rpg-gui/45.png"
+    },
+    "46.png": {
+      "uuid": "grudge-73aff9c3-3b33-0560-e740-c39de66a1e32",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-73aff9c3-3b33-0560-e740-c39de66a1e32.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-73aff9c3-3b33-0560-e740-c39de66a1e32.png",
+      "localPath": "/icons/rpg-gui/46.png"
+    },
+    "47.png": {
+      "uuid": "grudge-dc63f9be-dc4f-d8cf-e665-22a433498520",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-dc63f9be-dc4f-d8cf-e665-22a433498520.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-dc63f9be-dc4f-d8cf-e665-22a433498520.png",
+      "localPath": "/icons/rpg-gui/47.png"
+    },
+    "48.png": {
+      "uuid": "grudge-09328dd9-24a1-ebc5-316f-877f06a7c9b3",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-09328dd9-24a1-ebc5-316f-877f06a7c9b3.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-09328dd9-24a1-ebc5-316f-877f06a7c9b3.png",
+      "localPath": "/icons/rpg-gui/48.png"
+    },
+    "49.png": {
+      "uuid": "grudge-95e8fe4d-2d08-1aa9-b757-26271ebaafba",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-95e8fe4d-2d08-1aa9-b757-26271ebaafba.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-95e8fe4d-2d08-1aa9-b757-26271ebaafba.png",
+      "localPath": "/icons/rpg-gui/49.png"
+    },
+    "5.png": {
+      "uuid": "grudge-006ed4f4-67ba-a2c3-650f-c594a9fb8fe6",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-006ed4f4-67ba-a2c3-650f-c594a9fb8fe6.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-006ed4f4-67ba-a2c3-650f-c594a9fb8fe6.png",
+      "localPath": "/icons/rpg-gui/5.png"
+    },
+    "50.png": {
+      "uuid": "grudge-05a762fc-4249-3724-bc72-b92002050a85",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-05a762fc-4249-3724-bc72-b92002050a85.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-05a762fc-4249-3724-bc72-b92002050a85.png",
+      "localPath": "/icons/rpg-gui/50.png"
+    },
+    "51.png": {
+      "uuid": "grudge-256ab30f-8b51-0114-8eb3-5e3e8108cbef",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-256ab30f-8b51-0114-8eb3-5e3e8108cbef.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-256ab30f-8b51-0114-8eb3-5e3e8108cbef.png",
+      "localPath": "/icons/rpg-gui/51.png"
+    },
+    "52.png": {
+      "uuid": "grudge-b27962ff-7624-6f8f-f678-7ade2770cb78",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-b27962ff-7624-6f8f-f678-7ade2770cb78.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-b27962ff-7624-6f8f-f678-7ade2770cb78.png",
+      "localPath": "/icons/rpg-gui/52.png"
+    },
+    "53.png": {
+      "uuid": "grudge-493a9481-9835-1f1d-19c6-e6ce7277bace",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-493a9481-9835-1f1d-19c6-e6ce7277bace.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-493a9481-9835-1f1d-19c6-e6ce7277bace.png",
+      "localPath": "/icons/rpg-gui/53.png"
+    },
+    "54.png": {
+      "uuid": "grudge-70fb48e1-5a00-f7d5-b861-32e601059725",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-70fb48e1-5a00-f7d5-b861-32e601059725.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-70fb48e1-5a00-f7d5-b861-32e601059725.png",
+      "localPath": "/icons/rpg-gui/54.png"
+    },
+    "55.png": {
+      "uuid": "grudge-0f62b02c-de6c-f248-3b3d-51c502a6fa69",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-0f62b02c-de6c-f248-3b3d-51c502a6fa69.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-0f62b02c-de6c-f248-3b3d-51c502a6fa69.png",
+      "localPath": "/icons/rpg-gui/55.png"
+    },
+    "56.png": {
+      "uuid": "grudge-e04941b3-da31-fca9-8b4e-706bdcc285da",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-e04941b3-da31-fca9-8b4e-706bdcc285da.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-e04941b3-da31-fca9-8b4e-706bdcc285da.png",
+      "localPath": "/icons/rpg-gui/56.png"
+    },
+    "57.png": {
+      "uuid": "grudge-66c92436-1d06-6f0b-22cd-1e8aea411010",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-66c92436-1d06-6f0b-22cd-1e8aea411010.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-66c92436-1d06-6f0b-22cd-1e8aea411010.png",
+      "localPath": "/icons/rpg-gui/57.png"
+    },
+    "58.png": {
+      "uuid": "grudge-5d6fb5ce-3ef4-af6b-f1f7-2c1414ce2087",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-5d6fb5ce-3ef4-af6b-f1f7-2c1414ce2087.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-5d6fb5ce-3ef4-af6b-f1f7-2c1414ce2087.png",
+      "localPath": "/icons/rpg-gui/58.png"
+    },
+    "59.png": {
+      "uuid": "grudge-f1b57776-7f15-1a95-7d6c-6aceac05c746",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-f1b57776-7f15-1a95-7d6c-6aceac05c746.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-f1b57776-7f15-1a95-7d6c-6aceac05c746.png",
+      "localPath": "/icons/rpg-gui/59.png"
+    },
+    "6.png": {
+      "uuid": "grudge-984dbee0-9fbe-6bc3-8967-864279ea23e4",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-984dbee0-9fbe-6bc3-8967-864279ea23e4.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-984dbee0-9fbe-6bc3-8967-864279ea23e4.png",
+      "localPath": "/icons/rpg-gui/6.png"
+    },
+    "60.png": {
+      "uuid": "grudge-8130b1b7-3aa2-55f6-5b59-690a7f3c710a",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-8130b1b7-3aa2-55f6-5b59-690a7f3c710a.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-8130b1b7-3aa2-55f6-5b59-690a7f3c710a.png",
+      "localPath": "/icons/rpg-gui/60.png"
+    },
+    "61.png": {
+      "uuid": "grudge-09b90fb8-90e5-103a-2e8d-117f5a3c04a9",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-09b90fb8-90e5-103a-2e8d-117f5a3c04a9.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-09b90fb8-90e5-103a-2e8d-117f5a3c04a9.png",
+      "localPath": "/icons/rpg-gui/61.png"
+    },
+    "62.png": {
+      "uuid": "grudge-75850310-866a-4e4f-ca3f-9a027f6b530a",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-75850310-866a-4e4f-ca3f-9a027f6b530a.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-75850310-866a-4e4f-ca3f-9a027f6b530a.png",
+      "localPath": "/icons/rpg-gui/62.png"
+    },
+    "63.png": {
+      "uuid": "grudge-8783e1ba-aae5-a7b9-fae6-ccca65392096",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-8783e1ba-aae5-a7b9-fae6-ccca65392096.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-8783e1ba-aae5-a7b9-fae6-ccca65392096.png",
+      "localPath": "/icons/rpg-gui/63.png"
+    },
+    "64.png": {
+      "uuid": "grudge-d5f368a3-bd5e-92be-b9fd-069bb9d9bc32",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-d5f368a3-bd5e-92be-b9fd-069bb9d9bc32.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-d5f368a3-bd5e-92be-b9fd-069bb9d9bc32.png",
+      "localPath": "/icons/rpg-gui/64.png"
+    },
+    "65.png": {
+      "uuid": "grudge-9a008ad5-6aa7-5c76-8f84-f21f00c1053f",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-9a008ad5-6aa7-5c76-8f84-f21f00c1053f.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-9a008ad5-6aa7-5c76-8f84-f21f00c1053f.png",
+      "localPath": "/icons/rpg-gui/65.png"
+    },
+    "66.png": {
+      "uuid": "grudge-3b28d6b3-b719-0bf9-eb26-e7159488c795",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-3b28d6b3-b719-0bf9-eb26-e7159488c795.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-3b28d6b3-b719-0bf9-eb26-e7159488c795.png",
+      "localPath": "/icons/rpg-gui/66.png"
+    },
+    "67.png": {
+      "uuid": "grudge-772c4a3d-eb50-42b3-ef24-10e21dcecdc2",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-772c4a3d-eb50-42b3-ef24-10e21dcecdc2.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-772c4a3d-eb50-42b3-ef24-10e21dcecdc2.png",
+      "localPath": "/icons/rpg-gui/67.png"
+    },
+    "68.png": {
+      "uuid": "grudge-87ad2969-6d3f-5165-45b7-fb99c7e91f6c",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-87ad2969-6d3f-5165-45b7-fb99c7e91f6c.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-87ad2969-6d3f-5165-45b7-fb99c7e91f6c.png",
+      "localPath": "/icons/rpg-gui/68.png"
+    },
+    "69.png": {
+      "uuid": "grudge-8b270194-3b63-9b23-36a3-af3a8baf5556",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-8b270194-3b63-9b23-36a3-af3a8baf5556.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-8b270194-3b63-9b23-36a3-af3a8baf5556.png",
+      "localPath": "/icons/rpg-gui/69.png"
+    },
+    "7.png": {
+      "uuid": "grudge-309fb654-aee1-301e-9f63-3d439ced623a",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-309fb654-aee1-301e-9f63-3d439ced623a.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-309fb654-aee1-301e-9f63-3d439ced623a.png",
+      "localPath": "/icons/rpg-gui/7.png"
+    },
+    "70.png": {
+      "uuid": "grudge-4c2b6745-5daf-676e-dad0-d8ae7a03f6d9",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-4c2b6745-5daf-676e-dad0-d8ae7a03f6d9.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-4c2b6745-5daf-676e-dad0-d8ae7a03f6d9.png",
+      "localPath": "/icons/rpg-gui/70.png"
+    },
+    "71.png": {
+      "uuid": "grudge-362cf46e-c6f4-9985-afc4-c16d10ea8338",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-362cf46e-c6f4-9985-afc4-c16d10ea8338.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-362cf46e-c6f4-9985-afc4-c16d10ea8338.png",
+      "localPath": "/icons/rpg-gui/71.png"
+    },
+    "72.png": {
+      "uuid": "grudge-5bf96c2e-07db-8eab-bb53-8b8391eb13f0",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-5bf96c2e-07db-8eab-bb53-8b8391eb13f0.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-5bf96c2e-07db-8eab-bb53-8b8391eb13f0.png",
+      "localPath": "/icons/rpg-gui/72.png"
+    },
+    "73.png": {
+      "uuid": "grudge-30e25629-e5a2-c21b-e832-8177af31bba3",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-30e25629-e5a2-c21b-e832-8177af31bba3.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-30e25629-e5a2-c21b-e832-8177af31bba3.png",
+      "localPath": "/icons/rpg-gui/73.png"
+    },
+    "74.png": {
+      "uuid": "grudge-fd9856ff-598d-bbc1-a512-c9533bca1d43",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-fd9856ff-598d-bbc1-a512-c9533bca1d43.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-fd9856ff-598d-bbc1-a512-c9533bca1d43.png",
+      "localPath": "/icons/rpg-gui/74.png"
+    },
+    "75.png": {
+      "uuid": "grudge-341bf468-a7f5-88ee-a465-ff9e2fd70824",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-341bf468-a7f5-88ee-a465-ff9e2fd70824.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-341bf468-a7f5-88ee-a465-ff9e2fd70824.png",
+      "localPath": "/icons/rpg-gui/75.png"
+    },
+    "76.png": {
+      "uuid": "grudge-61539944-5cb3-9294-ccda-75888f3f0edb",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-61539944-5cb3-9294-ccda-75888f3f0edb.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-61539944-5cb3-9294-ccda-75888f3f0edb.png",
+      "localPath": "/icons/rpg-gui/76.png"
+    },
+    "77.png": {
+      "uuid": "grudge-205e03ca-950c-0d66-e830-10d11e070735",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-205e03ca-950c-0d66-e830-10d11e070735.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-205e03ca-950c-0d66-e830-10d11e070735.png",
+      "localPath": "/icons/rpg-gui/77.png"
+    },
+    "78.png": {
+      "uuid": "grudge-7f08d0f6-aa74-ec0b-dbd1-4e5dca472631",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-7f08d0f6-aa74-ec0b-dbd1-4e5dca472631.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-7f08d0f6-aa74-ec0b-dbd1-4e5dca472631.png",
+      "localPath": "/icons/rpg-gui/78.png"
+    },
+    "79.png": {
+      "uuid": "grudge-8073b1f7-9e7c-c0f5-f207-7abc8b7cb7cf",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-8073b1f7-9e7c-c0f5-f207-7abc8b7cb7cf.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-8073b1f7-9e7c-c0f5-f207-7abc8b7cb7cf.png",
+      "localPath": "/icons/rpg-gui/79.png"
+    },
+    "8.png": {
+      "uuid": "grudge-1a0052cf-0266-5537-f05f-2dcdd87d6905",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-1a0052cf-0266-5537-f05f-2dcdd87d6905.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-1a0052cf-0266-5537-f05f-2dcdd87d6905.png",
+      "localPath": "/icons/rpg-gui/8.png"
+    },
+    "80.png": {
+      "uuid": "grudge-baf7fcb0-ea37-7c73-148f-0a4793f355af",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-baf7fcb0-ea37-7c73-148f-0a4793f355af.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-baf7fcb0-ea37-7c73-148f-0a4793f355af.png",
+      "localPath": "/icons/rpg-gui/80.png"
+    },
+    "81.png": {
+      "uuid": "grudge-3dfe02a6-3c9c-0c44-5a5e-6395485d8e06",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-3dfe02a6-3c9c-0c44-5a5e-6395485d8e06.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-3dfe02a6-3c9c-0c44-5a5e-6395485d8e06.png",
+      "localPath": "/icons/rpg-gui/81.png"
+    },
+    "82.png": {
+      "uuid": "grudge-1f747d0e-2073-85a1-812e-4d6ba91c2d3c",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-1f747d0e-2073-85a1-812e-4d6ba91c2d3c.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-1f747d0e-2073-85a1-812e-4d6ba91c2d3c.png",
+      "localPath": "/icons/rpg-gui/82.png"
+    },
+    "83.png": {
+      "uuid": "grudge-4ec47d9c-a91f-ec28-c7dd-796aa33d85d8",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-4ec47d9c-a91f-ec28-c7dd-796aa33d85d8.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-4ec47d9c-a91f-ec28-c7dd-796aa33d85d8.png",
+      "localPath": "/icons/rpg-gui/83.png"
+    },
+    "84.png": {
+      "uuid": "grudge-b7b8b190-4873-5506-ada2-f0e68491af9d",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-b7b8b190-4873-5506-ada2-f0e68491af9d.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-b7b8b190-4873-5506-ada2-f0e68491af9d.png",
+      "localPath": "/icons/rpg-gui/84.png"
+    },
+    "85.png": {
+      "uuid": "grudge-e0771098-64b9-1410-2aef-0258a616814b",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-e0771098-64b9-1410-2aef-0258a616814b.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-e0771098-64b9-1410-2aef-0258a616814b.png",
+      "localPath": "/icons/rpg-gui/85.png"
+    },
+    "86.png": {
+      "uuid": "grudge-578e6ec8-b4f3-f143-a94a-9093102d431a",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-578e6ec8-b4f3-f143-a94a-9093102d431a.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-578e6ec8-b4f3-f143-a94a-9093102d431a.png",
+      "localPath": "/icons/rpg-gui/86.png"
+    },
+    "87.png": {
+      "uuid": "grudge-9df0962e-6091-2183-4472-e92b708b06c1",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-9df0962e-6091-2183-4472-e92b708b06c1.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-9df0962e-6091-2183-4472-e92b708b06c1.png",
+      "localPath": "/icons/rpg-gui/87.png"
+    },
+    "88.png": {
+      "uuid": "grudge-27da86e7-b1a6-2e17-1e2c-8da5a225eaa8",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-27da86e7-b1a6-2e17-1e2c-8da5a225eaa8.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-27da86e7-b1a6-2e17-1e2c-8da5a225eaa8.png",
+      "localPath": "/icons/rpg-gui/88.png"
+    },
+    "89.png": {
+      "uuid": "grudge-a65afded-ae1a-36af-4e38-b4b123c0ab93",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-a65afded-ae1a-36af-4e38-b4b123c0ab93.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-a65afded-ae1a-36af-4e38-b4b123c0ab93.png",
+      "localPath": "/icons/rpg-gui/89.png"
+    },
+    "9.png": {
+      "uuid": "grudge-e5a1c506-6a8d-3179-9668-6aeef517a0ab",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-e5a1c506-6a8d-3179-9668-6aeef517a0ab.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-e5a1c506-6a8d-3179-9668-6aeef517a0ab.png",
+      "localPath": "/icons/rpg-gui/9.png"
+    },
+    "90.png": {
+      "uuid": "grudge-9450b621-b6a9-dc01-8211-bfb8f0bb36f7",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-9450b621-b6a9-dc01-8211-bfb8f0bb36f7.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-9450b621-b6a9-dc01-8211-bfb8f0bb36f7.png",
+      "localPath": "/icons/rpg-gui/90.png"
+    },
+    "91.png": {
+      "uuid": "grudge-33619eea-3acc-b467-8d15-4e3fbbe31a52",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-33619eea-3acc-b467-8d15-4e3fbbe31a52.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-33619eea-3acc-b467-8d15-4e3fbbe31a52.png",
+      "localPath": "/icons/rpg-gui/91.png"
+    },
+    "92.png": {
+      "uuid": "grudge-85879e41-c8b4-164b-27ea-92f6d77f737b",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-85879e41-c8b4-164b-27ea-92f6d77f737b.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-85879e41-c8b4-164b-27ea-92f6d77f737b.png",
+      "localPath": "/icons/rpg-gui/92.png"
+    },
+    "93.png": {
+      "uuid": "grudge-d7f4717b-3bc0-0c26-bdf7-f1645c2d966b",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-d7f4717b-3bc0-0c26-bdf7-f1645c2d966b.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-d7f4717b-3bc0-0c26-bdf7-f1645c2d966b.png",
+      "localPath": "/icons/rpg-gui/93.png"
+    },
+    "94.png": {
+      "uuid": "grudge-9166386c-3898-2bfa-aecb-93e1339c194f",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-9166386c-3898-2bfa-aecb-93e1339c194f.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-9166386c-3898-2bfa-aecb-93e1339c194f.png",
+      "localPath": "/icons/rpg-gui/94.png"
+    },
+    "95.png": {
+      "uuid": "grudge-8690742d-a86d-e548-3118-ba79c99b4094",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-8690742d-a86d-e548-3118-ba79c99b4094.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-8690742d-a86d-e548-3118-ba79c99b4094.png",
+      "localPath": "/icons/rpg-gui/95.png"
+    },
+    "96.png": {
+      "uuid": "grudge-9d72cc71-f5cc-dfbc-e0e5-39d135b71be4",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-9d72cc71-f5cc-dfbc-e0e5-39d135b71be4.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-9d72cc71-f5cc-dfbc-e0e5-39d135b71be4.png",
+      "localPath": "/icons/rpg-gui/96.png"
+    },
+    "Avatar1-1.png": {
+      "uuid": "grudge-b1166694-7ed5-2f33-0f9e-7b4695d579ad",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-b1166694-7ed5-2f33-0f9e-7b4695d579ad.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-b1166694-7ed5-2f33-0f9e-7b4695d579ad.png",
+      "localPath": "/icons/rpg-gui/Avatar1-1.png"
+    },
+    "Avatar1-2.png": {
+      "uuid": "grudge-15b6123c-defd-6ed7-8280-32f95c16321d",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-15b6123c-defd-6ed7-8280-32f95c16321d.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-15b6123c-defd-6ed7-8280-32f95c16321d.png",
+      "localPath": "/icons/rpg-gui/Avatar1-2.png"
+    },
+    "Avatar1-3.png": {
+      "uuid": "grudge-094ef280-4a43-4bb9-f8e5-66c5fbfd6fc8",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-094ef280-4a43-4bb9-f8e5-66c5fbfd6fc8.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-094ef280-4a43-4bb9-f8e5-66c5fbfd6fc8.png",
+      "localPath": "/icons/rpg-gui/Avatar1-3.png"
+    },
+    "Avatar2-1.png": {
+      "uuid": "grudge-742b32f6-614e-4d0d-a8d1-11680ab6c286",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-742b32f6-614e-4d0d-a8d1-11680ab6c286.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-742b32f6-614e-4d0d-a8d1-11680ab6c286.png",
+      "localPath": "/icons/rpg-gui/Avatar2-1.png"
+    },
+    "Avatar2-2.png": {
+      "uuid": "grudge-9b53e4bd-e68b-c6a8-fd5d-7c4e04ace672",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-9b53e4bd-e68b-c6a8-fd5d-7c4e04ace672.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-9b53e4bd-e68b-c6a8-fd5d-7c4e04ace672.png",
+      "localPath": "/icons/rpg-gui/Avatar2-2.png"
+    },
+    "Avatar2-3.png": {
+      "uuid": "grudge-e43aa705-89c0-33ba-d7ae-e451fdbdf28d",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-e43aa705-89c0-33ba-d7ae-e451fdbdf28d.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-e43aa705-89c0-33ba-d7ae-e451fdbdf28d.png",
+      "localPath": "/icons/rpg-gui/Avatar2-3.png"
+    },
+    "bg1.png": {
+      "uuid": "grudge-037e2ba3-46c5-2153-ea1f-214cc54f2cd2",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-037e2ba3-46c5-2153-ea1f-214cc54f2cd2.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-037e2ba3-46c5-2153-ea1f-214cc54f2cd2.png",
+      "localPath": "/icons/rpg-gui/bg1.png"
+    },
+    "bg2.png": {
+      "uuid": "grudge-c975aca2-6ade-36ea-b88e-dbe8c9bdfe03",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-c975aca2-6ade-36ea-b88e-dbe8c9bdfe03.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-c975aca2-6ade-36ea-b88e-dbe8c9bdfe03.png",
+      "localPath": "/icons/rpg-gui/bg2.png"
+    },
+    "Buttons1_Buttons1-2 PNG_1.png": {
+      "uuid": "grudge-6e460c37-ce53-3206-d923-788380e5da39",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-6e460c37-ce53-3206-d923-788380e5da39.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-6e460c37-ce53-3206-d923-788380e5da39.png",
+      "localPath": "/icons/rpg-gui/Buttons1_Buttons1-2 PNG_1.png"
+    },
+    "Buttons1_Buttons1-2 PNG_2.png": {
+      "uuid": "grudge-ad731521-36eb-e232-0eaa-43e617ec6600",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-ad731521-36eb-e232-0eaa-43e617ec6600.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-ad731521-36eb-e232-0eaa-43e617ec6600.png",
+      "localPath": "/icons/rpg-gui/Buttons1_Buttons1-2 PNG_2.png"
+    },
+    "Buttons1_Buttons1-2 PNG_3.png": {
+      "uuid": "grudge-de1723f0-a5c5-e624-5063-a7233b079560",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-de1723f0-a5c5-e624-5063-a7233b079560.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-de1723f0-a5c5-e624-5063-a7233b079560.png",
+      "localPath": "/icons/rpg-gui/Buttons1_Buttons1-2 PNG_3.png"
+    },
+    "Buttons1_Buttons1-2 PNG_4.png": {
+      "uuid": "grudge-25617064-da29-8232-c4bd-1d6393d46377",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-25617064-da29-8232-c4bd-1d6393d46377.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-25617064-da29-8232-c4bd-1d6393d46377.png",
+      "localPath": "/icons/rpg-gui/Buttons1_Buttons1-2 PNG_4.png"
+    },
+    "Buttons1_Buttons1-2 PNG_5.png": {
+      "uuid": "grudge-700aa0c3-c5df-05e7-44c8-d02fcaf258fa",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-700aa0c3-c5df-05e7-44c8-d02fcaf258fa.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-700aa0c3-c5df-05e7-44c8-d02fcaf258fa.png",
+      "localPath": "/icons/rpg-gui/Buttons1_Buttons1-2 PNG_5.png"
+    },
+    "Buttons1_Buttons1-2 PNG_6.png": {
+      "uuid": "grudge-f66e9850-6015-b563-d20f-fc5850a9ded0",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-f66e9850-6015-b563-d20f-fc5850a9ded0.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-f66e9850-6015-b563-d20f-fc5850a9ded0.png",
+      "localPath": "/icons/rpg-gui/Buttons1_Buttons1-2 PNG_6.png"
+    },
+    "Buttons1_Buttons1-2 PNG_7.png": {
+      "uuid": "grudge-e2ada062-0d47-d345-9865-170f7240cfa4",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-e2ada062-0d47-d345-9865-170f7240cfa4.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-e2ada062-0d47-d345-9865-170f7240cfa4.png",
+      "localPath": "/icons/rpg-gui/Buttons1_Buttons1-2 PNG_7.png"
+    },
+    "Buttons1_Buttons1-2 PNG_8.png": {
+      "uuid": "grudge-56cb26a9-afa0-a393-bbec-5b26a4b953a2",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-56cb26a9-afa0-a393-bbec-5b26a4b953a2.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-56cb26a9-afa0-a393-bbec-5b26a4b953a2.png",
+      "localPath": "/icons/rpg-gui/Buttons1_Buttons1-2 PNG_8.png"
+    },
+    "Buttons1_Buttons1-3 PNG_1.png": {
+      "uuid": "grudge-7f4c04af-7a90-9c02-c390-707d3faccb42",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-7f4c04af-7a90-9c02-c390-707d3faccb42.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-7f4c04af-7a90-9c02-c390-707d3faccb42.png",
+      "localPath": "/icons/rpg-gui/Buttons1_Buttons1-3 PNG_1.png"
+    },
+    "Buttons1_Buttons1-3 PNG_2.png": {
+      "uuid": "grudge-706b3bd9-41ef-85f4-8c45-6be209985fd2",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-706b3bd9-41ef-85f4-8c45-6be209985fd2.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-706b3bd9-41ef-85f4-8c45-6be209985fd2.png",
+      "localPath": "/icons/rpg-gui/Buttons1_Buttons1-3 PNG_2.png"
+    },
+    "Buttons1_Buttons1-3 PNG_3.png": {
+      "uuid": "grudge-11a291ff-7c03-2514-9d44-6cc4ebbb413f",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-11a291ff-7c03-2514-9d44-6cc4ebbb413f.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-11a291ff-7c03-2514-9d44-6cc4ebbb413f.png",
+      "localPath": "/icons/rpg-gui/Buttons1_Buttons1-3 PNG_3.png"
+    },
+    "Buttons1_Buttons1-3 PNG_4.png": {
+      "uuid": "grudge-9b9a7b91-9053-4483-27de-108fd07f8625",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-9b9a7b91-9053-4483-27de-108fd07f8625.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-9b9a7b91-9053-4483-27de-108fd07f8625.png",
+      "localPath": "/icons/rpg-gui/Buttons1_Buttons1-3 PNG_4.png"
+    },
+    "Buttons1_Buttons1-3 PNG_5.png": {
+      "uuid": "grudge-7df3fdb6-2eb6-b909-1446-4099d4d6596a",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-7df3fdb6-2eb6-b909-1446-4099d4d6596a.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-7df3fdb6-2eb6-b909-1446-4099d4d6596a.png",
+      "localPath": "/icons/rpg-gui/Buttons1_Buttons1-3 PNG_5.png"
+    },
+    "Buttons1_Buttons1-3 PNG_6.png": {
+      "uuid": "grudge-6d3ec6a8-59e9-4329-7970-9146944d08b5",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-6d3ec6a8-59e9-4329-7970-9146944d08b5.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-6d3ec6a8-59e9-4329-7970-9146944d08b5.png",
+      "localPath": "/icons/rpg-gui/Buttons1_Buttons1-3 PNG_6.png"
+    },
+    "Buttons1_Buttons1-3 PNG_7.png": {
+      "uuid": "grudge-ca2aa083-7d1d-ac9e-265c-6a66f0ce8a96",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-ca2aa083-7d1d-ac9e-265c-6a66f0ce8a96.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-ca2aa083-7d1d-ac9e-265c-6a66f0ce8a96.png",
+      "localPath": "/icons/rpg-gui/Buttons1_Buttons1-3 PNG_7.png"
+    },
+    "Buttons1_Buttons1-3 PNG_8.png": {
+      "uuid": "grudge-a96d041e-b7f5-ec35-e2e5-86342ff63b33",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-a96d041e-b7f5-ec35-e2e5-86342ff63b33.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-a96d041e-b7f5-ec35-e2e5-86342ff63b33.png",
+      "localPath": "/icons/rpg-gui/Buttons1_Buttons1-3 PNG_8.png"
+    },
+    "Buttons2_Buttons2-1 PNG_1.png": {
+      "uuid": "grudge-dcb4ea6a-f0e8-f35c-09b2-2869f027c109",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-dcb4ea6a-f0e8-f35c-09b2-2869f027c109.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-dcb4ea6a-f0e8-f35c-09b2-2869f027c109.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-1 PNG_1.png"
+    },
+    "Buttons2_Buttons2-1 PNG_2.png": {
+      "uuid": "grudge-f2e5c4c0-073f-9cb3-c7ef-6db7f96e0846",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-f2e5c4c0-073f-9cb3-c7ef-6db7f96e0846.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-f2e5c4c0-073f-9cb3-c7ef-6db7f96e0846.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-1 PNG_2.png"
+    },
+    "Buttons2_Buttons2-1 PNG_3.png": {
+      "uuid": "grudge-c698fb6e-f7a5-bd16-294c-7068a2cfe1e2",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-c698fb6e-f7a5-bd16-294c-7068a2cfe1e2.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-c698fb6e-f7a5-bd16-294c-7068a2cfe1e2.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-1 PNG_3.png"
+    },
+    "Buttons2_Buttons2-1 PNG_4.png": {
+      "uuid": "grudge-32ec6a80-471b-1a6a-946e-9f4a7e791076",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-32ec6a80-471b-1a6a-946e-9f4a7e791076.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-32ec6a80-471b-1a6a-946e-9f4a7e791076.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-1 PNG_4.png"
+    },
+    "Buttons2_Buttons2-1 PNG_5.png": {
+      "uuid": "grudge-3c6eb41c-fdc2-81b4-3dfd-0ce8f4b9cfab",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-3c6eb41c-fdc2-81b4-3dfd-0ce8f4b9cfab.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-3c6eb41c-fdc2-81b4-3dfd-0ce8f4b9cfab.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-1 PNG_5.png"
+    },
+    "Buttons2_Buttons2-1 PNG_6.png": {
+      "uuid": "grudge-56de89ea-77dc-59cc-a4ac-02f0837e4d8d",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-56de89ea-77dc-59cc-a4ac-02f0837e4d8d.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-56de89ea-77dc-59cc-a4ac-02f0837e4d8d.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-1 PNG_6.png"
+    },
+    "Buttons2_Buttons2-1 PNG_7.png": {
+      "uuid": "grudge-4d2e6f5d-cd02-d0f2-20ac-f3d4a7ac9b00",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-4d2e6f5d-cd02-d0f2-20ac-f3d4a7ac9b00.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-4d2e6f5d-cd02-d0f2-20ac-f3d4a7ac9b00.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-1 PNG_7.png"
+    },
+    "Buttons2_Buttons2-1 PNG_8.png": {
+      "uuid": "grudge-95116391-1261-345e-cdb6-5e1b60371c20",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-95116391-1261-345e-cdb6-5e1b60371c20.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-95116391-1261-345e-cdb6-5e1b60371c20.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-1 PNG_8.png"
+    },
+    "Buttons2_Buttons2-2 PNG_1.png": {
+      "uuid": "grudge-d0e0f66a-c906-d169-426a-80556d9429fb",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-d0e0f66a-c906-d169-426a-80556d9429fb.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-d0e0f66a-c906-d169-426a-80556d9429fb.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-2 PNG_1.png"
+    },
+    "Buttons2_Buttons2-2 PNG_10.png": {
+      "uuid": "grudge-5e4fc321-3508-8e17-0bdf-7ce4ac8177f9",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-5e4fc321-3508-8e17-0bdf-7ce4ac8177f9.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-5e4fc321-3508-8e17-0bdf-7ce4ac8177f9.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-2 PNG_10.png"
+    },
+    "Buttons2_Buttons2-2 PNG_11.png": {
+      "uuid": "grudge-eb281352-ddd9-a9ee-6485-397bc9d3c1fb",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-eb281352-ddd9-a9ee-6485-397bc9d3c1fb.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-eb281352-ddd9-a9ee-6485-397bc9d3c1fb.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-2 PNG_11.png"
+    },
+    "Buttons2_Buttons2-2 PNG_12.png": {
+      "uuid": "grudge-abcf4c48-6bd4-c3a9-bc6f-dc870d788c56",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-abcf4c48-6bd4-c3a9-bc6f-dc870d788c56.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-abcf4c48-6bd4-c3a9-bc6f-dc870d788c56.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-2 PNG_12.png"
+    },
+    "Buttons2_Buttons2-2 PNG_13.png": {
+      "uuid": "grudge-21d9f039-6ce0-e062-e406-73f74706f0c0",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-21d9f039-6ce0-e062-e406-73f74706f0c0.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-21d9f039-6ce0-e062-e406-73f74706f0c0.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-2 PNG_13.png"
+    },
+    "Buttons2_Buttons2-2 PNG_14.png": {
+      "uuid": "grudge-f335386a-60f3-9b1b-4533-a39155eafd13",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-f335386a-60f3-9b1b-4533-a39155eafd13.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-f335386a-60f3-9b1b-4533-a39155eafd13.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-2 PNG_14.png"
+    },
+    "Buttons2_Buttons2-2 PNG_15.png": {
+      "uuid": "grudge-a35bd195-68f6-9c2b-6494-14056dd9d8ad",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-a35bd195-68f6-9c2b-6494-14056dd9d8ad.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-a35bd195-68f6-9c2b-6494-14056dd9d8ad.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-2 PNG_15.png"
+    },
+    "Buttons2_Buttons2-2 PNG_16.png": {
+      "uuid": "grudge-8c8bbfe7-15e9-d6d6-3d20-ec2cd93a7255",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-8c8bbfe7-15e9-d6d6-3d20-ec2cd93a7255.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-8c8bbfe7-15e9-d6d6-3d20-ec2cd93a7255.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-2 PNG_16.png"
+    },
+    "Buttons2_Buttons2-2 PNG_17.png": {
+      "uuid": "grudge-f6e22982-b250-17f9-ade1-73b81ba171c8",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-f6e22982-b250-17f9-ade1-73b81ba171c8.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-f6e22982-b250-17f9-ade1-73b81ba171c8.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-2 PNG_17.png"
+    },
+    "Buttons2_Buttons2-2 PNG_18.png": {
+      "uuid": "grudge-b4bc366a-4dde-c7e9-3a9d-e7e88a4bb68b",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-b4bc366a-4dde-c7e9-3a9d-e7e88a4bb68b.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-b4bc366a-4dde-c7e9-3a9d-e7e88a4bb68b.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-2 PNG_18.png"
+    },
+    "Buttons2_Buttons2-2 PNG_19.png": {
+      "uuid": "grudge-39052373-9532-38c1-77f3-25347d5efc8c",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-39052373-9532-38c1-77f3-25347d5efc8c.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-39052373-9532-38c1-77f3-25347d5efc8c.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-2 PNG_19.png"
+    },
+    "Buttons2_Buttons2-2 PNG_2.png": {
+      "uuid": "grudge-35408b32-9397-4aa4-7cf1-204c4a96af09",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-35408b32-9397-4aa4-7cf1-204c4a96af09.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-35408b32-9397-4aa4-7cf1-204c4a96af09.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-2 PNG_2.png"
+    },
+    "Buttons2_Buttons2-2 PNG_20.png": {
+      "uuid": "grudge-76bb315e-af9c-0e92-404c-aceed27158a8",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-76bb315e-af9c-0e92-404c-aceed27158a8.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-76bb315e-af9c-0e92-404c-aceed27158a8.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-2 PNG_20.png"
+    },
+    "Buttons2_Buttons2-2 PNG_21.png": {
+      "uuid": "grudge-5b616613-856f-f336-adc1-d7f8ecdf9354",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-5b616613-856f-f336-adc1-d7f8ecdf9354.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-5b616613-856f-f336-adc1-d7f8ecdf9354.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-2 PNG_21.png"
+    },
+    "Buttons2_Buttons2-2 PNG_22.png": {
+      "uuid": "grudge-4ad5c390-a4cd-873e-dff9-a5e5d7d501b1",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-4ad5c390-a4cd-873e-dff9-a5e5d7d501b1.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-4ad5c390-a4cd-873e-dff9-a5e5d7d501b1.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-2 PNG_22.png"
+    },
+    "Buttons2_Buttons2-2 PNG_23.png": {
+      "uuid": "grudge-b41c6fcc-6c01-0775-8950-9b0e886a6d1f",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-b41c6fcc-6c01-0775-8950-9b0e886a6d1f.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-b41c6fcc-6c01-0775-8950-9b0e886a6d1f.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-2 PNG_23.png"
+    },
+    "Buttons2_Buttons2-2 PNG_24.png": {
+      "uuid": "grudge-a6f4b7db-4d68-2132-dbaa-8277531f75b7",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-a6f4b7db-4d68-2132-dbaa-8277531f75b7.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-a6f4b7db-4d68-2132-dbaa-8277531f75b7.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-2 PNG_24.png"
+    },
+    "Buttons2_Buttons2-2 PNG_25.png": {
+      "uuid": "grudge-adf7d25a-21f5-c44d-e481-9e1df8b98622",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-adf7d25a-21f5-c44d-e481-9e1df8b98622.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-adf7d25a-21f5-c44d-e481-9e1df8b98622.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-2 PNG_25.png"
+    },
+    "Buttons2_Buttons2-2 PNG_26.png": {
+      "uuid": "grudge-5365315f-b67d-0336-f5b2-76aac1f4f238",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-5365315f-b67d-0336-f5b2-76aac1f4f238.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-5365315f-b67d-0336-f5b2-76aac1f4f238.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-2 PNG_26.png"
+    },
+    "Buttons2_Buttons2-2 PNG_27.png": {
+      "uuid": "grudge-69845ee1-b9e7-8ac0-c253-e2ed67e70238",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-69845ee1-b9e7-8ac0-c253-e2ed67e70238.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-69845ee1-b9e7-8ac0-c253-e2ed67e70238.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-2 PNG_27.png"
+    },
+    "Buttons2_Buttons2-2 PNG_3.png": {
+      "uuid": "grudge-cfedb21c-49f4-5c2c-9656-fed4a86f3277",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-cfedb21c-49f4-5c2c-9656-fed4a86f3277.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-cfedb21c-49f4-5c2c-9656-fed4a86f3277.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-2 PNG_3.png"
+    },
+    "Buttons2_Buttons2-2 PNG_4.png": {
+      "uuid": "grudge-8f48654b-e6cc-5b68-7c3c-a164da3e201f",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-8f48654b-e6cc-5b68-7c3c-a164da3e201f.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-8f48654b-e6cc-5b68-7c3c-a164da3e201f.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-2 PNG_4.png"
+    },
+    "Buttons2_Buttons2-2 PNG_5.png": {
+      "uuid": "grudge-fbbae354-eb14-42cc-a531-1c5f4e168fe5",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-fbbae354-eb14-42cc-a531-1c5f4e168fe5.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-fbbae354-eb14-42cc-a531-1c5f4e168fe5.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-2 PNG_5.png"
+    },
+    "Buttons2_Buttons2-2 PNG_6.png": {
+      "uuid": "grudge-25420059-bb19-dd47-1c99-46a240c27796",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-25420059-bb19-dd47-1c99-46a240c27796.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-25420059-bb19-dd47-1c99-46a240c27796.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-2 PNG_6.png"
+    },
+    "Buttons2_Buttons2-2 PNG_7.png": {
+      "uuid": "grudge-c4800654-9536-f389-4bb2-bc12d1a1c277",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-c4800654-9536-f389-4bb2-bc12d1a1c277.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-c4800654-9536-f389-4bb2-bc12d1a1c277.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-2 PNG_7.png"
+    },
+    "Buttons2_Buttons2-2 PNG_8.png": {
+      "uuid": "grudge-618cd428-7e3a-0304-989f-26f44c4e4802",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-618cd428-7e3a-0304-989f-26f44c4e4802.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-618cd428-7e3a-0304-989f-26f44c4e4802.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-2 PNG_8.png"
+    },
+    "Buttons2_Buttons2-2 PNG_9.png": {
+      "uuid": "grudge-baaf0eab-f45f-7c7a-e5ff-b24565daf394",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-baaf0eab-f45f-7c7a-e5ff-b24565daf394.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-baaf0eab-f45f-7c7a-e5ff-b24565daf394.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-2 PNG_9.png"
+    },
+    "Buttons2_Buttons2-3 PNG_1.png": {
+      "uuid": "grudge-1b08e507-47ee-1bdb-70f1-0a754b667253",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-1b08e507-47ee-1bdb-70f1-0a754b667253.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-1b08e507-47ee-1bdb-70f1-0a754b667253.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-3 PNG_1.png"
+    },
+    "Buttons2_Buttons2-3 PNG_10.png": {
+      "uuid": "grudge-8895a858-575d-6676-7674-f6e9a4bf2b9f",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-8895a858-575d-6676-7674-f6e9a4bf2b9f.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-8895a858-575d-6676-7674-f6e9a4bf2b9f.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-3 PNG_10.png"
+    },
+    "Buttons2_Buttons2-3 PNG_11.png": {
+      "uuid": "grudge-fa8307c9-afa6-dc86-b5ef-812568caac3b",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-fa8307c9-afa6-dc86-b5ef-812568caac3b.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-fa8307c9-afa6-dc86-b5ef-812568caac3b.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-3 PNG_11.png"
+    },
+    "Buttons2_Buttons2-3 PNG_12.png": {
+      "uuid": "grudge-13770fac-953f-d834-a4d7-283b3be5185e",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-13770fac-953f-d834-a4d7-283b3be5185e.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-13770fac-953f-d834-a4d7-283b3be5185e.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-3 PNG_12.png"
+    },
+    "Buttons2_Buttons2-3 PNG_13.png": {
+      "uuid": "grudge-d1962161-ab5b-8cd5-a7ea-06094f262fd7",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-d1962161-ab5b-8cd5-a7ea-06094f262fd7.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-d1962161-ab5b-8cd5-a7ea-06094f262fd7.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-3 PNG_13.png"
+    },
+    "Buttons2_Buttons2-3 PNG_14.png": {
+      "uuid": "grudge-192060c0-fe57-28e6-b1c3-dce1ee6ac0b7",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-192060c0-fe57-28e6-b1c3-dce1ee6ac0b7.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-192060c0-fe57-28e6-b1c3-dce1ee6ac0b7.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-3 PNG_14.png"
+    },
+    "Buttons2_Buttons2-3 PNG_15.png": {
+      "uuid": "grudge-3eea7f8e-0571-35f1-dd0f-16fa44096298",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-3eea7f8e-0571-35f1-dd0f-16fa44096298.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-3eea7f8e-0571-35f1-dd0f-16fa44096298.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-3 PNG_15.png"
+    },
+    "Buttons2_Buttons2-3 PNG_16.png": {
+      "uuid": "grudge-9a1f21f2-2b1c-e56b-98a9-9c9f9be79a40",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-9a1f21f2-2b1c-e56b-98a9-9c9f9be79a40.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-9a1f21f2-2b1c-e56b-98a9-9c9f9be79a40.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-3 PNG_16.png"
+    },
+    "Buttons2_Buttons2-3 PNG_17.png": {
+      "uuid": "grudge-2fc820d7-95f5-4279-926e-427cab6bca1f",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-2fc820d7-95f5-4279-926e-427cab6bca1f.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-2fc820d7-95f5-4279-926e-427cab6bca1f.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-3 PNG_17.png"
+    },
+    "Buttons2_Buttons2-3 PNG_18.png": {
+      "uuid": "grudge-2aff0ad2-6ca5-0602-e087-f6067198bb9c",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-2aff0ad2-6ca5-0602-e087-f6067198bb9c.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-2aff0ad2-6ca5-0602-e087-f6067198bb9c.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-3 PNG_18.png"
+    },
+    "Buttons2_Buttons2-3 PNG_19.png": {
+      "uuid": "grudge-ae092f30-e285-5f43-a110-3dba1fb20932",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-ae092f30-e285-5f43-a110-3dba1fb20932.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-ae092f30-e285-5f43-a110-3dba1fb20932.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-3 PNG_19.png"
+    },
+    "Buttons2_Buttons2-3 PNG_2.png": {
+      "uuid": "grudge-6a6297f7-8e85-63e9-1769-97a401ab7edf",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-6a6297f7-8e85-63e9-1769-97a401ab7edf.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-6a6297f7-8e85-63e9-1769-97a401ab7edf.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-3 PNG_2.png"
+    },
+    "Buttons2_Buttons2-3 PNG_20.png": {
+      "uuid": "grudge-7a6a10b2-d39a-325b-7df3-f7767b2088ad",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-7a6a10b2-d39a-325b-7df3-f7767b2088ad.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-7a6a10b2-d39a-325b-7df3-f7767b2088ad.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-3 PNG_20.png"
+    },
+    "Buttons2_Buttons2-3 PNG_21.png": {
+      "uuid": "grudge-5234b4b8-55d8-a357-fd82-8501f0abe6c2",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-5234b4b8-55d8-a357-fd82-8501f0abe6c2.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-5234b4b8-55d8-a357-fd82-8501f0abe6c2.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-3 PNG_21.png"
+    },
+    "Buttons2_Buttons2-3 PNG_22.png": {
+      "uuid": "grudge-3db2c622-479d-d413-684f-268669904364",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-3db2c622-479d-d413-684f-268669904364.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-3db2c622-479d-d413-684f-268669904364.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-3 PNG_22.png"
+    },
+    "Buttons2_Buttons2-3 PNG_23.png": {
+      "uuid": "grudge-b8536c1b-140b-d7e3-228d-661d1e4392bd",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-b8536c1b-140b-d7e3-228d-661d1e4392bd.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-b8536c1b-140b-d7e3-228d-661d1e4392bd.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-3 PNG_23.png"
+    },
+    "Buttons2_Buttons2-3 PNG_24.png": {
+      "uuid": "grudge-bb2438fa-c562-7384-e02b-a61d63a3f058",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-bb2438fa-c562-7384-e02b-a61d63a3f058.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-bb2438fa-c562-7384-e02b-a61d63a3f058.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-3 PNG_24.png"
+    },
+    "Buttons2_Buttons2-3 PNG_25.png": {
+      "uuid": "grudge-2b596bc8-7b79-0b85-1926-63a24c29ce2b",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-2b596bc8-7b79-0b85-1926-63a24c29ce2b.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-2b596bc8-7b79-0b85-1926-63a24c29ce2b.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-3 PNG_25.png"
+    },
+    "Buttons2_Buttons2-3 PNG_26.png": {
+      "uuid": "grudge-f0bc67bd-8b94-8f0a-ba79-c2768bdd8853",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-f0bc67bd-8b94-8f0a-ba79-c2768bdd8853.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-f0bc67bd-8b94-8f0a-ba79-c2768bdd8853.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-3 PNG_26.png"
+    },
+    "Buttons2_Buttons2-3 PNG_27.png": {
+      "uuid": "grudge-eb542ddb-8287-6e45-3bc7-813bf30879ba",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-eb542ddb-8287-6e45-3bc7-813bf30879ba.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-eb542ddb-8287-6e45-3bc7-813bf30879ba.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-3 PNG_27.png"
+    },
+    "Buttons2_Buttons2-3 PNG_3.png": {
+      "uuid": "grudge-2b1214e0-1d7a-a9eb-f1f7-c6098ad3cbb4",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-2b1214e0-1d7a-a9eb-f1f7-c6098ad3cbb4.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-2b1214e0-1d7a-a9eb-f1f7-c6098ad3cbb4.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-3 PNG_3.png"
+    },
+    "Buttons2_Buttons2-3 PNG_4.png": {
+      "uuid": "grudge-9d2b47b8-95b3-9f3f-a153-6fc429585bd0",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-9d2b47b8-95b3-9f3f-a153-6fc429585bd0.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-9d2b47b8-95b3-9f3f-a153-6fc429585bd0.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-3 PNG_4.png"
+    },
+    "Buttons2_Buttons2-3 PNG_5.png": {
+      "uuid": "grudge-6ea71898-c23e-0bfe-a7d1-4a5e22e3e494",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-6ea71898-c23e-0bfe-a7d1-4a5e22e3e494.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-6ea71898-c23e-0bfe-a7d1-4a5e22e3e494.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-3 PNG_5.png"
+    },
+    "Buttons2_Buttons2-3 PNG_6.png": {
+      "uuid": "grudge-908df72a-55aa-db60-1e24-6318f48a56ea",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-908df72a-55aa-db60-1e24-6318f48a56ea.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-908df72a-55aa-db60-1e24-6318f48a56ea.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-3 PNG_6.png"
+    },
+    "Buttons2_Buttons2-3 PNG_7.png": {
+      "uuid": "grudge-fe84f7b1-73e5-686e-44e9-34290e1ba1e1",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-fe84f7b1-73e5-686e-44e9-34290e1ba1e1.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-fe84f7b1-73e5-686e-44e9-34290e1ba1e1.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-3 PNG_7.png"
+    },
+    "Buttons2_Buttons2-3 PNG_8.png": {
+      "uuid": "grudge-40f18ad0-7f7b-858a-2ed5-58baa7229ed9",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-40f18ad0-7f7b-858a-2ed5-58baa7229ed9.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-40f18ad0-7f7b-858a-2ed5-58baa7229ed9.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-3 PNG_8.png"
+    },
+    "Buttons2_Buttons2-3 PNG_9.png": {
+      "uuid": "grudge-a6ef9918-0719-8db9-5ded-652603f74db9",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-a6ef9918-0719-8db9-5ded-652603f74db9.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-a6ef9918-0719-8db9-5ded-652603f74db9.png",
+      "localPath": "/icons/rpg-gui/Buttons2_Buttons2-3 PNG_9.png"
+    },
+    "Chat_Chat PNG_1.png": {
+      "uuid": "grudge-f7896687-2eb3-3aaf-57e1-f3cdc16281ef",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-f7896687-2eb3-3aaf-57e1-f3cdc16281ef.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-f7896687-2eb3-3aaf-57e1-f3cdc16281ef.png",
+      "localPath": "/icons/rpg-gui/Chat_Chat PNG_1.png"
+    },
+    "Chat_Chat PNG_2.png": {
+      "uuid": "grudge-d3ed9ca1-7b75-103f-a8e3-edc1070b6162",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-d3ed9ca1-7b75-103f-a8e3-edc1070b6162.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-d3ed9ca1-7b75-103f-a8e3-edc1070b6162.png",
+      "localPath": "/icons/rpg-gui/Chat_Chat PNG_2.png"
+    },
+    "Chat_Chat PNG_3.png": {
+      "uuid": "grudge-4e7231ec-b508-9738-75fa-cb53dc47d3ee",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-4e7231ec-b508-9738-75fa-cb53dc47d3ee.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-4e7231ec-b508-9738-75fa-cb53dc47d3ee.png",
+      "localPath": "/icons/rpg-gui/Chat_Chat PNG_3.png"
+    },
+    "Chat_Chat PNG_4.png": {
+      "uuid": "grudge-799f0a95-3ceb-d035-88ec-f39ed63d58b7",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-799f0a95-3ceb-d035-88ec-f39ed63d58b7.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-799f0a95-3ceb-d035-88ec-f39ed63d58b7.png",
+      "localPath": "/icons/rpg-gui/Chat_Chat PNG_4.png"
+    },
+    "Chat_Chat PNG_5.png": {
+      "uuid": "grudge-cc1075ca-cf65-95ef-4b64-c76e93123cce",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-cc1075ca-cf65-95ef-4b64-c76e93123cce.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-cc1075ca-cf65-95ef-4b64-c76e93123cce.png",
+      "localPath": "/icons/rpg-gui/Chat_Chat PNG_5.png"
+    },
+    "Chat_Chat PNG_6.png": {
+      "uuid": "grudge-2617e1f1-3674-3e55-933f-478e1a721403",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-2617e1f1-3674-3e55-933f-478e1a721403.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-2617e1f1-3674-3e55-933f-478e1a721403.png",
+      "localPath": "/icons/rpg-gui/Chat_Chat PNG_6.png"
+    },
+    "Elements_All Elements PNG_1.png": {
+      "uuid": "grudge-fccf2659-ffe1-c589-566f-736b81aa3024",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-fccf2659-ffe1-c589-566f-736b81aa3024.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-fccf2659-ffe1-c589-566f-736b81aa3024.png",
+      "localPath": "/icons/rpg-gui/Elements_All Elements PNG_1.png"
+    },
+    "Elements_All Elements PNG_10.png": {
+      "uuid": "grudge-b85fbfde-c0db-f83f-9962-a232aa4affdc",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-b85fbfde-c0db-f83f-9962-a232aa4affdc.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-b85fbfde-c0db-f83f-9962-a232aa4affdc.png",
+      "localPath": "/icons/rpg-gui/Elements_All Elements PNG_10.png"
+    },
+    "Elements_All Elements PNG_11.png": {
+      "uuid": "grudge-8c00a82a-d42e-b56d-d24e-35dfb54ff5e4",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-8c00a82a-d42e-b56d-d24e-35dfb54ff5e4.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-8c00a82a-d42e-b56d-d24e-35dfb54ff5e4.png",
+      "localPath": "/icons/rpg-gui/Elements_All Elements PNG_11.png"
+    },
+    "Elements_All Elements PNG_12.png": {
+      "uuid": "grudge-f7f746fe-5641-0ba3-6a20-a54d902b5af3",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-f7f746fe-5641-0ba3-6a20-a54d902b5af3.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-f7f746fe-5641-0ba3-6a20-a54d902b5af3.png",
+      "localPath": "/icons/rpg-gui/Elements_All Elements PNG_12.png"
+    },
+    "Elements_All Elements PNG_13.png": {
+      "uuid": "grudge-ccc98974-e9b5-8a04-4653-14fb60fad1fc",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-ccc98974-e9b5-8a04-4653-14fb60fad1fc.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-ccc98974-e9b5-8a04-4653-14fb60fad1fc.png",
+      "localPath": "/icons/rpg-gui/Elements_All Elements PNG_13.png"
+    },
+    "Elements_All Elements PNG_14.png": {
+      "uuid": "grudge-bf5e2433-3a20-dc32-7757-a6bc63420490",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-bf5e2433-3a20-dc32-7757-a6bc63420490.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-bf5e2433-3a20-dc32-7757-a6bc63420490.png",
+      "localPath": "/icons/rpg-gui/Elements_All Elements PNG_14.png"
+    },
+    "Elements_All Elements PNG_15.png": {
+      "uuid": "grudge-39c8596d-f93c-d594-6903-00a5dbbac535",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-39c8596d-f93c-d594-6903-00a5dbbac535.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-39c8596d-f93c-d594-6903-00a5dbbac535.png",
+      "localPath": "/icons/rpg-gui/Elements_All Elements PNG_15.png"
+    },
+    "Elements_All Elements PNG_16.png": {
+      "uuid": "grudge-c21855b8-27c1-a75b-94c2-2c0230fda8b9",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-c21855b8-27c1-a75b-94c2-2c0230fda8b9.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-c21855b8-27c1-a75b-94c2-2c0230fda8b9.png",
+      "localPath": "/icons/rpg-gui/Elements_All Elements PNG_16.png"
+    },
+    "Elements_All Elements PNG_17.png": {
+      "uuid": "grudge-8a5c183d-f92e-56e0-e22f-8c63300333e4",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-8a5c183d-f92e-56e0-e22f-8c63300333e4.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-8a5c183d-f92e-56e0-e22f-8c63300333e4.png",
+      "localPath": "/icons/rpg-gui/Elements_All Elements PNG_17.png"
+    },
+    "Elements_All Elements PNG_18.png": {
+      "uuid": "grudge-519268f1-9ae2-7a50-eb5e-793fbc42ee18",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-519268f1-9ae2-7a50-eb5e-793fbc42ee18.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-519268f1-9ae2-7a50-eb5e-793fbc42ee18.png",
+      "localPath": "/icons/rpg-gui/Elements_All Elements PNG_18.png"
+    },
+    "Elements_All Elements PNG_19.png": {
+      "uuid": "grudge-7fe3a937-722c-bda5-d930-393f1203dafa",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-7fe3a937-722c-bda5-d930-393f1203dafa.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-7fe3a937-722c-bda5-d930-393f1203dafa.png",
+      "localPath": "/icons/rpg-gui/Elements_All Elements PNG_19.png"
+    },
+    "Elements_All Elements PNG_2.png": {
+      "uuid": "grudge-1612aca1-509f-9d99-8e87-795e7b81d035",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-1612aca1-509f-9d99-8e87-795e7b81d035.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-1612aca1-509f-9d99-8e87-795e7b81d035.png",
+      "localPath": "/icons/rpg-gui/Elements_All Elements PNG_2.png"
+    },
+    "Elements_All Elements PNG_20.png": {
+      "uuid": "grudge-9666ce3a-1a9f-8252-631c-bad733f7159a",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-9666ce3a-1a9f-8252-631c-bad733f7159a.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-9666ce3a-1a9f-8252-631c-bad733f7159a.png",
+      "localPath": "/icons/rpg-gui/Elements_All Elements PNG_20.png"
+    },
+    "Elements_All Elements PNG_21.png": {
+      "uuid": "grudge-870b89c5-6ac2-abd5-8cc1-42ab1e16c3bd",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-870b89c5-6ac2-abd5-8cc1-42ab1e16c3bd.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-870b89c5-6ac2-abd5-8cc1-42ab1e16c3bd.png",
+      "localPath": "/icons/rpg-gui/Elements_All Elements PNG_21.png"
+    },
+    "Elements_All Elements PNG_22.png": {
+      "uuid": "grudge-b5d78d05-33e3-db54-133b-9537f657ec8b",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-b5d78d05-33e3-db54-133b-9537f657ec8b.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-b5d78d05-33e3-db54-133b-9537f657ec8b.png",
+      "localPath": "/icons/rpg-gui/Elements_All Elements PNG_22.png"
+    },
+    "Elements_All Elements PNG_23.png": {
+      "uuid": "grudge-d38e39af-b803-701a-bdc6-0cd55c7ccb5a",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-d38e39af-b803-701a-bdc6-0cd55c7ccb5a.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-d38e39af-b803-701a-bdc6-0cd55c7ccb5a.png",
+      "localPath": "/icons/rpg-gui/Elements_All Elements PNG_23.png"
+    },
+    "Elements_All Elements PNG_24.png": {
+      "uuid": "grudge-73301f55-be9c-a179-808b-e99148a5579b",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-73301f55-be9c-a179-808b-e99148a5579b.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-73301f55-be9c-a179-808b-e99148a5579b.png",
+      "localPath": "/icons/rpg-gui/Elements_All Elements PNG_24.png"
+    },
+    "Elements_All Elements PNG_25.png": {
+      "uuid": "grudge-f9a328a4-3a02-8658-71c2-8855dccd323b",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-f9a328a4-3a02-8658-71c2-8855dccd323b.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-f9a328a4-3a02-8658-71c2-8855dccd323b.png",
+      "localPath": "/icons/rpg-gui/Elements_All Elements PNG_25.png"
+    },
+    "Elements_All Elements PNG_26.png": {
+      "uuid": "grudge-67e7b27a-dfff-445a-05ae-585b342e6947",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-67e7b27a-dfff-445a-05ae-585b342e6947.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-67e7b27a-dfff-445a-05ae-585b342e6947.png",
+      "localPath": "/icons/rpg-gui/Elements_All Elements PNG_26.png"
+    },
+    "Elements_All Elements PNG_27.png": {
+      "uuid": "grudge-51535466-2e46-a8a2-667f-e6cc3319c2a3",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-51535466-2e46-a8a2-667f-e6cc3319c2a3.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-51535466-2e46-a8a2-667f-e6cc3319c2a3.png",
+      "localPath": "/icons/rpg-gui/Elements_All Elements PNG_27.png"
+    },
+    "Elements_All Elements PNG_3.png": {
+      "uuid": "grudge-3fcde436-9570-08a3-fc41-2cafe3485a98",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-3fcde436-9570-08a3-fc41-2cafe3485a98.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-3fcde436-9570-08a3-fc41-2cafe3485a98.png",
+      "localPath": "/icons/rpg-gui/Elements_All Elements PNG_3.png"
+    },
+    "Elements_All Elements PNG_4.png": {
+      "uuid": "grudge-14e5924c-4894-a81f-075b-82bb316c0a86",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-14e5924c-4894-a81f-075b-82bb316c0a86.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-14e5924c-4894-a81f-075b-82bb316c0a86.png",
+      "localPath": "/icons/rpg-gui/Elements_All Elements PNG_4.png"
+    },
+    "Elements_All Elements PNG_5.png": {
+      "uuid": "grudge-394a69c7-5f28-938d-8240-05463ba50dd4",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-394a69c7-5f28-938d-8240-05463ba50dd4.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-394a69c7-5f28-938d-8240-05463ba50dd4.png",
+      "localPath": "/icons/rpg-gui/Elements_All Elements PNG_5.png"
+    },
+    "Elements_All Elements PNG_6.png": {
+      "uuid": "grudge-097413a4-fedf-2c87-9a9d-89c3410b58ab",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-097413a4-fedf-2c87-9a9d-89c3410b58ab.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-097413a4-fedf-2c87-9a9d-89c3410b58ab.png",
+      "localPath": "/icons/rpg-gui/Elements_All Elements PNG_6.png"
+    },
+    "Elements_All Elements PNG_7.png": {
+      "uuid": "grudge-928665a5-c612-b1d4-6d31-9d458b1c00a9",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-928665a5-c612-b1d4-6d31-9d458b1c00a9.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-928665a5-c612-b1d4-6d31-9d458b1c00a9.png",
+      "localPath": "/icons/rpg-gui/Elements_All Elements PNG_7.png"
+    },
+    "Elements_All Elements PNG_8.png": {
+      "uuid": "grudge-fb762153-8951-da4b-68bf-db2de322410a",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-fb762153-8951-da4b-68bf-db2de322410a.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-fb762153-8951-da4b-68bf-db2de322410a.png",
+      "localPath": "/icons/rpg-gui/Elements_All Elements PNG_8.png"
+    },
+    "Elements_All Elements PNG_9.png": {
+      "uuid": "grudge-47c8c973-bbd3-907c-c196-854ba40dfdc8",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-47c8c973-bbd3-907c-c196-854ba40dfdc8.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-47c8c973-bbd3-907c-c196-854ba40dfdc8.png",
+      "localPath": "/icons/rpg-gui/Elements_All Elements PNG_9.png"
+    },
+    "Hero_Hero PNG_1.png": {
+      "uuid": "grudge-a0363029-d54d-5b02-53eb-0691fbf88f7e",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-a0363029-d54d-5b02-53eb-0691fbf88f7e.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-a0363029-d54d-5b02-53eb-0691fbf88f7e.png",
+      "localPath": "/icons/rpg-gui/Hero_Hero PNG_1.png"
+    },
+    "Hero_Hero PNG_2.png": {
+      "uuid": "grudge-75539ecf-f8fc-9310-0c3a-cb3750b2399d",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-75539ecf-f8fc-9310-0c3a-cb3750b2399d.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-75539ecf-f8fc-9310-0c3a-cb3750b2399d.png",
+      "localPath": "/icons/rpg-gui/Hero_Hero PNG_2.png"
+    },
+    "Hero_Hero PNG_3.png": {
+      "uuid": "grudge-682a00ea-0fdf-f1d5-d1ba-87d25284b09e",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-682a00ea-0fdf-f1d5-d1ba-87d25284b09e.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-682a00ea-0fdf-f1d5-d1ba-87d25284b09e.png",
+      "localPath": "/icons/rpg-gui/Hero_Hero PNG_3.png"
+    },
+    "HP-Mana_HP-Mana PNG_1.png": {
+      "uuid": "grudge-162af2c0-16f0-1234-d922-a8dd380dab06",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-162af2c0-16f0-1234-d922-a8dd380dab06.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-162af2c0-16f0-1234-d922-a8dd380dab06.png",
+      "localPath": "/icons/rpg-gui/HP-Mana_HP-Mana PNG_1.png"
+    },
+    "HP-Mana_HP-Mana PNG_2.png": {
+      "uuid": "grudge-12459cfb-19fc-e8c4-c449-19b369326d58",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-12459cfb-19fc-e8c4-c449-19b369326d58.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-12459cfb-19fc-e8c4-c449-19b369326d58.png",
+      "localPath": "/icons/rpg-gui/HP-Mana_HP-Mana PNG_2.png"
+    },
+    "HP-Mana_HP-Mana PNG_3.png": {
+      "uuid": "grudge-6af57f5c-e557-b5b3-f627-b8103883ea19",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-6af57f5c-e557-b5b3-f627-b8103883ea19.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-6af57f5c-e557-b5b3-f627-b8103883ea19.png",
+      "localPath": "/icons/rpg-gui/HP-Mana_HP-Mana PNG_3.png"
+    },
+    "HP-Mana_HP-Mana PNG_4.png": {
+      "uuid": "grudge-006410e7-1144-18d5-6768-e1b7947b8f8a",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-006410e7-1144-18d5-6768-e1b7947b8f8a.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-006410e7-1144-18d5-6768-e1b7947b8f8a.png",
+      "localPath": "/icons/rpg-gui/HP-Mana_HP-Mana PNG_4.png"
+    },
+    "HP-Mana_HP-Mana PNG_5.png": {
+      "uuid": "grudge-bc25ca1b-6fd3-75fd-162f-e93eb07732e4",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-bc25ca1b-6fd3-75fd-162f-e93eb07732e4.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-bc25ca1b-6fd3-75fd-162f-e93eb07732e4.png",
+      "localPath": "/icons/rpg-gui/HP-Mana_HP-Mana PNG_5.png"
+    },
+    "HP-Mana_HP-Mana PNG_6.png": {
+      "uuid": "grudge-f4ce48e4-588f-d248-ad33-20becac36c8d",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-f4ce48e4-588f-d248-ad33-20becac36c8d.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-f4ce48e4-588f-d248-ad33-20becac36c8d.png",
+      "localPath": "/icons/rpg-gui/HP-Mana_HP-Mana PNG_6.png"
+    },
+    "Icon1.png": {
+      "uuid": "grudge-257cedfb-a497-8c02-3dd8-a30d05ad5e01",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-257cedfb-a497-8c02-3dd8-a30d05ad5e01.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-257cedfb-a497-8c02-3dd8-a30d05ad5e01.png",
+      "localPath": "/icons/rpg-gui/Icon1.png"
+    },
+    "Icon10.png": {
+      "uuid": "grudge-d1087be2-af8d-c80d-d9a6-539ccc0f92f1",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-d1087be2-af8d-c80d-d9a6-539ccc0f92f1.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-d1087be2-af8d-c80d-d9a6-539ccc0f92f1.png",
+      "localPath": "/icons/rpg-gui/Icon10.png"
+    },
+    "Icon11.png": {
+      "uuid": "grudge-be0742cd-d863-7195-5b48-195daabd7c36",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-be0742cd-d863-7195-5b48-195daabd7c36.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-be0742cd-d863-7195-5b48-195daabd7c36.png",
+      "localPath": "/icons/rpg-gui/Icon11.png"
+    },
+    "Icon12.png": {
+      "uuid": "grudge-c60ba33f-43ff-fa6b-7fe5-c077821f27fb",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-c60ba33f-43ff-fa6b-7fe5-c077821f27fb.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-c60ba33f-43ff-fa6b-7fe5-c077821f27fb.png",
+      "localPath": "/icons/rpg-gui/Icon12.png"
+    },
+    "Icon2.png": {
+      "uuid": "grudge-73ee3001-afb9-c2d0-751e-58259b4552a1",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-73ee3001-afb9-c2d0-751e-58259b4552a1.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-73ee3001-afb9-c2d0-751e-58259b4552a1.png",
+      "localPath": "/icons/rpg-gui/Icon2.png"
+    },
+    "Icon3.png": {
+      "uuid": "grudge-d063af51-09e4-49bb-88df-1d26030e62c8",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-d063af51-09e4-49bb-88df-1d26030e62c8.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-d063af51-09e4-49bb-88df-1d26030e62c8.png",
+      "localPath": "/icons/rpg-gui/Icon3.png"
+    },
+    "Icon4.png": {
+      "uuid": "grudge-e03c9358-faee-76c6-f701-b309010bfc8f",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-e03c9358-faee-76c6-f701-b309010bfc8f.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-e03c9358-faee-76c6-f701-b309010bfc8f.png",
+      "localPath": "/icons/rpg-gui/Icon4.png"
+    },
+    "Icon5.png": {
+      "uuid": "grudge-430aeaa6-3646-02d7-ecbf-8aa83ab7e78f",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-430aeaa6-3646-02d7-ecbf-8aa83ab7e78f.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-430aeaa6-3646-02d7-ecbf-8aa83ab7e78f.png",
+      "localPath": "/icons/rpg-gui/Icon5.png"
+    },
+    "Icon6.png": {
+      "uuid": "grudge-75ae7d2a-f855-c4e1-55a5-efac2e7f3132",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-75ae7d2a-f855-c4e1-55a5-efac2e7f3132.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-75ae7d2a-f855-c4e1-55a5-efac2e7f3132.png",
+      "localPath": "/icons/rpg-gui/Icon6.png"
+    },
+    "Icon7.png": {
+      "uuid": "grudge-0f3903cb-eade-1731-269a-637b87546f93",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-0f3903cb-eade-1731-269a-637b87546f93.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-0f3903cb-eade-1731-269a-637b87546f93.png",
+      "localPath": "/icons/rpg-gui/Icon7.png"
+    },
+    "Icon8.png": {
+      "uuid": "grudge-1a7d793d-905d-849a-9b8d-fd224361fbdc",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-1a7d793d-905d-849a-9b8d-fd224361fbdc.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-1a7d793d-905d-849a-9b8d-fd224361fbdc.png",
+      "localPath": "/icons/rpg-gui/Icon8.png"
+    },
+    "Icon9.png": {
+      "uuid": "grudge-cd14e4d8-510c-eb02-81d1-c03f7304b452",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-cd14e4d8-510c-eb02-81d1-c03f7304b452.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-cd14e4d8-510c-eb02-81d1-c03f7304b452.png",
+      "localPath": "/icons/rpg-gui/Icon9.png"
+    },
+    "Inventory_Inventory PNG_1.png": {
+      "uuid": "grudge-8e74ff19-691f-1619-8b2a-78820b57430a",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-8e74ff19-691f-1619-8b2a-78820b57430a.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-8e74ff19-691f-1619-8b2a-78820b57430a.png",
+      "localPath": "/icons/rpg-gui/Inventory_Inventory PNG_1.png"
+    },
+    "Inventory_Inventory PNG_2.png": {
+      "uuid": "grudge-596effb4-9456-16cf-c928-f41c98f27e91",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-596effb4-9456-16cf-c928-f41c98f27e91.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-596effb4-9456-16cf-c928-f41c98f27e91.png",
+      "localPath": "/icons/rpg-gui/Inventory_Inventory PNG_2.png"
+    },
+    "Inventory_Inventory PNG_3.png": {
+      "uuid": "grudge-d89ff5e4-32d6-0da7-49e7-8fe4c8101cb2",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-d89ff5e4-32d6-0da7-49e7-8fe4c8101cb2.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-d89ff5e4-32d6-0da7-49e7-8fe4c8101cb2.png",
+      "localPath": "/icons/rpg-gui/Inventory_Inventory PNG_3.png"
+    },
+    "Loading_1.png": {
+      "uuid": "grudge-2aedc81e-aad4-bdd8-5d2b-e09e59534f0c",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-2aedc81e-aad4-bdd8-5d2b-e09e59534f0c.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-2aedc81e-aad4-bdd8-5d2b-e09e59534f0c.png",
+      "localPath": "/icons/rpg-gui/Loading_1.png"
+    },
+    "Loading_2.png": {
+      "uuid": "grudge-95d1b3c6-4a60-fa19-3649-51445571094b",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-95d1b3c6-4a60-fa19-3649-51445571094b.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-95d1b3c6-4a60-fa19-3649-51445571094b.png",
+      "localPath": "/icons/rpg-gui/Loading_2.png"
+    },
+    "Loading_3.png": {
+      "uuid": "grudge-f37ced8e-bfa5-b26c-fa74-fa10ca16c84d",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-f37ced8e-bfa5-b26c-fa74-fa10ca16c84d.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-f37ced8e-bfa5-b26c-fa74-fa10ca16c84d.png",
+      "localPath": "/icons/rpg-gui/Loading_3.png"
+    },
+    "Loading_4.png": {
+      "uuid": "grudge-2c41cf19-c508-050e-4551-27cee85859e3",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-2c41cf19-c508-050e-4551-27cee85859e3.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-2c41cf19-c508-050e-4551-27cee85859e3.png",
+      "localPath": "/icons/rpg-gui/Loading_4.png"
+    },
+    "Loading_5.png": {
+      "uuid": "grudge-f56d81c4-6e23-cb22-ba61-885e0811518e",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-f56d81c4-6e23-cb22-ba61-885e0811518e.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-f56d81c4-6e23-cb22-ba61-885e0811518e.png",
+      "localPath": "/icons/rpg-gui/Loading_5.png"
+    },
+    "Loading_6.png": {
+      "uuid": "grudge-1ac8d1ad-4840-ce66-c87d-586d693a15c0",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-1ac8d1ad-4840-ce66-c87d-586d693a15c0.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-1ac8d1ad-4840-ce66-c87d-586d693a15c0.png",
+      "localPath": "/icons/rpg-gui/Loading_6.png"
+    },
+    "Loading_7.png": {
+      "uuid": "grudge-0490f236-c070-ad21-4773-2b76996d4251",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-0490f236-c070-ad21-4773-2b76996d4251.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-0490f236-c070-ad21-4773-2b76996d4251.png",
+      "localPath": "/icons/rpg-gui/Loading_7.png"
+    },
+    "Loading_8.png": {
+      "uuid": "grudge-57ecb0d1-05fd-cec2-a0f0-f3a111c11753",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-57ecb0d1-05fd-cec2-a0f0-f3a111c11753.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-57ecb0d1-05fd-cec2-a0f0-f3a111c11753.png",
+      "localPath": "/icons/rpg-gui/Loading_8.png"
+    },
+    "Loading_9.png": {
+      "uuid": "grudge-88b6752d-4192-5fdb-6cf0-c5b0b9431bbb",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-88b6752d-4192-5fdb-6cf0-c5b0b9431bbb.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-88b6752d-4192-5fdb-6cf0-c5b0b9431bbb.png",
+      "localPath": "/icons/rpg-gui/Loading_9.png"
+    },
+    "Login_Login PNG_1.png": {
+      "uuid": "grudge-da73a362-df0d-e7f3-2647-dc9dcde2a56f",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-da73a362-df0d-e7f3-2647-dc9dcde2a56f.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-da73a362-df0d-e7f3-2647-dc9dcde2a56f.png",
+      "localPath": "/icons/rpg-gui/Login_Login PNG_1.png"
+    },
+    "Login_Login PNG_2.png": {
+      "uuid": "grudge-b939232a-f1ae-f96c-f9f4-f45794e5040c",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-b939232a-f1ae-f96c-f9f4-f45794e5040c.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-b939232a-f1ae-f96c-f9f4-f45794e5040c.png",
+      "localPath": "/icons/rpg-gui/Login_Login PNG_2.png"
+    },
+    "Login_Login PNG_3.png": {
+      "uuid": "grudge-920b90d6-8a25-4cc1-7ef0-3f4824887f73",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-920b90d6-8a25-4cc1-7ef0-3f4824887f73.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-920b90d6-8a25-4cc1-7ef0-3f4824887f73.png",
+      "localPath": "/icons/rpg-gui/Login_Login PNG_3.png"
+    },
+    "Map_Map PNG_1.png": {
+      "uuid": "grudge-9ec60b11-5452-cb11-1c51-ae5917e64db6",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-9ec60b11-5452-cb11-1c51-ae5917e64db6.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-9ec60b11-5452-cb11-1c51-ae5917e64db6.png",
+      "localPath": "/icons/rpg-gui/Map_Map PNG_1.png"
+    },
+    "Map_Map PNG_2.png": {
+      "uuid": "grudge-55e63590-922f-e29c-1d1f-ccb175a4d62c",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-55e63590-922f-e29c-1d1f-ccb175a4d62c.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-55e63590-922f-e29c-1d1f-ccb175a4d62c.png",
+      "localPath": "/icons/rpg-gui/Map_Map PNG_2.png"
+    },
+    "Map_Map PNG_3.png": {
+      "uuid": "grudge-54323e35-b3b5-a148-4ad8-86af2e56df9f",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-54323e35-b3b5-a148-4ad8-86af2e56df9f.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-54323e35-b3b5-a148-4ad8-86af2e56df9f.png",
+      "localPath": "/icons/rpg-gui/Map_Map PNG_3.png"
+    },
+    "Map_Map PNG_4.png": {
+      "uuid": "grudge-48b3dca4-abb7-f425-9ee9-fb13faefa507",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-48b3dca4-abb7-f425-9ee9-fb13faefa507.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-48b3dca4-abb7-f425-9ee9-fb13faefa507.png",
+      "localPath": "/icons/rpg-gui/Map_Map PNG_4.png"
+    },
+    "Map_Map PNG_5.png": {
+      "uuid": "grudge-fd58171c-2cd3-3531-6436-173c0f5aa72c",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-fd58171c-2cd3-3531-6436-173c0f5aa72c.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-fd58171c-2cd3-3531-6436-173c0f5aa72c.png",
+      "localPath": "/icons/rpg-gui/Map_Map PNG_5.png"
+    },
+    "Map_Map PNG_6.png": {
+      "uuid": "grudge-e16b25a2-121a-5c5b-0600-2704509499f0",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-e16b25a2-121a-5c5b-0600-2704509499f0.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-e16b25a2-121a-5c5b-0600-2704509499f0.png",
+      "localPath": "/icons/rpg-gui/Map_Map PNG_6.png"
+    },
+    "Quests1_Quests1 PNG_1.png": {
+      "uuid": "grudge-a945d6fe-846d-d492-3ba3-06f44fb94ec6",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-a945d6fe-846d-d492-3ba3-06f44fb94ec6.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-a945d6fe-846d-d492-3ba3-06f44fb94ec6.png",
+      "localPath": "/icons/rpg-gui/Quests1_Quests1 PNG_1.png"
+    },
+    "Quests1_Quests1 PNG_2.png": {
+      "uuid": "grudge-9a1ddca7-4a1d-f85d-7754-69b2b2dd9474",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-9a1ddca7-4a1d-f85d-7754-69b2b2dd9474.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-9a1ddca7-4a1d-f85d-7754-69b2b2dd9474.png",
+      "localPath": "/icons/rpg-gui/Quests1_Quests1 PNG_2.png"
+    },
+    "Quests1_Quests1 PNG_3.png": {
+      "uuid": "grudge-673e889b-cfd7-7dbe-a08d-d2226d20a8d6",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-673e889b-cfd7-7dbe-a08d-d2226d20a8d6.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-673e889b-cfd7-7dbe-a08d-d2226d20a8d6.png",
+      "localPath": "/icons/rpg-gui/Quests1_Quests1 PNG_3.png"
+    },
+    "Quests2_Quests2 PNG_1.png": {
+      "uuid": "grudge-e3bf40a8-a05b-bfa3-8f79-2fd5e1206a0e",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-e3bf40a8-a05b-bfa3-8f79-2fd5e1206a0e.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-e3bf40a8-a05b-bfa3-8f79-2fd5e1206a0e.png",
+      "localPath": "/icons/rpg-gui/Quests2_Quests2 PNG_1.png"
+    },
+    "Quests2_Quests2 PNG_2.png": {
+      "uuid": "grudge-2502e829-e6ae-f58c-4474-14ffe5a14eb0",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-2502e829-e6ae-f58c-4474-14ffe5a14eb0.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-2502e829-e6ae-f58c-4474-14ffe5a14eb0.png",
+      "localPath": "/icons/rpg-gui/Quests2_Quests2 PNG_2.png"
+    },
+    "Quests2_Quests2 PNG_3.png": {
+      "uuid": "grudge-3106c342-931b-2de4-4b80-33fcaba72787",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-3106c342-931b-2de4-4b80-33fcaba72787.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-3106c342-931b-2de4-4b80-33fcaba72787.png",
+      "localPath": "/icons/rpg-gui/Quests2_Quests2 PNG_3.png"
+    },
+    "Registration_Registration Settings PNG_1.png": {
+      "uuid": "grudge-8b19b5a4-4654-37dc-6ec6-b0d651f73265",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-8b19b5a4-4654-37dc-6ec6-b0d651f73265.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-8b19b5a4-4654-37dc-6ec6-b0d651f73265.png",
+      "localPath": "/icons/rpg-gui/Registration_Registration Settings PNG_1.png"
+    },
+    "Registration_Registration Settings PNG_2.png": {
+      "uuid": "grudge-41cfcb64-cad6-9c75-36ff-47c183b8a783",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-41cfcb64-cad6-9c75-36ff-47c183b8a783.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-41cfcb64-cad6-9c75-36ff-47c183b8a783.png",
+      "localPath": "/icons/rpg-gui/Registration_Registration Settings PNG_2.png"
+    },
+    "Registration_Registration Settings PNG_3.png": {
+      "uuid": "grudge-bfffcb51-be69-fb7a-48dc-70de175ac6f1",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-bfffcb51-be69-fb7a-48dc-70de175ac6f1.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-bfffcb51-be69-fb7a-48dc-70de175ac6f1.png",
+      "localPath": "/icons/rpg-gui/Registration_Registration Settings PNG_3.png"
+    },
+    "Registration_Registration Settings PNG_4.png": {
+      "uuid": "grudge-f71ba15b-e379-e060-f4a7-60aed1897857",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-f71ba15b-e379-e060-f4a7-60aed1897857.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-f71ba15b-e379-e060-f4a7-60aed1897857.png",
+      "localPath": "/icons/rpg-gui/Registration_Registration Settings PNG_4.png"
+    },
+    "Registration_Registration Settings PNG_5.png": {
+      "uuid": "grudge-3bda57ea-ebf3-6a06-46fc-4f9ac4d042d9",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-3bda57ea-ebf3-6a06-46fc-4f9ac4d042d9.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-3bda57ea-ebf3-6a06-46fc-4f9ac4d042d9.png",
+      "localPath": "/icons/rpg-gui/Registration_Registration Settings PNG_5.png"
+    },
+    "Registration_Registration Settings PNG_6.png": {
+      "uuid": "grudge-7d25ba9f-4d7c-b654-a4ef-409381ca1479",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-7d25ba9f-4d7c-b654-a4ef-409381ca1479.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-7d25ba9f-4d7c-b654-a4ef-409381ca1479.png",
+      "localPath": "/icons/rpg-gui/Registration_Registration Settings PNG_6.png"
+    },
+    "Skills_Skills PNG_1.png": {
+      "uuid": "grudge-bcca0585-ce5d-d4a4-ad6c-5c0735cb5512",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-bcca0585-ce5d-d4a4-ad6c-5c0735cb5512.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-bcca0585-ce5d-d4a4-ad6c-5c0735cb5512.png",
+      "localPath": "/icons/rpg-gui/Skills_Skills PNG_1.png"
+    },
+    "Skills_Skills PNG_2.png": {
+      "uuid": "grudge-f43c7670-2d7b-35bd-3210-b57dac05b1fd",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-f43c7670-2d7b-35bd-3210-b57dac05b1fd.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-f43c7670-2d7b-35bd-3210-b57dac05b1fd.png",
+      "localPath": "/icons/rpg-gui/Skills_Skills PNG_2.png"
+    },
+    "Skills_Skills PNG_3.png": {
+      "uuid": "grudge-2c499eff-a3dc-1134-bac9-f4a74ccec96a",
+      "r2Key": "grudge-nexus/icons/rpg-gui/grudge-2c499eff-a3dc-1134-bac9-f4a74ccec96a.png",
+      "cdnUrl": "https://assets.grudge-studio.com/grudge-nexus/icons/rpg-gui/grudge-2c499eff-a3dc-1134-bac9-f4a74ccec96a.png",
+      "localPath": "/icons/rpg-gui/Skills_Skills PNG_3.png"
+    }
+  }
+}

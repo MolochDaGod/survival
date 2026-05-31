@@ -4,10 +4,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite --config vite.config.ts --host 0.0.0.0",
-    "build": "vite build --config vite.config.ts",
+    "dev": "pnpm run gen:bestiary && vite --config vite.config.ts --host 0.0.0.0",
+    "build": "pnpm run gen:bestiary && vite build --config vite.config.ts",
     "serve": "vite preview --config vite.config.ts --host 0.0.0.0",
-    "typecheck": "tsc -p tsconfig.json --noEmit"
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "gen:bestiary": "tsx ../../scripts/gen-bestiary-data.ts"
   },
   "devDependencies": {
     "@hookform/resolvers": "^3.10.0",

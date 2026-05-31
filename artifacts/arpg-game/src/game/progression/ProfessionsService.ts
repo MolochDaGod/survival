@@ -22,6 +22,36 @@ import {
   type ProfessionEffects,
   type ProfessionState,
 } from './Professions';
+import type { WeaponType } from '../types';
+
+/**
+ * Combat-profession branch matching each WeaponType. A weapon can map to
+ * MORE than one branch (e.g. dagger fits both Blades and Theft) — the
+ * signature check below returns true if ANY of the candidate branches
+ * has at least one learned skill.
+ */
+const COMBAT_BRANCHES_BY_WEAPON: Partial<Record<WeaponType, string[]>> = {
+  pistol: ['pistol'],
+  rifle: ['rifle'],
+  smg: ['rifle'],
+  shotgun: ['rifle'],
+  bow: ['rifle'],
+  crossbow: ['rifle'],
+  gun: ['rifle'],   // legacy generic gun → rifle bucket
+  sword: ['blades'],
+  greatsword: ['blades'],
+  sword_shield: ['blades'],
+  scythe: ['blades'],
+  spear: ['blades'],
+  javelin: ['blades'],
+  dagger: ['blades', 'theft'],
+  knife: ['blades', 'theft'],
+  axe: ['hammers'],
+  hatchet: ['hammers'],
+  greataxe: ['hammers'],
+  hammer: ['hammers'],
+  mace: ['hammers'],
+};
 
 type Listener = (state: Readonly<ProfessionState>) => void;
 
@@ -152,6 +182,24 @@ class ProfessionsServiceImpl {
 
   branchesFor(prof: Profession) {
     return PROFESSION_BRANCHES[prof];
+  }
+
+  // ─── Signature-weapon check (Combat XP bonus gate) ───────────────────────
+
+  /**
+   * Returns true if `type` is a signature weapon for any Combat branch the
+   * player has trained in (≥1 learned skill in that branch). Used by the
+   * runtime to grant the spec's +25% Combat XP bonus.
+   */
+  isSignatureCombatWeapon(type: WeaponType): boolean {
+    const candidates = COMBAT_BRANCHES_BY_WEAPON[type];
+    if (!candidates || candidates.length === 0) return false;
+    for (const id of this.state.learned) {
+      const s = getSkill(id);
+      if (!s || s.prof !== 'combat') continue;
+      if (candidates.includes(s.branch)) return true;
+    }
+    return false;
   }
 }
 

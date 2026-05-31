@@ -8,6 +8,7 @@ import {
 } from '../game/Items';
 import { EquippedSet, ALL_SLOTS } from '../game/Inventory';
 import { InventoryItem } from '../game/Items';
+import GameIcon from './ui/GameIcon';
 
 interface EquipmentPanelProps {
   bag: InventoryItem[];
@@ -106,10 +107,10 @@ const SlotCell: React.FC<{
       }}
     >
       {def ? (
-        <div style={{ fontSize: '28px' }}>{def.icon}</div>
+        <GameIcon icon={def.icon} size={36} alt={def.name} />
       ) : (
         <>
-          <div style={{ fontSize: '18px', opacity: 0.25 }}>{icon}</div>
+          <GameIcon icon={icon} size={18} style={{ opacity: 0.25 }} />
           <div style={{ fontSize: '7px', color: '#444', marginTop: '2px', textTransform: 'uppercase' }}>{label}</div>
         </>
       )}
@@ -147,7 +148,7 @@ const BagCell: React.FC<{
         transform: hover && item ? 'scale(1.06)' : 'scale(1)',
       }}
     >
-      {def && <div style={{ fontSize: '24px' }}>{def.icon}</div>}
+      {def && <GameIcon icon={def.icon} size={32} alt={def.name} />}
       {hover && def && <ItemTooltip def={def} />}
     </div>
   );

@@ -5,6 +5,7 @@ import { AssetManager, ENEMY_DEFS } from './AssetManager';
 import { sampleTerrainHeight } from './TerrainBuilder';
 import { groundY as groundFloor } from './GroundSampler';
 import { EnemyBrain, EnemyRole, CombatState } from './ai/EnemyBrain';
+import { tickAIMantle, aiMantleIsActive, clearAIMantle } from './ai/AILedgeMantle';
 
 /**
  * Enemy defs/keys come from `assetManager.enemyDefs` after AssetManager.loadAll()
@@ -388,9 +389,13 @@ export class EnemyManager {
     for (let i = 0; i < aliveEnemies.length; i++) {
       const bi = this.brains.get(aliveEnemies[i]);
       if (!bi) continue;
+      // Mantling enemies own their own translation — letting separation
+      // shove them off the lerp would corrupt the climb endpoint.
+      if (aiMantleIsActive(aliveEnemies[i])) continue;
       for (let j = i + 1; j < aliveEnemies.length; j++) {
         const bj = this.brains.get(aliveEnemies[j]);
         if (!bj) continue;
+        if (aiMantleIsActive(aliveEnemies[j])) continue;
         const dx = bi.vehicle.position.x - bj.vehicle.position.x;
         const dz = bi.vehicle.position.z - bj.vehicle.position.z;
         const d2 = dx * dx + dz * dz;
@@ -422,13 +427,24 @@ export class EnemyManager {
 
       // ── Position / facing ───────────────────────────────────────────────
       if (brain) {
+        // Run the ledge-climb tick first. If the enemy is stuck against a
+        // ~1 m rise while pursuing, this writes its own position+vehicle
+        // lerp; we skip the YUKA→mesh sync and the ground-snap so the
+        // climb lifts cleanly above the wall instead of being yanked
+        // back to the lower surface.
+        const isPursuing =
+          brain.state === CombatState.PURSUE || brain.state === CombatState.COMBAT;
+        const mantling = tickAIMantle(enemy, brain.vehicle, playerPos, isPursuing, dt);
+
         const vp = brain.vehicle.position;
         const pos = enemy.mesh.position;
-        pos.x = vp.x;
-        pos.z = vp.z;
-        // Ground-snap (overrides YUKA y)
-        if (enemy.mesh.userData.deathTimer == null) {
-          pos.y = groundFloor(vp.x, vp.z);
+        if (!mantling) {
+          pos.x = vp.x;
+          pos.z = vp.z;
+          // Ground-snap (overrides YUKA y)
+          if (enemy.mesh.userData.deathTimer == null) {
+            pos.y = groundFloor(vp.x, vp.z);
+          }
         }
         // Update distanceToPlayer
         const dx2 = playerPos.x - pos.x;
@@ -475,7 +491,9 @@ export class EnemyManager {
       }
 
       // ── Knockback ────────────────────────────────────────────────────────
-      if (enemy.knockback && enemy.knockback.lengthSq() > 0.0001) {
+      // Skipped during a mantle so the scripted lerp can't be pushed off
+      // its rails by leftover knockback impulse.
+      if (enemy.knockback && enemy.knockback.lengthSq() > 0.0001 && !aiMantleIsActive(enemy)) {
         const pos = enemy.mesh.position;
         pos.x += enemy.knockback.x * dt;
         pos.z += enemy.knockback.z * dt;
@@ -498,10 +516,12 @@ export class EnemyManager {
       // ── Procedural animation ─────────────────────────────────────────────
       if (!enemy.mesh.userData.hasRealModel) {
         this.animateProceduralEnemy(enemy, time);
-      } else {
+      } else if (!aiMantleIsActive(enemy)) {
         // Real FBX rig — crossfade between idle / walk / attack based on
-        // the legacy state we just computed above. Death is handled in
-        // killEnemy() since `enemy.state === 'dead'` skips this loop.
+        // the legacy state we just computed above. Skipped while mantling
+        // because AILedgeMantle already drove the rig onto a one-shot
+        // climb clip and we don't want to crossfade back to walk before
+        // the climb finishes.
         this.updateEnemyAnimState(enemy);
       }
 
@@ -530,6 +550,7 @@ export class EnemyManager {
       if (e.state === 'dead' && e.mesh.userData.deathTimer <= 0) {
         this.mixers.delete(e);
         this.scene.remove(e.mesh);
+        clearAIMantle(e);
         const brain = this.brains.get(e);
         if (brain) { brain.dispose(this.yukaEM); this.brains.delete(e); }
         return false;
@@ -804,10 +825,11 @@ export class EnemyManager {
     const duration = 500;
     const start    = Date.now();
     const startRZ  = enemy.mesh.rotation.z;
+    const startY = enemy.mesh.position.y;
     const iv = setInterval(() => {
       const t = Math.min((Date.now() - start) / duration, 1);
       enemy.mesh.rotation.z          = startRZ + t * Math.PI / 2;
-      enemy.mesh.position.y          = -t * 1.5;
+      enemy.mesh.position.y = startY - t * 1.5;
       enemy.mesh.userData.deathTimer = (1 - t) * 0.5;
       if (t >= 1) { clearInterval(iv); enemy.mesh.userData.deathTimer = 0; }
     }, 16);

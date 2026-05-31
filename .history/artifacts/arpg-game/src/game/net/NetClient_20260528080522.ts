@@ -1,0 +1,1130 @@
+import { useRef, useState } from "react";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useInView,
+} from "framer-motion";
+import {
+  Sword,
+  Hammer,
+  Skull,
+  MessageCircle,
+  Cpu,
+  Cloud,
+  Menu,
+  X,
+  Zap,
+  Users,
+  Home,
+  Crosshair,
+  FlaskConical,
+  Map,
+} from "lucide-react";
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Real game content (mirrors arpg-game/src/data/bestiary.ts and
+// arpg-game/public/lore/grudges-compendium.md). Keeping the canonical
+// data inline here so the marketing copy stays in lockstep with the
+// in-game compendium and bestiary entries — if those source files change,
+// update this list.
+// ─────────────────────────────────────────────────────────────────────────────
+
+interface BestiaryRow {
+  name: string;
+  classification: string;
+  threat: 1 | 2 | 3 | 4 | 5;
+  habitat: string;
+  lore: string;
+  accent: string;
+}
+
+const BESTIARY: BestiaryRow[] = [
+  {
+    name: "Hollow Jester",
+    classification: "Abomination · Humanoid",
+    threat: 3,
+    habitat: "Abandoned carnivals · Urban ruins",
+    lore: "Their painted grins are seared into the bone, and their laughter precedes them by several seconds — a delayed echo from somewhere just on the wrong side of reality.",
+    accent: "#e84060",
+  },
+  {
+    name: "Frost Surgeon",
+    classification: "Ranged · Construct",
+    threat: 4,
+    habitat: "Hospital ruins · Quarantine zones",
+    lore: 'They will pursue any wounded survivor across miles of terrain to "complete the procedure" — and the outcome is never in the patient\'s favour.',
+    accent: "#80c0ff",
+  },
+  {
+    name: "Veil Stalker",
+    classification: "Stealth · Humanoid",
+    threat: 4,
+    habitat: "Forests at dusk · Sewer networks",
+    lore: "They do not roar. They whisper your name from a direction you can never quite locate.",
+    accent: "#666666",
+  },
+  {
+    name: "Tunnel Wretch",
+    classification: "Brute · Mutated",
+    threat: 2,
+    habitat: "Caves · Mineshafts · Collapsed buildings",
+    lore: "Buried alive when the rift opened, these miners adapted. Their lungs no longer require air — only the dark wet smell of stone.",
+    accent: "#aa8855",
+  },
+  {
+    name: "Husk Watcher",
+    classification: "Sentinel · Construct",
+    threat: 3,
+    habitat: "Cornfields · Farmsteads · Crossroads",
+    lore: "Stand perfectly still and the Husk Watcher will not move. Look away and turn back, and it has somehow taken three steps closer.",
+    accent: "#ccaa44",
+  },
+  {
+    name: "Drowned Diver",
+    classification: "Aquatic · Ranged",
+    threat: 3,
+    habitat: "Coastlines · Flooded basements · Old docks",
+    lore: "Their suits are still pressurised from the dive that killed them. Inside, the water remembers.",
+    accent: "#3377cc",
+  },
+];
+
+const PILLARS = [
+  {
+    title: "Vendetta Combat",
+    description:
+      "Action-RPG melee and ranged loops against six classes of horror — each with its own movement archetype, weakness profile, and tell.",
+    icon: <Sword className="h-6 w-6" />,
+  },
+  {
+    title: "Salvage & Build",
+    description:
+      "Place foundations, walls, doors, and roofs from scrap. Break ruined walls for ore, timber, and forgotten pre-Schism electronics.",
+    icon: <Hammer className="h-6 w-6" />,
+  },
+  {
+    title: "Perks & Specialisation",
+    description:
+      "Earn perk points across nine tiers. Read tile descriptions inline; preview every branch before you commit.",
+    icon: <Cpu className="h-6 w-6" />,
+  },
+  {
+    title: "Townsfolk With Memory",
+    description:
+      "Ambient NPCs carry barker lines tied to the Compendium. Attack them and the whole settlement remembers.",
+    icon: <MessageCircle className="h-6 w-6" />,
+  },
+  {
+    title: "A World That Forgot You",
+    description:
+      "Atmospheric weather, dynamic day/night, fog rolling across river crossings the cartographers stopped naming three centuries ago.",
+    icon: <Cloud className="h-6 w-6" />,
+  },
+  {
+    title: "Bestiary as Lore",
+    description:
+      "Every kill earns a page. Threat tiers, habitats, weaknesses, tactical notes — the only field guide left on the surface.",
+    icon: <Skull className="h-6 w-6" />,
+  },
+];
+
+const PATHS = [
+  {
+    label: "Path One",
+    title: "Ascension",
+    pct: "12%",
+    body: "Augmentation. Citizenship. The stars. Earth left behind forever, mined to extinction. Their genetic legacy preserved among the Way's interstellar alliance.",
+  },
+  {
+    label: "Path Two",
+    title: "Stewardship",
+    pct: "68%",
+    body: "Stratospheric habitats held aloft by anti-gravity cores. Bound by the Charter to deliver resource quotas. They watch the homeworld be hollowed out from above.",
+  },
+  {
+    label: "The Third Path",
+    title: "The Denied",
+    pct: "20%",
+    body: "Some refused both. Their descendants are the surface tribes — the Grudges. The station-dwellers gave us the name as an insult. We took it.",
+  },
+];
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Gameplay data — factions, biomes, bosses, township stages
+// ─────────────────────────────────────────────────────────────────────────────
+
+const FACTIONS = [
+  { name: "Salpan Syndicate",    type: "Criminal",   color: "#e84060", desc: "Controls Rift extraction rights across the northern zones. Best contracts, most dangerous employers." },
+  { name: "Iron Ecclesiasty",    type: "Religious",  color: "#c0802a", desc: "Combines arms manufacturing with a doctrine built around pre-Way weapons. Purist, militant, well-armed." },
+  { name: "Revenant Consortium", type: "Corporate",  color: "#4a90d0", desc: "The food and medicine supply chain. Neutral in combat, ruthless in negotiation. Impossible to ignore." },
+  { name: "Cloudborn Council",   type: "Governing",  color: "#6090b0", desc: "The administrative body of the Stratocolonies. Powerful, remote, and increasingly paranoid." },
+  { name: "Grounded Assembly",   type: "Governing",  color: "#508060", desc: "The democratic council of the Undercity factions. Fractious but resilient. Excellent engineers." },
+  { name: "GAIA Protocol",       type: "AI Entity",  color: "#9060c0", desc: "Does not negotiate. Does not threaten. Simply continues its hundred-year project to restore the surface." },
+];
+
+interface BiomeData {
+  name: string;
+  color: string;
+  desc: string;
+  danger: number;
+  loot: number;
+}
+
+const BIOMES: BiomeData[] = [
+  { name: "Surface Ruins",  color: "#8a7060", desc: "The broken remnants of the pre-Arrival world. Contested ground between factions. Rich in scrap and pre-war technology.", danger: 3, loot: 4 },
+  { name: "Stratocolony",   color: "#6080a0", desc: "Kilometre-wide platform cities floating 3–12km above the surface. Access requires clearance or subterfuge.", danger: 4, loot: 5 },
+  { name: "Undercity",      color: "#507060", desc: "Vast tunnel networks beneath the ruins. Home to the Grounded Assembly. Dense politics, no natural light.", danger: 3, loot: 3 },
+  { name: "Rift Zone",      color: "#c04030", desc: "Tears in physical reality leaking Way-derived radiation. Lethal without protection. Extraordinarily lucrative.", danger: 5, loot: 5 },
+  { name: "Tundra",         color: "#7090b0", desc: "The frozen northern expanse. Sparse population, extreme cold, rare biological specimens not found elsewhere.", danger: 3, loot: 2 },
+  { name: "Ashfields",      color: "#a06030", desc: "Former agricultural zones turned to scorched flats. Moderate danger, steady scavenging, few surprises.", danger: 2, loot: 3 },
+  { name: "The Hollow",     color: "#9060c0", desc: "An 800km region where physics behaves differently. Mapping is unreliable. The Way will not discuss it.", danger: 5, loot: 4 },
+];
+
+interface BossData {
+  id: string;
+  name: string;
+  type: string;
+  img: string;
+  threat: number;
+  lore: string;
+  abilities: string[];
+}
+
+const BOSSES: BossData[] = [
+  {
+    id: "clown",
+    name: "The Jester",
+    type: "HOLLOW ENTITY",
+    img: "/bestiary/clown.png",
+    threat: 4,
+    lore: "A former stratocolony entertainer who descended to the surface after six months inside The Hollow. He fights with staged precision — every strike a punchline, every death a performance.",
+    abilities: ["Poison Candles", "Manic Dash", "Crowd Curse", "Jester's Finale"],
+  },
+  {
+    id: "doctor",
+    name: "Frost Surgeon",
+    type: "ROGUE WAY-TECH",
+    img: "/bestiary/doctor.png",
+    threat: 4,
+    lore: "Once a sanctioned Way-assigned medical engineer. After the Way went silent in 2099 he continued his work without oversight. His improvements involve cryo-bonding performed without anaesthesia.",
+    abilities: ["Cryo Scalpel", "Neural Override", "Organ Harvest", "Frozen Rebirth"],
+  },
+  {
+    id: "masked",
+    name: "The Masked",
+    type: "UNKNOWN ORIGIN",
+    img: "/bestiary/masked.png",
+    threat: 5,
+    lore: "No faction claims responsibility. Observed at seventeen settlement collapses in the past ninety days. It moves. It watches. It does not speak. Settlements that report a sighting rarely file a second report.",
+    abilities: ["Shadow Step", "Void Gaze", "Silence Field", "Erasure"],
+  },
+  {
+    id: "miner",
+    name: "The Pitwalker",
+    type: "SUBTERRANEAN STRAIN",
+    img: "/bestiary/miner.png",
+    threat: 3,
+    lore: "When The Way sealed the eastern mine shafts in 2097, approximately 400 workers were left below. Three years later something emerged. Stone-fused flesh, a mining lamp still burning on what was a forehead.",
+    abilities: ["Pickaxe Crush", "Stone Skin", "Tremor Strike", "Lamp Blind"],
+  },
+  {
+    id: "scarecrow",
+    name: "The Scarecrow",
+    type: "CONSTRUCT — DISPUTED",
+    img: "/bestiary/scarecrow.png",
+    threat: 3,
+    lore: "Found stationary at the perimeter of Ashfield settlements. GAIA Protocol has flagged it as a persistent territorial marker of non-human design. It watches crop fields. It waits.",
+    abilities: ["Harvest Curse", "Straw Swarm", "Root Bind", "Reaping Call"],
+  },
+  {
+    id: "seaexplorer",
+    name: "The Wrecked",
+    type: "FLOODED UNDERCITY",
+    img: "/bestiary/seaexplorer.png",
+    threat: 4,
+    lore: "Emerged from the flooded eastern undercity tunnels. Still wearing the pressure suit. The visor glows from within with something that is not a face. What it wants — unknown.",
+    abilities: ["Pressure Slam", "Bioluminescent Lure", "Flood Surge", "Deep Descent"],
+  },
+];
+
+const SETTLEMENT_STAGES = [
+  {
+    stage: "01",
+    title: "Lone Camp",
+    color: "#5a9060",
+    unlock: "Day 1",
+    structures: "Claim flag · Personal tent · Campfire · Storage crate",
+    npcs: "None yet.",
+    desc: "Your first foothold. A claim flag staked in safe ground. Without this, no NPC will follow you anywhere — every hire begins with the question: do you have a camp?",
+  },
+  {
+    stage: "02",
+    title: "Working Camp",
+    color: "#4a70a0",
+    unlock: "Township Buildings 2 + Trade 1",
+    structures: "Logging Camp · Market Stall · Recruit banner",
+    npcs: "Woodcutter · Forager · Stall Vendor",
+    desc: "You've stopped gathering every stick yourself. Passive workers fill your chests while you run contracts.",
+  },
+  {
+    stage: "03",
+    title: "Tribe",
+    color: "#9060b0",
+    unlock: "Buildings 3–4 · Defenses 1–2 · Trade 2",
+    structures: "Mining Outpost · Palisade/Gate · Watchtower · Caravan Cart",
+    npcs: "+ Miner · Sentry · Gate Guard ×2 · Caravan Master",
+    desc: "This is where a camp becomes a community. You have walls, a gate, and guards. Something worth defending now.",
+  },
+  {
+    stage: "04",
+    title: "Village",
+    color: "#c4973a",
+    unlock: "Buildings 4 · Trade 3–4 · Diplomacy 2–3 · Defenses 3",
+    structures: "Field · Auto-Turret · Meeting Hall · Embassy · Market Complex",
+    npcs: "+ Farmer · Turret Gunner · Fence · Diplomat Envoy · Mercenary",
+    desc: "A living settlement with an economy, diplomacy, and automated perimeter defenses. The Fence arrives without being invited.",
+  },
+  {
+    stage: "05",
+    title: "Stronghold",
+    color: "#d04040",
+    unlock: "All Township branches maxed + Defenses 4",
+    structures: "Fortress · Keep Gate · Grand Bazaar · War Banner · Lord's Hall",
+    npcs: "+ Captain (+ 3-NPC squad) · Bazaar Merchant ×3 · Heavy Turret Gunner",
+    desc: "The full Township Master unlock. You command the regional economy. Other survivors cross the map to trade here.",
+  },
+];
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Helpers
+// ─────────────────────────────────────────────────────────────────────────────
+
+const img = (file: string) => `${import.meta.env.BASE_URL}images/${file}`;
+
+function FadeIn({
+  children,
+  delay = 0,
+  y = 30,
+}: {
+  children: React.ReactNode;
+  delay?: number;
+  y?: number;
+}) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-15%" });
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y }}
+      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y }}
+      transition={{ duration: 1.0, delay, ease: "easeOut" }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Sections
+// ─────────────────────────────────────────────────────────────────────────────
+
+function TopNav() {
+  const [open, setOpen] = useState(false);
+  return (
+    <nav className="fixed top-0 left-0 right-0 z-50 px-4 md:px-10 py-4 flex items-center justify-between bg-gradient-to-b from-black/80 via-black/50 to-transparent backdrop-blur-[2px]">
+      <div className="flex items-baseline gap-3 font-serif">
+        <span className="text-secondary text-xl tracking-[0.3em] font-bold">GRUDGES</span>
+        <span className="hidden xl:inline text-muted-foreground/60 text-xs tracking-widest uppercase">343 PC · Surface Bulletin</span>
+      </div>
+      {/* Desktop links */}
+      <div className="hidden md:flex items-center gap-6 text-[11px] tracking-[0.2em] uppercase font-serif">
+        <a href="#factions" className="text-muted-foreground/70 hover:text-secondary transition-colors">Factions</a>
+        <a href="#township" className="text-muted-foreground/70 hover:text-secondary transition-colors">Township</a>
+        <a href="#biomes" className="text-muted-foreground/70 hover:text-secondary transition-colors">World</a>
+        <a href="#named-enemies" className="text-muted-foreground/70 hover:text-secondary transition-colors">Enemies</a>
+        <a href="/lore.html" className="text-muted-foreground/70 hover:text-secondary transition-colors">Lore</a>
+        <a
+          href="/arpg-game/"
+          className="border border-secondary/50 px-4 py-2 text-secondary hover:bg-secondary hover:text-black transition-colors duration-300"
+        >
+          Play Now
+        </a>
+      </div>
+      {/* Mobile menu button */}
+      <button className="md:hidden text-secondary p-1" onClick={() => setOpen(!open)} aria-label="Toggle menu">
+        {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+      </button>
+      {/* Mobile dropdown */}
+      {open && (
+        <div className="absolute top-full left-0 right-0 bg-background/95 backdrop-blur-md border-b border-border/40 py-4 flex flex-col gap-4 px-6 text-sm font-serif tracking-[0.2em] uppercase md:hidden">
+          <a href="#factions" className="text-muted-foreground hover:text-secondary" onClick={() => setOpen(false)}>Factions</a>
+          <a href="#township" className="text-muted-foreground hover:text-secondary" onClick={() => setOpen(false)}>Township</a>
+          <a href="#biomes" className="text-muted-foreground hover:text-secondary" onClick={() => setOpen(false)}>World</a>
+          <a href="#named-enemies" className="text-muted-foreground hover:text-secondary" onClick={() => setOpen(false)}>Enemies</a>
+          <a href="/lore.html" className="text-muted-foreground hover:text-secondary">Lore</a>
+          <a href="/arpg-game/" className="text-secondary border border-secondary/40 px-4 py-2 text-center hover:bg-secondary hover:text-black transition-colors">Play Now</a>
+        </div>
+      )}
+    </nav>
+  );
+}
+
+function Hero() {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end start"],
+  });
+  const yBg = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
+  const opacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
+
+  return (
+    <section
+      ref={ref}
+      className="relative h-screen flex items-center justify-center overflow-hidden"
+    >
+      <motion.div style={{ y: yBg }} className="absolute inset-0 z-0">
+        <img
+          src={img("hero-cathedral.png")}
+          alt="A ruined cathedral on the surface, three centuries after the Schism"
+          className="w-full h-full object-cover object-center scale-105"
+        />
+        <div className="absolute inset-0 bg-black/55 z-10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent z-20" />
+      </motion.div>
+
+      <motion.div
+        style={{ opacity }}
+        className="relative z-30 text-center flex flex-col items-center px-4 max-w-5xl"
+      >
+        <FadeIn delay={0.3}>
+          <div className="flex items-center justify-center gap-3 text-secondary tracking-[0.4em] text-[10px] md:text-xs mb-4 uppercase font-medium">
+            <span className="w-8 h-px bg-secondary/60" />
+            <span>Year 2398 OEY · 343 Post-Contact</span>
+            <span className="w-8 h-px bg-secondary/60" />
+          </div>
+        </FadeIn>
+
+        <FadeIn delay={0.5}>
+          <h1
+            className="font-serif font-bold text-foreground leading-[0.85] mb-4"
+            style={{
+              fontSize: "clamp(4.5rem, 13vw, 12rem)",
+              letterSpacing: "-0.035em",
+              textShadow:
+                "0 2px 8px rgba(0,0,0,0.95), 0 8px 32px rgba(0,0,0,0.8), 0 0 60px rgba(0,0,0,0.6)",
+            }}
+          >
+            GRUDG<span className="text-primary">ES</span>
+          </h1>
+        </FadeIn>
+
+        <FadeIn delay={0.7}>
+          <p className="font-serif italic text-2xl md:text-3xl text-secondary/90 mb-10 tracking-wide">
+            Bind a grudge. Bear it forward.
+          </p>
+        </FadeIn>
+
+        <FadeIn delay={0.9}>
+          <p className="max-w-xl text-sm md:text-base text-foreground/75 font-light mb-12 leading-relaxed">
+            They left us behind. Twelve percent went to the stars. Sixty-eight
+            percent rose to the stratocolonies. The rest of us stayed on the
+            surface and learned how to bury our own. Three hundred years later,
+            the rift is still open, and so are old wounds.
+          </p>
+        </FadeIn>
+
+        <FadeIn delay={1.1}>
+          <div className="flex flex-col sm:flex-row items-center gap-4">
+            <a
+              href="/arpg-game/"
+              className="group relative inline-flex items-center justify-center px-10 py-4 font-serif text-base md:text-lg tracking-[0.25em] text-white uppercase bg-primary overflow-hidden transition-all hover:scale-105 duration-500 ease-out shadow-[0_0_40px_rgba(180,40,60,0.35)]"
+            >
+              <div className="absolute inset-0 bg-white/15 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out" />
+              <span className="relative z-10">Play Now</span>
+            </a>
+            <a
+              href="#compendium"
+              className="font-serif tracking-[0.25em] text-xs md:text-sm uppercase text-muted-foreground hover:text-secondary transition-colors duration-300"
+            >
+              Read the Compendium ↓
+            </a>
+          </div>
+        </FadeIn>
+      </motion.div>
+
+      {/* Scroll indicator */}
+      <motion.div
+        animate={{ y: [0, 8, 0], opacity: [0.4, 0.9, 0.4] }}
+        transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 z-30 text-secondary/70 font-serif tracking-[0.4em] text-[10px] uppercase"
+      >
+        Descend
+      </motion.div>
+    </section>
+  );
+}
+
+function ColdOpen() {
+  return (
+    <section
+      id="compendium"
+      className="relative py-32 px-6 md:px-12 max-w-5xl mx-auto z-20"
+    >
+      <FadeIn>
+        <div className="text-center">
+          <div className="text-secondary tracking-[0.35em] text-xs uppercase mb-8">
+            Compendium · Part I
+          </div>
+          <h2 className="font-serif text-3xl md:text-5xl text-foreground mb-10 leading-tight">
+            "By the mid-21st century, Earth was in terminal decline.
+            <br />
+            <span className="text-secondary">Then in 2055, they came.</span>"
+          </h2>
+          <div className="w-px h-20 bg-border mx-auto mb-10" />
+          <p className="text-base md:text-xl font-light text-muted-foreground leading-relaxed max-w-3xl mx-auto">
+            They emerged from a warp tear two hundred kilometres above the
+            Pacific. No invasion. No ultimatum. Just a single vessel, smooth and
+            silent, hanging in geostationary orbit for seventy-two hours while
+            the world panicked.
+            <br />
+            <br />
+            They called themselves <em className="text-foreground">The Way</em>.
+            They were us, separated by tens of thousands of years of divergent
+            evolution. Their message was four sentences long. The fourth was a
+            choice: leave the planet, or watch it be mined.
+            <br />
+            <br />
+            <span className="text-secondary/90 font-serif italic">
+              Some of us refused both.
+            </span>
+          </p>
+        </div>
+      </FadeIn>
+    </section>
+  );
+}
+
+function ThreePaths() {
+  return (
+    <section className="relative py-24 bg-black/40 border-y border-border/40">
+      <div className="max-w-7xl mx-auto px-6 md:px-12">
+        <FadeIn>
+          <div className="text-center mb-16">
+            <div className="text-secondary tracking-[0.35em] text-xs uppercase mb-4">
+              The Schism · 2056–2062
+            </div>
+            <h2 className="font-serif text-4xl md:text-6xl text-foreground">
+              Three Paths.{" "}
+              <span className="text-secondary">One Planet.</span>
+            </h2>
+          </div>
+        </FadeIn>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {PATHS.map((p, i) => (
+            <FadeIn key={p.title} delay={i * 0.15}>
+              <div className="group relative h-full p-8 border border-border/40 bg-black/30 hover:border-secondary/40 transition-colors duration-500">
+                <div className="text-secondary/80 tracking-[0.3em] text-[10px] uppercase mb-3">
+                  {p.label}
+                </div>
+                <h3 className="font-serif text-3xl text-foreground mb-2">
+                  {p.title}
+                </h3>
+                <div className="font-serif text-5xl text-primary mb-6 leading-none">
+                  {p.pct}
+                </div>
+                <p className="text-muted-foreground leading-relaxed text-sm md:text-base">
+                  {p.body}
+                </p>
+                {p.title === "The Denied" && (
+                  <div className="absolute top-6 right-6 font-serif italic text-secondary tracking-wide text-sm">
+                    ← you
+                  </div>
+                )}
+              </div>
+            </FadeIn>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function PillarsSection() {
+  return (
+    <section className="relative py-24">
+      <div className="max-w-6xl mx-auto px-6 md:px-12">
+        <FadeIn>
+          <div className="mb-12 flex items-end justify-between gap-6 border-b border-border/40 pb-6">
+            <div>
+              <div className="text-secondary tracking-[0.35em] text-[10px] uppercase mb-3">
+                Field Manual · §I–VI
+              </div>
+              <h2 className="font-serif text-3xl md:text-5xl text-foreground leading-[0.95]">
+                What you do on the surface.
+              </h2>
+            </div>
+            <div className="hidden md:block font-serif italic text-muted-foreground/60 text-sm tracking-wide shrink-0">
+              Six disciplines. No shortcuts.
+            </div>
+          </div>
+        </FadeIn>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-border/25">
+          {PILLARS.map((p, i) => (
+            <FadeIn key={p.title} delay={i * 0.04}>
+              <div className="group h-full bg-background px-5 py-6 hover:bg-black/40 transition-colors duration-500 flex gap-4">
+                <div className="shrink-0 text-secondary/80 group-hover:text-secondary transition-colors mt-0.5 [&>svg]:h-4 [&>svg]:w-4">
+                  {p.icon}
+                </div>
+                <div className="min-w-0">
+                  <div className="flex items-baseline gap-2 mb-1.5">
+                    <span className="font-serif text-[10px] tracking-[0.25em] text-muted-foreground/60 uppercase">
+                      §{String(i + 1).padStart(2, "0")}
+                    </span>
+                    <h3 className="font-serif text-base text-foreground leading-tight">
+                      {p.title}
+                    </h3>
+                  </div>
+                  <p className="text-muted-foreground/85 leading-snug text-[13px]">
+                    {p.description}
+                  </p>
+                </div>
+              </div>
+            </FadeIn>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function BestiarySection() {
+  return (
+    <section className="relative py-32 overflow-hidden">
+      <div className="absolute inset-0 z-0">
+        <img
+          src={img("blood-moon-monster.png")}
+          alt=""
+          className="w-full h-full object-cover object-right opacity-30 grayscale-[0.4]"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-background via-background/95 to-background/40" />
+      </div>
+      <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12">
+        <FadeIn>
+          <div className="mb-16 max-w-3xl">
+            <div className="text-primary tracking-[0.35em] text-xs uppercase mb-4">
+              Bestiary · Six Classifications Confirmed
+            </div>
+            <h2 className="font-serif text-4xl md:text-6xl text-foreground leading-tight mb-6">
+              The things that crawled out{" "}
+              <span className="text-primary">when the rift opened.</span>
+            </h2>
+            <p className="text-muted-foreground text-base md:text-lg leading-relaxed max-w-2xl">
+              Every confirmed kill earns a Compendium page: threat tier,
+              habitat, weaknesses, and a field note left by whoever logged the
+              entry first. Here are the six the surface knows by name.
+            </p>
+          </div>
+        </FadeIn>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-border/40">
+          {BESTIARY.map((m, i) => (
+            <FadeIn key={m.name} delay={i * 0.07}>
+              <article className="h-full bg-background/95 p-7 group hover:bg-black/60 transition-colors duration-500 border-l-2 border-l-transparent hover:border-l-primary">
+                <div className="flex items-start justify-between mb-3">
+                  <h3
+                    className="font-serif text-2xl text-foreground"
+                    style={{ color: m.accent }}
+                  >
+                    {m.name}
+                  </h3>
+                  <div className="flex gap-0.5 mt-2 shrink-0">
+                    {Array.from({ length: 5 }).map((_, idx) => (
+                      <span
+                        key={idx}
+                        className={`w-1.5 h-4 ${
+                          idx < m.threat ? "bg-primary" : "bg-border/60"
+                        }`}
+                        aria-hidden
+                      />
+                    ))}
+                  </div>
+                </div>
+                <div className="font-serif text-[11px] tracking-[0.2em] text-muted-foreground/80 uppercase mb-2">
+                  {m.classification}
+                </div>
+                <div className="text-xs text-muted-foreground/70 mb-5 italic">
+                  Habitat: {m.habitat}
+                </div>
+                <p className="text-sm text-muted-foreground/95 leading-relaxed">
+                  {m.lore}
+                </p>
+              </article>
+            </FadeIn>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function TownshipSection() {
+  return (
+    <section id="township" className="relative py-32">
+      <div className="max-w-7xl mx-auto px-6 md:px-12">
+        <FadeIn>
+          <div className="text-center mb-16">
+            <div className="text-secondary tracking-[0.35em] text-xs uppercase mb-4">
+              Township System · Five Stages
+            </div>
+            <h2 className="font-serif text-4xl md:text-6xl text-foreground leading-tight">
+              From bedroll{" "}
+              <span className="text-secondary">to fortress.</span>
+            </h2>
+            <p className="text-muted-foreground mt-4 max-w-2xl mx-auto text-base md:text-lg">
+              Every survivor starts with nothing and a claim flag. Five stages of progression that reshape the economy around you.
+            </p>
+          </div>
+        </FadeIn>
+        <div className="space-y-6">
+          {SETTLEMENT_STAGES.map((s, i) => (
+            <FadeIn key={s.stage} delay={i * 0.07}>
+              <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-6 border border-border/30 bg-black/30 p-6 md:p-8 hover:bg-black/50 transition-colors duration-300"
+                style={{ borderLeftColor: s.color, borderLeftWidth: 3 }}>
+                <div className="hidden md:flex items-start">
+                  <span className="font-serif text-6xl font-bold opacity-15 leading-none" style={{ color: s.color }}>
+                    {s.stage}
+                  </span>
+                </div>
+                <div>
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="font-serif text-[10px] tracking-[0.35em] uppercase px-2 py-0.5 border" style={{ borderColor: s.color, color: s.color }}>
+                      STAGE {s.stage}
+                    </span>
+                    <span className="text-xs text-muted-foreground/60 font-serif">{s.unlock}</span>
+                  </div>
+                  <h3 className="font-serif text-2xl md:text-3xl text-foreground mb-2">{s.title}</h3>
+                  <p className="text-muted-foreground/85 leading-relaxed text-sm mb-4">{s.desc}</p>
+                  <div className="flex flex-col sm:flex-row gap-3 text-xs font-serif">
+                    <div className="flex gap-2">
+                      <span className="text-muted-foreground/50 uppercase tracking-wider shrink-0">Structures:</span>
+                      <span className="text-muted-foreground/80">{s.structures}</span>
+                    </div>
+                    <div className="hidden sm:block text-border/50">·</div>
+                    <div className="flex gap-2">
+                      <span className="text-muted-foreground/50 uppercase tracking-wider shrink-0">NPCs:</span>
+                      <span style={{ color: s.color }}>{s.npcs}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </FadeIn>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function FactionsSection() {
+  return (
+    <section id="factions" className="relative py-32 bg-black/40 border-y border-border/40">
+      <div className="max-w-7xl mx-auto px-6 md:px-12">
+        <FadeIn>
+          <div className="text-center mb-16">
+            <div className="text-secondary tracking-[0.35em] text-xs uppercase mb-4">
+              Major Factions · Six Powers
+            </div>
+            <h2 className="font-serif text-4xl md:text-6xl text-foreground leading-tight">
+              Everyone has{" "}
+              <span className="text-primary">an agenda.</span>
+            </h2>
+            <p className="text-muted-foreground mt-4 max-w-2xl mx-auto text-base">
+              Reputation with one faction directly affects your standing with others. There are no clean hands in this world.
+            </p>
+          </div>
+        </FadeIn>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-border/20">
+          {FACTIONS.map((f, i) => (
+            <FadeIn key={f.name} delay={i * 0.06}>
+              <div
+                className="h-full bg-background/95 p-7 group hover:bg-black/70 transition-all duration-500 border-t-2"
+                style={{ borderTopColor: f.color }}
+              >
+                <div
+                  className="font-serif text-[10px] tracking-[0.3em] uppercase mb-2 font-bold"
+                  style={{ color: f.color }}
+                >
+                  {f.type}
+                </div>
+                <h3 className="font-serif text-xl text-foreground mb-3 group-hover:text-white transition-colors">
+                  {f.name}
+                </h3>
+                <p className="text-sm text-muted-foreground/90 leading-relaxed">{f.desc}</p>
+              </div>
+            </FadeIn>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function BiomesSection() {
+  return (
+    <section id="biomes" className="relative py-32">
+      <div className="max-w-7xl mx-auto px-6 md:px-12">
+        <FadeIn>
+          <div className="mb-16">
+            <div className="text-secondary tracking-[0.35em] text-xs uppercase mb-4">
+              World Biomes · Seven Zones
+            </div>
+            <h2 className="font-serif text-4xl md:text-6xl text-foreground leading-tight">
+              Seven regions.{" "}
+              <span className="text-secondary">None of them safe.</span>
+            </h2>
+          </div>
+        </FadeIn>
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+          {BIOMES.map((b, i) => (
+            <FadeIn key={b.name} delay={i * 0.06}>
+              <div
+                className="relative h-full bg-background/80 border border-border/30 p-6 hover:border-opacity-80 transition-all duration-500"
+                style={{ borderLeftColor: b.color, borderLeftWidth: 3 }}
+              >
+                <h3 className="font-serif text-xl mb-2" style={{ color: b.color }}>{b.name}</h3>
+                <p className="text-sm text-muted-foreground/85 leading-relaxed mb-5">{b.desc}</p>
+                <div className="flex gap-6 text-xs font-serif uppercase tracking-wider">
+                  <div>
+                    <div className="text-muted-foreground/50 mb-1.5">Danger</div>
+                    <div className="flex gap-1">
+                      {Array.from({ length: 5 }).map((_, idx) => (
+                        <span
+                          key={idx}
+                          className="w-2.5 h-2.5 block"
+                          style={{ backgroundColor: idx < b.danger ? b.color : "#333" }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-muted-foreground/50 mb-1.5">Loot</div>
+                    <div className="flex gap-1">
+                      {Array.from({ length: 5 }).map((_, idx) => (
+                        <span
+                          key={idx}
+                          className="w-2.5 h-2.5 block"
+                          style={{ backgroundColor: idx < b.loot ? "#c5a059" : "#333" }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </FadeIn>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function NamedEnemiesSection() {
+  const [active, setActive] = useState<string | null>(null);
+  return (
+    <section id="named-enemies" className="relative py-32 bg-black/50 border-y border-border/40">
+      <div className="max-w-7xl mx-auto px-6 md:px-12">
+        <FadeIn>
+          <div className="text-center mb-16">
+            <div className="text-primary tracking-[0.35em] text-xs uppercase mb-4">
+              Named Enemies · Six Confirmed
+            </div>
+            <h2 className="font-serif text-4xl md:text-6xl text-foreground leading-tight">
+              Not every threat{" "}
+              <span className="text-primary">wears a faction badge.</span>
+            </h2>
+            <p className="text-muted-foreground mt-4 max-w-2xl mx-auto text-base">
+              These entities exist outside the political order — corrupted, transformed, or simply no longer classifiable as human.
+            </p>
+          </div>
+        </FadeIn>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+          {BOSSES.map((b, i) => (
+            <FadeIn key={b.id} delay={i * 0.06}>
+              <button
+                className={`relative w-full group text-left transition-all duration-300 ${active === b.id ? "ring-2 ring-primary" : ""}`}
+                onClick={() => setActive(active === b.id ? null : b.id)}
+              >
+                <div className="aspect-square overflow-hidden bg-black/60 relative">
+                  <img
+                    src={b.img}
+                    alt={b.name}
+                    className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
+                </div>
+                <div className="absolute bottom-0 left-0 right-0 p-3">
+                  <div className="text-[9px] tracking-[0.2em] text-primary uppercase mb-0.5">{b.type}</div>
+                  <div className="font-serif text-sm text-foreground leading-tight">{b.name}</div>
+                  <div className="flex gap-0.5 mt-1.5">
+                    {Array.from({ length: 5 }).map((_, idx) => (
+                      <span key={idx} className={`w-1.5 h-1.5 ${idx < b.threat ? "bg-primary" : "bg-border/40"}`} />
+                    ))}
+                  </div>
+                </div>
+              </button>
+            </FadeIn>
+          ))}
+        </div>
+        {active &&
+          (() => {
+            const b = BOSSES.find((x) => x.id === active)!;
+            return (
+              <motion.div
+                key={active}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mt-8 border border-border/50 bg-background/90 p-8 grid grid-cols-1 md:grid-cols-3 gap-8"
+              >
+                <div className="md:col-span-2">
+                  <div className="text-primary tracking-[0.3em] text-[10px] uppercase mb-2">{b.type}</div>
+                  <h3 className="font-serif text-3xl text-foreground mb-4">{b.name}</h3>
+                  <p className="text-muted-foreground/90 leading-relaxed mb-6">{b.lore}</p>
+                  <div>
+                    <div className="text-xs tracking-[0.3em] uppercase text-muted-foreground/60 mb-3">Abilities</div>
+                    <div className="flex flex-wrap gap-2">
+                      {b.abilities.map((a) => (
+                        <span key={a} className="px-3 py-1 bg-primary/10 border border-primary/30 text-primary text-xs font-serif tracking-wide">
+                          {a}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <div className="flex items-center justify-center">
+                  <img src={b.img} alt={b.name} className="max-h-52 object-contain" />
+                </div>
+              </motion.div>
+            );
+          })()}
+      </div>
+    </section>
+  );
+}
+
+function TheWaySection() {
+  return (
+    <section className="relative py-24 bg-black/60 border-y border-border/20">
+      <div className="max-w-5xl mx-auto px-6 md:px-12 text-center">
+        <FadeIn>
+          <div className="text-secondary tracking-[0.4em] text-xs uppercase mb-10">The Way · What We Know</div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+            <div>
+              <div className="font-serif text-secondary text-[10px] tracking-[0.3em] uppercase mb-3">Arrival Year</div>
+              <div className="font-serif text-5xl text-foreground mb-3">2055 OEY</div>
+              <div className="text-muted-foreground/70 text-sm leading-relaxed">Seventeen objects in low orbit. No hostile action. Just presence.</div>
+            </div>
+            <div>
+              <div className="font-serif text-secondary text-[10px] tracking-[0.3em] uppercase mb-3">Technology Given</div>
+              <div className="font-serif text-lg text-foreground mb-3 leading-snug">Antigravitic · Rift-generative · Biological synthesis</div>
+              <div className="text-muted-foreground/70 text-sm leading-relaxed">Given under the Accords in exchange for territorial access.</div>
+            </div>
+            <div>
+              <div className="font-serif text-secondary text-[10px] tracking-[0.3em] uppercase mb-3">Current Status</div>
+              <div className="font-serif text-3xl text-primary mb-3">Silent since 2099</div>
+              <div className="text-muted-foreground/70 text-sm leading-relaxed">Their orbital structures remain. No response to any signal in twelve months.</div>
+            </div>
+          </div>
+        </FadeIn>
+      </div>
+    </section>
+  );
+}
+
+function BuildSection() {
+  return (
+    <section className="relative py-32 overflow-hidden">
+      <div className="absolute inset-0 z-0">
+        <img
+          src={img("forge-interior.png")}
+          alt=""
+          className="w-full h-full object-cover object-left opacity-30"
+        />
+        <div className="absolute inset-0 bg-gradient-to-l from-background via-background/95 to-background/40" />
+      </div>
+      <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div className="lg:col-start-2">
+          <FadeIn>
+            <Hammer className="w-12 h-12 text-secondary mb-6" />
+            <div className="text-secondary tracking-[0.35em] text-xs uppercase mb-4">
+              Stewardship · Charter Forbids It · Do It Anyway
+            </div>
+            <h2 className="font-serif text-4xl md:text-6xl text-foreground leading-tight mb-6">
+              Rebuild what the stations decided wasn't worth saving.
+            </h2>
+            <p className="text-muted-foreground text-base md:text-lg leading-relaxed mb-8">
+              Pre-Contact concrete still holds, if you patch it. Drop a
+              foundation, raise four walls, hang a door, and you have what the
+              old codex calls a <em>house</em>. Add a roof and the rain stops
+              being your problem.
+            </p>
+            <ul className="space-y-3 text-muted-foreground/90 font-serif text-sm md:text-base">
+              <li className="flex gap-3">
+                <span className="text-primary">›</span> Foundations, walls,
+                doors, roofs — placed in real space, not on a grid you can't see
+              </li>
+              <li className="flex gap-3">
+                <span className="text-primary">›</span> Salvage scrap from
+                breakable ruins; smelt iron in a forge you built yourself
+              </li>
+              <li className="flex gap-3">
+                <span className="text-primary">›</span> The horde respects
+                walls. Mostly.
+              </li>
+            </ul>
+          </FadeIn>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function VoicesSection() {
+  return (
+    <section className="relative py-32 bg-black/50 border-y border-border/40">
+      <div className="max-w-4xl mx-auto px-6 md:px-12 space-y-20">
+        <FadeIn>
+          <div className="text-center mb-12">
+            <div className="text-secondary tracking-[0.35em] text-xs uppercase mb-4">
+              Townsfolk · Overheard
+            </div>
+            <h2 className="font-serif text-3xl md:text-5xl text-foreground">
+              Walk into any settlement and listen.
+            </h2>
+          </div>
+        </FadeIn>
+
+        <FadeIn delay={0.1}>
+          <blockquote className="text-2xl md:text-4xl font-serif italic text-foreground leading-relaxed">
+            "The grudge runs deep here.
+            <br />
+            <span className="text-secondary">Watch your back.</span>"
+          </blockquote>
+        </FadeIn>
+
+        <FadeIn delay={0.2}>
+          <blockquote className="text-2xl md:text-4xl font-serif italic text-muted-foreground leading-relaxed text-right">
+            "Don't go past the river after dark.
+            <br />
+            <span className="text-foreground">Things wander out there.</span>"
+          </blockquote>
+        </FadeIn>
+
+        <FadeIn delay={0.3}>
+          <blockquote className="text-2xl md:text-4xl font-serif italic text-foreground leading-relaxed">
+            "Heard the bells last night?
+            <br />
+            <span className="text-primary">Something's coming.</span>"
+          </blockquote>
+        </FadeIn>
+
+        <FadeIn delay={0.4}>
+          <blockquote className="text-2xl md:text-4xl font-serif italic text-muted-foreground leading-relaxed text-right">
+            "My son was a guard.
+            <br />
+            <span className="text-foreground">The rift took him.</span>"
+          </blockquote>
+        </FadeIn>
+
+        <FadeIn delay={0.5}>
+          <p className="text-center text-sm text-muted-foreground/70 italic font-serif tracking-wide pt-8">
+            Attack one, and the whole town remembers.
+          </p>
+        </FadeIn>
+      </div>
+    </section>
+  );
+}
+
+function FinalCTA() {
+  return (
+    <section className="relative h-screen flex flex-col items-center justify-center overflow-hidden">
+      <div className="absolute inset-0 z-0">
+        <img
+          src={img("distant-church.png")}
+          alt=""
+          className="w-full h-full object-cover object-bottom opacity-50"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/40 to-black/85" />
+      </div>
+      <div className="relative z-10 text-center px-4 max-w-3xl">
+        <FadeIn>
+          <div className="text-secondary tracking-[0.4em] text-[10px] md:text-xs uppercase mb-6">
+            Surface Bulletin · Year 343 PC
+          </div>
+          <h2
+            className="font-serif text-5xl md:text-7xl lg:text-8xl mb-4 text-foreground leading-tight"
+            style={{
+              textShadow:
+                "0 2px 8px rgba(0,0,0,0.9), 0 8px 32px rgba(0,0,0,0.8)",
+            }}
+          >
+            The stars don't owe us anything.
+          </h2>
+          <p className="font-serif italic text-xl md:text-2xl text-secondary mb-12">
+            And we don't owe them anything either.
+          </p>
+          <a
+            href="/arpg-game/"
+            className="inline-block px-12 py-5 font-serif text-base md:text-lg tracking-[0.3em] text-black uppercase bg-secondary hover:bg-foreground transition-colors duration-500 shadow-[0_0_60px_rgba(200,150,50,0.4)]"
+          >
+            Bind a Grudge
+          </a>
+          <p className="mt-8 text-xs text-muted-foreground/70 font-serif tracking-widest uppercase">
+            Free to play · No install · Loads in your browser
+          </p>
+        </FadeIn>
+      </div>
+    </section>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="relative py-12 border-t border-border/30">
+      <div className="max-w-7xl mx-auto px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-4 text-xs tracking-widest uppercase font-serif text-muted-foreground/60">
+        <div>Grudges · An action-RPG of the surface tribes</div>
+        <div className="text-secondary/70">
+          Year 2398 OEY · 343 Post-Contact
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Root
+// ─────────────────────────────────────────────────────────────────────────────
+
+export default function App() {
+  return (
+    <div className="bg-background text-foreground min-h-screen overflow-x-hidden">
+      <TopNav />
+      <Hero />
+      <ColdOpen />
+      <ThreePaths />
+      <PillarsSection />
+      <TownshipSection />
+      <FactionsSection />
+      <BiomesSection />
+      <BestiarySection />
+      <NamedEnemiesSection />
+      <BuildSection />
+      <VoicesSection />
+      <TheWaySection />
+      <FinalCTA />
+      <Footer />
+    </div>
+  );
+}

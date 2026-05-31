@@ -219,8 +219,8 @@ export const BODY_TYPES: BodyTypeConfig[] = [
   // Each loads a full clothed GLTF from R2 with 24 baked animation clips.
   { id: 'adventurer',    gender: 'male', label: 'Adventurer', icon: '⚔️',  category: 'civilian', scaleX: 1.00, scaleY: 1.00, gltfPath: '/models/characters/male/adventurer.gltf' },
   { id: 'beach',         gender: 'male', label: 'Scout',      icon: '🏖️', category: 'civilian', scaleX: 1.00, scaleY: 1.00, gltfPath: '/models/characters/male/beach.gltf' },
-  { id: 'casual',        gender: 'male', label: 'Survivor',   icon: '🧥',  category: 'civilian', scaleX: 1.00, scaleY: 1.00, gltfPath: '/models/characters/male/casual_2.gltf' },
-  { id: 'casual-hoodie', gender: 'male', label: 'Scavenger',  icon: '🪝',  category: 'civilian', scaleX: 1.00, scaleY: 1.00, gltfPath: '/models/characters/male/casual_hoodie.gltf' },
+  { id: 'casual',        gender: 'male', label: 'Survivor',   icon: '🧥',  category: 'civilian', scaleX: 1.00, scaleY: 1.00, gltfPath: '/models/characters/male/casual.gltf' },
+  { id: 'casual-hoodie', gender: 'male', label: 'Scavenger',  icon: '🪝',  category: 'civilian', scaleX: 1.00, scaleY: 1.00, gltfPath: '/models/characters/male/casual-hoodie.gltf' },
   { id: 'farmer',        gender: 'male', label: 'Settler',    icon: '🌾',  category: 'civilian', scaleX: 1.00, scaleY: 1.00, gltfPath: '/models/characters/male/farmer.gltf' },
   { id: 'king',          gender: 'male', label: 'Warlord',    icon: '👑',  category: 'civilian', scaleX: 1.00, scaleY: 1.00, gltfPath: '/models/characters/male/king.gltf' },
   { id: 'punk',          gender: 'male', label: 'Raider',     icon: '💀',  category: 'civilian', scaleX: 1.00, scaleY: 1.00, gltfPath: '/models/characters/male/punk.gltf' },

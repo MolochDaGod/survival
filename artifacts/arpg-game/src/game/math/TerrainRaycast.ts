@@ -72,8 +72,9 @@ export function downCast(
   fallSpeed: number,
   dt = 0.016,
 ): number {
-  const distance   = Math.abs(fallSpeed) * dt + 0.5;
-  const numSamples = Math.max(3, Math.min(12, Math.ceil(fallSpeed * 0.06)));
+  const speed = Math.abs(fallSpeed);
+  const distance = speed * dt + 0.5;
+  const numSamples = Math.max(3, Math.min(12, Math.ceil(speed * 0.06)));
   const step       = distance / numSamples;
 
   for (let i = 0; i <= numSamples; i++) {

@@ -1,0 +1,20 @@
+name = "grudge-chat"
+main = "src/index.ts"
+compatibility_date = "2025-05-01"
+compatibility_flags = ["nodejs_compat"]
+
+[durable_objects]
+bindings = [
+  { name = "CHAT_ROOM", class_name = "ChatRoom" }
+]
+
+[[migrations]]
+tag = "v1"
+new_classes = ["ChatRoom"]
+
+# Custom domain — add CNAME chat.grudge-studio.com → grudge-chat.<account>.workers.dev
+# [routes]
+# pattern = "chat.grudge-studio.com/*"
+
+[vars]
+ALLOWED_ORIGINS = "https://grudges.grudge-studio.com,https://survival.grudge-studio.com,https://survival-grudgenexus.vercel.app,http://localhost:5171"

@@ -1,0 +1,948 @@
+/* Shared book overlay styles ─ pixel-art, gold/parchment palette */
+
+.book-backdrop {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.85) 80%);
+  z-index: 9000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: bookFadeIn 200ms ease-out;
+}
+
+@keyframes bookFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.book-stage {
+  position: relative;
+  /* sized exactly to the displayed book frame */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* ── Parchment-area XY graph ──────────────────────────────────────────────
+   * The book sprite has decorative gold borders + a center binding gutter,
+   * so the actual writable parchment is INSET inside the 652×652 frame.
+   * These percentages are tuned to the Craftpix open-book art and shared
+   * across all skins (adventure / magic / bestiary use the same template).
+   *
+   *   ┌──────────────────────────────────────────────┐
+   *   │                  page-top                    │
+   *   │  page-outer  ┌──┐  page-gutter  ┌──┐  page-outer │
+   *   │              │ L│  (binding)    │ R│              │
+   *   │              └──┘               └──┘              │
+   *   │                  page-bottom                 │
+   *   └──────────────────────────────────────────────┘
+   * Tweak here to retune ALL books at once. */
+  --page-top:    13%;
+  --page-bottom: 14%;
+  --page-outer:   9%;
+  --page-gutter:  3.5%;  /* half the width of the binding gap */
+}
+
+/* The animated book sprite layer */
+.book-sprite {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* The content layer that overlays the open spread (left + right pages). */
+.book-pages {
+  position: absolute;
+  inset: 0;
+  /* Each .book-page is absolutely positioned to its parchment region —
+   * no grid, so we don't accidentally paint over the binding gutter. */
+  pointer-events: none;
+  font-family: 'Cinzel', 'Georgia', serif;
+  color: #2a1810;
+}
+
+.book-pages.fade-in  { animation: pagesFadeIn 250ms ease-out forwards; }
+.book-pages.fade-out { animation: pagesFadeOut 220ms ease-in forwards; }
+
+@keyframes pagesFadeIn  { from { opacity: 0; } to { opacity: 1; } }
+@keyframes pagesFadeOut { from { opacity: 1; } to { opacity: 0; } }
+
+/* Each page is absolutely positioned inside the parchment area. Content
+ * scrolls inside the page rather than overflowing past the gold border. */
+.book-page {
+  position: absolute;
+  top:    var(--page-top);
+  bottom: var(--page-bottom);
+  padding: 4px 8px;
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  /* Vertical scroll only — kept inside the parchment, never spills onto
+   * the bound spine or outside borders. */
+  overflow-y: auto;
+  overflow-x: hidden;
+  /* Min-height fix so children can shrink and the scroll container actually
+   * scrolls instead of pushing past the bottom edge. */
+  min-height: 0;
+
+  /* Custom parchment-themed scrollbar. */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(107, 62, 28, 0.4) transparent;
+}
+.book-page::-webkit-scrollbar             { width: 5px; }
+.book-page::-webkit-scrollbar-track       { background: transparent; }
+.book-page::-webkit-scrollbar-thumb       { background: rgba(107, 62, 28, 0.4); border-radius: 3px; }
+.book-page::-webkit-scrollbar-thumb:hover { background: rgba(107, 62, 28, 0.7); }
+
+.book-page.left {
+  left:  var(--page-outer);
+  right: calc(50% + var(--page-gutter));
+}
+.book-page.right {
+  left:  calc(50% + var(--page-gutter));
+  right: var(--page-outer);
+}
+
+/* Visible parchment-page frames — drawn under content so each "page" reads
+ * as a real paper rectangle with hard borders the writing cannot escape.
+ * The borders are warm sepia ink against the parchment so they harmonise
+ * with the gold sprite frame. The light cream wash adds a tiny bit of
+ * paper colour on top of the sprite so text contrast stays consistent
+ * across the three book skins (bestiary/adventure/magic share this CSS). */
+.book-page-frame {
+  position: absolute;
+  top:    var(--page-top);
+  bottom: var(--page-bottom);
+  pointer-events: none;
+  border: 1px solid rgba(107, 62, 28, 0.55);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 240, 200, 0.18),
+    inset 0 0 14px rgba(40, 22, 10, 0.18);
+  background: linear-gradient(
+    155deg,
+    rgba(255, 240, 200, 0.06) 0%,
+    rgba(255, 220, 170, 0.02) 50%,
+    rgba(40, 22, 10, 0.06) 100%
+  );
+  border-radius: 1px;
+  z-index: 1;
+}
+.book-page-frame.left {
+  left:  var(--page-outer);
+  right: calc(50% + var(--page-gutter));
+}
+.book-page-frame.right {
+  left:  calc(50% + var(--page-gutter));
+  right: var(--page-outer);
+}
+
+/* Lift content above the frames so text/images aren't tinted by the wash. */
+.book-page { z-index: 2; }
+
+/* ─── Bookmark sidebar — vertical entry-jump tabs on the right edge ───────
+ * Anchored to the right side of the parchment area, each bookmark is a
+ * narrow tab whose color is set via the PageDef.badge.color prop. Used by
+ * Bestiary (one tab per monster), Professions (one per profession), etc.
+ * The active tab is filled and pulled outward; inactive ones sit flush. */
+.book-bookmarks {
+  position: absolute;
+  top: calc(var(--page-top) + 18px);
+  bottom: calc(var(--page-bottom) + 18px);
+  right: calc(var(--page-outer) - 2px);
+  width: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  z-index: 12;
+  pointer-events: none;
+}
+.book-bookmark {
+  pointer-events: auto;
+  flex: 1 1 auto;
+  min-height: 12px;
+  max-height: 36px;
+  border: 1.5px solid rgba(40, 22, 10, 0.6);
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+  padding: 0;
+  position: relative;
+  transition: transform 0.12s, box-shadow 0.12s, opacity 0.12s;
+  opacity: 0.55;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+  font-family: 'Cinzel', serif;
+  font-size: 0;
+  color: transparent;
+}
+.book-bookmark:hover {
+  opacity: 1;
+  transform: translateX(3px);
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);
+}
+.book-bookmark.active {
+  opacity: 1;
+  transform: translateX(6px);
+  box-shadow:
+    2px 2px 8px rgba(0, 0, 0, 0.7),
+    inset 0 0 6px rgba(255, 230, 180, 0.4);
+}
+.book-bookmark span {
+  position: absolute;
+  right: calc(100% + 8px);
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(20, 10, 5, 0.95);
+  border: 1px solid #c5a059;
+  color: #fbe9b8;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  border-radius: 3px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.12s;
+}
+.book-bookmark:hover span,
+.book-bookmark.active span { opacity: 1; }
+
+/* ─── Monster portrait — uses a sprite sheet of pre-rendered enemies, or
+ *     falls back to the raw 3D-model texture sampled in PNG form. Drawn
+ *     into the .bestiary-portrait container so it scales with the slot. */
+.monster-portrait {
+  width: 100%;
+  height: 100%;
+  display: block;
+  image-rendering: pixelated;
+  object-fit: contain;
+  background: radial-gradient(
+    circle at 50% 40%,
+    rgba(255, 240, 200, 0.18) 0%,
+    rgba(40, 22, 10, 0.05) 70%,
+    transparent 100%
+  );
+}
+
+/* ─── Per-stat book — shared layout primitives used by StatBook ─────────── */
+.stat-book-tier {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 6px 4px;
+  border-bottom: 1px dashed rgba(107, 62, 28, 0.3);
+}
+.stat-book-tier:last-child { border-bottom: none; }
+.stat-book-tier-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(184, 133, 58, 0.2);
+  border: 1.5px solid rgba(107, 62, 28, 0.45);
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: #6b2c0a;
+  flex-shrink: 0;
+}
+.stat-book-tier.unlocked .stat-book-tier-num {
+  background: rgba(110, 201, 110, 0.25);
+  border-color: #4a8a3a;
+  color: #2a6a1a;
+}
+.stat-book-tier-body {
+  flex: 1;
+  font-family: 'Georgia', serif;
+  font-size: 13px;
+  line-height: 1.45;
+  color: #3a1f10;
+}
+.stat-book-tier-name {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  color: #6b2c0a;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 12px;
+  margin-bottom: 1px;
+}
+
+.stat-book-choice-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 4px;
+  margin-top: 4px;
+}
+.stat-book-choice {
+  border: 1.5px solid rgba(107, 62, 28, 0.4);
+  border-radius: 4px;
+  padding: 5px 6px;
+  background: rgba(255, 240, 200, 0.1);
+  font-family: 'Georgia', serif;
+  font-size: 11px;
+  line-height: 1.35;
+  color: #3a1f10;
+}
+.stat-book-choice b {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  color: #6b2c0a;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  display: block;
+  margin-bottom: 2px;
+}
+.stat-book-choice.chosen {
+  background: rgba(110, 201, 110, 0.15);
+  border-color: #4a8a3a;
+}
+
+/* Clickable stat row in Perks / CharacterCreation summary. */
+.stat-link {
+  cursor: pointer;
+  border-radius: 3px;
+  padding: 1px 4px;
+  margin: -1px -4px;
+  transition: background 0.12s;
+}
+.stat-link:hover {
+  background: rgba(184, 133, 58, 0.2);
+}
+
+/* Close button — anchored ON the book's gold corner ornament so it reads
+ * as part of the frame instead of a detached widget floating in space.
+ * Sized for the larger 1.8× book; visually matches the book's brass-on-
+ * leather aesthetic and casts a soft glow on hover. */
+.book-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #7a3818, #2a1208 75%);
+  border: 3px solid #c5a059;
+  color: #fbe9b8;
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 22px;
+  cursor: pointer;
+  z-index: 20;
+  pointer-events: auto;
+  box-shadow:
+    0 4px 14px rgba(0,0,0,0.75),
+    inset 0 0 8px rgba(255, 220, 150, 0.25);
+  transition: transform 0.15s, background 0.15s, box-shadow 0.15s;
+}
+.book-close:hover {
+  transform: scale(1.08);
+  background: radial-gradient(circle at 30% 30%, #9a4218, #3a1808 75%);
+  box-shadow:
+    0 6px 18px rgba(0,0,0,0.85),
+    0 0 16px rgba(197, 160, 89, 0.55),
+    inset 0 0 8px rgba(255, 220, 150, 0.4);
+}
+
+/* Page-turn buttons — flank the book vertically centred so they read as
+ * "next / prev page" navigation, not tiny corner ornaments tucked under
+ * the parchment. They sit just outside the gold border so they never
+ * obscure page content even at large book sizes. */
+.page-turn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 64px;
+  height: 64px;
+  border: 3px solid #c5a059;
+  border-radius: 50%;
+  background: linear-gradient(150deg, #2a1810 0%, #120a06 100%);
+  color: #fbe9b8;
+  font-size: 32px;
+  font-weight: 700;
+  cursor: pointer;
+  z-index: 15;
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Cinzel', serif;
+  box-shadow:
+    0 6px 16px rgba(0,0,0,0.7),
+    inset 0 0 8px rgba(255, 220, 150, 0.18);
+  transition: transform 0.15s, background 0.15s, box-shadow 0.15s, border-color 0.15s;
+}
+.page-turn:hover:not(:disabled) {
+  transform: translateY(-50%) scale(1.1);
+  border-color: #f0d088;
+  box-shadow:
+    0 8px 22px rgba(0,0,0,0.8),
+    0 0 18px rgba(240, 208, 136, 0.55),
+    inset 0 0 10px rgba(255, 220, 150, 0.3);
+}
+.page-turn:disabled { opacity: 0.25; cursor: default; }
+.page-turn.prev { left: -36px; }
+.page-turn.next { right: -36px; }
+
+/* Page index label — sits below the book on the backdrop, so the binding
+ * gutter art stays clean and the count is easy to read. */
+.book-page-num {
+  position: absolute;
+  bottom: -34px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  color: #c5a059;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  z-index: 10;
+  pointer-events: none;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+}
+
+/* ── Responsive: tuck controls inside the frame on small viewports ────────
+ * BookOverlay clamps to MIN_SIZE 520, so on phones the book may extend
+ * past the viewport edges. To keep close + page-turn + page-num reachable
+ * on small/short screens, pull the side nav inside the frame and move
+ * the page-num up just inside the bottom edge. Triggered by *either*
+ * narrow width or short height so landscape phones are covered too. */
+@media (max-width: 700px), (max-height: 620px) {
+  .book-close { top: 8px; right: 8px; width: 44px; height: 44px; font-size: 18px; border-width: 2px; }
+  .page-turn { width: 52px; height: 52px; font-size: 26px; border-width: 2px; }
+  .page-turn.prev { left: 8px; }
+  .page-turn.next { right: 8px; }
+  .book-page-num { bottom: 8px; font-size: 12px; }
+}
+
+/* ─── Decorative typography for book content ──────────────────────────────── */
+
+/* Typography below was tuned for the original ~650px book. With the book
+ * now sized for 1.8× scale (~1175px), every default class gets a ~1.6×
+ * bump so headings and body copy fill the larger parchment area without
+ * feeling lost. Inline `style={{ fontSize: ... }}` overrides in book
+ * content components still take precedence; those are intentionally left
+ * smaller for compact lists (inventory grids, bestiary roster). */
+
+.book-h1 {
+  font-family: 'Cinzel', serif;
+  font-size: 34px;
+  font-weight: 700;
+  color: #6b2c0a;
+  text-align: center;
+  margin: 0 0 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  text-shadow: 1px 1px 0 rgba(255,235,180,0.4);
+}
+
+.book-h2 {
+  font-family: 'Cinzel', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #6b3e1c;
+  margin: 0 0 6px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(107,62,28,0.3);
+  padding-bottom: 3px;
+}
+
+.book-text {
+  font-family: 'Georgia', serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #3a1f10;
+  margin: 0 0 10px;
+}
+
+.book-stat-row {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'Georgia', serif;
+  font-size: 15px;
+  color: #3a1f10;
+  margin: 3px 0;
+  border-bottom: 1px dotted rgba(107,62,28,0.2);
+  padding-bottom: 3px;
+}
+.book-stat-row b { color: #6b2c0a; }
+
+/* Generic grid for icon thumbnails */
+.book-grid {
+  display: grid;
+  gap: 4px;
+}
+
+.book-thumb {
+  aspect-ratio: 1;
+  background: rgba(60,30,15,0.08);
+  border: 1.5px solid rgba(107,62,28,0.3);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.1s, border-color 0.1s, box-shadow 0.1s;
+  overflow: hidden;
+  position: relative;
+  font-size: 18px;
+}
+.book-thumb:hover {
+  transform: scale(1.06);
+  border-color: #b8853a;
+  box-shadow: 0 0 8px rgba(184,133,58,0.5);
+}
+.book-thumb.selected {
+  border-color: #b8853a;
+  box-shadow: 0 0 10px rgba(184,133,58,0.7), inset 0 0 6px rgba(184,133,58,0.3);
+  background: rgba(184,133,58,0.15);
+}
+.book-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+/* ─── HUD book buttons (bottom-right) ─────────────────────────────────────── */
+
+.book-button {
+  width: 56px;
+  height: 56px;
+  border: 2px solid #c5a059;
+  border-radius: 8px;
+  background: linear-gradient(150deg, #2a1810 0%, #120a06 100%);
+  color: #fbe9b8;
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.12s, box-shadow 0.12s, border-color 0.12s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  pointer-events: auto;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+}
+.book-button:hover {
+  transform: translateY(-2px);
+  border-color: #f0d088;
+  box-shadow: 0 6px 16px rgba(197,160,89,0.5);
+}
+.book-button .icon { font-size: 22px; line-height: 1; }
+.book-button .key {
+  position: absolute;
+  top: 2px;
+  left: 4px;
+  font-size: 9px;
+  color: #888;
+  font-family: monospace;
+}
+
+/* ─── Mini map ─────────────────────────────────────────────────────────────── */
+
+.minimap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  border: 2px solid #6b3e1c;
+  border-radius: 4px;
+  background: linear-gradient(135deg, #2a3a18 0%, #1a2510 100%);
+  overflow: hidden;
+  margin: 6px 0;
+}
+
+.minimap-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(107,62,28,0.15) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(107,62,28,0.15) 1px, transparent 1px);
+  background-size: 10% 10%;
+}
+
+.minimap-marker {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  margin-left: -6px;
+  margin-top: -6px;
+  border-radius: 50%;
+  border: 1.5px solid #fff;
+  cursor: pointer;
+  transition: transform 0.12s, box-shadow 0.12s;
+}
+.minimap-marker:hover { transform: scale(1.5); z-index: 5; }
+.minimap-marker.player  { background: #6ec96e; box-shadow: 0 0 6px #6ec96e; }
+.minimap-marker.enemy   { background: #d44040; }
+.minimap-marker.resource{ background: #c5a059; }
+.minimap-marker.trader  { background: #5a9ad8; }
+.minimap-marker.town    { background: #f0d088; width: 16px; height: 16px; margin-left: -8px; margin-top: -8px; }
+.minimap-marker.dungeon { background: #6a3a8a; clip-path: polygon(50% 0,100% 50%,50% 100%,0 50%); border-radius: 0; }
+
+.minimap-tooltip {
+  position: absolute;
+  background: rgba(20,10,5,0.95);
+  border: 1px solid #c5a059;
+  color: #fbe9b8;
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  padding: 4px 8px;
+  border-radius: 3px;
+  pointer-events: none;
+  z-index: 20;
+  white-space: nowrap;
+  transform: translate(8px, -100%);
+}
+
+.minimap-zoom {
+  width: 100%;
+  margin: 4px 0;
+  accent-color: #c5a059;
+}
+
+.minimap-legend {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px 6px;
+  font-family: 'Georgia', serif;
+  font-size: 9px;
+  color: #3a1f10;
+}
+.minimap-legend-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1px solid #fff;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+
+/* ─── Bestiary entry layout ────────────────────────────────────────────────── */
+
+.bestiary-portrait {
+  width: 100%;
+  aspect-ratio: 1;
+  background: rgba(60,30,15,0.1);
+  border: 2px solid #6b3e1c;
+  border-radius: 6px;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-size: 60px;
+}
+.bestiary-portrait img {
+  max-width: 100%;
+  max-height: 100%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  border-radius: 3px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4) inset;
+}
+
+.weakness-tag {
+  display: inline-block;
+  background: rgba(212,80,80,0.15);
+  color: #8a2020;
+  border: 1px solid rgba(212,80,80,0.4);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 10px;
+  margin: 2px 4px 2px 0;
+  font-family: 'Cinzel', serif;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.resist-tag {
+  display: inline-block;
+  background: rgba(90,154,216,0.15);
+  color: #205080;
+  border: 1px solid rgba(90,154,216,0.4);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 10px;
+  margin: 2px 4px 2px 0;
+  font-family: 'Cinzel', serif;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.loot-tag {
+  display: inline-block;
+  background: rgba(180,140,60,0.15);
+  color: #6a4818;
+  border: 1px solid rgba(180,140,60,0.45);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 10px;
+  margin: 2px 4px 2px 0;
+  font-family: 'Cinzel', serif;
+  letter-spacing: 0.3px;
+}
+
+/* ─── Perks book ──────────────────────────────────────────────────────────── */
+
+.perk-track-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 6px;
+}
+.perk-track-tab {
+  flex: 1;
+  padding: 4px 0;
+  background: rgba(60,30,15,0.1);
+  border: 1.5px solid rgba(107,62,28,0.3);
+  border-radius: 3px;
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  font-weight: 700;
+  color: #6b3e1c;
+  cursor: pointer;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.12s;
+}
+.perk-track-tab:hover { background: rgba(184,133,58,0.15); }
+.perk-track-tab.active {
+  background: rgba(184,133,58,0.25);
+  border-color: #b8853a;
+  color: #6b2c0a;
+}
+
+.perk-tier-row {
+  border-top: 1px dashed rgba(107,62,28,0.3);
+  padding: 4px 0;
+}
+.perk-tier-label {
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  color: #8a6a3a;
+  letter-spacing: 1px;
+  margin-bottom: 2px;
+  text-transform: uppercase;
+}
+
+/* ─── Bottom HUD layout ───────────────────────────────────────────────────── */
+
+.hud-overlay {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 800;
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  gap: 8px;
+  padding: 0 8px 8px;
+  pointer-events: none;
+  font-family: 'Cinzel', serif;
+}
+
+.hud-panel {
+  background: linear-gradient(150deg, rgba(30,20,14,0.92) 0%, rgba(15,10,6,0.95) 100%);
+  border: 2px solid #c5a059;
+  border-radius: 8px;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.6), 0 4px 14px rgba(0,0,0,0.7);
+  pointer-events: auto;
+  position: relative;
+  padding: 8px;
+}
+.hud-panel::before, .hud-panel::after {
+  content: ''; position: absolute; width: 6px; height: 6px;
+  background: #c5a059; border: 1px solid #fff; border-radius: 1px;
+  box-shadow: 0 0 3px #c5a059;
+}
+.hud-panel::before { top: 3px; left: 3px; }
+.hud-panel::after  { top: 3px; right: 3px; }
+
+.hud-section-label {
+  font-size: 9px;
+  color: #c5a059;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  text-align: center;
+  opacity: 0.8;
+}
+
+/* Chat panel (left) */
+.hud-chat {
+  display: flex;
+  flex-direction: column;
+  height: 180px;
+}
+.hud-chat-log {
+  flex: 1;
+  overflow-y: auto;
+  font-family: 'Georgia', serif;
+  font-size: 11px;
+  color: #d8c8a0;
+  padding: 4px;
+  background: rgba(0,0,0,0.4);
+  border-radius: 3px;
+  border: 1px solid rgba(197,160,89,0.2);
+  margin-bottom: 4px;
+}
+.hud-chat-log p { margin: 1px 0; line-height: 1.3; }
+.hud-chat-input {
+  width: 100%;
+  background: rgba(0,0,0,0.5);
+  border: 1px solid rgba(197,160,89,0.3);
+  color: #fbe9b8;
+  padding: 4px 6px;
+  font-family: 'Georgia', serif;
+  font-size: 11px;
+  border-radius: 3px;
+}
+.hud-chat-input:focus { outline: none; border-color: #c5a059; }
+
+/* Center: avatar + hotbars */
+.hud-center {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 8px;
+  align-items: stretch;
+}
+.hud-avatar {
+  width: 80px;
+  height: 80px;
+  border: 2px solid #c5a059;
+  border-radius: 8px;
+  background: radial-gradient(circle, rgba(197,160,89,0.15), #0f0805);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  position: relative;
+}
+.hud-avatar-name {
+  position: absolute;
+  bottom: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 9px;
+  color: #c5a059;
+  white-space: nowrap;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.hud-hotbars {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  justify-content: center;
+}
+.hud-hotbar-row {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+.hud-hotbar-label {
+  font-size: 9px;
+  color: #c5a059;
+  width: 30px;
+  text-align: center;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.hud-slot {
+  width: 38px;
+  height: 38px;
+  background: linear-gradient(135deg, #1a0f08, #0f0805);
+  border: 2px solid #3a2515;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: #fbe9b8;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.12s;
+}
+.hud-slot:hover { border-color: #c5a059; transform: scale(1.05); }
+.hud-slot .num {
+  position: absolute; top: 1px; left: 3px;
+  font-size: 8px; color: #888; font-family: monospace;
+}
+.hud-slot .cd-text {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 700; color: #fff;
+  background: rgba(0,0,0,0.6);
+  border-radius: 3px;
+}
+
+/* Right: biometrics + weapon + book buttons */
+.hud-right {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.hud-biometrics {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 3px 6px;
+  align-items: center;
+  font-size: 10px;
+  color: #d8c8a0;
+}
+.hud-bio-label {
+  font-size: 9px;
+  color: #c5a059;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.hud-bio-bar {
+  height: 8px;
+  background: rgba(0,0,0,0.5);
+  border: 1px solid rgba(197,160,89,0.3);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.hud-bio-bar > div {
+  height: 100%;
+  transition: width 0.3s;
+}
+.hud-bio-val { font-family: monospace; font-size: 9px; color: #fbe9b8; min-width: 28px; text-align: right; }
+
+.hud-weapon-card {
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(197,160,89,0.3);
+  border-radius: 4px;
+  padding: 4px 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 2px;
+}
+.hud-weapon-icon {
+  width: 28px; height: 28px;
+  background: rgba(197,160,89,0.1);
+  border: 1px solid rgba(197,160,89,0.4);
+  border-radius: 3px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+}
+.hud-weapon-info { flex: 1; }
+.hud-weapon-name { font-size: 11px; color: #fbe9b8; font-weight: 700; }
+.hud-weapon-stat { font-size: 9px; color: #888; font-family: monospace; }
+
+.hud-book-buttons {
+  display: flex;
+  gap: 4px;
+  justify-content: space-around;
+  margin-top: 4px;
+}

@@ -38,7 +38,21 @@ export type BuildingPieceId =
   | 'mb_wall_corner'
   | 'mb_floor'
   | 'mb_stairs'
-  | 'mb_roof';
+  | 'mb_roof'
+  // ── medieval_village additions (alternative wall/roof palette) ────────────
+  | 'mb_wall_plaster'
+  | 'mb_wall_brick'
+  | 'mb_roof_tile'
+  | 'mb_stairs_solid'
+  // ── fantasy_megakit furniture (player-placeable decoration) ───────────────
+  | 'mb_workbench'
+  | 'mb_anvil'
+  | 'mb_table'
+  | 'mb_bed'
+  | 'mb_chest'
+  | 'mb_bookcase'
+  | 'mb_bench'
+  | 'mb_lantern';
 
 interface PieceDef {
   id: BuildingPieceId;
@@ -57,15 +71,31 @@ const GRID = 4;
  * is a perfectly serviceable visual.
  */
 const PIECES: Record<BuildingPieceId, PieceDef> = {
-  mb_foundation:  { id: 'mb_foundation',  glbPath: 'models/environment/kaykit_dungeon/floorDecoration_tilesLarge.gltf.glb', yOffset: 0    },
-  mb_wall:        { id: 'mb_wall',        glbPath: 'models/environment/kaykit_dungeon/wall.gltf.glb',                       yOffset: 0    },
-  mb_wall_door:   { id: 'mb_wall_door',   glbPath: 'models/environment/kaykit_dungeon/wall_door.gltf.glb',                  yOffset: 0    },
-  mb_door:        { id: 'mb_door',        glbPath: 'models/environment/kaykit_dungeon/door.gltf.glb',                       yOffset: 0    },
-  mb_wall_window: { id: 'mb_wall_window', glbPath: 'models/environment/kaykit_dungeon/wall_window.gltf.glb',                yOffset: 0    },
-  mb_wall_corner: { id: 'mb_wall_corner', glbPath: 'models/environment/kaykit_dungeon/wallCorner.gltf.glb',                 yOffset: 0    },
-  mb_floor:       { id: 'mb_floor',       glbPath: 'models/environment/kaykit_dungeon/floorDecoration_wood.gltf.glb',       yOffset: 0    },
-  mb_stairs:      { id: 'mb_stairs',      glbPath: 'models/environment/kaykit_dungeon/stairs.gltf.glb',                     yOffset: 0    },
-  mb_roof:        { id: 'mb_roof',        glbPath: 'models/environment/kaykit_dungeon/floorDecoration_tilesLarge.gltf.glb', yOffset: 3.0  },
+  mb_foundation: { id: 'mb_foundation', glbPath: 'models/environment/kaykit_dungeon/floorDecoration_tilesLarge.gltf.glb', yOffset: 0 },
+  mb_wall: { id: 'mb_wall', glbPath: 'models/environment/kaykit_dungeon/wall.gltf.glb', yOffset: 0 },
+  mb_wall_door: { id: 'mb_wall_door', glbPath: 'models/environment/kaykit_dungeon/wall_door.gltf.glb', yOffset: 0 },
+  mb_door: { id: 'mb_door', glbPath: 'models/environment/kaykit_dungeon/door.gltf.glb', yOffset: 0 },
+  mb_wall_window: { id: 'mb_wall_window', glbPath: 'models/environment/kaykit_dungeon/wall_window.gltf.glb', yOffset: 0 },
+  mb_wall_corner: { id: 'mb_wall_corner', glbPath: 'models/environment/kaykit_dungeon/wallCorner.gltf.glb', yOffset: 0 },
+  mb_floor: { id: 'mb_floor', glbPath: 'models/environment/kaykit_dungeon/floorDecoration_wood.gltf.glb', yOffset: 0 },
+  mb_stairs: { id: 'mb_stairs', glbPath: 'models/environment/kaykit_dungeon/stairs.gltf.glb', yOffset: 0 },
+  mb_roof: { id: 'mb_roof', glbPath: 'models/environment/kaykit_dungeon/floorDecoration_tilesLarge.gltf.glb', yOffset: 3.0 },
+
+  // medieval_village palette
+  mb_wall_plaster: { id: 'mb_wall_plaster', glbPath: 'models/environment/medieval_village/glTF/Wall_Plaster_Straight.gltf', yOffset: 0 },
+  mb_wall_brick: { id: 'mb_wall_brick', glbPath: 'models/environment/medieval_village/glTF/Wall_UnevenBrick_Straight.gltf', yOffset: 0 },
+  mb_roof_tile: { id: 'mb_roof_tile', glbPath: 'models/environment/medieval_village/glTF/Roof_RoundTiles_4x4.gltf', yOffset: 3.0 },
+  mb_stairs_solid: { id: 'mb_stairs_solid', glbPath: 'models/environment/medieval_village/glTF/Stair_Interior_Solid.gltf', yOffset: 0 },
+
+  // fantasy_megakit furniture
+  mb_workbench: { id: 'mb_workbench', glbPath: 'models/props/fantasy_megakit/Exports/glTF/Workbench.gltf', yOffset: 0 },
+  mb_anvil: { id: 'mb_anvil', glbPath: 'models/props/fantasy_megakit/Exports/glTF/Anvil.gltf', yOffset: 0 },
+  mb_table: { id: 'mb_table', glbPath: 'models/props/fantasy_megakit/Exports/glTF/Table_Large.gltf', yOffset: 0 },
+  mb_bed: { id: 'mb_bed', glbPath: 'models/props/fantasy_megakit/Exports/glTF/Bed_Twin1.gltf', yOffset: 0 },
+  mb_chest: { id: 'mb_chest', glbPath: 'models/props/fantasy_megakit/Exports/glTF/Chest_Wood.gltf', yOffset: 0 },
+  mb_bookcase: { id: 'mb_bookcase', glbPath: 'models/props/fantasy_megakit/Exports/glTF/Bookcase_2.gltf', yOffset: 0 },
+  mb_bench: { id: 'mb_bench', glbPath: 'models/props/fantasy_megakit/Exports/glTF/Bench.gltf', yOffset: 0 },
+  mb_lantern: { id: 'mb_lantern', glbPath: 'models/props/fantasy_megakit/Exports/glTF/Lantern_Wall.gltf', yOffset: 0 },
 };
 
 export interface PlacedPieceData {

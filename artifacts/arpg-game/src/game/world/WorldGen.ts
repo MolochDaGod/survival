@@ -136,81 +136,125 @@ export function isForestBiome(biome: Biome): boolean {
 
 // ─── Settlement seeding ───────────────────────────────────────────────────────
 
+import { SECTORS } from '../../data/sectors';
+import type { FactionId } from '../../data/factions';
+
 export interface SettlementDef {
   x: number;
   z: number;
   type: 'town' | 'camp' | 'outpost' | 'cave';
   name: string;
+  /** Owning faction, or null for independent wildlands settlements. */
+  factionId: FactionId | null;
+  /** Sector id this settlement sits in, or null for wildlands. */
+  sectorId: string | null;
 }
 
-const SETTLEMENT_NAMES = [
-  'Ashveil', 'Thornmere', 'Duskwall', 'Ironmoor', 'Crestfall',
-  'Embervast', 'Stonehaven', 'Reedholm', 'Blackpeak', 'Graymoor',
-  'Frostgate', 'Dunshire',
+/** Faction capitals — one town per sector, planted at the sector centre. */
+const FACTION_CAPITALS: Record<FactionId, string> = {
+  keepers: 'Old Cathedral',
+  tech_scavengers: 'The Workshops',
+  hollow_lords: 'Iron Pit',
+  network: 'The Exchange',
+  forgotten: 'Tidewatch',
+};
+
+/** Per-faction satellite settlements (camp / cave / outpost). */
+interface SatelliteSeed {
+  type: 'camp' | 'cave' | 'outpost';
+  name: string;
+  /** Offset from sector centre as polar (angle radians, distance frac of radius). */
+  angle: number;
+  distFrac: number;
+  /** Minimum world height to accept the placement. */
+  minH: number;
+}
+
+const FACTION_SATELLITES: Record<FactionId, SatelliteSeed[]> = {
+  keepers: [
+    { type: 'camp', name: 'Shrine Camp Vesper', angle: 0.4, distFrac: 0.55, minH: 3 },
+    { type: 'outpost', name: 'Watch Post Kestrel', angle: 2.1, distFrac: 0.85, minH: 3 },
+    { type: 'cave', name: 'Stone Throat', angle: 3.6, distFrac: 0.45, minH: 10 },
+  ],
+  tech_scavengers: [
+    { type: 'camp', name: 'Survivor Camp Alpha', angle: 1.1, distFrac: 0.55, minH: 1 },
+    { type: 'outpost', name: 'Scout Point Raven', angle: 4.0, distFrac: 0.85, minH: 1 },
+    { type: 'cave', name: 'Dark Maw Cave', angle: 2.6, distFrac: 0.50, minH: 10 },
+  ],
+  hollow_lords: [
+    { type: 'camp', name: 'Warband Camp Iron', angle: 0.8, distFrac: 0.55, minH: 1 },
+    { type: 'outpost', name: 'Lookout Hawk', angle: 3.2, distFrac: 0.85, minH: 1 },
+    { type: 'cave', name: 'Howling Pit', angle: 5.2, distFrac: 0.40, minH: 10 },
+  ],
+  network: [
+    { type: 'camp', name: 'Relay Camp Signal', angle: 1.5, distFrac: 0.55, minH: 1 },
+    { type: 'outpost', name: 'Perch Falcon', angle: 5.0, distFrac: 0.85, minH: 1 },
+    { type: 'cave', name: 'Shadow Den', angle: 2.4, distFrac: 0.45, minH: 10 },
+  ],
+  forgotten: [
+    { type: 'camp', name: 'Tide Camp Reed', angle: 0.6, distFrac: 0.55, minH: 1 },
+    { type: 'outpost', name: 'Drowned Watch', angle: 3.4, distFrac: 0.80, minH: 1 },
+  ],
+};
+
+/** Independent wildlands settlements — neutral, no faction claim. */
+const WILDLANDS_SEEDS: { x: number; z: number; type: SettlementDef['type']; name: string }[] = [
+  { x: -250, z: 500, type: 'camp', name: 'Ashveil' },
+  { x: 600, z: -700, type: 'outpost', name: 'Thornmere' },
+  { x: -800, z: -600, type: 'camp', name: 'Duskwall' },
+  { x: 500, z: 650, type: 'outpost', name: 'Ironmoor' },
+  { x: -550, z: 850, type: 'camp', name: 'Crestfall' },
 ];
 
-const CAMP_NAMES = ['Survivor Camp Alpha', 'Survivor Camp Beta', 'Survivor Camp Gamma', 'Survivor Camp Delta'];
-const CAVE_NAMES  = ['Dark Maw Cave', 'Howling Pit', 'Stone Throat', 'Shadow Den'];
-const POST_NAMES  = ['Watch Post Kestrel', 'Scout Point Raven', 'Lookout Hawk', 'Perch Falcon'];
-
-/**
- * Pre-seeded settlement locations on land (verified at generation time).
- * Calling this multiple times returns the same list.
- */
 let _cachedSettlements: SettlementDef[] | null = null;
 
+/**
+ * Pre-seeded settlement locations. Towns are faction capitals planted at
+ * each sector centre; satellites populate each territory; the remainder
+ * are independent wildlands camps.
+ */
 export function getSettlements(): SettlementDef[] {
   if (_cachedSettlements) return _cachedSettlements;
 
   const settlements: SettlementDef[] = [];
 
-  // Eight towns in a rough ring at 500–1400 m from centre
-  const townAngles = [0.3, 1.1, 1.9, 2.8, 3.7, 4.5, 5.3, 6.0];
-  townAngles.forEach((angle, i) => {
-    const radius = 600 + ((i * 137) % 700);
-    const x = Math.cos(angle) * radius;
-    const z = Math.sin(angle) * radius;
-    const h = worldHeight(x, z);
-    if (h > 1) {
-      settlements.push({ x, z, type: 'town', name: SETTLEMENT_NAMES[i % SETTLEMENT_NAMES.length] });
+  for (const sector of SECTORS) {
+    // Faction capital — guaranteed at the sector centre (or nearest valid land).
+    const cx = sector.center.x;
+    const cz = sector.center.z;
+    const ch = worldHeight(cx, cz);
+    if (ch > 0.5) {
+      settlements.push({
+        x: cx, z: cz, type: 'town', name: FACTION_CAPITALS[sector.owner],
+        factionId: sector.owner, sectorId: sector.id,
+      });
     }
-  });
+    // Satellite settlements scattered inside the sector radius.
+    const sats = FACTION_SATELLITES[sector.owner] ?? [];
+    for (const sat of sats) {
+      const x = cx + Math.cos(sat.angle) * sector.radius * sat.distFrac;
+      const z = cz + Math.sin(sat.angle) * sector.radius * sat.distFrac;
+      const h = worldHeight(x, z);
+      if (h > sat.minH) {
+        settlements.push({
+          x, z, type: sat.type, name: sat.name,
+          factionId: sector.owner, sectorId: sector.id,
+        });
+      }
+    }
+  }
 
-  // Four survivor camps at medium range
-  const campAngles = [0.8, 2.4, 4.0, 5.6];
-  campAngles.forEach((angle, i) => {
-    const radius = 900 + ((i * 211) % 500);
-    const x = Math.cos(angle) * radius;
-    const z = Math.sin(angle) * radius;
-    const h = worldHeight(x, z);
-    if (h > 1) {
-      settlements.push({ x, z, type: 'camp', name: CAMP_NAMES[i] });
-    }
-  });
-
-  // Four cave entrances in hills
-  const caveAngles = [1.5, 3.1, 4.7, 0.1];
-  caveAngles.forEach((angle, i) => {
-    const radius = 400 + ((i * 97) % 600);
-    const x = Math.cos(angle) * radius;
-    const z = Math.sin(angle) * radius;
-    const h = worldHeight(x, z);
-    if (h > 10) {
-      settlements.push({ x, z, type: 'cave', name: CAVE_NAMES[i] });
-    }
-  });
-
-  // Four outposts at outer range
-  const outpostAngles = [0.5, 1.9, 3.4, 5.0];
-  outpostAngles.forEach((angle, i) => {
-    const radius = 1400 + ((i * 173) % 800);
-    const x = Math.cos(angle) * radius;
-    const z = Math.sin(angle) * radius;
-    const h = worldHeight(x, z);
-    if (h > 1) {
-      settlements.push({ x, z, type: 'outpost', name: POST_NAMES[i] });
-    }
-  });
+  // Independent wildlands settlements — only kept if outside every sector.
+  for (const w of WILDLANDS_SEEDS) {
+    const h = worldHeight(w.x, w.z);
+    if (h <= 1) continue;
+    const inSector = SECTORS.some(s => {
+      const dx = w.x - s.center.x, dz = w.z - s.center.z;
+      return (dx * dx + dz * dz) < (s.radius * s.radius);
+    });
+    if (inSector) continue;
+    settlements.push({ ...w, factionId: null, sectorId: null });
+  }
 
   _cachedSettlements = settlements;
   return settlements;

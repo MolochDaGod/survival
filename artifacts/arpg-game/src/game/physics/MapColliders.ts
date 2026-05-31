@@ -23,6 +23,7 @@
 import * as THREE from 'three';
 import type RAPIER from '@dimforge/rapier3d-compat';
 import type { PhysicsWorld } from './PhysicsWorld';
+import { GROUPS_TERRAIN } from './PhysicsGroups';
 
 const SKIP_NAME_RE = /(water|sky|fog|cloud|particle|vfx|leaf|leaves|foliage|grass[_-]?(blade|card|billboard|sprite|decal|cluster|tuft))/i;
 
@@ -90,7 +91,8 @@ export function buildMapColliders(
 
     const bodyDesc = RAPIER.RigidBodyDesc.fixed();
     const body = world.createRigidBody(bodyDesc);
-    const colliderDesc = RAPIER.ColliderDesc.trimesh(vertices, indices);
+    const colliderDesc = RAPIER.ColliderDesc.trimesh(vertices, indices)
+      .setCollisionGroups(GROUPS_TERRAIN);
     world.createCollider(colliderDesc, body);
     bodies.push(body);
   });

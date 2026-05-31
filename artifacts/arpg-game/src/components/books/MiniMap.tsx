@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 
-export type MarkerKind = 'player' | 'enemy' | 'resource' | 'trader' | 'town' | 'dungeon';
+export type MarkerKind = 'player' | 'enemy' | 'resource' | 'trader' | 'town' | 'dungeon' | 'industry';
 
 export interface MapMarker {
   id: string;
@@ -9,6 +9,8 @@ export interface MapMarker {
   z: number;          // world Z
   label: string;
   detail?: string;    // shown in tooltip
+  /** Optional PNG icon — when set the marker renders as an <img> instead of a coloured dot. */
+  iconUrl?: string;
 }
 
 interface Props {
@@ -67,6 +69,20 @@ export function MiniMap({ player, markers, initialRadius = 150 }: Props) {
 
         {visible.map(m => {
           const pos = toLocal(m);
+          if (m.iconUrl) {
+            return (
+              <img
+                key={m.id}
+                className={`minimap-marker ${m.kind} icon`}
+                src={m.iconUrl}
+                alt={m.label}
+                draggable={false}
+                style={{ left: `${pos.left}%`, top: `${pos.top}%` }}
+                onMouseEnter={() => setHovered(m)}
+                onMouseLeave={() => setHovered(null)}
+              />
+            );
+          }
           return (
             <div
               key={m.id}
@@ -125,5 +141,6 @@ function dotColor(kind: MarkerKind): string {
     case 'trader':   return '#5a9ad8';
     case 'town':     return '#f0d088';
     case 'dungeon':  return '#6a3a8a';
+    case 'industry': return '#b08840';
   }
 }

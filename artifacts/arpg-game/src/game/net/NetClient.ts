@@ -64,12 +64,15 @@ export class NetClient {
   constructor(private readonly handlers: NetClientHandlers = {}) {}
 
   /**
-   * Resolve the websocket URL. In production the frontend lives on Vercel
-   * which cannot proxy WebSocket upgrades, so `VITE_WS_URL` must point
-   * directly at the Railway api-server (e.g.
-   * `wss://grudge-nexus-api-production.up.railway.app`). In dev the env
-   * var is usually unset, and we fall back to same-origin which works
-   * because Vite's dev proxy handles the upgrade.
+   * Resolve the WebSocket URL.
+   *
+   * In production the game is served from Vercel, which cannot proxy
+   * WebSocket upgrade requests. So in any deployment that has
+   * `VITE_WS_URL` set, we connect directly to that host (the Railway
+   * api-server, e.g. `wss://grudge-nexus-api-production.up.railway.app`).
+   * In local dev the var is unset and we fall back to the same origin
+   * (works because `dev:api` runs alongside `dev:game` and Vite proxies
+   * the upgrade).
    */
   private resolveUrl(): string {
     const envUrl = (import.meta as any).env?.VITE_WS_URL as string | undefined;
@@ -77,6 +80,7 @@ export class NetClient {
       // Strip trailing slash, append the realtime path.
       return `${envUrl.replace(/\/+$/, '')}/api/realtime`;
     }
+    // Same-origin fallback — works in dev where the api proxy is active.
     const proto = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
     return `${proto}//${window.location.host}/api/realtime`;
   }
@@ -92,7 +96,13 @@ export class NetClient {
     this.currentName = name;
     this.currentAccountId = accountId;
     this.intentionalClose = false;
-    if (this.ws && (this.ws.readyState === WebSocket.OPEN || this.ws.readyState === WebSocket.CONNECTING)) {
+    // Guard CLOSING as well as OPEN/CONNECTING — opening a second socket
+    // while the first is still draining causes duplicate event handlers.
+    if (this.ws && (
+      this.ws.readyState === WebSocket.OPEN ||
+      this.ws.readyState === WebSocket.CONNECTING ||
+      this.ws.readyState === WebSocket.CLOSING
+    )) {
       return;
     }
     this.openSocket();
@@ -154,8 +164,11 @@ export class NetClient {
     });
 
     ws.addEventListener('error', () => {
-      // 'close' fires after 'error', so reconnect is handled there. Just log.
-      // Keeping silent in production to avoid spamming user consoles.
+      // 'close' always fires after 'error', so reconnect is handled there.
+      // Log in dev to ease multiplayer debugging; silent in production.
+      if (import.meta.env.DEV) {
+        console.warn('[NetClient] WebSocket error  will reconnect shortly - NetClient.ts:171');
+      }
     });
   }
 
@@ -178,9 +191,16 @@ export class NetClient {
     }
   }
 
+  /**
+   * Exponential backoff with ±20 % jitter to avoid thundering-herd spikes
+   * when a server restarts and many clients reconnect simultaneously.
+   * Delay series (before jitter): 1 s → 2 s → 4 s → 8 s → 16 s → 30 s …
+   */
   private scheduleReconnect() {
     this.reconnectAttempt = Math.min(this.reconnectAttempt + 1, 8);
-    const delay = Math.min(RECONNECT_MAX_MS, 1000 * 2 ** (this.reconnectAttempt - 1));
+    const base = Math.min(RECONNECT_MAX_MS, 1000 * 2 ** (this.reconnectAttempt - 1));
+    const jitter = base * 0.2 * (Math.random() * 2 - 1); // ±20 %
+    const delay = Math.max(0, base + jitter);
     this.setStatus('reconnecting');
     if (this.reconnectTimer) clearTimeout(this.reconnectTimer);
     this.reconnectTimer = setTimeout(() => this.openSocket(), delay);
@@ -234,8 +254,10 @@ export class NetClient {
     this.send({ t: 'state', ...s });
   }
 
+  /** Send a chat message. Truncated to 256 chars to prevent oversized frames. */
   sendChat(msg: string): void {
-    this.send({ t: 'chat', msg });
+    const safe = msg.slice(0, 256);
+    this.send({ t: 'chat', msg: safe });
   }
 
   /** Close intentionally — no reconnect. */

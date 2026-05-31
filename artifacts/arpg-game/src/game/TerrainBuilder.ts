@@ -1,5 +1,7 @@
 import * as THREE from 'three';
 import type { AssetManager } from './AssetManager';
+import type { PhysicsWorld } from './physics/PhysicsWorld';
+import { attachArenaDisk, type ChunkColliderHandle } from './physics/ChunkColliders';
 import { LAYERS } from './Layers';
 import { worldHeight, WORLD_HALF } from './world/WorldGen';
 
@@ -35,13 +37,33 @@ export class TerrainBuilder {
   scene: THREE.Scene;
   assets: AssetManager;
   arenaMesh: THREE.Mesh | null = null;
+  /** Optional Rapier world. When present the flat arena spawns a thin
+   *  cylinder collider so the player can stand inside the ring even before
+   *  the surrounding terrain heightfields finish streaming in. */
+  private physics: PhysicsWorld | null;
+  private arenaCollider: ChunkColliderHandle | null = null;
 
-  constructor(scene: THREE.Scene, assets: AssetManager) {
+  constructor(
+    scene: THREE.Scene,
+    assets: AssetManager,
+    physics: PhysicsWorld | null = null,
+  ) {
     this.scene = scene;
     this.assets = assets;
+    this.physics = physics;
   }
 
-  /** Hills are now streamed by TerrainChunkManager — this only builds the arena + rim. */
+  /** Wire the Rapier world in after construction. Safe to call multiple
+   *  times — back-fills the arena disk collider if it wasn't created yet. */
+  setPhysics(physics: PhysicsWorld | null) {
+    if (this.physics === physics) return;
+    this.physics = physics;
+    if (physics && !this.arenaCollider && this.arenaMesh) {
+      this.arenaCollider = attachArenaDisk(physics, WORLD.FLOOR_Y, WORLD.ARENA_RADIUS);
+    }
+  }
+
+  /** Hills are now streamed by WorldChunkManager — this only builds the arena + rim. */
   build() {
     this.buildArena();
     this.buildArenaRim();
@@ -67,6 +89,13 @@ export class TerrainBuilder {
     arena.layers.enable(LAYERS.GROUND);
     this.scene.add(arena);
     this.arenaMesh = arena;
+
+    // Static Rapier disk colocated with the visual arena. Sits a hair
+    // below FLOOR_Y so its top surface aligns with the rendered plane
+    // (the mesh itself is offset 0.02 m up for z-fighting headroom).
+    if (this.physics) {
+      this.arenaCollider = attachArenaDisk(this.physics, WORLD.FLOOR_Y, WORLD.ARENA_RADIUS);
+    }
   }
 
   private buildArenaRim() {
@@ -106,6 +135,8 @@ export class TerrainBuilder {
       this.arenaMesh.geometry.dispose();
       (this.arenaMesh.material as THREE.Material).dispose();
     }
+    this.arenaCollider?.dispose();
+    this.arenaCollider = null;
   }
 }
 

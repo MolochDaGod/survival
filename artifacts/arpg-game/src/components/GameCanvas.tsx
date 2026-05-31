@@ -19,6 +19,7 @@ import { ProfessionsBook } from './books/ProfessionsBook';
 import { ITEM_DATABASE } from '../game/Items';
 import { SurvivalInventory } from './SurvivalInventory';
 import { CraftingPanel } from './CraftingPanel';
+import styles from './GameCanvas.module.css';
 import { BuildMenu } from './BuildMenu';
 import { MainPanel } from './MainPanel';
 import { CoopMenu } from './CoopMenu';
@@ -727,16 +728,10 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ characterConfig = DEFAUL
 
   if (webglError) {
     return (
-      <div style={{
-        width: '100vw', height: '100vh',
-        display: 'flex', flexDirection: 'column',
-        alignItems: 'center', justifyContent: 'center',
-        background: '#050c14', color: '#fff',
-        fontFamily: 'monospace', textAlign: 'center', gap: '16px',
-      }}>
-        <div style={{ fontSize: '48px' }}>⚔️</div>
-        <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#ff6b35' }}>DUNGEON BLADE</div>
-        <div style={{ fontSize: '14px', color: '#aaa', maxWidth: '400px', lineHeight: 1.6 }}>
+      <div className= { styles.webglError } >
+      <div className={ styles.webglErrorIcon }>⚔️</div>
+        < div className = { styles.webglErrorTitle } > DUNGEON BLADE </div>
+          < div className = { styles.webglErrorBody } >
           WebGL is required to run this 3D game. Please open this in a modern browser with hardware acceleration enabled.
         </div>
       </div>
@@ -753,12 +748,7 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ characterConfig = DEFAUL
     // is letterboxed above the HUD strip whose height is the
     // clamp()-driven `--hud-strip-px` CSS var defined in index.css.
     <div
-      style={{
-        width: '100vw',
-        height: '100vh',
-        overflow: 'hidden',
-        background: '#000',
-      }}
+      className= { styles.root }
       // Two-step inline override so browsers that *do* support dvw/dvh
       // pick those up while older ones keep the vw/vh values above.
       ref={(el) => {
@@ -769,11 +759,7 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ characterConfig = DEFAUL
     >
       <canvas
         ref={canvasRef}
-        style={{
-          display: 'block',
-          width: '100%',
-          height: 'calc(100dvh - var(--hud-strip-px, 200px))',
-        }}
+className = { styles.canvas }
         onClick={handleCanvasClick}
       />
 
@@ -783,28 +769,14 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ characterConfig = DEFAUL
         // overlay them again — only the progress bar + percentage. The
         // gradient is just a soft bottom vignette so the bar reads
         // cleanly against the artwork without washing out the painting.
-        <div style={{
-          position: 'absolute', inset: 0,
-          display: 'flex', flexDirection: 'column',
-          alignItems: 'center', justifyContent: 'flex-end',
-          paddingBottom: '8vh',
-          backgroundImage: 'linear-gradient(180deg, rgba(5,8,12,0) 60%, rgba(5,8,12,0.85) 100%), url(/grudges-loading-2.png)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          zIndex: 100, gap: '14px', pointerEvents: 'none',
-        }}>
-          <div style={{ width: 'min(420px, 60vw)', height: '4px', background: 'rgba(0,0,0,0.6)', border: '1px solid rgba(196,154,86,0.3)', borderRadius: '2px', overflow: 'hidden' }}>
-            <div style={{
-              width: `${loadPct}%`,
-              height: '100%',
-              background: 'linear-gradient(90deg, #8e6d2a, #c8a14a, #ecd9aa)',
-              transition: 'width 0.3s ease',
-            }} />
+  <div className={ styles.loadOverlay }>
+    <div className={ styles.progressTrack }>
+      <div
+              className={ styles.progressFill }
+ref = {(el) => { if (el) el.style.setProperty('--progress', `${loadPct}%`); }}
+            />
           </div>
-          <div style={{ fontSize: '11px', color: '#c79a56', fontFamily: "'JetBrains Mono', monospace", letterSpacing: '0.3em', textShadow: '0 1px 0 #000' }}>
-            {loadPct}%
-          </div>
+  < div className = { styles.progressLabel } > { loadPct } % </div>
         </div>
       )}
 
@@ -837,16 +809,8 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ characterConfig = DEFAUL
     const thickness = 2;
     const armLen = isAiming ? 0 : 8;
     return (
-      <div style= {{
-      position: 'fixed',
-        top: 0, left: 0, right: 0, bottom: 0,
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-            pointerEvents: 'none',
-              zIndex: 150,
-          }
-  }>
-    <svg width={ 60 } height = { 60} viewBox = "-30 -30 60 60" style = {{ overflow: 'visible' }
-}>
+      <div className= { styles.crosshairWrap } >
+      <svg className={ styles.crosshairSvg } width = { 60} height = { 60} viewBox = "-30 -30 60 60" >
   {/* Center dot — always visible */ }
   < circle cx = { 0} cy = { 0} r = { isAiming? 1.5: 1 } fill = { color } />
     {/* Four arms */ }
@@ -876,24 +840,7 @@ stroke = { color } strokeWidth = { thickness } strokeLinecap = "round" />
           type="button"
           onClick={() => engineRef.current?.toggleDebug()}
           title="Admin / Debug panel (also: ` key)"
-          style={{
-            position: 'fixed',
-            top: 12,
-            right: 14,
-            zIndex: 200,
-            padding: '6px 12px',
-            background: 'rgba(20, 14, 8, 0.85)',
-            color: '#f5e2c1',
-            border: '1px solid #6b5535',
-            borderRadius: 4,
-            fontFamily: 'monospace',
-            fontSize: 11,
-            letterSpacing: 1.5,
-            fontWeight: 700,
-            cursor: 'pointer',
-            textTransform: 'uppercase',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.5)',
-          }}
+className = { styles.adminBtn }
         >
           ⚙ Admin
         </button>
@@ -948,52 +895,8 @@ stroke = { color } strokeWidth = { thickness } strokeLinecap = "round" />
       {/* Door / NPC interaction prompt — fed by engine.onInteractionPrompt.
           Shown centered, ~35% from the bottom, only during active gameplay. */}
       {gameState.gameStarted && !gameState.mainMenuOpen && interactionPrompt && (
-        <div
-          style={{
-            position: 'fixed',
-            bottom: '35%',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 10,
-            padding: '8px 16px',
-            background: 'rgba(18,9,4,0.85)',
-            border: '1px solid #c9950a',
-            borderRadius: 8,
-            backdropFilter: 'blur(6px)',
-            boxShadow:
-              '0 0 18px rgba(0,0,0,0.7), inset 0 0 12px rgba(0,0,0,0.5), 0 0 6px rgba(201,149,10,0.3)',
-            color: '#fbe9b8',
-            fontFamily: '"Cinzel", serif',
-            fontSize: 13,
-            letterSpacing: '0.12em',
-            textTransform: 'uppercase',
-            pointerEvents: 'none',
-            zIndex: 200,
-            userSelect: 'none',
-          }}
-        >
-          <span
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              minWidth: 26,
-              height: 26,
-              padding: '0 8px',
-              borderRadius: 4,
-              background: '#1a0d05',
-              border: '1px solid #c9950a',
-              color: '#fff176',
-              fontFamily: '"JetBrains Mono", monospace',
-              fontSize: 13,
-              fontWeight: 700,
-              boxShadow: 'inset 0 -2px 0 rgba(0,0,0,0.6)',
-            }}
-          >
-            {parsePromptKey(interactionPrompt)}
-          </span>
+  <div className={ styles.interactionPrompt }>
+    <span className={ styles.interactionKey }> { parsePromptKey(interactionPrompt) } </span>
           <span>{stripPromptKey(interactionPrompt)}</span>
         </div>
       )}
