@@ -51,7 +51,9 @@ app.use(
 /** Convert a CORS_ORIGINS entry to a RegExp or null (passthrough). */
 function originPatternToRegex(pattern: string): RegExp | string {
   if (!pattern.includes('*')) return pattern; // exact match
-  const escaped = pattern
+  // Strip the protocol prefix — the regex already anchors with ^https?://
+  const cleaned = pattern.replace(/^https?:\/\//, '');
+  const escaped = cleaned
     .replace(/[.+?^${}()|[\]\\]/g, '\\$&') // escape regex specials
     .replace(/\*/g, '.*');                    // * → .*
   return new RegExp(`^https?:\\/\\/${escaped}$`);

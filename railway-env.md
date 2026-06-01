@@ -45,8 +45,8 @@ Set these in the **Vercel** project settings (not Railway):
 
 | Variable | Value |
 |---|---|
-| `VITE_WS_URL` | `wss://grudge-nexus-api-production.up.railway.app` |
-| `VITE_GRUDGE_API_BASE` | `https://grudge-nexus-api-production.up.railway.app` |
+| `VITE_WS_URL` | `wss://survival-api-production.up.railway.app` |
+| `VITE_GRUDGE_API_BASE` | `https://survival-api-production.up.railway.app` |
 | `VITE_ASSET_CDN_URL` | `https://assets.grudge-studio.com/grudge-nexus` |
 
 ## Deployment Checklist
@@ -57,8 +57,8 @@ Set these in the **Vercel** project settings (not Railway):
    $env:DATABASE_URL="postgresql://postgres:<password>@zephyr.proxy.rlwy.net:41964/railway"
    pnpm db:push
    ```
-3. **Verify health**: `curl https://grudge-nexus-api-production.up.railway.app/api/healthz` → `{"status":"ok"}`
-4. **WebSocket test**: `new WebSocket('wss://grudge-nexus-api-production.up.railway.app/api/realtime')` — should connect and receive `welcome` message.
+3. **Verify health**: `curl https://survival-api-production.up.railway.app/api/healthz` → `{"status":"ok"}`
+4. **WebSocket test**: `new WebSocket('wss://survival-api-production.up.railway.app/api/realtime')` — should connect and receive `welcome` message.
 5. **CORS test**: From any `*.vercel.app` preview, `fetch('/api/healthz')` should return 200 (wildcard CORS is active).
 6. **Graceful shutdown**: The server drains connections on SIGTERM (15s timeout). Railway zero-downtime deploys work automatically.
 

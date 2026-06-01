@@ -4,7 +4,7 @@
   "installCommand": "pnpm install",
   "outputDirectory": "artifacts/website/dist/public",
   "rewrites": [
-    { "source": "/api/:path*", "destination": "https://grudge-nexus-api-production.up.railway.app/api/:path*" },
+    { "source": "/api/:path*", "destination": "https://survival-api-production.up.railway.app/api/:path*" },
     { "source": "/arpg-game", "destination": "/arpg-game/index.html" },
     { "source": "/arpg-game/", "destination": "/arpg-game/index.html" },
     { "source": "/arpg-game/:path*", "destination": "/arpg-game/index.html" },
