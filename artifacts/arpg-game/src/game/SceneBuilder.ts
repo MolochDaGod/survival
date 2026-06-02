@@ -5,6 +5,8 @@ import { GrassSystem } from './world/GrassSystem';
 import { WaterSurface } from './world/water/WaterSurface';
 import { SplashFX } from './world/water/SplashFX';
 import { FeaturePlacer } from './world/FeaturePlacer';
+import { PrefabSystem } from './world/PrefabSystem';
+import { TerrainPatchSystem, setTerrainPatchSystem } from './world/TerrainPatchSystem';
 import { TerrainScatter } from './world/TerrainScatter';
 import { RoadSystem } from './world/RoadSystem';
 import { GLBLocationSystem, DoorProxy } from './world/GLBLocationSystem';
@@ -51,6 +53,10 @@ export class SceneBuilder {
   /** Pooled splash rings. Triggered by SwimController, FishingSystem, BoatSystem. */
   splashFX: SplashFX;
   private features: FeaturePlacer;
+  /** GLB prefab loader/registry — exposed for GameEngine proximity scans. */
+  prefabs: PrefabSystem;
+  /** GLB terrain patches blended into the procedural heightfield. */
+  terrainPatches: TerrainPatchSystem;
   /** Biome-aware terrain scatter (craftpix palm trees, stones, mountains). */
   private terrainScatter: TerrainScatter;
   private roads: RoadSystem;
@@ -104,7 +110,17 @@ export class SceneBuilder {
     this.chunks.setGrassSystem(this.grass);
     this.water    = new WaterSurface(scene);
     this.splashFX = new SplashFX(scene);
-    this.features = new FeaturePlacer(scene, physics);
+    this.prefabs = new PrefabSystem(scene, physics);
+    // Terrain patches share scene + loading manager with prefabs. Registering
+    // the singleton lets WorldChunkManager.getBlendedHeight() see them, and
+    // the onPatchAdded callback evicts overlapping chunks so they rebuild
+    // against the new edge profile.
+    this.terrainPatches = new TerrainPatchSystem(scene, assets.getLoadingManager());
+    setTerrainPatchSystem(this.terrainPatches);
+    this.terrainPatches.onPatchAdded(({ cx, cz, rOuter }) => {
+      this.chunks.invalidateRegion(cx, cz, rOuter);
+    });
+    this.features = new FeaturePlacer(scene, physics, this.prefabs);
     this.terrainScatter = new TerrainScatter(scene, physics);
     this.roads    = new RoadSystem(scene);
     this.markers  = new ArenaMarkers(scene);
@@ -464,6 +480,7 @@ export class SceneBuilder {
     this.water.dispose();
     this.splashFX.dispose();
     this.features.dispose();
+    this.prefabs.dispose();
     this.roads.dispose();
     this.markers.dispose();
     this.glbLocations?.dispose();

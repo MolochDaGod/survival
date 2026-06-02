@@ -14,6 +14,7 @@ import { GROUPS_PROP } from '../physics/PhysicsGroups';
 import type RAPIER from '@dimforge/rapier3d-compat';
 import { createGLTFLoader } from '../loaders/createGLTFLoader';
 import { assetUrl } from '../../lib/assetUrl';
+import type { PrefabSystem } from './PrefabSystem';
 
 /**
  * Lightweight axis-Y rotation → quaternion helper for collider rotations.
@@ -550,6 +551,52 @@ function buildCampGLB(
   }
 }
 
+// ─── Prefab-based settlement decoration ───────────────────────────────────────
+
+/**
+ * Lay out the signature GLB prefabs around a town/outpost centre.
+ *
+ * The pattern is deterministic per-seed (uses settlement position hash) so
+ * placements are stable across reloads. Each call places one of every
+ * crafting station, two houses, and a caravan, with missing GLBs falling
+ * through silently via PrefabSystem's per-id warn-once.
+ */
+function decorateSettlementWithPrefabs(prefabs: PrefabSystem, def: SettlementDef): void {
+  const { x, z, type } = def;
+  // Cheap repeatable jitter: hash position into a 0..2π offset.
+  const phase = ((x * 73856093) ^ (z * 19349663)) >>> 0;
+  const baseAngle = (phase % 1000) / 1000 * Math.PI * 2;
+
+  // Outposts get a minimal kit (training dummy + caravan only).
+  if (type === 'outpost') {
+    const r = 12;
+    void prefabs.place('rts_target', x + Math.cos(baseAngle) * r, z + Math.sin(baseAngle) * r);
+    void prefabs.place('caravan', x + Math.cos(baseAngle + Math.PI) * r, z + Math.sin(baseAngle + Math.PI) * r, { ry: baseAngle });
+    return;
+  }
+
+  // Towns — ring of signature buildings around the central campfire.
+  const ring: Array<{ id: string; r: number }> = [
+    { id: 'smeltery', r: 18 },
+    { id: 'weaponsmith', r: 18 },
+    { id: 'bakery', r: 18 },
+    { id: 'woodcutter', r: 22 },
+    { id: 'house_human', r: 26 },
+    { id: 'house_orc', r: 26 },
+  ];
+  for (let i = 0; i < ring.length; i++) {
+    const a = baseAngle + (i / ring.length) * Math.PI * 2;
+    const bx = x + Math.cos(a) * ring[i].r;
+    const bz = z + Math.sin(a) * ring[i].r;
+    void prefabs.place(ring[i].id, bx, bz, { ry: a + Math.PI });
+  }
+
+  // Caravan = market/auction node — sits at the town gate (south side).
+  void prefabs.place('caravan', x + 30, z, { ry: -Math.PI / 2 });
+  // Training dummy near the weaponsmith.
+  void prefabs.place('rts_target', x + 6, z + 6);
+}
+
 // ─── Public API ───────────────────────────────────────────────────────────────
 
 export class FeaturePlacer {
@@ -558,9 +605,18 @@ export class FeaturePlacer {
    *  broad-phase node keeps overhead trivial even with hundreds of
    *  procedural buildings + rock clusters. */
   private body: RAPIER.RigidBody | null = null;
+  /** Optional PrefabSystem — when present, towns gain signature GLB
+   *  buildings (smeltery, weaponsmith, bakery, caravan, ...) on top of
+   *  the procedural box buildings. Missing GLBs degrade silently. */
+  private prefabs: PrefabSystem | null;
 
-  constructor(private scene: THREE.Scene, physics: PhysicsWorld | null = null) {
+  constructor(
+    private scene: THREE.Scene,
+    physics: PhysicsWorld | null = null,
+    prefabs: PrefabSystem | null = null,
+  ) {
     this.physics = physics;
+    this.prefabs = prefabs;
   }
 
   buildAll() {
@@ -576,6 +632,11 @@ export class FeaturePlacer {
         case 'camp': buildCampGLB(this.scene, def, this.physics, this.body); break;
         case 'cave': placeCaveEntrance(this.scene, def.x, def.z, this.physics, this.body); break;
         case 'outpost': placeOutpost(this.scene, def.x, def.z, this.physics, this.body); break;
+      }
+      // Layer prefab signature pieces on top of the procedural baseline.
+      // No-op when prefabs is null or when the GLB is missing on disk.
+      if (this.prefabs && (def.type === 'town' || def.type === 'outpost')) {
+        decorateSettlementWithPrefabs(this.prefabs, def);
       }
     }
   }

@@ -10,7 +10,8 @@
 
 import * as THREE from 'three';
 import { LAYERS } from '../Layers';
-import { worldHeight, getBiome, getBiomeColor, isWater, isForestBiome, Biome } from './WorldGen';
+import { getBiome, getBiomeColor, isWater, isForestBiome, Biome } from './WorldGen';
+import { getBlendedHeight } from './TerrainPatchSystem';
 import { createBiomeTerrainMaterial, updateTerrainUniforms } from './BiomeTerrainMaterial';
 import { getResourceSystem } from './ResourceSystem';
 import { getWinterTreeSystem } from './WinterTreeSystem';
@@ -126,10 +127,31 @@ export class WorldChunkManager {
           entry.cz * CHUNK_SIZE + CHUNK_SIZE * 0.5,
           CHUNK_SIZE,
           CHUNK_RES,
-          worldHeight,
+          getBlendedHeight,
         );
       }
     }
+  }
+
+  /**
+   * Evict every resident chunk that overlaps the world-space disc
+   * `(cx, cz, radius)` so they get rebuilt next `update()` with the
+   * latest `getBlendedHeight()`. Called by TerrainPatchSystem after a
+   * patch is registered to keep render mesh + collider in sync.
+   */
+  invalidateRegion(cx: number, cz: number, radius: number): void {
+    const minCx = Math.floor((cx - radius) / CHUNK_SIZE);
+    const maxCx = Math.floor((cx + radius) / CHUNK_SIZE);
+    const minCz = Math.floor((cz - radius) / CHUNK_SIZE);
+    const maxCz = Math.floor((cz + radius) / CHUNK_SIZE);
+    for (const [key, entry] of this.chunks) {
+      if (entry.cx < minCx || entry.cx > maxCx) continue;
+      if (entry.cz < minCz || entry.cz > maxCz) continue;
+      this.evictChunk(key, entry);
+    }
+    // Force next update() to re-load — clear the early-exit cache.
+    this.lastCx = Number.POSITIVE_INFINITY;
+    this.lastCz = Number.POSITIVE_INFINITY;
   }
 
   /**
@@ -197,7 +219,10 @@ export class WorldChunkManager {
       const ly = pos.getY(i);
       const wx = baseX + lx;
       const wz = baseZ - ly;
-      const h  = worldHeight(wx, wz);
+      // Blended sampler: pure procedural worldHeight() unless a registered
+      // TerrainPatch covers (wx, wz) — then feather toward its perimeter
+      // edge profile so the chunk mesh meets the GLB seamlessly.
+      const h = getBlendedHeight(wx, wz);
       pos.setZ(i, h);
 
       const biome = getBiome(h);
@@ -224,7 +249,7 @@ export class WorldChunkManager {
     }
 
     // Determine dominant biome at chunk centre for tree-type selection
-    const chunkCentreH     = worldHeight(baseX, baseZ);
+    const chunkCentreH = getBlendedHeight(baseX, baseZ);
     const chunkCentreBiome = getBiome(chunkCentreH);
 
     pos.needsUpdate = true;
@@ -357,7 +382,7 @@ export class WorldChunkManager {
         baseZ,
         CHUNK_SIZE,
         CHUNK_RES,
-        worldHeight,
+        getBlendedHeight,
       );
       physicsTrunks = attachChunkTrunks(this.physics, trunkPhysics);
     }

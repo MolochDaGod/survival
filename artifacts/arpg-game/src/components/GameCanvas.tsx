@@ -201,6 +201,18 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ characterConfig = DEFAUL
     };
     engine.onInteractionPrompt = (label) => setInteractionPrompt(label);
 
+    // Prefab interactions — caravan = market/auction, smeltery/weaponsmith/
+    // bakery = crafting stations, training dummy etc. Forwarded as a DOM
+    // event so any UI panel (market modal, craft window, …) can subscribe
+    // without coupling to GameCanvas internals.
+    engine.onPrefabInteract = (interaction, prefabId) => {
+      window.dispatchEvent(new CustomEvent('prefab:interact', {
+        detail: { interaction, prefabId },
+      }));
+      // Lightweight visible default until the dedicated panels ship.
+      console.info(`[GameCanvas] prefab interaction → ${interaction} (${prefabId})`);
+    };
+
     // Flash hit-marker crosshair red whenever a bullet/melee swing lands on an enemy.
     engine.enemyManager && (engine.enemyManager.onEnemyDamaged = () => {
       setHitMarker(true);

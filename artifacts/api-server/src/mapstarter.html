@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>GRUDGES — World Map</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Cinzel:wght@700&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0a0a0a;
+    font-family: 'Share Tech Mono', monospace;
+    color: #c8b89a;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  #map-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    cursor: grab;
+    user-select: none;
+  }
+  #map-container.grabbing { cursor: grabbing; }
+
+  #map-world {
+    position: absolute;
+    transform-origin: 0 0;
+    will-change: transform;
+  }
+
+  #map-image {
+    display: block;
+    width: 1800px;
+    height: 1800px;
+    image-rendering: crisp-edges;
+  }
+
+  /* Sector overlays */
+  .sector-overlay {
+    position: absolute;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 10px;
+  }
+  .sector-overlay:hover {
+    border-color: rgba(255,255,255,0.6);
+    background: rgba(255,255,255,0.06) !important;
+  }
+  .sector-overlay.active {
+    border-color: #f0c040 !important;
+    background: rgba(240,192,64,0.08) !important;
+  }
+
+  .sector-label {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-shadow: 0 0 8px #000, 0 0 16px #000;
+    line-height: 1.3;
+    pointer-events: none;
+  }
+
+  /* POI markers */
+  .poi-marker {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.8);
+    cursor: pointer;
+    transform: translate(-50%, -50%);
+    transition: transform 0.15s;
+    z-index: 10;
+  }
+  .poi-marker:hover { transform: translate(-50%, -50%) scale(1.6); }
+  .poi-marker::after {
+    content: attr(data-label);
+    position: absolute;
+    left: 18px;
+    top: -4px;
+    white-space: nowrap;
+    font-size: 9px;
+    background: rgba(0,0,0,0.85);
+    padding: 2px 5px;
+    border-radius: 3px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s;
+    color: #e8d8b8;
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+  .poi-marker:hover::after { opacity: 1; }
+
+  /* POI types */
+  .poi-camp    { background: #4caf50; }
+  .poi-event   { background: #ff5722; }
+  .poi-loot    { background: #ffd700; }
+  .poi-faction { background: #9c27b0; }
+  .poi-danger  { background: #f44336; }
+  .poi-spawn   { background: #2196f3; }
+  .poi-ruins   { background: #795548; }
+  .poi-node    { background: #00bcd4; }
+
+  /* Tooltip */
+  #tooltip {
+    position: fixed;
+    z-index: 1000;
+    background: rgba(5,5,5,0.97);
+    border: 1px solid #6b5a3a;
+    border-radius: 6px;
+    padding: 14px 18px;
+    max-width: 300px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s;
+    box-shadow: 0 0 30px rgba(0,0,0,0.8);
+  }
+  #tooltip.visible { opacity: 1; }
+  #tooltip h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    color: #f0c040;
+    margin-bottom: 6px;
+    letter-spacing: 1px;
+  }
+  #tooltip .faction-tag {
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 10px;
+    display: inline-block;
+    margin-bottom: 8px;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+  #tooltip p { font-size: 11px; line-height: 1.6; color: #b8a88a; margin-bottom: 4px; }
+  #tooltip .poi-list { margin-top: 8px; }
+  #tooltip .poi-item {
+    font-size: 10px;
+    color: #90a4ae;
+    padding: 1px 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  #tooltip .poi-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* HUD */
+  #hud {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 500;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 18px;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
+    pointer-events: none;
+  }
+  #hud h1 {
+    font-family: 'Cinzel', serif;
+    font-size: 18px;
+    letter-spacing: 4px;
+    color: #f0c040;
+    text-shadow: 0 0 20px rgba(240,192,64,0.5);
+  }
+  #hud .coords {
+    font-size: 11px;
+    color: #6b8a6b;
+    pointer-events: none;
+  }
+
+  /* Legend */
+  #legend {
+    position: fixed;
+    bottom: 16px;
+    left: 16px;
+    z-index: 500;
+    background: rgba(5,5,5,0.92);
+    border: 1px solid #3a3020;
+    border-radius: 6px;
+    padding: 12px 14px;
+    font-size: 10px;
+  }
+  #legend h4 {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    color: #f0c040;
+    margin-bottom: 8px;
+    letter-spacing: 2px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 4px;
+    color: #9a8a6a;
+  }
+  .legend-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255,255,255,0.4);
+    flex-shrink: 0;
+  }
+
+  /* Zoom controls */
+  #zoom-controls {
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    z-index: 500;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .zoom-btn {
+    width: 36px; height: 36px;
+    background: rgba(5,5,5,0.92);
+    border: 1px solid #3a3020;
+    border-radius: 4px;
+    color: #f0c040;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+  .zoom-btn:hover { background: rgba(240,192,64,0.1); }
+
+  /* Faction panel */
+  #faction-panel {
+    position: fixed;
+    top: 50px;
+    right: 16px;
+    z-index: 500;
+    background: rgba(5,5,5,0.92);
+    border: 1px solid #3a3020;
+    border-radius: 6px;
+    padding: 12px 14px;
+    width: 190px;
+    font-size: 10px;
+  }
+  #faction-panel h4 {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    color: #f0c040;
+    margin-bottom: 8px;
+    letter-spacing: 2px;
+  }
+  .faction-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+    cursor: pointer;
+    padding: 3px 5px;
+    border-radius: 3px;
+    transition: background 0.15s;
+  }
+  .faction-item:hover { background: rgba(255,255,255,0.05); }
+  .faction-item.highlighted { background: rgba(240,192,64,0.08); }
+  .faction-swatch {
+    width: 10px; height: 10px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+  .faction-name { color: #c8b89a; font-size: 10px; line-height: 1.3; }
+  .faction-sub  { color: #5a5040; font-size: 9px; }
+
+  #zoom-label {
+    position: fixed;
+    bottom: 60px;
+    right: 16px;
+    z-index: 500;
+    font-size: 10px;
+    color: #5a5040;
+    text-align: center;
+    width: 36px;
+  }
+</style>
+</head>
+<body>
+
+<!-- HUD -->
+<div id="hud">
+  <h1>⚔ GRUDGES PROTOCOL</h1>
+  <div class="coords" id="coord-display">SECTOR GRID — 9 ZONES ACTIVE</div>
+</div>
+
+<!-- Faction Panel -->
+<div id="faction-panel">
+  <h4>FACTIONS</h4>
+  <div class="faction-item" data-faction="keepers">
+    <div class="faction-swatch" style="background:#4a90d9"></div>
+    <div><div class="faction-name">Keepers</div><div class="faction-sub">Cathedral Highlands</div></div>
+  </div>
+  <div class="faction-item" data-faction="scavengers">
+    <div class="faction-swatch" style="background:#7cb342"></div>
+    <div><div class="faction-name">Tech-Scavengers</div><div class="faction-sub">The Junkyards</div></div>
+  </div>
+  <div class="faction-item" data-faction="hollow">
+    <div class="faction-swatch" style="background:#e53935"></div>
+    <div><div class="faction-name">Hollow Lords</div><div class="faction-sub">The Pit</div></div>
+  </div>
+  <div class="faction-item" data-faction="network">
+    <div class="faction-swatch" style="background:#f57c00"></div>
+    <div><div class="faction-name">Network</div><div class="faction-sub">The Switchyard</div></div>
+  </div>
+  <div class="faction-item" data-faction="forgotten">
+    <div class="faction-swatch" style="background:#00897b"></div>
+    <div><div class="faction-name">The Forgotten</div><div class="faction-sub">Drowned Quarter</div></div>
+  </div>
+  <div class="faction-item" data-faction="warlords">
+    <div class="faction-swatch" style="background:#8e24aa"></div>
+    <div><div class="faction-name">Warlords</div><div class="faction-sub">Crown Peaks</div></div>
+  </div>
+</div>
+
+<!-- Legend -->
+<div id="legend">
+  <h4>MAP KEY</h4>
+  <div class="legend-item"><div class="legend-dot" style="background:#2196f3"></div>Spawn / Camp</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#4caf50"></div>Survivor Camp</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#9c27b0"></div>Faction HQ</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#ffd700"></div>Loot Node</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#ff5722"></div>Event Zone</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#f44336"></div>Danger / Boss</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#795548"></div>Ruins / POI</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#00bcd4"></div>Resource Node</div>
+</div>
+
+<!-- Zoom -->
+<div id="zoom-label" id="zoom-pct">100%</div>
+<div id="zoom-controls">
+  <button class="zoom-btn" id="zoom-in">+</button>
+  <button class="zoom-btn" id="zoom-out">−</button>
+  <button class="zoom-btn" id="zoom-reset" style="font-size:12px">⌂</button>
+</div>
+
+<!-- Tooltip -->
+<div id="tooltip"></div>
+
+<!-- Map -->
+<div id="map-container">
+  <div id="map-world">
+    <img id="map-image"
+      src="https://file-cdn.sider.ai/u/U05XHAW4OE4/file/af893767-b526-49d7-a4b1-87a5f1b58df7/19e87ac91d7f8.png?Key-Pair-Id=K344F5VVSSM536&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9maWxlLWNkbi5zaWRlci5haS8qL1UwNVhIQVc0T0U0LyoiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE3ODI5MjU4MDV9fX1dfQ__&Signature=PcQvFE1OlRrU5KNrHR2DhLGfG8lKKs6BnDN9pAl3o7oa6ri-3i~172s~tx-ukALuGhFpm51EepTCRqbSUhlVT4lKIZDtNjLOw6g0W7wK6jFvcwAE0G3g3NH~ab5IMEVRBxUfNk566NDxYhl2sIHu0ntVHJ~D~H3MsmEW0vvWxEEujm-vTMhfRtOZp2ZHq8uSq0~rHFVLcy14az4Qmn8oTd2beUPfRDOJs2SSXtZVI4dhtSy1SyziFDZnSQM9eo4DiBWVkkV37Egs40~y~YpeDuGrg9UYZhWbIKlBj~xh7HgrpezSdVucUJzBEbBS3-cRgM3NAXbahJAFqIw7u-rNuw__"
+      alt="Grudges World Map"
+      draggable="false"
+    />
+
+    <!-- ═══════════════════════════════════════════
+         SECTOR OVERLAYS  (600×600 each in a 1800×1800 grid)
+         NW=0,0  N=600,0  NE=1200,0
+         W=0,600 C=600,600 E=1200,600
+         SW=0,1200 S=600,1200 SE=1200,1200
+    ════════════════════════════════════════════ -->
+
+    <!-- NW — THE DRIED BASIN -->
+    <div class="sector-overlay" id="sec-nw"
+      style="left:0;top:0;width:600px;height:600px;background:rgba(180,140,60,0.04);border-color:rgba(180,140,60,0.25);"
+      data-sector="nw">
+      <div class="sector-label" style="color:#c8a050;">THE DRIED BASIN<br/><span style="font-size:9px;color:#7a6030;">WILDLANDS · UNALIGNED</span></div>
+    </div>
+
+    <!-- N — CATHEDRAL HIGHLANDS -->
+    <div class="sector-overlay" id="sec-n"
+      style="left:600px;top:0;width:600px;height:600px;background:rgba(74,144,217,0.04);border-color:rgba(74,144,217,0.3);"
+      data-sector="n">
+      <div class="sector-label" style="color:#6aacf0;">CATHEDRAL HIGHLANDS<br/><span style="font-size:9px;color:#2a5070;">KEEPERS OF THE OLD FAITH</span></div>
+    </div>
+
+    <!-- NE — CROWN PEAKS -->
+    <div class="sector-overlay" id="sec-ne"
+      style="left:1200px;top:0;width:600px;height:600px;background:rgba(142,36,170,0.04);border-color:rgba(142,36,170,0.3);"
+      data-sector="ne">
+      <div class="sector-label" style="color:#ce88f0;">THE CROWN PEAKS<br/><span style="font-size:9px;color:#5a2070;">WARLORDS · MERCENARY</span></div>
+    </div>
+
+    <!-- W — THE SWITCHYARD -->
+    <div class="sector-overlay" id="sec-w"
+      style="left:0;top:600px;width:600px;height:600px;background:rgba(245,124,0,0.04);border-color:rgba(245,124,0,0.3);"
+      data-sector="w">
+      <div class="sector-label" style="color:#f0a040;">THE SWITCHYARD<br/><span style="font-size:9px;color:#7a4010;">NETWORK</span></div>
+    </div>
+
+    <!-- CENTER — ENCAMPMENT -->
+    <div class="sector-overlay" id="sec-c"
+      style="left:600px;top:600px;width:600px;height:600px;background:rgba(200,200,200,0.03);border-color:rgba(200,200,200,0.25);"
+      data-sector="c">
+      <div class="sector-label" style="color:#d0d0c0;">THE ENCAMPMENT<br/><span style="font-size:9px;color:#707060;">NEUTRAL SAFE ZONE · SPAWN</span></div>
+    </div>
+
+    <!-- E — THE JUNKYARDS -->
+    <div class="sector-overlay" id="sec-e"
+      style="left:1200px;top:600px;width:600px;height:600px;background:rgba(124,179,66,0.04);border-color:rgba(124,179,66,0.3);"
+      data-sector="e">
+      <div class="sector-label" style="color:#a0d060;">THE JUNKYARDS<br/><span style="font-size:9px;color:#3a6010;">TECH-SCAVENGERS</span></div>
+    </div>
+
+    <!-- SW — THE DROWNED QUARTER -->
+    <div class="sector-overlay" id="sec-sw"
+      style="left:0;top:1200px;width:600px;height:600px;background:rgba(0,137,123,0.04);border-color:rgba(0,137,123,0.3);"
+      data-sector="sw">
+      <div class="sector-label" style="color:#40c0a8;">THE DROWNED QUARTER<br/><span style="font-size:9px;color:#005040;">THE FORGOTTEN</span></div>
+    </div>
+
+    <!-- S — THE PIT -->
+    <div class="sector-overlay" id="sec-s"
+      style="left:600px;top:1200px;width:600px;height:600px;background:rgba(229,57,53,0.05);border-color:rgba(229,57,53,0.35);"
+      data-sector="s">
+      <div class="sector-label" style="color:#f07060;">THE PIT<br/><span style="font-size:9px;color:#7a2020;">HOLLOW LORDS</span></div>
+    </div>
+
+    <!-- SE — THE GRINDING MARCH -->
+    <div class="sector-overlay" id="sec-se"
+      style="left:1200px;top:1200px;width:600px;height:600px;background:rgba(150,100,60,0.04);border-color:rgba(150,100,60,0.3);"
+      data-sector="se">
+      <div class="sector-label" style="color:#c09060;">THE GRINDING MARCH<br/><span style="font-size:9px;color:#6a4020;">CONTESTED · NO FACTION</span></div>
+    </div>
+
+    <!-- ═══════════════════════════
+         POI MARKERS
+    ════════════════════════════ -->
+
+    <!-- DRIED BASIN POIs -->
+    <div class="poi-marker poi-ruins"   style="left:140px;top:180px" data-label="Dried River Bed"></div>
+    <div class="poi-marker poi-node"    style="left:280px;top:300px" data-label="The Core Tap (Dungeon)"></div>
+    <div class="poi-marker poi-danger"  style="left:180px;top:420px" data-label="Desolate Plateau · Roamer Herd"></div>
+    <div class="poi-marker poi-loot"    style="left:400px;top:200px" data-label="Dust Cache · Supply Drop"></div>
+
+    <!-- CATHEDRAL HIGHLANDS POIs -->
+    <div class="poi-marker poi-faction" style="left:860px;top:120px" data-label="Keeper Sanctum · Faction HQ"></div>
+    <div class="poi-marker poi-ruins"   style="left:720px;top:280px" data-label="Old Cathedral Ruins"></div>
+    <div class="poi-marker poi-event"   style="left:1000px;top:200px" data-label="Sermon of Fire · Event Zone"></div>
+    <div class="poi-marker poi-node"    style="left:780px;top:420px" data-label="Faith Spring · Water Node"></div>
+    <div class="poi-marker poi-loot"    style="left:1050px;top:360px" data-label="Archive Vault · Rare Loot"></div>
+
+    <!-- CROWN PEAKS POIs -->
+    <div class="poi-marker poi-faction" style="left:1480px;top:150px" data-label="Warlord Stronghold · HQ"></div>
+    <div class="poi-marker poi-danger"  style="left:1360px;top:280px" data-label="Dark-Glow Mountains · Elite Spawn"></div>
+    <div class="poi-marker poi-loot"    style="left:1580px;top:340px" data-label="Summit Cache · +500 Elevation"></div>
+    <div class="poi-marker poi-node"    style="left:1420px;top:440px" data-label="Glow-Mineral Vein"></div>
+
+    <!-- SWITCHYARD POIs -->
+    <div class="poi-marker poi-faction" style="left:180px;top:780px" data-label="Network Relay Hub · HQ"></div>
+    <div class="poi-marker poi-node"    style="left:320px;top:900px" data-label="Rail Junction Alpha"></div>
+    <div class="poi-marker poi-event"   style="left:80px;top:1000px" data-label="Signal Intercept · Event Zone"></div>
+    <div class="poi-marker poi-loot"    style="left:450px;top:840px" data-label="Cargo Wreck · Supply Cache"></div>
+    <div class="poi-marker poi-ruins"   style="left:200px;top:1100px" data-label="Old Power Station"></div>
+
+    <!-- ENCAMPMENT POIs -->
+    <div class="poi-marker poi-spawn"   style="left:900px;top:900px" data-label="★ SPAWN — Encampment Arena"></div>
+    <div class="poi-marker poi-camp"    style="left:780px;top:780px" data-label="Player Camp · NW Gate"></div>
+    <div class="poi-marker poi-camp"    style="left:1020px;top:780px" data-label="Player Camp · NE Gate"></div>
+    <div class="poi-marker poi-camp"    style="left:780px;top:1040px" data-label="Player Camp · SW Gate"></div>
+    <div class="poi-marker poi-camp"    style="left:1020px;top:1040px" data-label="Player Camp · SE Gate"></div>
+    <div class="poi-marker poi-loot"    style="left:700px;top:910px" data-label="Market Row · Trader Stalls"></div>
+    <div class="poi-marker poi-node"    style="left:1100px;top:910px" data-label="Workshop · Crafting Node"></div>
+
+    <!-- JUNKYARDS POIs -->
+    <div class="poi-marker poi-faction" style="left:1480px;top:750px" data-label="Scavenger Den · Faction HQ"></div>
+    <div class="poi-marker poi-node"    style="left:1320px;top:880px" data-label="Toxic Lake · Chemical Node"></div>
+    <div class="poi-marker poi-loot"    style="left:1600px;top:950px" data-label="Parts Heap · Scrap Cache"></div>
+    <div class="poi-marker poi-danger"  style="left:1380px;top:1050px" data-label="Crusher Pit · Elite Junk Golem"></div>
+    <div class="poi-marker poi-ruins"   style="left:1250px;top:730px" data-label="Old Factory Complex"></div>
+    <div class="poi-marker poi-event"   style="left:1540px;top:840px" data-label="Scrap Wars · PvP Event Zone"></div>
+
+    <!-- DROWNED QUARTER POIs -->
+    <div class="poi-marker poi-faction" style="left:140px;top:1360px" data-label="Forgotten Enclave · HQ"></div>
+    <div class="poi-marker poi-ruins"   style="left:300px;top:1480px" data-label="Submerged Mall · Dive Ruins"></div>
+    <div class="poi-marker poi-node"    style="left:450px;top:1340px" data-label="Flood Channel · Swim Route"></div>
+    <div class="poi-marker poi-loot"    style="left:200px;top:1600px" data-label="Sunken Vault · Underwater Loot"></div>
+    <div class="poi-marker poi-event"   style="left:380px;top:1650px" data-label="The Rising · Flood Event"></div>
+
+    <!-- THE PIT POIs -->
+    <div class="poi-marker poi-faction" style="left:900px;top:1400px" data-label="Hollow Lords Citadel · HQ"></div>
+    <div class="poi-marker poi-danger"  style="left:820px;top:1550px" data-label="Crater Rim · Boss Spawn Ring"></div>
+    <div class="poi-marker poi-danger"  style="left:980px;top:1550px" data-label="Crater Rim · Boss Spawn Ring"></div>
+    <div class="poi-marker poi-event"   style="left:900px;top:1700px" data-label="The Descent · Raid Event"></div>
+    <div class="poi-marker poi-loot"    style="left:760px;top:1450px" data-label="Obsidian Cache"></div>
+    <div class="poi-marker poi-node"    style="left:1040px;top:1450px" data-label="Heat Vent · Forge Node"></div>
+
+    <!-- GRINDING MARCH POIs -->
+    <div class="poi-marker poi-event"   style="left:1500px;top:1380px" data-label="CENTER LOOT RING · Warzone Event"></div>
+    <div class="poi-marker poi-loot"    style="left:1350px;top:1500px" data-label="Gorge Cache Alpha"></div>
+    <div class="poi-marker poi-loot"    style="left:1650px;top:1500px" data-label="Ridge Cache Beta"></div>
+    <div class="poi-marker poi-danger"  style="left:1280px;top:1350px" data-label="Contested Trench · PvPvE"></div>
+    <div class="poi-marker poi-danger"  style="left:1720px;top:1350px" data-label="Contested Trench · PvPvE"></div>
+    <div class="poi-marker poi-ruins"   style="left:1500px;top:1600px" data-label="Monument Zero · Unclaimed"></div>
+    <div class="poi-marker poi-event"   style="left:1400px;top:1700px" data-label="March of Grudges · Weekly Raid"></div>
+
+  </div><!-- /map-world -->
+</div><!-- /map-container -->
+
+<script>
+// ──────────────────────────────────────────────
+// SECTOR DATA
+// ──────────────────────────────────────────────
+const SECTORS = {
+  nw: {
+    name: 'THE DRIED BASIN',
+    faction: 'Unaligned — Wildlands',
+    factionColor: '#c8a050',
+    coords: '(-6000, -6000)',
+    desc: 'A cracked, eroded wasteland of dried riverbeds and dust storms. Roamer herds dominate the open plateaus. The Core Tap dungeon lies beneath a collapsed industrial tower.',
+    pois: [
+      { type: 'poi-ruins', label: 'Dried River Bed' },
+      { type: 'poi-node',  label: 'The Core Tap — Dungeon Entrance' },
+      { type: 'poi-danger',label: 'Desolate Plateau — Roamer Herd Territory' },
+      { type: 'poi-loot',  label: 'Dust Cache — Supply Drop Zone' },
+    ],
+    enemies: 'All factions contest edges', workable: '—',
+  },
+  n: {
+    name: 'CATHEDRAL HIGHLANDS',
+    faction: 'Keepers of the Old Faith',
+    factionColor: '#4a90d9',
+    coords: '(0, -6000)',
+    desc: 'Jagged highland ridges carved by ancient glaciers, now home to the Keeper Sanctum. Stone spires mark sacred sites. Faith Springs feed into the lowlands. Rival patrols clash at the Archive Vault.',
+    pois: [
+      { type: 'poi-faction', label: 'Keeper Sanctum — Faction HQ' },
+      { type: 'poi-ruins',   label: 'Old Cathedral Ruins — Climb Surface' },
+      { type: 'poi-event',   label: 'Sermon of Fire — Event Zone' },
+      { type: 'poi-node',    label: 'Faith Spring — Water / Crafting Node' },
+      { type: 'poi-loot',    label: 'Archive Vault — Rare Loot Tier 3' },
+    ],
+    enemies: 'Tech-Scavengers, Hollow Lords', workable: 'Network, Forgotten',
+  },
+  ne: {
+    name: 'THE CROWN PEAKS',
+    faction: 'Warlords (Mercenary — No Pledge)',
+    factionColor: '#8e24aa',
+    coords: '(+6000, -6000)',
+    desc: 'The highest terrain in the region. Dark-glow mineral veins pulse under obsidian cliffs. Warlord patrols sell protection to the highest bidder. Bioluminescent waterfalls descend into Crown Falls below.',
+    pois: [
+      { type: 'poi-faction', label: 'Warlord Stronghold — HQ' },
+      { type: 'poi-danger',  label: 'Dark-Glow Mountains — Elite Enemy Spawn' },
+      { type: 'poi-loot',    label: 'Summit Cache — Elevation +500' },
+      { type: 'poi-node',    label: 'Glow-Mineral Vein — Rare Resource' },
+    ],
+    enemies: '—', workable: 'Hirable by any faction (caps at neutral)',
+  },
+  w: {
+    name: 'THE SWITCHYARD',
+    faction: 'Network',
+    factionColor: '#f57c00',
+    coords: '(-6000, 0)',
+    desc: 'A rusted rail hub spanning multiple lines. Network operatives control information flow through relay towers and signal repeaters. The old power station is contested nightly.',
+    pois: [
+      { type: 'poi-faction', label: 'Network Relay Hub — Faction HQ' },
+      { type: 'poi-node',    label: 'Rail Junction Alpha — Transit Node' },
+      { type: 'poi-event',   label: 'Signal Intercept — Event Zone' },
+      { type: 'poi-loot',    label: 'Cargo Wreck — Supply Cache' },
+      { type: 'poi-ruins',   label: 'Old Power Station — Contested POI' },
+    ],
+    enemies: 'Hollow Lords, Forgotten', workable: 'Keepers, Tech-Scavengers',
+  },
+  c: {
+    name: 'THE ENCAMPMENT',
+    faction: 'Neutral Safe Zone',
+    factionColor: '#c8c8a8',
+    coords: '(0, 0)',
+    desc: 'The server spawn. A massive fortified stadium converted into a survivor hub. Eight roads radiate to every sector. Trading, crafting, and recruiting happen here. All-faction ceasefire enforced within walls.',
+    pois: [
+      { type: 'poi-spawn', label: '★ SPAWN POINT — Arena Hub' },
+      { type: 'poi-camp',  label: 'Player Camp Slots — 4 Gates' },
+      { type: 'poi-loot',  label: 'Market Row — Trader Stalls' },
+      { type: 'poi-node',  label: 'Workshop — Crafting / Upgrade Node' },
+    ],
+    enemies: '—', workable: 'All factions tolerated inside walls',
+  },
+  e: {
+    name: 'THE JUNKYARDS',
+    faction: 'Tech-Scavengers',
+    factionColor: '#7cb342',
+    coords: '(+6000, 0)',
+    desc: 'Mountains of salvaged tech, rusted vehicles, and toxic chemical lakes. Scavengers strip everything to its components. The Crusher Pit is guarded by a Junk Golem boss. Scrap Wars PvP events run weekly.',
+    pois: [
+      { type: 'poi-faction', label: 'Scavenger Den — Faction HQ' },
+      { type: 'poi-node',    label: 'Toxic Lake — Chemical Harvest Node' },
+      { type: 'poi-loot',    label: 'Parts Heap — Scrap Cache Tier 2' },
+      { type: 'poi-danger',  label: 'Crusher Pit — Elite Junk Golem Boss' },
+      { type: 'poi-ruins',   label: 'Old Factory Complex' },
+      { type: 'poi-event',   label: 'Scrap Wars — Weekly PvP Event' },
+    ],
+    enemies: 'Keepers, Forgotten', workable: 'Hollow Lords, Network',
+  },
+  sw: {
+    name: 'THE DROWNED QUARTER',
+    faction: 'The Forgotten',
+    factionColor: '#00897b',
+    coords: '(-6000, +6000)',
+    desc: 'A flooded district of submerged pre-war infrastructure. The Forgotten move silently through waterways. Dive ruins require the swimming layer. The Rising flood event temporarily changes terrain topology.',
+    pois: [
+      { type: 'poi-faction', label: 'Forgotten Enclave — Faction HQ' },
+      { type: 'poi-ruins',   label: 'Submerged Mall — Dive Ruins' },
+      { type: 'poi-node',    label: 'Flood Channel — Swim Route Node' },
+      { type: 'poi-loot',    label: 'Sunken Vault — Underwater Loot Tier 3' },
+      { type: 'poi-event',   label: 'The Rising — Flood Event (Dynamic Terrain)' },
+    ],
+    enemies: 'Tech-Scavengers, Network', workable: 'Keepers, Hollow Lords',
+  },
+  s: {
+    name: 'THE PIT',
+    faction: 'Hollow Lords',
+    factionColor: '#e53935',
+    coords: '(0, +6000)',
+    desc: 'A massive impact crater with concentric rings of ruins descending into total darkness at its core. The Hollow Lords emerged from beneath. Boss spawns ring the crater edge. The Descent raid drops teams into the core.',
+    pois: [
+      { type: 'poi-faction', label: 'Hollow Lords Citadel — Faction HQ' },
+      { type: 'poi-danger',  label: 'Crater Rim — Boss Spawn Ring (x2)' },
+      { type: 'poi-event',   label: 'The Descent — Raid Event (Crater Core)' },
+      { type: 'poi-loot',    label: 'Obsidian Cache — Tier 4 Rare' },
+      { type: 'poi-node',    label: 'Heat Vent — Forge / Crafting Node' },
+    ],
+    enemies: 'Keepers, Network', workable: 'Tech-Scavengers, Forgotten',
+  },
+  se: {
+    name: 'THE GRINDING MARCH',
+    faction: 'Contested — No Faction Control',
+    factionColor: '#c09060',
+    coords: '(+6000, +6000)',
+    desc: 'A scarred battlefield of trenches, ridges, and gorges. All five factions clash here. No one owns it. The Center Loot Ring draws the most violence. Monument Zero stands unclaimed at the heart.',
+    pois: [
+      { type: 'poi-event',   label: 'CENTER LOOT RING — Warzone Event' },
+      { type: 'poi-loot',    label: 'Gorge Cache Alpha & Beta' },
+      { type: 'poi-danger',  label: 'Contested Trenches — PvPvE Zones' },
+      { type: 'poi-ruins',   label: 'Monument Zero — Unclaimed' },
+      { type: 'poi-event',   label: 'March of Grudges — Weekly Raid' },
+    ],
+    enemies: 'Everybody vs everybody', workable: '—',
+  },
+};
+
+// ──────────────────────────────────────────────
+// PAN & ZOOM
+// ──────────────────────────────────────────────
+const container = document.getElementById('map-container');
+const world     = document.getElementById('map-world');
+const tooltip   = document.getElementById('tooltip');
+const coordDisplay = document.getElementById('coord-display');
+
+let scale = 0.45, tx = 0, ty = 0;
+let dragging = false, startX, startY, startTx, startTy;
+
+function clampTranslate(x, y) {
+  const vw = window.innerWidth, vh = window.innerHeight;
+  const mw = 1800 * scale, mh = 1800 * scale;
+  const minX = Math.min(0, vw - mw);
+  const minY = Math.min(0, vh - mh);
+  return {
+    x: Math.max(minX, Math.min(0, x)),
+    y: Math.max(minY, Math.min(0, y)),
+  };
+}
+
+function applyTransform() {
+  world.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
+  document.getElementById('zoom-label').textContent = Math.round(scale * 100) + '%';
+}
+
+function centerMap() {
+  const vw = window.innerWidth, vh = window.innerHeight;
+  tx = (vw - 1800 * scale) / 2;
+  ty = (vh - 1800 * scale) / 2;
+  const c = clampTranslate(tx, ty);
+  tx = c.x; ty = c.y;
+  applyTransform();
+}
+
+scale = 0.45;
+setTimeout(centerMap, 50);
+
+container.addEventListener('mousedown', e => {
+  if (e.button !== 0) return;
+  dragging = true;
+  startX = e.clientX; startY = e.clientY;
+  startTx = tx; startTy = ty;
+  container.classList.add('grabbing');
+});
+window.addEventListener('mousemove', e => {
+  if (!dragging) return;
+  const nx = startTx + (e.clientX - startX);
+  const ny = startTy + (e.clientY - startY);
+  const c = clampTranslate(nx, ny);
+  tx = c.x; ty = c.y;
+  applyTransform();
+});
+window.addEventListener('mouseup', () => {
+  dragging = false;
+  container.classList.remove('grabbing');
+});
+
+container.addEventListener('wheel', e => {
+  e.preventDefault();
+  const delta = e.deltaY > 0 ? -0.08 : 0.08;
+  const newScale = Math.max(0.25, Math.min(3.0, scale + delta));
+  // zoom toward mouse
+  const rect = container.getBoundingClientRect();
+  const mx = e.clientX - rect.left;
+  const my = e.clientY - rect.top;
+  tx = mx - (mx - tx) * (newScale / scale);
+  ty = my - (my - ty) * (newScale / scale);
+  scale = newScale;
+  const c = clampTranslate(tx, ty);
+  tx = c.x; ty = c.y;
+  applyTransform();
+}, { passive: false });
+
+// Touch support
+let lastTouchDist = null;
+container.addEventListener('touchstart', e => {
+  if (e.touches.length === 1) {
+    dragging = true;
+    startX = e.touches[0].clientX; startY = e.touches[0].clientY;
+    startTx = tx; startTy = ty;
+  } else if (e.touches.length === 2) {
+    const dx = e.touches[0].clientX - e.touches[1].clientX;
+    const dy = e.touches[0].clientY - e.touches[1].clientY;
+    lastTouchDist = Math.sqrt(dx*dx + dy*dy);
+  }
+});
+container.addEventListener('touchmove', e => {
+  e.preventDefault();
+  if (e.touches.length === 1 && dragging) {
+    const nx = startTx + (e.touches[0].clientX - startX);
+    const ny = startTy + (e.touches[0].clientY - startY);
+    const c = clampTranslate(nx, ny);
+    tx = c.x; ty = c.y;
+    applyTransform();
+  } else if (e.touches.length === 2) {
+    const dx = e.touches[0].clientX - e.touches[1].clientX;
+    const dy = e.touches[0].clientY - e.touches[1].clientY;
+    const dist = Math.sqrt(dx*dx + dy*dy);
+    if (lastTouchDist) {
+      const newScale = Math.max(0.25, Math.min(3.0, scale * (dist / lastTouchDist)));
+      scale = newScale;
+      applyTransform();
+    }
+    lastTouchDist = dist;
+  }
+}, { passive: false });
+container.addEventListener('touchend', () => { dragging = false; lastTouchDist = null; });
+
+// Zoom buttons
+document.getElementById('zoom-in').onclick = () => {
+  scale = Math.min(3.0, scale + 0.15);
+  const c = clampTranslate(tx, ty); tx = c.x; ty = c.y;
+  applyTransform();
+};
+document.getElementById('zoom-out').onclick = () => {
+  scale = Math.max(0.25, scale - 0.15);
+  const c = clampTranslate(tx, ty); tx = c.x; ty = c.y;
+  applyTransform();
+};
+document.getElementById('zoom-reset').onclick = () => {
+  scale = 0.45; centerMap();
+};
+
+// ──────────────────────────────────────────────
+// TOOLTIP — SECTORS
+// ──────────────────────────────────────────────
+function showTooltip(e, html) {
+  tooltip.innerHTML = html;
+  tooltip.classList.add('visible');
+  positionTooltip(e);
+}
+function hideTooltip() {
+  tooltip.classList.remove('visible');
+}
+function positionTooltip(e) {
+  let x = e.clientX + 16, y = e.clientY + 16;
+  if (x + 320 > window.innerWidth)  x = e.clientX - 320;
+  if (y + 300 > window.innerHeight) y = e.clientY - 300;
+  tooltip.style.left = x + 'px';
+  tooltip.style.top  = y + 'px';
+}
+
+document.querySelectorAll('.sector-overlay').forEach(el => {
+  el.addEventListener('mouseenter', e => {
+    const key  = el.dataset.sector;
+    const data = SECTORS[key];
+    if (!data) return;
+
+    const poiRows = data.pois.map(p =>
+      `<div class="poi-item"><div class="poi-dot" style="background:var(--c)"></div>${p.label}</div>`
+        .replace('var(--c)', getComputedStyle(document.documentElement).getPropertyValue('--'+p.type) || '#888')
+    ).join('');
+
+    // Build color inline
+    const poiHtml = data.pois.map(p => {
+      const colors = {
+        'poi-camp':'#4caf50','poi-event':'#ff5722','poi-loot':'#ffd700',
+        'poi-faction':'#9c27b0','poi-danger':'#f44336','poi-spawn':'#2196f3',
+        'poi-ruins':'#795548','poi-node':'#00bcd4'
+      };
+      return `<div class="poi-item"><div class="poi-dot" style="background:${colors[p.type]||'#888'}"></div>${p.label}</div>`;
+    }).join('');
+
+    showTooltip(e, `
+      <h3>${data.name}</h3>
+      <span class="faction-tag" style="background:${data.factionColor}22;color:${data.factionColor};border:1px solid ${data.factionColor}55">${data.faction}</span>
+      <p>${data.desc}</p>
+      <p style="margin-top:6px;color:#5a7a5a;font-size:10px">COORDS: ${data.coords}</p>
+      ${data.enemies !== '—' ? `<p style="color:#c05040;font-size:10px;margin-top:4px">⚔ ENEMIES: ${data.enemies}</p>` : ''}
+      ${data.workable !== '—' ? `<p style="color:#4a8a4a;font-size:10px">✓ WORKABLE: ${data.workable}</p>` : ''}
+      <div class="poi-list">${poiHtml}</div>
+    `);
+
+    document.querySelectorAll('.sector-overlay').forEach(s => s.classList.remove('active'));
+    el.classList.add('active');
+  });
+
+  el.addEventListener('mousemove', positionTooltip);
+  el.addEventListener('mouseleave', () => {
+    hideTooltip();
+    el.classList.remove('active');
+  });
+});
+
+// ──────────────────────────────────────────────
+// COORD TRACKER
+// ──────────────────────────────────────────────
+container.addEventListener('mousemove', e => {
+  const rect = container.getBoundingClientRect();
+  const mx = (e.clientX - rect.left - tx) / scale;
+  const my = (e.clientY - rect.top  - ty) / scale;
+  // Map 0-1800 to -6000 to +6000
+  const wx = Math.round((mx / 1800) * 12000 - 6000);
+  const wy = Math.round((my / 1800) * 12000 - 6000);
+  coordDisplay.textContent = `WORLD (${wx}, ${wy})`;
+});
+</script>
+</body>

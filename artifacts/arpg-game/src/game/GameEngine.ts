@@ -102,10 +102,15 @@ export class GameEngine {
    *  right keycap glyph). Resolved through resolveInteractionPrompt() with
    *  priority portal > door > NPC. */
   onInteractionPrompt: ((label: string | null) => void) | null = null;
+  /** Fires when the player presses INTERACT next to a PrefabSystem instance
+   *  with a non-null `interaction` id. The UI wires this to open market /
+   *  craft / vehicle panels (e.g. 'market:auction' on the caravan). */
+  onPrefabInteract: ((interaction: string, prefabId: string) => void) | null = null;
   private _lastDoorLabel: string | null = null;
-  private _lastNpcLabel:  string | null = null;
+  private _lastNpcLabel: string | null = null;
   private _lastBoatLabel: string | null = null;
   private _lastFishLabel: string | null = null;
+  private _lastPrefabLabel: string | null = null;
   private _lastEmittedPrompt: string | null = null;
 
   /** Water-layer subsystems — built after player + sceneBuilder exist.
@@ -1075,6 +1080,34 @@ export class GameEngine {
       for (const mx of this._namedNpcMixers) mx.update(dt);
     }
 
+    // Prefab interaction proximity sweep — surfaces the caravan/market
+    // and any other interactable prefab (training dummy, vehicles, …).
+    // Runs every frame in any map mode so the prompt UI is consistent.
+    {
+      const prefabs = this.sceneBuilder?.prefabs.getInteractables() ?? [];
+      let nearestLabel: string | null = null;
+      let triggered: { interaction: string; id: string } | null = null;
+      const RADIUS_SQ = 4 * 4;
+      for (const inst of prefabs) {
+        const dx = this.player.position.x - inst.position.x;
+        const dz = this.player.position.z - inst.position.z;
+        if (dx * dx + dz * dz < RADIUS_SQ) {
+          nearestLabel = `Press [E] · ${inst.label}`;
+          if (this._questInteractPressed && inst.interaction) {
+            triggered = { interaction: inst.interaction, id: inst.id };
+          }
+          break;
+        }
+      }
+      if (nearestLabel !== this._lastPrefabLabel) {
+        this._lastPrefabLabel = nearestLabel;
+        this.resolveInteractionPrompt();
+      }
+      if (triggered) {
+        this.onPrefabInteract?.(triggered.interaction, triggered.id);
+      }
+    }
+
     // Quest system proximity checks — NPC talk requires pressing E (interact)
     if (this.sceneBuilder?.isStarterMapMode()) {
       // Show NPC name/role prompt when player is within 5m of a named NPC
@@ -1407,6 +1440,7 @@ export class GameEngine {
       ?? this._lastDoorLabel
       ?? this._lastBoatLabel
       ?? this._lastFishLabel
+      ?? this._lastPrefabLabel
       ?? this._lastNpcLabel
       ?? null;
     if (next !== this._lastEmittedPrompt) {

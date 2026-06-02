@@ -2,5 +2,27 @@
     "files.readonlyInclude": {
         "{**/.c4z/.extsrcs/*.PROTSYM.cbl,**/.c4z/.extsrcs/*.PROTSYM.listing}": true
     },
-    "DockerRun.DisableDockerrc": true
+    "DockerRun.DisableDockerrc": true,
+    "serverpulse.ai.enabled": true,
+    "serverpulse.ai.optInShown": true,
+    "serverpulse.services": [
+        {
+            "name": "survival (docker) (docker)",
+            "type": "docker",
+            "port": 8000,
+            "useDocker": {
+                "pathToDockerFile": {
+                    "$mid": 1,
+                    "fsPath": "f:\\GitHub\\survival\\Dockerfile",
+                    "_sep": 1,
+                    "external": "file:///f%3A/GitHub/survival/Dockerfile",
+                    "path": "/f:/GitHub/survival/Dockerfile",
+                    "scheme": "file"
+                }
+            },
+            "healthCheckPath": "",
+            "enableHealthCheck": true,
+            "healthCheckInterval": 300000
+        }
+    ]
 }

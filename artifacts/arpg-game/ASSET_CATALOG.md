@@ -782,3 +782,78 @@ public/
 1. **Killers Pack RAR** — 99 MB, extraction failed
 2. **Just Survive RARs** — may need password or native unrar
 3. **Classic 64 Pack** — extraction returned 0 files
+
+---
+
+## 🧱 Prefab Pack — `public/models/prefabs/`
+
+27-asset GLB pack (~5.12M triangles total) registered as world-spawnable
+prefabs through `src/data/prefabs.ts` and instantiated by
+`src/game/world/PrefabSystem.ts`. Drop the listed files into
+`public/models/prefabs/` to enable each entry; missing files warn once and
+are skipped.
+
+### Registry ↔ file map
+
+| id              | file                                                          | kind            | role                              |
+| --------------- | ------------------------------------------------------------- | --------------- | --------------------------------- |
+| `smeltery`      | `stylized_smeltery_setup.glb`                                 | crafting        | smelter station                   |
+| `weaponsmith`   | `stylized_weaponsmith.glb`                                    | crafting        | weapon forge                      |
+| `bakery`        | `stylized_bakery.glb`                                         | building        | cooking station                   |
+| `woodcutter`    | `stylised_medieval_buildings_-_woodcutter_hut.glb`            | building        | wood-processing hut               |
+| `house_human`   | `rts_human_house_lv2_-_proto_series.glb`                      | building        | settler home (human factions)     |
+| `house_orc`     | `rts_orc_house_lv2_-_proto_series.glb`                        | building        | orc dwelling (hollow lords)       |
+| `medieval_city` | `medieval_modular_city_realistic_-_wip.glb`                   | city            | NPC-populated capital             |
+| `pirate_island` | `stylized_pirate_island_pack__low_poly_3d_assets.glb`         | biome pack      | coast/drowned-quarter dressing    |
+| `galleon`       | `galleon.glb`                                                 | vehicle         | large ship                        |
+| `raft`          | `the_raft.glb`                                                | vehicle         | starter raft                      |
+| `caravan`       | `stylized_caravan.glb`                                        | interactable    | **market / auction access node**  |
+| `ore_crystals`  | `ore_and_crystals.glb`                                        | resource_node   | ore + crystal vein                |
+| `tree_log`      | `low_poly_tree_log_and_stump.glb`                             | resource_node   | fallen log                        |
+| `hemp`          | `hemp.glb`                                                    | resource_node   | hemp plant                        |
+| `scrap_pile`    | `pile_of_scrap_metal_tools_rubbish_garbage.glb`               | resource_node   | scrap (junkyards)                 |
+| `pines_snowy`   | `snowy_pine_trees_pack__ps1_low_poly.glb`                     | vegetation      | snow biome trees                  |
+| `tree_stylized` | `stylize22d_tree.glb`                                         | vegetation      | generic tree                      |
+| `plants_set`    | `plants_asset_set.glb`                                        | vegetation      | undergrowth scatter               |
+| `brick_wall`    | `medieval_wall_of_bricks_assets.glb`                          | building        | modular brick wall kit            |
+| `populate`      | `populate_models.glb`                                         | biome pack      | city/crowd dressing               |
+| `campfire`      | `campfire_fbx.glb`                                            | prop            | camp fire                         |
+| `camp_stove`    | `camping_stove.glb`                                           | prop            | camp stove (cook)                 |
+| `camp_shovel`   | `camping_shovel.glb`                                          | prop            | shovel                            |
+| `plinth`        | `low_poly_hand_painted_dungeon_plinth.glb`                    | prop            | dungeon altar                     |
+| `fruits_veg`    | `lowpoly_fruits__vegetables.glb`                              | resource_node   | forageable produce                |
+| `rts_target`    | `rts_target.glb`                                              | target          | combat training dummy             |
+| `spider`        | `spider._low_poly.glb`                                        | enemy           | cave spider                       |
+| `stealth_wasp`  | `stealth_wasp_2.0.glb`                                        | enemy           | flying insect                     |
+| `skeleton` / `skeleton_axe` / `skeleton_sword` | (multiple `*.glb`)             | enemy           | undead humanoids                  |
+| `ncr_ranger`    | `ncr_ranger-fallout.glb`                                      | enemy           | wasteland ranger                  |
+| `terrain_quick` | `free_quick_terrain_test.glb`                                 | terrain_patch   | test patch (80 m core / 40 m ring)|
+| `terrain_snow_mtn` | `snowy_mountain_-_terrain.glb`                             | terrain_patch   | snowy mountain (200 / 80)         |
+| `terrain_cg_misty` / `terrain_cg_western` / `terrain_cg_encamp` / `terrain_cg_bigfarm` / `terrain_cg_town2f` / `terrain_cg_town3f` | (`chicken_gun_*.glb`) | terrain_patch | town / camp / farm patches |
+| `post_apoc_city` / `city_pack_free` / `snowy_village` | (`*.glb`)               | city            | NPC-populated settlement props    |
+| `training_gym`  | `training_gym.glb`                                            | building        | XP training facility              |
+| `temple_ancient`| `ancient_x_temple-i.glb`                                      | building        | temple / dungeon entry            |
+| `anta_grande`   | `anta_grande_do_zambujeiro.glb`                               | building        | megalith ruin                     |
+| `psx_industrial`| `psx_industrial_pack.glb`                                     | biome_pack      | industrial/urban modular kit      |
+| `crystal_gems`  | `stylized_crystal_gem_pack_-_handpainted.glb`                 | resource_node   | hand-painted gem nodes            |
+| `mat_*`         | PBR/material packs (medieval, jungle, biomasse, sand, lava, ground) | material  | shader / surface references       |
+| `fx_sphere_explosion` | `sphere_explosion.glb`                                  | fx              | explosion VFX prop                |
+
+### Wiring summary
+
+- **Settlements** — `FeaturePlacer.decorateSettlementWithPrefabs` rings each
+  town with smeltery + weaponsmith + bakery + woodcutter + two houses, then
+  parks a caravan at the south gate. Outposts get a target dummy + caravan.
+- **Caravan = market/auction** — proximity (4 m) shows `Press [E] · Trade
+  Caravan`; pressing INTERACT fires `engine.onPrefabInteract('market:auction',
+  'caravan')`, which GameCanvas forwards as a `prefab:interact` DOM event.
+- **Terrain patches** — `terrainPatches.place('terrain_snow_mtn', cx, cz)`
+  loads the GLB, samples 64 perimeter heights, blends procedurally:
+  `r ≤ rCore` → patch height verbatim; `rCore < r < rOuter` → smoothstep
+  procedural↔perimeter; `r ≥ rOuter` → pure `worldHeight()`. Render mesh
+  *and* Rapier heightfield use the same `getBlendedHeight()` so no seams.
+  Existing chunks within the patch radius are auto-evicted and rebuilt.
+- **Resource nodes / vegetation** — registered but not auto-scattered yet;
+  call `prefabs.place(id, x, z)` from biome scatter code when ready.
+- **Repeat-the-pattern recipe** — see `public/models/prefabs/README.md` for
+  the 3-step add-a-prefab guide.
