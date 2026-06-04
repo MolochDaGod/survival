@@ -4,6 +4,10 @@
   "installCommand": "pnpm install",
   "outputDirectory": "artifacts/website/dist/public",
   "rewrites": [
+    { "source": "/api/auth/:path*", "destination": "https://id.grudge-studio.com/auth/:path*" },
+    { "source": "/api/characters/:path*", "destination": "https://api.grudge-studio.com/api/characters/:path*" },
+    { "source": "/api/assets/:path*", "destination": "https://assets.grudge-studio.com/:path*" },
+    { "source": "/api/game/:path*", "destination": "https://api.grudge-studio.com/api/:path*" },
     { "source": "/api/:path*", "destination": "https://survival-api-production.up.railway.app/api/:path*" },
     { "source": "/arpg-game", "destination": "/arpg-game/index.html" },
     { "source": "/arpg-game/", "destination": "/arpg-game/index.html" },
