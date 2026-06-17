@@ -50,7 +50,8 @@ const s3 = DRY_RUN ? null : new S3Client({
   forcePathStyle: true,
 });
 
-const ASSETS_ROOT = 'F:\\GitHub\\RTS-Grudge\\attached_assets';
+const GRUDGE_REPOS_ROOT = process.env.GRUDGE_REPOS_ROOT || 'D:\\GrudgeRepos';
+const ASSETS_ROOT = `${GRUDGE_REPOS_ROOT}\\RTS-Grudge\\attached_assets`;
 const PREFIX = 'grudge-nexus';
 
 function mimeForExt(ext) {

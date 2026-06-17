@@ -1,6 +1,7 @@
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 
-$baseDir = 'F:\GitHub\survival\artifacts\arpg-game\public\icons'
+$SurvivalRoot = if ($env:GRUDGE_REPOS_ROOT) { Join-Path $env:GRUDGE_REPOS_ROOT 'survival' } else { 'D:\GrudgeRepos\survival' }
+$baseDir = Join-Path $SurvivalRoot 'artifacts\arpg-game\public\icons'
 
 $packs = @(
     @{ Zip = 'C:\Users\nugye\Documents\craftpix-net-501950-street-food-for-cyberpunk-pixel-art-32x32-icons.zip'; Dir = 'cyberpunk-food' },

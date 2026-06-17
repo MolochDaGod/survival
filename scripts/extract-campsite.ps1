@@ -1,7 +1,8 @@
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 
 $zipPath = 'C:\Users\nugye\Documents\CampsiteEnvironment_3Dexter_V1.1.zip'
-$destBase = 'F:\GitHub\survival\artifacts\arpg-game\public\models\campsite'
+$SurvivalRoot = if ($env:GRUDGE_REPOS_ROOT) { Join-Path $env:GRUDGE_REPOS_ROOT 'survival' } else { 'D:\GrudgeRepos\survival' }
+$destBase = Join-Path $SurvivalRoot 'artifacts\arpg-game\public\models\campsite'
 
 # Create directories
 $dirs = @('campfire', 'tents', 'tarps', 'sleeping-bags', 'axe', 'logs', 'textures')

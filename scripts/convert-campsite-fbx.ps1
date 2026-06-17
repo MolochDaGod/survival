@@ -1,5 +1,6 @@
-$fbx2gltf = 'F:\GitHub\survival\artifacts\arpg-game\node_modules\fbx2gltf\bin\Windows_NT\FBX2glTF.exe'
-$base = 'F:\GitHub\survival\artifacts\arpg-game\public\models\campsite'
+$SurvivalRoot = if ($env:GRUDGE_REPOS_ROOT) { Join-Path $env:GRUDGE_REPOS_ROOT 'survival' } else { 'D:\GrudgeRepos\survival' }
+$fbx2gltf = Join-Path $SurvivalRoot 'artifacts\arpg-game\node_modules\fbx2gltf\bin\Windows_NT\FBX2glTF.exe'
+$base = Join-Path $SurvivalRoot 'artifacts\arpg-game\public\models\campsite'
 $outDir = Join-Path $base 'glb'
 New-Item -ItemType Directory -Force -Path $outDir | Out-Null
 

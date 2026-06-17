@@ -1,7 +1,8 @@
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 
 $zipPath = 'C:\Users\nugye\Documents\craftpix-net-960481-genetics-pixel-art-icon-32x32-pack.zip'
-$destDir = 'F:\GitHub\survival\artifacts\arpg-game\public\icons\genetics'
+$SurvivalRoot = if ($env:GRUDGE_REPOS_ROOT) { Join-Path $env:GRUDGE_REPOS_ROOT 'survival' } else { 'D:\GrudgeRepos\survival' }
+$destDir = Join-Path $SurvivalRoot 'artifacts\arpg-game\public\icons\genetics'
 
 $zip = [System.IO.Compression.ZipFile]::OpenRead($zipPath)
 
