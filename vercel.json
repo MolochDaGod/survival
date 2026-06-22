@@ -1,5 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "alias": ["grudges.grudge-studio.com", "grudges-survival.vercel.app"],
   "buildCommand": "pnpm run build",
   "installCommand": "pnpm install",
   "outputDirectory": "artifacts/website/dist/public",
@@ -11,13 +12,13 @@
     { "source": "/api/:path*", "destination": "https://survival-api-production.up.railway.app/api/:path*" },
     { "source": "/arpg-game", "destination": "/arpg-game/index.html" },
     { "source": "/arpg-game/", "destination": "/arpg-game/index.html" },
-    { "source": "/arpg-game/:path*", "destination": "/arpg-game/index.html" },
+    { "source": "/arpg-game/((?!assets/|models/|textures/|locations/|icons/|lore/|fx/|audio/|favicon|.*\\..*).*)", "destination": "/arpg-game/index.html" },
     { "source": "/admin", "destination": "/admin/index.html" },
     { "source": "/admin/", "destination": "/admin/index.html" },
-    { "source": "/admin/:path*", "destination": "/admin/:path*" },
+    { "source": "/admin/((?!assets/|favicon|.*\\..*).*)", "destination": "/admin/index.html" },
     { "source": "/asset-studio", "destination": "/asset-studio/index.html" },
     { "source": "/asset-studio/", "destination": "/asset-studio/index.html" },
-    { "source": "/asset-studio/:path*", "destination": "/asset-studio/:path*" },
+    { "source": "/asset-studio/((?!assets/|favicon|.*\\..*).*)", "destination": "/asset-studio/index.html" },
     { "source": "/info.html", "destination": "/info.html" },
     { "source": "/lore.html", "destination": "/lore.html" },
     { "source": "/stats-guide.html", "destination": "/stats-guide.html" }
@@ -26,7 +27,7 @@
     {
       "source": "/(.*)",
       "headers": [
-{ "key": "Content-Security-Policy", "value": "frame-ancestors 'self' https://id.grudge-studio.com https://*.grudge-studio.com https://puter.com https://*.puter.com https://*.puter.site" },
+        { "key": "Content-Security-Policy", "value": "frame-ancestors 'self' https://id.grudge-studio.com https://*.grudge-studio.com https://puter.com https://*.puter.com https://*.puter.site" },
         { "key": "X-Content-Type-Options", "value": "nosniff" },
         { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
       ]
