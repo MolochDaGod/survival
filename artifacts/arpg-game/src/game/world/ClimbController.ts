@@ -11,6 +11,10 @@
  *   • KIN → `staminaRegen`: offsets the 3 HP/s stamina drain
  *   • GRA ≥ 3 → `wallRun` : unlocks a wall-run burst (fast upward dash)
  *
+ * Wall probes reuse the same BVH-backed occluder list as ThirdPersonCamera
+ * (set via `setOccluders` from GameEngine) rather than walking the full
+ * scene graph — consistent layer filtering and no Sprite raycast crashes.
+ *
  * The controller is stateless between frames — it re-probes every tick and
  * detaches the player the instant no wall is found, stamina runs out, or
  * the player presses Jump to leap off.
@@ -18,7 +22,7 @@
 
 import * as THREE from 'three';
 import type { PlayerController } from '../PlayerController';
-import { MASK_WORLD } from '../Layers';
+import { bindWorldRaycaster } from '../Layers';
 
 export type ClimbState = 'idle' | 'climbing' | 'wall_run';
 
@@ -36,14 +40,14 @@ const DETACH_LEAP_SPEED = 4.0;      // m/s upward impulse on jump-off
 
 const _rayOrigin = new THREE.Vector3();
 const _rayDir    = new THREE.Vector3();
-const _raycaster = new THREE.Raycaster();
-// BVH fast-path when meshes have bounds trees (starter map, chunks).
-(_raycaster as unknown as { firstHitOnly: boolean }).firstHitOnly = true;
-_raycaster.layers.mask = MASK_WORLD;
+const _wallNormalScratch = new THREE.Vector3();
 
 export class ClimbController {
   private player: PlayerController;
-  private scene: THREE.Scene;
+  private readonly raycaster = new THREE.Raycaster();
+
+  /** BVH-backed static meshes — shared list with ThirdPersonCamera. */
+  private occluders: THREE.Object3D[] = [];
 
   state: ClimbState = 'idle';
 
@@ -63,9 +67,14 @@ export class ClimbController {
   /** Track Space-key so we only trigger on the leading edge. */
   private spaceWasDown = false;
 
-  constructor(player: PlayerController, scene: THREE.Scene) {
+  constructor(player: PlayerController, camera: THREE.Camera) {
     this.player = player;
-    this.scene  = scene;
+    bindWorldRaycaster(this.raycaster, camera);
+  }
+
+  /** Same occluder list as ThirdPersonCamera — set once after scene BVHs build. */
+  setOccluders(meshes: THREE.Object3D[]): void {
+    this.occluders = meshes;
   }
 
   // ── Dynamic stat getters ──────────────────────────────────────────────
@@ -80,7 +89,7 @@ export class ClimbController {
 
   // ── Per-frame tick ────────────────────────────────────────────────────
 
-  update(dt: number, camera?: THREE.Camera): void {
+  update(dt: number): void {
     const p = this.player.position;
     const keys = this.player.keys;
     const spaceDown = !!keys['Space'];
@@ -88,30 +97,29 @@ export class ClimbController {
     this.spaceWasDown = spaceDown;
 
     // ── Probe for a climbable wall ──────────────────────────────────────
-    const fwd = this.player.getForwardDir();
-    _rayOrigin.set(p.x, p.y + 0.8, p.z); // chest height
-    _rayDir.copy(fwd).normalize();
-    _raycaster.set(_rayOrigin, _rayDir);
-    _raycaster.far = PROBE_DISTANCE;
-    // Three.js r183+ throws when raycasting Sprites/Text without a camera.
-    // WORLD-layer mask skips VFX/nameplates; camera is set defensively anyway.
-    _raycaster.layers.mask = MASK_WORLD;
-    if (camera) (_raycaster as unknown as { camera: THREE.Camera }).camera = camera;
+    this.nearWall = false;
+    if (this.occluders.length > 0) {
+      const fwd = this.player.getForwardDir();
+      _rayOrigin.set(p.x, p.y + 0.8, p.z); // chest height
+      _rayDir.copy(fwd).normalize();
+      this.raycaster.set(_rayOrigin, _rayDir);
+      this.raycaster.far = PROBE_DISTANCE;
 
-    const hits = _raycaster.intersectObjects(this.scene.children, true);
-    let wallHit: THREE.Intersection | null = null;
-    for (const h of hits) {
-      if (!(h.object instanceof THREE.Mesh)) continue;
-      if (!h.face) continue;
-      // Transform face normal to world space
-      const wn = h.face.normal.clone().transformDirection(h.object.matrixWorld).normalize();
-      if (Math.abs(wn.y) < MAX_NORMAL_Y) {
-        wallHit = h;
-        this.wallNormal.copy(wn);
-        break;
+      const hits = this.raycaster.intersectObjects(this.occluders, true);
+      for (const h of hits) {
+        if (!(h.object instanceof THREE.Mesh)) continue;
+        if (!h.face) continue;
+        _wallNormalScratch
+          .copy(h.face.normal)
+          .transformDirection(h.object.matrixWorld)
+          .normalize();
+        if (Math.abs(_wallNormalScratch.y) < MAX_NORMAL_Y) {
+          this.wallNormal.copy(_wallNormalScratch);
+          this.nearWall = true;
+          break;
+        }
       }
     }
-    this.nearWall = wallHit !== null;
 
     // ── State machine ───────────────────────────────────────────────────
 
@@ -196,10 +204,8 @@ export class ClimbController {
 
     // Keep the player pressed against the wall (so the raycast stays valid)
     const fwd = this.player.getForwardDir();
-    const distToWall = PROBE_DISTANCE * 0.6;
     p.x = p.x + fwd.x * 0.02; // gentle push toward wall
     p.z = p.z + fwd.z * 0.02;
-    void distToWall; // reserved
   }
 
   private drainStamina(dt: number): void {

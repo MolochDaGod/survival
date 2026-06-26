@@ -4,7 +4,7 @@ import { PlayerController } from './PlayerController';
 import { EnemyManager } from './EnemyManager';
 import { AbilitySystem } from './AbilitySystem';
 import { AssetManager } from './AssetManager';
-import { installBVH, buildBVHsForScene } from './BVHRaycast';
+import { installBVH, buildBVHsForScene, collectOccluders } from './BVHRaycast';
 import { setGroundScene } from './GroundSampler';
 import { PerfMonitor } from './PerfMonitor';
 import { PortraitRenderer } from './PortraitRenderer';
@@ -457,17 +457,8 @@ export class GameEngine {
       // there once it exists.)
       this._pendingSpawnAnchor = starterSpawn ? starterSpawn.clone() : null;
 
-      // Feed the third-person camera the world's static colliders so it can
-      // dolly inward when a wall, pillar, or hill blocks line-of-sight.
-      const occluders: THREE.Object3D[] = [];
-      this.scene.traverse((obj) => {
-        if (obj instanceof THREE.SkinnedMesh) return;
-        if (obj instanceof THREE.Mesh && (obj.geometry as { boundsTree?: unknown }).boundsTree) {
-          occluders.push(obj);
-        } else if (obj instanceof THREE.InstancedMesh) {
-          occluders.push(obj);
-        }
-      });
+      // BVH-backed occluders for camera dolly + wall-climb probes.
+      const occluders = collectOccluders(this.scene);
       this.player.tpCamera.setOccluders(occluders);
       this.player.onStatChange = () => this.onStatsUpdate?.(this.playerStats);
 
@@ -492,8 +483,9 @@ export class GameEngine {
       this.swimController.onSplash = (pos) => this.sceneBuilder?.splashFX.splash(pos);
 
       // ClimbController: raycast-based wall climbing tied to KIN/GRA stats.
-      this.climbController = new ClimbController(this.player, this.scene);
+      this.climbController = new ClimbController(this.player, this.camera);
       this.climbController.readStat = (key) => readEffect(this.perkEffects, key);
+      this.climbController.setOccluders(occluders);
 
       // FishingSystem: triggered through handleFishingClick (LMB capture).
       this.fishingSystem = new FishingSystem(
@@ -1004,7 +996,7 @@ export class GameEngine {
       const p = this.player.position;
       this.swimController.update(dt, groundY(p.x, p.z));
     }
-    this.climbController?.update(dt, this.camera);
+    this.climbController?.update(dt);
     this.fishingSystem?.update(dt);
     this.boatSystem?.update(dt);
     this.sceneBuilder?.updateSky(nowSec, this.camera.aspect);

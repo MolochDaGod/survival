@@ -92,11 +92,9 @@ export class GLBLocationSystem {
 
   /**
    * Load and place all configured GLB locations.
-   * @param basePath   Vite BASE_URL (e.g. '/').
    * @param onProgress Optional progress callback; called with (loaded, total).
    */
   async loadAll(
-    basePath = '/',
     onProgress?: (loaded: number, total: number) => void,
   ): Promise<void> {
     const settlements = getSettlements();

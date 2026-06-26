@@ -198,7 +198,7 @@ export class SceneBuilder {
       this.scene,
       this.assets.getLoadingManager(),
     );
-    this.glbLocationsReady = this.glbLocations.loadAll(import.meta.env.BASE_URL);
+    this.glbLocationsReady = this.glbLocations.loadAll();
     await this.glbLocationsReady;
 
     const doors     = this.glbLocations.getDoorProxies();

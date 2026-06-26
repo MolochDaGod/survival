@@ -82,3 +82,24 @@ export const MASK_WORLD = buildMask(LAYERS.WORLD);
 export const MASK_HITTABLE = buildMask(LAYERS.WORLD, LAYERS.ENEMIES);
 /** Mask covering walkable ground only — for foot-anchoring raycasts. */
 export const MASK_GROUND = buildMask(LAYERS.GROUND);
+
+type RaycasterWithBVH = THREE.Raycaster & {
+  firstHitOnly?: boolean;
+  camera?: THREE.Camera;
+};
+
+/**
+ * One-time raycaster setup for queries against WORLD-tagged meshes (walls,
+ * terrain, pillars). Filters out Sprites/VFX on other layers and satisfies
+ * Three.js r183's `raycaster.camera` requirement when the scene graph is
+ * walked recursively. Used by ThirdPersonCamera and ClimbController.
+ */
+export function bindWorldRaycaster(
+  raycaster: THREE.Raycaster,
+  camera: THREE.Camera,
+): void {
+  const r = raycaster as RaycasterWithBVH;
+  r.firstHitOnly = true;
+  raycaster.layers.mask = MASK_WORLD;
+  r.camera = camera;
+}

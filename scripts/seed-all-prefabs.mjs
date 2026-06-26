@@ -17,7 +17,7 @@
 
 const API_URL = process.argv.find(a => a.startsWith('--api-url='))?.split('=')[1]
   ?? process.env.API_URL
-  ?? 'https://grudge-nexus-api-production.up.railway.app';
+  ?? 'https://survival-api-production.up.railway.app';
 const ADMIN_TOKEN = process.argv.find(a => a.startsWith('--admin-token='))?.split('=')[1]
   ?? process.env.ADMIN_TOKEN
   ?? '';

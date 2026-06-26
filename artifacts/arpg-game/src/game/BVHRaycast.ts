@@ -40,3 +40,21 @@ export function buildBVHsForScene(scene: THREE.Object3D) {
     }
   });
 }
+
+/**
+ * Collect static meshes with BVHs for camera occlusion and wall-climb probes.
+ * Shared by ThirdPersonCamera and ClimbController so both systems raycast
+ * the same curated list instead of walking the full scene graph.
+ */
+export function collectOccluders(scene: THREE.Object3D): THREE.Object3D[] {
+  const occluders: THREE.Object3D[] = [];
+  scene.traverse((obj) => {
+    if (obj instanceof THREE.SkinnedMesh) return;
+    if (obj instanceof THREE.Mesh && (obj.geometry as { boundsTree?: unknown }).boundsTree) {
+      occluders.push(obj);
+    } else if (obj instanceof THREE.InstancedMesh) {
+      occluders.push(obj);
+    }
+  });
+  return occluders;
+}
