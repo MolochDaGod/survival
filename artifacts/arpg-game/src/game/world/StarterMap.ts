@@ -19,6 +19,7 @@
 import * as THREE from 'three';
 import type { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { createGLTFLoader } from '@/game/loaders/createGLTFLoader';
+import { assetUrl } from '@/lib/assetUrl';
 import { LAYERS } from '../Layers';
 
 // Name keywords that identify wall/ceiling meshes — kept in sync with
@@ -65,9 +66,9 @@ export class StarterMap {
    * @param basePath Vite `BASE_URL` — guarantees correct base prefix when
    *                 the artifact is mounted at a non-root path.
    */
-  async load(basePath: string): Promise<void> {
-    const glbUrl     = `${basePath}locations/${this.mapName}.glb`;
-    const sidecarUrl = `${basePath}locations/${this.mapName}.json`;
+  async load(_basePath: string): Promise<void> {
+    const glbUrl     = assetUrl(`/locations/${this.mapName}.glb`);
+    const sidecarUrl = assetUrl(`/locations/${this.mapName}.json`);
 
     // Sidecar first — small, no Draco roundtrip needed. If it fails we still
     // load the GLB; spawn falls back to the centre of the bounding box once

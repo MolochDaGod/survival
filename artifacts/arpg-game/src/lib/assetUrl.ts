@@ -17,6 +17,13 @@ const CDN_BASE = (import.meta.env.VITE_ASSET_CDN_URL as string | undefined)
   ?.replace(/\/+$/, '') ?? '';
 
 /**
+ * R2 bucket root for assets that were synced without the `grudge-nexus/`
+ * prefix. Location GLBs (`locations/*.glb`) live here; models/icons/textures
+ * live under `grudge-nexus/`.
+ */
+const CDN_ROOT = CDN_BASE.replace(/\/grudge-nexus$/, '') || CDN_BASE;
+
+/**
  * Resolve an asset path.
  *
  * @param path Root-relative path starting with `/`, e.g. `/models/foo.glb`
@@ -26,5 +33,10 @@ export function assetUrl(path: string): string {
   if (!CDN_BASE) return path;
   // Strip leading slash so we don't get `https://cdn.com//models/...`
   const clean = path.startsWith('/') ? path.slice(1) : path;
+  // World-location maps are at the bucket root (`/locations/encampment.glb`),
+  // not under `/grudge-nexus/`. AssetManager routes models through the prefix.
+  if (clean.startsWith('locations/')) {
+    return `${CDN_ROOT}/${clean}`;
+  }
   return `${CDN_BASE}/${clean}`;
 }

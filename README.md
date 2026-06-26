@@ -18,8 +18,8 @@ Both `grudges.grudge-studio.com` and `survival.grudge-studio.com` are custom dom
 | [grudges.grudge-studio.com/info.html](https://grudges.grudge-studio.com/info.html) | Combat, building, professions overview |
 | [grudges.grudge-studio.com/admin/](https://grudges.grudge-studio.com/admin/) | Admin panel (prefabs, spawn rules, assets) |
 | [grudges.grudge-studio.com/asset-studio/](https://grudges.grudge-studio.com/asset-studio/) | Asset browser & pipeline |
-| `grudge-nexus-api-production.up.railway.app/api` | API server (Railway — `zealous-love` project) |
-| `wss://grudge-nexus-api-production.up.railway.app/api/realtime` | Co-op WebSocket (Railway, direct) |
+| `survival-api-production.up.railway.app/api` | API server (Railway — survival project) |
+| `wss://survival-api-production.up.railway.app/api/realtime` | Co-op WebSocket (Railway, direct) |
 | `assets.grudge-studio.com` | Asset CDN (Cloudflare R2) |
 
 ## The Game
@@ -140,8 +140,8 @@ Vercel env vars (set in dashboard → Settings → Environment Variables):
 
 | Variable | Value |
 |---|---|
-| `VITE_WS_URL` | `wss://grudge-nexus-api-production.up.railway.app` |
-| `VITE_GRUDGE_API_BASE` | `https://grudge-nexus-api-production.up.railway.app` |
+| `VITE_WS_URL` | `wss://survival-api-production.up.railway.app` |
+| `VITE_GRUDGE_API_BASE` | `https://survival-api-production.up.railway.app` |
 | `VITE_ASSET_CDN_URL` | `https://assets.grudge-studio.com/grudge-nexus` |
 
 Deploy manually:
@@ -175,14 +175,14 @@ railway up                      # deploys current HEAD via Dockerfile
 Health check:
 
 ```bash
-curl https://grudge-nexus-api-production.up.railway.app/api/healthz
+curl https://survival-api-production.up.railway.app/api/healthz
 # → {"status":"ok"}
 ```
 
 WebSocket test (browser console):
 
 ```js
-new WebSocket('wss://grudge-nexus-api-production.up.railway.app/api/realtime')
+new WebSocket('wss://survival-api-production.up.railway.app/api/realtime')
 // fires onopen, then receives {type:"welcome"} JSON frame
 ```
 

@@ -71,6 +71,8 @@ export class SceneBuilder {
   private starterMapReady?: Promise<void>;
   /** Layered InstancedMesh grass scattered on the starter map's lawns. */
   private starterMapGrass?: StarterMapGrass;
+  /** False when the encampment GLB failed to load and we fell back to procedural. */
+  private starterMapModeActive = STARTER_MAP_MODE;
 
   /** The shadow-casting key light. Repositioned each frame. */
   private sun!: THREE.DirectionalLight;
@@ -132,38 +134,46 @@ export class SceneBuilder {
     this.addSkyDome();
 
     if (STARTER_MAP_MODE) {
-      // Handcrafted-map mode: skip ALL procedural systems and load the chosen city.
-      this.starterMap = new StarterMap(
-        this.scene,
-        this.assets.getLoadingManager(),
-        STARTER_MAP_NAME,
-      );
-      this.starterMapReady = this.starterMap.load(import.meta.env.BASE_URL);
-      await this.starterMapReady;
+      try {
+        this.starterMap = new StarterMap(
+          this.scene,
+          this.assets.getLoadingManager(),
+          STARTER_MAP_NAME,
+        );
+        this.starterMapReady = this.starterMap.load(import.meta.env.BASE_URL);
+        await this.starterMapReady;
 
-      // Once the GLB is in the scene with BVHs built, scatter three
-      // layered passes of instanced grass on every detected lawn /
-      // garden / turf surface.
-      const root = this.starterMap.getRoot();
-      if (root) {
-        this.starterMapGrass = new StarterMapGrass(this.scene);
-        try {
-          this.starterMapGrass.build(root);
-        } catch (err) {
-          console.warn('[SceneBuilder] StarterMapGrass build failed:', err);
+        if (!this.starterMap.isLoaded()) {
+          throw new Error(`Starter map "${STARTER_MAP_NAME}" did not load`);
         }
-      }
 
-      // Scatter craftpix terrain models (palm trees, stones, mountains)
-      // around the starter map. Uses a smaller radius + wider spacing
-      // since the playable area is smaller than the procedural world.
-      this.terrainScatter.scatter(800, 50).catch((err) => {
-        console.warn('[SceneBuilder] TerrainScatter failed:', err);
-      });
-      return;
+        const root = this.starterMap.getRoot();
+        if (root) {
+          this.starterMapGrass = new StarterMapGrass(this.scene);
+          try {
+            this.starterMapGrass.build(root);
+          } catch (err) {
+            console.warn('[SceneBuilder] StarterMapGrass build failed:', err);
+          }
+        }
+
+        this.terrainScatter.scatter(800, 50).catch((err) => {
+          console.warn('[SceneBuilder] TerrainScatter failed:', err);
+        });
+        return;
+      } catch (err) {
+        console.error(
+          '[SceneBuilder] Starter map failed — falling back to procedural world:',
+          err,
+        );
+        this.starterMap?.dispose();
+        this.starterMap = undefined;
+        this.starterMapReady = undefined;
+        this.starterMapModeActive = false;
+      }
     }
 
-    // Procedural infinite-world mode (legacy path).
+    // Procedural infinite-world mode (legacy path + starter-map fallback).
     // Await winter tree init before seeding the first chunk so Mountain/SnowPeak
     // chunks have models from the very first load.  On error, log and continue —
     // spawnChunkTrees() returns [] safely so the world still loads without trees.
@@ -213,7 +223,7 @@ export class SceneBuilder {
 
   /** True when the handcrafted town map is the active world. */
   isStarterMapMode(): boolean {
-    return STARTER_MAP_MODE;
+    return this.starterMapModeActive;
   }
 
   /**
@@ -253,9 +263,7 @@ export class SceneBuilder {
   }
 
   updateStreaming(playerX: number, playerZ: number) {
-    // Skip all procedural streaming in starter-map mode — there is no
-    // chunk grid to load and no procedural GLB locations to fade in/out.
-    if (STARTER_MAP_MODE) return;
+    if (this.starterMapModeActive) return;
     this.chunks.update(playerX, playerZ);
     this.glbLocations?.update(playerX, playerZ);
   }

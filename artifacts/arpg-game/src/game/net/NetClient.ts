@@ -43,6 +43,8 @@ export interface NetClientHandlers {
 const STATE_INTERVAL_MS = 50; // 20 Hz
 const PING_INTERVAL_MS = 5000;
 const RECONNECT_MAX_MS = 30_000;
+/** Production survival API — Vercel cannot proxy WebSocket upgrades. */
+const SURVIVAL_WS_BASE = 'wss://survival-api-production.up.railway.app';
 
 export class NetClient {
   private ws: WebSocket | null = null;
@@ -75,10 +77,22 @@ export class NetClient {
    * the upgrade).
    */
   private resolveUrl(): string {
-    const envUrl = (import.meta as any).env?.VITE_WS_URL as string | undefined;
+    let envUrl = (import.meta as any).env?.VITE_WS_URL as string | undefined;
+    // Legacy Vercel env pointed at grudge-nexus-api, which serves the
+    // Warlords SPA — not the survival realtime server. Redirect to the
+    // correct Railway host so co-op works without a manual env redeploy.
+    if (envUrl?.includes('grudge-nexus-api-production')) {
+      envUrl = SURVIVAL_WS_BASE;
+    }
     if (envUrl) {
-      // Strip trailing slash, append the realtime path.
       return `${envUrl.replace(/\/+$/, '')}/api/realtime`;
+    }
+    // Production on grudge-studio.com — connect directly to Railway.
+    if (
+      import.meta.env.PROD &&
+      /\.grudge-studio\.com$/i.test(window.location.hostname)
+    ) {
+      return `${SURVIVAL_WS_BASE}/api/realtime`;
     }
     // Same-origin fallback — works in dev where the api proxy is active.
     const proto = window.location.protocol === 'https:' ? 'wss:' : 'ws:';

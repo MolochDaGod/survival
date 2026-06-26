@@ -15,6 +15,7 @@
 import * as THREE from 'three';
 import type { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { createGLTFLoader } from '@/game/loaders/createGLTFLoader';
+import { assetUrl } from '@/lib/assetUrl';
 import { getSettlements } from './WorldGen';
 import { groundY } from '../GroundSampler';
 import { LAYERS } from '../Layers';
@@ -102,7 +103,6 @@ export class GLBLocationSystem {
     const towns = settlements.filter(s => s.type === 'town');
     const camps = settlements.filter(s => s.type === 'camp');
 
-    const base  = basePath.endsWith('/') ? basePath : basePath + '/';
     const total = CONFIGS.length;
     let loaded  = 0;
 
@@ -119,7 +119,7 @@ export class GLBLocationSystem {
           onProgress?.(loaded, total);
           return Promise.resolve();
         }
-        const url = `${base}locations/${cfg.file}`;
+        const url = assetUrl(`/locations/${cfg.file}`);
         return this.loadOne(cfg, url, anchor.x, anchor.z).then(() => {
           loaded++;
           onProgress?.(loaded, total);
