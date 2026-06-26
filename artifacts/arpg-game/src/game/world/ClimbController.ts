@@ -18,6 +18,7 @@
 
 import * as THREE from 'three';
 import type { PlayerController } from '../PlayerController';
+import { MASK_WORLD } from '../Layers';
 
 export type ClimbState = 'idle' | 'climbing' | 'wall_run';
 
@@ -36,6 +37,9 @@ const DETACH_LEAP_SPEED = 4.0;      // m/s upward impulse on jump-off
 const _rayOrigin = new THREE.Vector3();
 const _rayDir    = new THREE.Vector3();
 const _raycaster = new THREE.Raycaster();
+// BVH fast-path when meshes have bounds trees (starter map, chunks).
+(_raycaster as unknown as { firstHitOnly: boolean }).firstHitOnly = true;
+_raycaster.layers.mask = MASK_WORLD;
 
 export class ClimbController {
   private player: PlayerController;
@@ -76,7 +80,7 @@ export class ClimbController {
 
   // ── Per-frame tick ────────────────────────────────────────────────────
 
-  update(dt: number): void {
+  update(dt: number, camera?: THREE.Camera): void {
     const p = this.player.position;
     const keys = this.player.keys;
     const spaceDown = !!keys['Space'];
@@ -89,10 +93,15 @@ export class ClimbController {
     _rayDir.copy(fwd).normalize();
     _raycaster.set(_rayOrigin, _rayDir);
     _raycaster.far = PROBE_DISTANCE;
+    // Three.js r183+ throws when raycasting Sprites/Text without a camera.
+    // WORLD-layer mask skips VFX/nameplates; camera is set defensively anyway.
+    _raycaster.layers.mask = MASK_WORLD;
+    if (camera) (_raycaster as unknown as { camera: THREE.Camera }).camera = camera;
 
     const hits = _raycaster.intersectObjects(this.scene.children, true);
     let wallHit: THREE.Intersection | null = null;
     for (const h of hits) {
+      if (!(h.object instanceof THREE.Mesh)) continue;
       if (!h.face) continue;
       // Transform face normal to world space
       const wn = h.face.normal.clone().transformDirection(h.object.matrixWorld).normalize();

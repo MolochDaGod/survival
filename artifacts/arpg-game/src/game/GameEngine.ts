@@ -1004,7 +1004,7 @@ export class GameEngine {
       const p = this.player.position;
       this.swimController.update(dt, groundY(p.x, p.z));
     }
-    this.climbController?.update(dt);
+    this.climbController?.update(dt, this.camera);
     this.fishingSystem?.update(dt);
     this.boatSystem?.update(dt);
     this.sceneBuilder?.updateSky(nowSec, this.camera.aspect);
