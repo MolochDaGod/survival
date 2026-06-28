@@ -32,4 +32,4 @@ export * from "./schema";
 // Re-export the most common drizzle-orm helpers so workspace packages that
 // only depend on @workspace/db (e.g. scripts) can build typed queries without
 // adding drizzle-orm to their own dependencies.
-export { eq, ne, and, or, inArray, isNull, isNotNull, sql } from "drizzle-orm";
+export { eq, ne, and, or, inArray, isNull, isNotNull, sql, desc, asc } from "drizzle-orm";
