@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Grudox — Grudge Nexus Entry · LED Mask CNFT</title>
+  <meta name="description" content="Enter the Grudge Nexus era. Low-poly voxel survival, Quaternius characters, grudge-control locomotion — mint your LED mask CNFT for 1,000 GBUX and unlock your personal mask AI." />
+  <meta property="og:title" content="Grudox — Grudge Nexus Entry" />
+  <meta property="og:description" content="Nexus-era survival · voxel world · animated characters · 1,000 GBUX LED mask CNFT · personal AI" />
+  <meta property="og:image" content="/opengraph.jpg" />
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600&display=swap" rel="stylesheet" />
+  <script src="https://js.puter.com/v2/"></script>
+  <style>
+    :root {
+      --bg: #05070b;
+      --panel: rgba(12, 18, 28, 0.88);
+      --border: rgba(120, 168, 220, 0.22);
+      --text: #e8eef8;
+      --muted: #8fa3bf;
+      --accent: #5eb3ff;
+      --gold: #d4a24a;
+      --danger: #ff6b6b;
+      --mask-primary: #1a2744;
+      --mask-secondary: #0a1018;
+      --mask-glow: #5eb3ff;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: 'DM Sans', system-ui, sans-serif; }
+    body::before {
+      content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      background:
+        radial-gradient(ellipse 80% 50% at 20% 20%, rgba(94,179,255,0.12), transparent 60%),
+        radial-gradient(ellipse 60% 40% at 80% 70%, rgba(212,162,74,0.08), transparent 55%),
+        linear-gradient(180deg, #05070b 0%, #0a1018 50%, #05070b 100%);
+    }
+    h1, h2, h3 { font-family: 'Rajdhani', sans-serif; letter-spacing: 0.08em; text-transform: uppercase; margin: 0 0 0.5rem; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .hidden { display: none !important; }
+
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 1.5rem; border-bottom: 1px solid var(--border);
+      background: rgba(5, 7, 11, 0.92); backdrop-filter: blur(12px);
+      position: sticky; top: 0; z-index: 40;
+    }
+    nav .brand { display: flex; align-items: center; gap: 0.75rem; font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 1.25rem; }
+    nav .brand img { width: 40px; height: 40px; }
+    nav .links { display: flex; gap: 1.25rem; align-items: center; flex-wrap: wrap; }
+    nav .links a { font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+      padding: 0.7rem 1.25rem; border-radius: 6px; border: 1px solid transparent;
+      font-family: 'Rajdhani', sans-serif; font-weight: 600; font-size: 0.8rem;
+      letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer;
+      transition: filter 0.15s, transform 0.08s;
+    }
+    .btn:active { transform: translateY(1px); }
+    .btn-primary { background: linear-gradient(180deg, var(--accent), #2a6fa8); color: #041018; border-color: rgba(180,220,255,0.5); }
+    .btn-primary:hover { filter: brightness(1.08); }
+    .btn-primary:disabled { opacity: 0.45; cursor: not-allowed; filter: none; }
+    .btn-secondary { background: rgba(255,255,255,0.04); color: var(--text); border-color: var(--border); }
+    .btn-ghost { background: transparent; color: var(--muted); border-color: transparent; font-size: 0.7rem; }
+
+    .hero {
+      min-height: calc(100vh - 72px);
+      display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;
+      max-width: 1200px; margin: 0 auto; padding: 3rem 1.5rem; align-items: center;
+    }
+    @media (max-width: 900px) { .hero { grid-template-columns: 1fr; } }
+
+    .hero-copy h1 { font-size: clamp(2.2rem, 5vw, 3.5rem); line-height: 1.05; }
+    .hero-copy .tag { color: var(--muted); font-size: 1.05rem; line-height: 1.6; margin: 1rem 0 1.5rem; max-width: 36rem; }
+    .price-tag {
+      display: inline-flex; align-items: baseline; gap: 0.5rem;
+      padding: 0.5rem 1rem; border: 1px solid var(--gold); border-radius: 6px;
+      background: rgba(212,162,74,0.08); margin-bottom: 1.25rem;
+    }
+    .price-tag strong { font-family: 'Rajdhani', sans-serif; font-size: 1.75rem; color: var(--gold); }
+    .features { display: grid; gap: 0.75rem; margin: 1.5rem 0; }
+    .feature {
+      display: flex; gap: 0.75rem; align-items: flex-start;
+      padding: 0.75rem 1rem; background: var(--panel); border: 1px solid var(--border); border-radius: 8px;
+    }
+    .feature span { font-size: 1.25rem; }
+    .feature div strong { display: block; font-family: 'Rajdhani', sans-serif; letter-spacing: 0.06em; }
+    .feature div p { margin: 0.2rem 0 0; color: var(--muted); font-size: 0.85rem; }
+
+    .panel {
+      background: var(--panel); border: 1px solid var(--border); border-radius: 12px;
+      padding: 1.5rem; box-shadow: 0 24px 80px rgba(0,0,0,0.45);
+    }
+
+    /* LED mask preview */
+    .mask-stage { text-align: center; margin-bottom: 1.25rem; }
+    #mask-preview {
+      width: 200px; height: 240px; margin: 0 auto 1rem; cursor: pointer;
+      background: linear-gradient(160deg, var(--mask-secondary), var(--mask-primary));
+      border-radius: 48% 48% 42% 42% / 55% 55% 45% 45%;
+      position: relative;
+      box-shadow: 0 0 40px color-mix(in srgb, var(--mask-glow) 50%, transparent), inset 0 -20px 40px rgba(0,0,0,0.5);
+      animation: mask-float 4s ease-in-out infinite;
+    }
+    #mask-preview::before {
+      content: ''; position: absolute; inset: 18% 22% 38%;
+      background: #020408; border-radius: 40% 40% 35% 35%;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.9);
+    }
+    #mask-preview::after {
+      content: ''; position: absolute; left: 12%; right: 12%; bottom: 8%; height: 3px;
+      background: var(--mask-glow); border-radius: 2px;
+      box-shadow: 0 0 12px var(--mask-glow), 0 0 24px var(--mask-glow);
+      animation: led-pulse 1.8s ease-in-out infinite;
+    }
+    #mask-preview[data-pattern="circuit"] {
+      background-image:
+        linear-gradient(160deg, var(--mask-secondary), var(--mask-primary)),
+        repeating-linear-gradient(90deg, transparent, transparent 8px, color-mix(in srgb, var(--mask-glow) 25%, transparent) 8px, color-mix(in srgb, var(--mask-glow) 25%, transparent) 9px);
+    }
+    #mask-preview[data-pattern="scanline"] {
+      background-image:
+        linear-gradient(160deg, var(--mask-secondary), var(--mask-primary)),
+        repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255,255,255,0.04) 3px, rgba(255,255,255,0.04) 4px);
+    }
+    @keyframes mask-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+    @keyframes led-pulse { 0%, 100% { opacity: 0.7; } 50% { opacity: 1; } }
+
+    #preview-name { font-family: 'Rajdhani', sans-serif; font-size: 1.25rem; font-weight: 700; }
+    #preview-rarity { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+    #preview-rarity[data-rarity="legendary"] { color: var(--gold); }
+    #preview-rarity[data-rarity="epic"] { color: #c084fc; }
+    #preview-rarity[data-rarity="rare"] { color: var(--accent); }
+
+    .wallet-row { display: flex; justify-content: space-between; font-size: 0.85rem; margin: 0.4rem 0; color: var(--muted); }
+    .wallet-row strong { color: var(--text); font-family: 'Rajdhani', sans-serif; }
+    #status-msg { font-size: 0.8rem; color: var(--muted); margin-top: 0.75rem; min-height: 1.2em; }
+    #status-msg.error { color: var(--danger); }
+
+    .section { max-width: 1200px; margin: 0 auto; padding: 3rem 1.5rem; }
+    .section h2 { font-size: 1.5rem; margin-bottom: 1.5rem; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    @media (max-width: 768px) { .grid-3 { grid-template-columns: 1fr; } }
+    .card { padding: 1.25rem; background: var(--panel); border: 1px solid var(--border); border-radius: 10px; }
+    .card h3 { font-size: 0.9rem; color: var(--accent); }
+
+    /* AI assistant */
+    #assistant-panel.locked { opacity: 0.55; pointer-events: none; }
+    #assistant-panel.locked::after {
+      content: 'Mint a mask to unlock'; position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(5,7,11,0.6); border-radius: 12px;
+      font-family: 'Rajdhani', sans-serif; letter-spacing: 0.14em; text-transform: uppercase;
+    }
+    #assistant-panel { position: relative; }
+    #chat-log {
+      height: 200px; overflow-y: auto; padding: 0.75rem; margin-bottom: 0.75rem;
+      background: rgba(0,0,0,0.35); border: 1px solid var(--border); border-radius: 8px;
+      font-size: 0.85rem; line-height: 1.45;
+    }
+    #chat-log .chat-ai { color: var(--accent); margin: 0.4rem 0; }
+    #chat-log .chat-user { color: var(--text); margin: 0.4rem 0; }
+    #chat-form { display: flex; gap: 0.5rem; }
+    #chat-input {
+      flex: 1; padding: 0.6rem 0.75rem; border-radius: 6px;
+      border: 1px solid var(--border); background: rgba(0,0,0,0.3); color: var(--text);
+      font-family: inherit;
+    }
+
+    /* Reveal modal */
+    #reveal-modal {
+      position: fixed; inset: 0; z-index: 100; display: none;
+      align-items: center; justify-content: center;
+      background: rgba(4,8,14,0.85); backdrop-filter: blur(8px);
+    }
+    #reveal-modal.open { display: flex; }
+    #reveal-modal .modal-card {
+      text-align: center; padding: 2rem; max-width: 400px;
+      background: var(--panel); border: 1px solid var(--accent); border-radius: 12px;
+    }
+
+    .skin-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 0.75rem;
+    }
+    .skin-card {
+      display: flex; flex-direction: column; align-items: center; gap: 0.35rem;
+      padding: 0.75rem; background: var(--panel); border: 1px solid var(--border);
+      border-radius: 8px; cursor: pointer; color: var(--text); font-family: inherit;
+      transition: border-color 0.15s, transform 0.08s;
+    }
+    .skin-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .skin-card strong { font-family: 'Rajdhani', sans-serif; font-size: 0.8rem; letter-spacing: 0.06em; }
+    .skin-card span { font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+    .skin-card[data-rarity="legendary"] span { color: var(--gold); }
+    .skin-card[data-rarity="epic"] span { color: #c084fc; }
+    .skin-card[data-rarity="rare"] span { color: var(--accent); }
+    .skin-swatch {
+      width: 48px; height: 56px;
+      background: linear-gradient(160deg, var(--sw-secondary), var(--sw-primary));
+      border-radius: 40% 40% 35% 35% / 50% 50% 40% 40%;
+      box-shadow: 0 0 16px color-mix(in srgb, var(--sw-glow) 40%, transparent);
+      position: relative;
+    }
+    .skin-swatch::after {
+      content: ''; position: absolute; left: 15%; right: 15%; bottom: 12%; height: 2px;
+      background: var(--sw-glow); border-radius: 1px;
+      box-shadow: 0 0 8px var(--sw-glow);
+    }
+    .gbux-note {
+      font-size: 0.8rem; color: var(--muted); margin-top: 0.5rem; line-height: 1.5;
+    }
+    .gbux-note a { color: var(--gold); }
+
+    footer {
+      text-align: center; padding: 2rem; color: var(--muted); font-size: 0.75rem;
+      letter-spacing: 0.12em; text-transform: uppercase; border-top: 1px solid var(--border);
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="brand">
+      <img src="/logo-256.png" alt="Grudox" />
+      <span>Grudox</span>
+    </div>
+    <div class="links">
+      <a href="/arpg-game/">Play Nexus</a>
+      <a href="https://dash.grudge-studio.com/">Dashboard</a>
+      <a href="/">Grudges</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-copy">
+      <p style="font-family:'Rajdhani',sans-serif;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);font-size:0.8rem;margin:0 0 0.5rem;">Grudge Nexus Era</p>
+      <h1>Grudox Entry</h1>
+      <p class="tag">
+        Welcome to the Nexus. Grudox is Grudge Studio's low-poly voxel survival frontier — Quaternius animated
+        characters, grudge-control locomotion, and encampment world systems built for the era after Warlords.
+        Mint your LED mask CNFT for <strong style="color:var(--gold);">1,000 GBUX</strong> — random skin roll to your
+        Grudge ID wallet — and unlock a personal mask AI for the run.
+      </p>
+      <div class="price-tag">
+        <strong>1,000</strong>
+        <span>GBUX · one random skin roll</span>
+      </div>
+      <div class="features">
+        <div class="feature">
+          <span>◈</span>
+          <div><strong>Grudge ID Wallet</strong><p>Mask delivered server-side to your linked Grudge wallet on mint.</p></div>
+        </div>
+        <div class="feature">
+          <span>◎</span>
+          <div><strong>Random Skin Roll</strong><p>10 LED patterns from common to legendary — odds weighted on-chain record.</p></div>
+        </div>
+        <div class="feature">
+          <span>✦</span>
+          <div><strong>Mask AI Assistant</strong><p>Personal companion chat unlocked with your first mint.</p></div>
+        </div>
+      </div>
+      <a class="btn btn-primary" href="/arpg-game/">Enter the Nexus</a>
+    </div>
+
+    <div class="panel">
+      <div class="mask-stage">
+        <div id="mask-preview" data-pattern="pulse"></div>
+        <div id="preview-name">Preview Roll</div>
+        <div id="preview-rarity" data-rarity="rare">tap preview to roll</div>
+      </div>
+
+      <div id="signed-out">
+        <p style="color:var(--muted);font-size:0.85rem;margin:0 0 1rem;">Sign in with Grudge ID to mint</p>
+        <button type="button" class="btn btn-primary" id="btn-puter" style="width:100%;margin-bottom:0.5rem;">Sign in with Puter</button>
+        <button type="button" class="btn btn-secondary" id="btn-guest" style="width:100%;">Continue as Guest</button>
+      </div>
+
+      <div id="signed-in" class="hidden">
+        <div class="wallet-row"><span>Survivor</span><strong id="user-name">—</strong></div>
+        <div class="wallet-row"><span>GBUX Balance</span><strong id="gbux-balance">0</strong></div>
+        <div class="wallet-row"><span>Grudge Wallet</span><strong id="wallet-addr">—</strong></div>
+        <div style="display:flex;gap:0.5rem;margin-top:1rem;flex-wrap:wrap;">
+          <button type="button" class="btn btn-ghost" id="btn-preview">Preview Roll</button>
+          <button type="button" class="btn btn-primary" id="mint-btn" style="flex:1;">Mint Mask · 1000 GBUX</button>
+        </div>
+        <button type="button" class="btn btn-ghost" id="btn-signout" style="width:100%;margin-top:0.5rem;">Sign Out</button>
+        <p class="gbux-note">Earn GBUX in the <a href="/arpg-game/">Nexus</a> or sync your Grudge wallet balance.</p>
+      </div>
+      <p id="status-msg"></p>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Nexus Stack</h2>
+    <div class="grid-3">
+      <div class="card"><h3>Voxel World</h3><p style="color:var(--muted);font-size:0.9rem;">Low-poly voxel-forward encampment map — Craftpix &amp; Quaternius props, prefab-driven biomes, metre-scale imports.</p></div>
+      <div class="card"><h3>Animated Characters</h3><p style="color:var(--muted);font-size:0.9rem;">Quaternius Ultimate Animated packs — 24 locomotion clips, modular gear, grudge-control third-person capsule.</p></div>
+      <div class="card"><h3>Grudge ID Saves</h3><p style="color:var(--muted);font-size:0.9rem;">One Nexus account per Grudge ID — characters, GBUX, LED masks, and world saves on Railway.</p></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>How it works</h2>
+    <div class="grid-3">
+      <div class="card"><h3>01 · Connect</h3><p style="color:var(--muted);font-size:0.9rem;">Sign in with Puter or guest. Your Grudge ID syncs to the Nexus server wallet.</p></div>
+      <div class="card"><h3>02 · Mint</h3><p style="color:var(--muted);font-size:0.9rem;">Spend 1,000 GBUX. Server rolls your LED skin and mints the cNFT to your wallet.</p></div>
+      <div class="card"><h3>03 · Assist</h3><p style="color:var(--muted);font-size:0.9rem;">Your mask AI wakes up — tactical tips, lore, and companion chat tied to your roll.</p></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Skin Catalog</h2>
+    <p style="color:var(--muted);font-size:0.9rem;margin:-0.75rem 0 1.25rem;">10 weighted LED patterns — tap a skin to preview, or roll on mint.</p>
+    <div class="skin-grid" id="skin-gallery"></div>
+  </section>
+
+  <section class="section">
+    <h2>Mask AI Assistant</h2>
+    <div class="panel locked" id="assistant-panel">
+      <div id="chat-log">
+        <p class="chat-ai"><strong>Mask AI</strong> Mint your LED mask and I'll sync to your Grudge frequency.</p>
+      </div>
+      <form id="chat-form">
+        <input id="chat-input" type="text" placeholder="Ask your mask AI…" autocomplete="off" />
+        <button type="submit" class="btn btn-secondary">Send</button>
+      </form>
+    </div>
+  </section>
+
+  <div id="reveal-modal">
+    <div class="modal-card">
+      <h2 id="reveal-title">Skin Revealed</h2>
+      <p style="color:var(--muted);font-size:0.85rem;">Minted to your Grudge wallet</p>
+      <p id="reveal-mint" style="font-family:monospace;font-size:0.75rem;color:var(--accent);word-break:break-all;margin:1rem 0;"></p>
+      <button type="button" class="btn btn-primary" id="reveal-close">Continue</button>
+    </div>
+  </div>
+
+  <footer>Grudge Studio · Grudge Nexus · Grudox Entry · Low-Poly Voxel Survival</footer>
+  <script type="module" src="/src/grudox.ts"></script>
+</body>
+</html>
