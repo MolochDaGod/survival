@@ -53,6 +53,7 @@ import { ShockwaveVFX } from './vfx/ShockwaveVFX';
 import { SurvivorSpawner, type SurvivorSpawnerSnapshot } from './township/SurvivorSpawner';
 import { getQuestSystem } from './quest/QuestSystem';
 import { createIntroQuest, createSectorQuests, ENCAMPMENT_NPCS } from './quest/EncampmentIntro';
+import { EnemyCampSystem } from './world/EnemyCampSystem';
 import { getMilestoneEffects, mergeEffectBags, readEffect, type MilestoneEffectBag } from '@workspace/game-systems/perks';
 import { sumPassives, getUnlockedPerks, getUnlockedCombos, type StatTrack } from './progression/PerkSystem';
 
@@ -90,6 +91,8 @@ export class GameEngine {
   breakableWallSystem?: BreakableWallSystem;
   /** RTS survivor camp system — spawns wild survivors, manages camp production + raids. */
   survivorSpawner?: SurvivorSpawner;
+  /** Procedural enemy camps (200–500 m from player) with raid missions. */
+  enemyCampSystem?: EnemyCampSystem;
   /** Aggregated perk effect bag — refreshed once per second, read every frame. */
   perkEffects: MilestoneEffectBag = {};
   /**
@@ -111,6 +114,7 @@ export class GameEngine {
   private _lastBoatLabel: string | null = null;
   private _lastFishLabel: string | null = null;
   private _lastPrefabLabel: string | null = null;
+  private _lastCampLabel: string | null = null;
   private _lastEmittedPrompt: string | null = null;
 
   /** Water-layer subsystems — built after player + sceneBuilder exist.
@@ -523,6 +527,19 @@ export class GameEngine {
       // Extended intro grace for encampment — player needs time to meet NPCs
       // and accept the intro quest before enemies wander in.
       this.enemyManager.setIntroGrace(this.sceneBuilder.isStarterMapMode() ? 45 : 20);
+      this.enemyCampSystem = new EnemyCampSystem(
+        this.scene,
+        this.sceneBuilder.prefabs,
+        this.enemyManager,
+      );
+      {
+        const questSys = getQuestSystem();
+        const priorComplete = questSys.onQuestComplete;
+        questSys.onQuestComplete = (qid, reward) => {
+          priorComplete?.(qid, reward);
+          this.grantQuestRewards(qid, reward);
+        };
+      }
       this.enemyManager.onEnemyKilledAt = (exp, position, tier) => {
         this.gameState.killCount++;
         this.gameState.score += 100 + this.wave * 25;
@@ -689,18 +706,9 @@ export class GameEngine {
         // Pre-register sector exploration quests (inactive until intro finishes)
         const sectorQuests = createSectorQuests();
         for (const sq of sectorQuests) questSys.register(sq);
+        const priorComplete = questSys.onQuestComplete;
         questSys.onQuestComplete = (qid, reward) => {
-          console.log(`[Quest] "${qid}" complete!`, reward);
-          // Grant profession XP to relevant professions
-          if (reward.professionXp) {
-            for (const [prof, amount] of Object.entries(reward.professionXp)) {
-              ProfessionsService.gainXp(prof as any, amount);
-            }
-          }
-          // Grant weapon XP to the unallocated pool
-          if (reward.weaponXp) {
-            StatProgressionService.addWeaponXp(reward.weaponXp);
-          }
+          priorComplete?.(qid, reward);
           // When the intro quest finishes, unlock all 5 sector exploration quests
           if (qid === 'encampment_intro') {
             for (const sq of sectorQuests) {
@@ -1029,6 +1037,13 @@ export class GameEngine {
       this.player.position.x, this.player.position.z, Date.now(),
     );
 
+    // ── Enemy camps — procedural raid nodes 200–500 m from player ───────────
+    this.enemyCampSystem?.update(
+      dt,
+      this.player.position.x,
+      this.player.position.z,
+    );
+
     // ── NPC manager — goals + render culling ─────────────────────────────────
     const npcMgr = getNPCManager();
     npcMgr.playerPositions[0] = this.player.position;
@@ -1072,6 +1087,26 @@ export class GameEngine {
       for (const mx of this._namedNpcMixers) mx.update(dt);
     }
 
+    // Enemy camp raid prompt (position-based — works before GLB streams in).
+    {
+      const camp = this.enemyCampSystem?.getCampNear(
+        this.player.position.x,
+        this.player.position.z,
+        12,
+      );
+      let campLabel: string | null = null;
+      if (camp && !camp.cleared && !camp.missionActive) {
+        campLabel = 'Press [E] · Raid Enemy Camp';
+        if (this._questInteractPressed) {
+          this.enemyCampSystem?.acceptCampMission(camp);
+        }
+      }
+      if (campLabel !== this._lastCampLabel) {
+        this._lastCampLabel = campLabel;
+        this.resolveInteractionPrompt();
+      }
+    }
+
     // Prefab interaction proximity sweep — surfaces the caravan/market
     // and any other interactable prefab (training dummy, vehicles, …).
     // Runs every frame in any map mode so the prompt UI is consistent.
@@ -1096,15 +1131,23 @@ export class GameEngine {
         this.resolveInteractionPrompt();
       }
       if (triggered) {
+        if (triggered.interaction === 'mission:enemy_camp') {
+          const camp = this.enemyCampSystem?.getCampNear(
+            this.player.position.x,
+            this.player.position.z,
+            15,
+          );
+          if (camp) this.enemyCampSystem?.acceptCampMission(camp);
+        }
         this.onPrefabInteract?.(triggered.interaction, triggered.id);
       }
     }
 
     // Quest system proximity checks — NPC talk requires pressing E (interact)
+    let nearNpcId: string | null = null;
     if (this.sceneBuilder?.isStarterMapMode()) {
       // Show NPC name/role prompt when player is within 5m of a named NPC
       let nearestNpcLabel: string | null = null;
-      let nearNpcId: string | null = null;
       for (const npcDef of ENCAMPMENT_NPCS) {
         const brain = getNPCManager().getBrain(npcDef.id);
         if (!brain) continue;
@@ -1126,8 +1169,9 @@ export class GameEngine {
         this.resolveInteractionPrompt();
       }
 
-      getQuestSystem().update(this.player.position, nearNpcId);
     }
+
+    getQuestSystem().update(this.player.position, nearNpcId);
 
     // Breakable wall physics (fragment gravity, fade-out).
     this.breakableWallSystem?.update(dt);
@@ -1415,6 +1459,24 @@ export class GameEngine {
     }
   };
 
+  /** Grant structured quest rewards (profession XP, weapon XP, items). */
+  private grantQuestRewards(qid: string, reward: import('./quest/QuestSystem').QuestReward): void {
+    console.log(`[Quest] "${qid}" complete!`, reward);
+    if (reward.professionXp) {
+      for (const [prof, amount] of Object.entries(reward.professionXp)) {
+        ProfessionsService.gainXp(prof as import('./progression/Professions').Profession, amount);
+      }
+    }
+    if (reward.weaponXp) {
+      StatProgressionService.addWeaponXp(reward.weaponXp);
+    }
+    if (reward.items?.length) {
+      for (const item of reward.items) {
+        this.onSurvivalLootDrop?.(item.itemId, item.count);
+      }
+    }
+  }
+
   /**
    * Pick the highest-priority interaction prompt and emit it to the UI.
    * Priority: interior portal (Enter/Exit Building) > door (Open/Close Door)
@@ -1432,6 +1494,7 @@ export class GameEngine {
       ?? this._lastDoorLabel
       ?? this._lastBoatLabel
       ?? this._lastFishLabel
+      ?? this._lastCampLabel
       ?? this._lastPrefabLabel
       ?? this._lastNpcLabel
       ?? null;

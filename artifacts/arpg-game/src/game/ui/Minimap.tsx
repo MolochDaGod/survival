@@ -190,7 +190,23 @@ export const Minimap: React.FC<MinimapProps> = ({
       ctx.fill();
     }
 
-    // ── 5. Buildings ────────────────────────────────────────────────────────
+    // ── 5. Enemy camps (raid mission nodes) ─────────────────────────────────
+    const camps = tracker.query(px, pz, worldWindow, EntityType.CAMP);
+    for (const camp of camps) {
+      if (!fow.isRevealed(camp.position.x, camp.position.z)) continue;
+      const cx = (camp.position.x - px) * WORLD_TO_PX + RADIUS;
+      const cz = (camp.position.z - pz) * WORLD_TO_PX + RADIUS;
+      const isAi = (camp as { kind?: string }).kind === 'ai_island';
+      ctx.beginPath();
+      ctx.arc(cx, cz, isAi ? 5 : 4, 0, Math.PI * 2);
+      ctx.fillStyle = isAi ? '#ff6622' : TYPE_COLOR[EntityType.CAMP];
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(0,0,0,0.5)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+
+    // ── 6. Buildings ────────────────────────────────────────────────────────
     const buildings = tracker.query(px, pz, worldWindow, EntityType.BUILDING);
     for (const b of buildings) {
       if (!fow.isRevealed(b.position.x, b.position.z)) continue;
@@ -200,7 +216,7 @@ export const Minimap: React.FC<MinimapProps> = ({
       ctx.fillRect(bx - 3, bz - 3, 6, 6);
     }
 
-    // ── 6. NPC dots — use craftpix marker sprites ─────────────────────────
+    // ── 7. NPC dots — use craftpix marker sprites ─────────────────────────
     const npcs = tracker.query(px, pz, worldWindow, [EntityType.NPC, EntityType.ENEMY]);
     for (const npc of npcs) {
       if (!fow.isRevealed(npc.position.x, npc.position.z)) continue;

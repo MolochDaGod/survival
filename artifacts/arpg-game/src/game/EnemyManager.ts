@@ -234,10 +234,17 @@ export class EnemyManager {
       if (dxP * dxP + dzP * dzP < playerR2) continue;
       break; // candidate passed both checks
     }
-    const y = groundFloor(x, z);
+    this.spawnEnemyAt(x, z);
+  }
 
-    // ~25% of enemies are ranged (increases slightly with wave)
-    const rangedChance = Math.min(0.25 + this.wave * 0.03, 0.45);
+  /** Spawn one enemy at a fixed world position (used by enemy camp raids). */
+  spawnEnemyAt(x: number, z: number, waveOverride?: number): void {
+    if (this.enemies.filter(e => e.state !== 'dead').length >= this.maxEnemies) return;
+
+    const wave = waveOverride ?? this.wave;
+    const y    = groundFloor(x, z);
+
+    const rangedChance = Math.min(0.25 + wave * 0.03, 0.45);
     const isRanged     = Math.random() < rangedChance;
     const role         = isRanged ? EnemyRole.RANGED : EnemyRole.MELEE;
 
@@ -253,24 +260,15 @@ export class EnemyManager {
       modelGroup.position.y = footOffsetY;
       group.add(modelGroup);
 
-      // Measure the actual rendered height after foot-offset so the health
-      // bar sits just above the model's head, regardless of scale/origin.
       modelGroup.updateMatrixWorld(true);
       const hpBox = new THREE.Box3().setFromObject(modelGroup);
       const modelTop = isFinite(hpBox.max.y) ? hpBox.max.y : 2.0;
       group.userData.hpBarY = modelTop + 0.35;
 
-      // Pre-create one action per logical state (idle/walk/attack/death) so
-      // the per-frame `updateEnemyAnimState` call can crossfade between them
-      // without hitting `mixer.clipAction()` in the hot loop. If a rig is
-      // missing a clip we fall back to whatever IS available so something
-      // always plays — otherwise the model would T-pose between transitions.
       let clips: EnemyClipSet | null = null;
       if (mixer && animations.length > 0) {
         clips = buildEnemyClips(mixer, animations);
         if (!clips.idle) {
-          // No idle clip — promote the first animation so the model isn't
-          // frozen at rest. Mirrors the pre-crossfade fallback behaviour.
           const fallbackClip = animations[0];
           const action       = mixer.clipAction(fallbackClip);
           action.setLoop(THREE.LoopRepeat, Infinity);
@@ -291,23 +289,22 @@ export class EnemyManager {
       group.userData.hasRealModel = false;
     }
 
-    // Tint ranged enemies with a subtle blue glow on eyes
     if (isRanged) group.userData.isRanged = true;
 
     this.addHealthBar(group);
     this.scene.add(group);
 
-    const health = 50 + this.wave * 20;
+    const health = 50 + wave * 20;
     const spd    = isRanged
-      ? (2.5 + this.wave * 0.3 + Math.random())   // ranged a bit slower
-      : (3   + this.wave * 0.5 + Math.random() * 1.5);
+      ? (2.5 + wave * 0.3 + Math.random())
+      : (3   + wave * 0.5 + Math.random() * 1.5);
 
     const enemy: Enemy = {
       mesh:             group,
       health,
       maxHealth:        health,
       speed:            spd,
-      damage:           isRanged ? 6 + this.wave * 2 : 8 + this.wave * 3,
+      damage:           isRanged ? 6 + wave * 2 : 8 + wave * 3,
       state:            'idle',
       attackCooldown:   isRanged ? 2.5 : 1.2,
       attackTimer:      0,
@@ -316,7 +313,6 @@ export class EnemyManager {
 
     if (loaded?.mixer) this.mixers.set(enemy, loaded.mixer);
 
-    // Create YUKA brain
     const brain = new EnemyBrain({
       role,
       x: x, y: y, z: z,
@@ -327,6 +323,18 @@ export class EnemyManager {
     this.brains.set(enemy, brain);
 
     this.enemies.push(enemy);
+  }
+
+  /** Scatter defenders around an enemy camp centre. */
+  spawnEnemiesAtCamp(cx: number, cz: number, count: number): void {
+    const campWave = Math.max(1, this.wave);
+    for (let i = 0; i < count; i++) {
+      const angle = (i / count) * Math.PI * 2 + Math.random() * 0.6;
+      const dist  = 5 + Math.random() * 10;
+      const x     = cx + Math.cos(angle) * dist;
+      const z     = cz + Math.sin(angle) * dist;
+      setTimeout(() => this.spawnEnemyAt(x, z, campWave), i * 450);
+    }
   }
 
   // ── Main update ──────────────────────────────────────────────────────────

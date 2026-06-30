@@ -22,10 +22,10 @@
  *   - Uploads with correct Content-Type headers for Cloudflare to serve
  *   - Runs 8 concurrent uploads for throughput
  */
-import { readFileSync, readdirSync, statSync, createReadStream } from "fs";
+import { readFileSync, readdirSync, statSync } from "fs";
 import { resolve, dirname, extname, relative } from "path";
 import { fileURLToPath } from "url";
-import { createHash } from "crypto";
+import { execFileSync } from "node:child_process";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = resolve(__dirname, "..");
@@ -51,18 +51,24 @@ function loadEnv() {
 loadEnv();
 
 // ── Config ────────────────────────────────────────────────────────────────
-const CF_ACCOUNT_ID = process.env.CF_ACCOUNT_ID;
-const ACCESS_KEY = process.env.OBJECT_STORAGE_KEY;
-const SECRET_KEY = process.env.OBJECT_STORAGE_SECRET;
+const CF_ACCOUNT_ID =
+  process.env.CF_ACCOUNT_ID || process.env.CLOUDFLARE_ACCOUNT_ID;
+const ACCESS_KEY =
+  process.env.R2_ACCESS_KEY_ID || process.env.OBJECT_STORAGE_KEY;
+const SECRET_KEY =
+  process.env.R2_SECRET_ACCESS_KEY || process.env.OBJECT_STORAGE_SECRET;
 const REGION = process.env.OBJECT_STORAGE_REGION || "auto";
 const BUCKET = process.env.R2_BUCKET_ASSETS || "grudge-assets";
 
-if (!CF_ACCOUNT_ID || !ACCESS_KEY || !SECRET_KEY) {
-  console.error(
-    "Missing R2 credentials. Set CF_ACCOUNT_ID, OBJECT_STORAGE_KEY, OBJECT_STORAGE_SECRET in .env"
-  );
-  process.exit(1);
-}
+const PLACEHOLDER = "NEED_FROM_CF_DASHBOARD_R2_API_TOKENS";
+const WRANGLER_BIN = process.env.WRANGLER_BIN || "wrangler";
+const hasS3Creds =
+  CF_ACCOUNT_ID &&
+  ACCESS_KEY &&
+  SECRET_KEY &&
+  ACCESS_KEY !== PLACEHOLDER &&
+  SECRET_KEY !== PLACEHOLDER &&
+  ACCESS_KEY.length === 32;
 
 // ── Parse CLI args ────────────────────────────────────────────────────────
 const args = process.argv.slice(2);
@@ -81,6 +87,16 @@ const CDN_DIRS = [
   "bestiary",
   "assets", // assets/survival/*
 ];
+
+/** R2 key prefix — must match `VITE_ASSET_CDN_URL` (`…/grudge-nexus`). */
+const NEXUS_PREFIX = "grudge-nexus";
+
+/** `locations/*` is served from the bucket root (see assetUrl.ts). */
+function r2Key(relativePath) {
+  const key = relativePath.replace(/\\/g, "/");
+  if (key.startsWith("locations/")) return key;
+  return `${NEXUS_PREFIX}/${key}`;
+}
 
 const PUBLIC_DIR = resolve(root, "artifacts/arpg-game/public");
 
@@ -114,17 +130,20 @@ function mimeFor(file) {
   return MIME[extname(file).toLowerCase()] || "application/octet-stream";
 }
 
-// ── S3 client (dynamic import so the script fails fast on missing creds) ──
-const { S3Client, PutObjectCommand, HeadObjectCommand } = await import(
-  "@aws-sdk/client-s3"
-);
-
-const s3 = new S3Client({
-  region: REGION,
-  endpoint: `https://${CF_ACCOUNT_ID}.r2.cloudflarestorage.com`,
-  credentials: { accessKeyId: ACCESS_KEY, secretAccessKey: SECRET_KEY },
-  forcePathStyle: true,
-});
+// ── S3 client (optional — wrangler fallback when S3 tokens are unset) ───────
+let s3 = null;
+if (hasS3Creds) {
+  const { S3Client } = await import("@aws-sdk/client-s3");
+  const endpoint =
+    process.env.R2_S3_ENDPOINT ||
+    `https://${CF_ACCOUNT_ID}.r2.cloudflarestorage.com`;
+  s3 = new S3Client({
+    region: REGION,
+    endpoint,
+    credentials: { accessKeyId: ACCESS_KEY, secretAccessKey: SECRET_KEY },
+    forcePathStyle: true,
+  });
+}
 
 // ── Walk directory ────────────────────────────────────────────────────────
 function walk(dir) {
@@ -142,32 +161,60 @@ function walk(dir) {
 
 // ── Check if file exists on R2 with same size (skip re-upload) ────────────
 async function existsOnR2(key, localSize) {
-  try {
-    const head = await s3.send(
-      new HeadObjectCommand({ Bucket: BUCKET, Key: key })
-    );
-    return head.ContentLength === localSize;
-  } catch {
-    return false;
+  if (s3) {
+    try {
+      const { HeadObjectCommand } = await import("@aws-sdk/client-s3");
+      const head = await s3.send(
+        new HeadObjectCommand({ Bucket: BUCKET, Key: key })
+      );
+      return head.ContentLength === localSize;
+    } catch {
+      return false;
+    }
   }
+  // wrangler has no cheap HEAD — always upload (Put is idempotent).
+  return false;
 }
 
 // ── Upload one file ───────────────────────────────────────────────────────
 async function uploadFile(localPath, key) {
-  const body = readFileSync(localPath);
-  await s3.send(
-    new PutObjectCommand({
-      Bucket: BUCKET,
-      Key: key,
-      Body: body,
-      ContentType: mimeFor(localPath),
-    })
+  if (s3) {
+    const { PutObjectCommand } = await import("@aws-sdk/client-s3");
+    const body = readFileSync(localPath);
+    await s3.send(
+      new PutObjectCommand({
+        Bucket: BUCKET,
+        Key: key,
+        Body: body,
+        ContentType: mimeFor(localPath),
+      })
+    );
+    return;
+  }
+  const ct = mimeFor(localPath);
+  execFileSync(
+    WRANGLER_BIN,
+    [
+      "r2",
+      "object",
+      "put",
+      `${BUCKET}/${key}`,
+      "--file",
+      localPath,
+      "--content-type",
+      ct,
+      "--remote",
+    ],
+    { stdio: "inherit", shell: process.platform === "win32" }
   );
 }
 
 // ── Main ──────────────────────────────────────────────────────────────────
 async function main() {
   console.log(`[sync] Bucket: ${BUCKET}`);
+  console.log(
+    `[sync] Transport: ${hasS3Creds ? "S3 API" : "wrangler r2 object put"}`
+  );
   console.log(`[sync] CDN dirs: ${CDN_DIRS.join(", ")}`);
   console.log(`[sync] Source: ${PUBLIC_DIR}`);
   if (PREFIX_FILTER) console.log(`[sync] Filter: ${PREFIX_FILTER}`);
@@ -186,9 +233,9 @@ async function main() {
     }
     const files = walk(full);
     for (const f of files) {
-      const key = relative(PUBLIC_DIR, f).replace(/\\/g, "/");
-      if (PREFIX_FILTER && !key.startsWith(PREFIX_FILTER)) continue;
-      allFiles.push({ localPath: f, key, size: statSync(f).size });
+      const rel = relative(PUBLIC_DIR, f).replace(/\\/g, "/");
+      if (PREFIX_FILTER && !rel.startsWith(PREFIX_FILTER)) continue;
+      allFiles.push({ localPath: f, key: r2Key(rel), size: statSync(f).size });
     }
   }
 

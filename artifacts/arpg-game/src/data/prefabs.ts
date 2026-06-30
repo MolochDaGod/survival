@@ -32,6 +32,8 @@ export interface PrefabDef {
   id: string;
   /** Filename under `public/models/prefabs/` (no leading slash). */
   file: string;
+  /** Optional override — full root-relative asset path when not under prefabs/. */
+  assetPath?: string;
   /** Gameplay category (see PrefabKind). */
   kind: PrefabKind;
   /** Human-readable label for tooltips and debug overlays. */
@@ -68,7 +70,8 @@ export interface PrefabDef {
  */
 export const PREFABS: PrefabDef[] = [
   // ── Crafting stations ─────────────────────────────────────────────────────
-  { id: 'smeltery',     file: 'stylized_smeltery_setup.glb',                              kind: 'crafting',     label: 'Smeltery',        scale: 1.6, collider: [2.4, 1.5, 2.4], footprint: 4, interaction: 'craft:smeltery',   tags: ['ore', 'smith', 'fire'] },
+  { id: 'workbench',    file: 'Workbench.gltf',                                           kind: 'crafting',     label: 'Workbench',       scale: 1.0, collider: [0.8, 0.5, 0.5], footprint: 1.2, interaction: 'craft:workbench',  tags: ['craft', 'bench', 'workbench'], assetPath: '/models/props/fantasy_megakit/Exports/glTF/Workbench.gltf' },
+  { id: 'smeltery',     file: 'stylized_smeltery_setup.glb',                              kind: 'crafting',     label: 'Smeltery',        scale: 1.6, collider: [2.4, 1.5, 2.4], footprint: 4, interaction: 'craft:smeltery',   tags: ['ore', 'smith', 'fire', 'furnace'] },
   { id: 'weaponsmith',  file: 'stylized_weaponsmith.glb',                                 kind: 'crafting',     label: 'Weaponsmith',     scale: 1.4, collider: [2.0, 1.4, 2.0], footprint: 4, interaction: 'craft:weaponsmith', tags: ['weapon', 'smith'] },
   { id: 'bakery',       file: 'stylized_bakery.glb',                                      kind: 'building',     label: 'Bakery',          scale: 1.4, collider: [3.0, 2.0, 3.0], footprint: 5, interaction: 'craft:cooking',     tags: ['food', 'cook'] },
   { id: 'woodcutter',   file: 'stylised_medieval_buildings_-_woodcutter_hut.glb',         kind: 'building',     label: 'Woodcutter Hut',  scale: 1.4, collider: [2.6, 1.8, 2.6], footprint: 4, interaction: 'craft:woodcutter',  tags: ['wood', 'forest'] },
@@ -136,6 +139,9 @@ export const PREFABS: PrefabDef[] = [
   { id: 'terrain_cg_town2f', file: 'chicken_gun_town2f_reupload.glb',                     kind: 'terrain_patch', label: 'Town 2F Map',         scale: 1.0, patchRadius: 140, blendRing: 60, footprint: 200, tags: ['terrain', 'town', 'cg'] },
   { id: 'terrain_cg_town3f', file: 'town3f2_chicken_gun_map_reupload.glb',                kind: 'terrain_patch', label: 'Town 3F Map',         scale: 1.0, patchRadius: 160, blendRing: 70, footprint: 230, tags: ['terrain', 'town', 'cg'] },
 
+  // ── Enemy camps (procedural mission nodes, 200–500 m from player) ────────
+  { id: 'enemy_camp', file: 'stylized_enemy_camp_scene.glb',                         kind: 'building',     label: 'Enemy Camp',      scale: 1.0, collider: [9, 2.5, 9], footprint: 18, interaction: 'mission:enemy_camp', tags: ['camp', 'hostile', 'mission', 'event'] },
+
   // ── Big-landmark sceneries (placed like a city, not blended) ──────────────
   { id: 'post_apoc_city',  file: 'post-apocalyptic_city.glb',                             kind: 'city',         label: 'Post-Apoc City',  scale: 1.0, footprint: 80, tags: ['city', 'ruin', 'wasteland'] },
   { id: 'city_pack_free',  file: 'city_pack_free.glb',                                    kind: 'city',         label: 'City Pack',       scale: 1.0, footprint: 60, tags: ['city', 'npc', 'modular'] },
@@ -184,7 +190,7 @@ export function pickPrefabs(tags: string[]): PrefabDef[] {
   return PREFABS.filter(p => p.tags?.some(t => tags.includes(t)));
 }
 
-/** Canonical public path for a prefab GLB (no `assetUrl()` applied). */
+/** Canonical public path for a prefab asset (no `assetUrl()` applied). */
 export function prefabPath(def: PrefabDef): string {
-  return `/models/prefabs/${def.file}`;
+  return def.assetPath ?? `/models/prefabs/${def.file}`;
 }

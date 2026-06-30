@@ -209,8 +209,11 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ characterConfig = DEFAUL
       window.dispatchEvent(new CustomEvent('prefab:interact', {
         detail: { interaction, prefabId },
       }));
-      // Lightweight visible default until the dedicated panels ship.
-      console.info(`[GameCanvas] prefab interaction → ${interaction} (${prefabId})`);
+      if (interaction === 'mission:enemy_camp') {
+        console.info('[GameCanvas] Enemy camp raid mission accepted');
+      } else {
+        console.info(`[GameCanvas] prefab interaction → ${interaction} (${prefabId})`);
+      }
     };
 
     // Flash hit-marker crosshair red whenever a bullet/melee swing lands on an enemy.
