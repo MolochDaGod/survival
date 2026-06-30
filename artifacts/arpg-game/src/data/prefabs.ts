@@ -71,9 +71,9 @@ export interface PrefabDef {
 export const PREFABS: PrefabDef[] = [
   // ── Crafting stations ─────────────────────────────────────────────────────
   { id: 'workbench',    file: 'Workbench.gltf',                                           kind: 'crafting',     label: 'Workbench',       scale: 1.0, collider: [0.8, 0.5, 0.5], footprint: 1.2, interaction: 'craft:workbench',  tags: ['craft', 'bench', 'workbench'], assetPath: '/models/props/fantasy_megakit/Exports/glTF/Workbench.gltf' },
-  { id: 'smeltery',     file: 'stylized_smeltery_setup.glb',                              kind: 'crafting',     label: 'Smeltery',        scale: 1.6, collider: [2.4, 1.5, 2.4], footprint: 4, interaction: 'craft:smeltery',   tags: ['ore', 'smith', 'fire', 'furnace'] },
-  { id: 'weaponsmith',  file: 'stylized_weaponsmith.glb',                                 kind: 'crafting',     label: 'Weaponsmith',     scale: 1.4, collider: [2.0, 1.4, 2.0], footprint: 4, interaction: 'craft:weaponsmith', tags: ['weapon', 'smith'] },
-  { id: 'bakery',       file: 'stylized_bakery.glb',                                      kind: 'building',     label: 'Bakery',          scale: 1.4, collider: [3.0, 2.0, 3.0], footprint: 5, interaction: 'craft:cooking',     tags: ['food', 'cook'] },
+  { id: 'smeltery',     file: 'stylized_smeltery_setup.glb',                              kind: 'crafting',     label: 'Smeltery',        scale: 1.6, collider: [2.4, 1.5, 2.4], footprint: 4, interaction: 'craft:smeltery',   tags: ['ore', 'smith', 'fire', 'furnace'], assetPath: '/models/props/fantasy_megakit/Exports/glTF/Anvil_Log.gltf' },
+  { id: 'weaponsmith',  file: 'stylized_weaponsmith.glb',                                 kind: 'crafting',     label: 'Weaponsmith',     scale: 1.4, collider: [2.0, 1.4, 2.0], footprint: 4, interaction: 'craft:weaponsmith', tags: ['weapon', 'smith'], assetPath: '/models/props/fantasy_megakit/Exports/glTF/Anvil.gltf' },
+  { id: 'bakery',       file: 'stylized_bakery.glb',                                      kind: 'building',     label: 'Bakery',          scale: 1.4, collider: [3.0, 2.0, 3.0], footprint: 5, interaction: 'craft:cooking',     tags: ['food', 'cook'], assetPath: '/models/props/fantasy_megakit/Exports/glTF/Stall_Empty.gltf' },
   { id: 'woodcutter',   file: 'stylised_medieval_buildings_-_woodcutter_hut.glb',         kind: 'building',     label: 'Woodcutter Hut',  scale: 1.4, collider: [2.6, 1.8, 2.6], footprint: 4, interaction: 'craft:woodcutter',  tags: ['wood', 'forest'] },
 
   // ── Houses / dwellings ────────────────────────────────────────────────────
@@ -103,20 +103,20 @@ export const PREFABS: PrefabDef[] = [
   { id: 'plants_set',   file: 'plants_asset_set.glb',                                     kind: 'vegetation',   label: 'Plants Set',      scale: 1.0, footprint: 0.8, tags: ['plant', 'forest', 'grass', 'scatter'] },
 
   // ── Modular building kits ────────────────────────────────────────────────
-  { id: 'brick_wall',   file: 'medieval_wall_of_bricks_assets.glb',                       kind: 'building',     label: 'Brick Wall Kit',  scale: 1.0, collider: [2.0, 1.5, 0.4], footprint: 2.5, tags: ['wall', 'brick', 'modular', 'fortification'] },
+  { id: 'brick_wall',   file: 'medieval_wall_of_bricks_assets.glb',                       kind: 'building',     label: 'Brick Wall Kit',  scale: 1.0, collider: [2.0, 1.5, 0.4], footprint: 2.5, tags: ['wall', 'brick', 'modular', 'fortification'], assetPath: '/models/props/fantasy_megakit/Exports/glTF/Barrel_Holder.gltf' },
 
   // ── Population / city dressing ──────────────────────────────────────────
   { id: 'populate',     file: 'populate_models.glb',                                      kind: 'biome_pack',   label: 'Population Set',  scale: 1.0, footprint: 8, tags: ['npc', 'city', 'crowd', 'dressing'] },
 
   // ── Decoration props ──────────────────────────────────────────────────────
-  { id: 'campfire',     file: 'campfire_fbx.glb',                                         kind: 'prop',         label: 'Campfire',        scale: 1.0, footprint: 0.7, interaction: 'campfire',          tags: ['fire', 'camp'] },
-  { id: 'camp_stove',   file: 'camping_stove.glb',                                        kind: 'prop',         label: 'Camp Stove',      scale: 1.0, footprint: 0.4, interaction: 'craft:cooking',     tags: ['cook', 'camp'] },
+  { id: 'campfire',     file: 'campfire_fbx.glb',                                         kind: 'prop',         label: 'Campfire',        scale: 1.0, footprint: 0.7, interaction: 'campfire',          tags: ['fire', 'camp'], assetPath: '/models/props/fantasy_megakit/Exports/glTF/Torch_Metal.gltf' },
+  { id: 'camp_stove',   file: 'camping_stove.glb',                                        kind: 'prop',         label: 'Camp Stove',      scale: 1.0, footprint: 0.4, interaction: 'craft:cooking',     tags: ['cook', 'camp'], assetPath: '/models/props/fantasy_megakit/Exports/glTF/Cauldron.gltf' },
   { id: 'camp_shovel',  file: 'camping_shovel.glb',                                       kind: 'prop',         label: 'Shovel',          scale: 1.0, footprint: 0.3, tags: ['tool', 'camp'] },
-  { id: 'plinth',       file: 'low_poly_hand_painted_dungeon_plinth.glb',                 kind: 'prop',         label: 'Stone Plinth',    scale: 1.0, collider: [0.5, 0.6, 0.5], footprint: 0.6, tags: ['dungeon', 'altar'] },
+  { id: 'plinth',       file: 'low_poly_hand_painted_dungeon_plinth.glb',                 kind: 'prop',         label: 'Stone Plinth',    scale: 1.0, collider: [0.5, 0.6, 0.5], footprint: 0.6, tags: ['dungeon', 'altar'], assetPath: '/models/props/fantasy_megakit/Exports/glTF/BookStand.gltf' },
   { id: 'fruits_veg',   file: 'lowpoly_fruits__vegetables.glb',                           kind: 'resource_node',label: 'Fruits & Veg',    scale: 1.0, footprint: 0.5, interaction: 'forage', tags: ['food', 'farm', 'forage', 'plant'] },
 
   // ── Combat / training ─────────────────────────────────────────────────────
-  { id: 'rts_target',   file: 'rts_target.glb',                                           kind: 'target',       label: 'Training Dummy',  scale: 1.0, collider: [0.4, 1.0, 0.4], footprint: 0.6, interaction: 'training_dummy', tags: ['training', 'combat'] },
+  { id: 'rts_target',   file: 'rts_target.glb',                                           kind: 'target',       label: 'Training Dummy',  scale: 1.0, collider: [0.4, 1.0, 0.4], footprint: 0.6, interaction: 'training_dummy', tags: ['training', 'combat'], assetPath: '/models/props/fantasy_megakit/Exports/glTF/Dummy.gltf' },
 
   // ── Enemies ───────────────────────────────────────────────────────────────
   { id: 'spider',          file: 'spider._low_poly.glb',                                  kind: 'enemy',        label: 'Cave Spider',     scale: 1.0, collider: [0.6, 0.4, 0.6], footprint: 1.0, tags: ['spider', 'cave', 'pit', 'hostile'] },
