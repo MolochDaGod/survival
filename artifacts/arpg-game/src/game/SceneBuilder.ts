@@ -25,7 +25,7 @@ import { LAYERS } from './Layers';
  * coexist: the encampment is a static GLB island planted at (0,0), and the
  * chunk manager fills the rest of the 20 km world procedurally.
  */
-const STARTER_MAP_MODE = true;
+const STARTER_MAP_MODE = false;
 /** Encampment GLB map. Loaded at world origin as the safe starting zone. */
 const STARTER_MAP_NAME = 'encampment';
 /**
