@@ -5,7 +5,7 @@
     "survival.grudge-studio.com",
     "grudges-survival.vercel.app"
   ],
-  "buildCommand": "pnpm run build",
+  "buildCommand": "pnpm -r --if-present run build && node scripts/merge-outputs.mjs",
   "installCommand": "pnpm install --no-frozen-lockfile",
   "outputDirectory": "artifacts/website/dist/public",
   "rewrites": [
