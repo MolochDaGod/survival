@@ -1,71 +1,175 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "alias": ["grudges.grudge-studio.com", "grudges-survival.vercel.app"],
+  "alias": [
+    "grudges.grudge-studio.com",
+    "survival.grudge-studio.com",
+    "grudges-survival.vercel.app"
+  ],
   "buildCommand": "pnpm run build",
   "installCommand": "pnpm install",
   "outputDirectory": "artifacts/website/dist/public",
   "rewrites": [
-    { "source": "/api/auth/:path*", "destination": "https://id.grudge-studio.com/auth/:path*" },
-    { "source": "/api/characters/:path*", "destination": "https://api.grudge-studio.com/api/characters/:path*" },
-    { "source": "/api/assets/:path*", "destination": "https://assets.grudge-studio.com/:path*" },
-    { "source": "/api/game/:path*", "destination": "https://api.grudge-studio.com/api/:path*" },
-    { "source": "/api/:path*", "destination": "https://survival-api-production.up.railway.app/api/:path*" },
-    { "source": "/arpg-game", "destination": "/arpg-game/index.html" },
-    { "source": "/arpg-game/", "destination": "/arpg-game/index.html" },
-    { "source": "/arpg-game/((?!assets/|models/|textures/|locations/|icons/|lore/|fx/|audio/|favicon|.*\\..*).*)", "destination": "/arpg-game/index.html" },
-    { "source": "/admin", "destination": "/admin/index.html" },
-    { "source": "/admin/", "destination": "/admin/index.html" },
-    { "source": "/admin/((?!assets/|favicon|.*\\..*).*)", "destination": "/admin/index.html" },
-    { "source": "/asset-studio", "destination": "/asset-studio/index.html" },
-    { "source": "/asset-studio/", "destination": "/asset-studio/index.html" },
-    { "source": "/asset-studio/((?!assets/|favicon|.*\\..*).*)", "destination": "/asset-studio/index.html" },
-    { "source": "/info.html", "destination": "/info.html" },
-    { "source": "/lore.html", "destination": "/lore.html" },
-    { "source": "/stats-guide.html", "destination": "/stats-guide.html" }
+    {
+      "source": "/api/auth/:path*",
+      "destination": "https://id.grudge-studio.com/auth/:path*"
+    },
+    {
+      "source": "/api/characters/:path*",
+      "destination": "https://api.grudge-studio.com/api/characters/:path*"
+    },
+    {
+      "source": "/api/assets/:path*",
+      "destination": "https://assets.grudge-studio.com/:path*"
+    },
+    {
+      "source": "/api/game/:path*",
+      "destination": "https://api.grudge-studio.com/api/:path*"
+    },
+    {
+      "source": "/api/:path*",
+      "destination": "https://survival-api-production.up.railway.app/api/:path*"
+    },
+    {
+      "source": "/arpg-game/locations/:path*",
+      "destination": "https://assets.grudge-studio.com/locations/:path*"
+    },
+    {
+      "source": "/arpg-game",
+      "destination": "/arpg-game/index.html"
+    },
+    {
+      "source": "/arpg-game/",
+      "destination": "/arpg-game/index.html"
+    },
+    {
+      "source": "/arpg-game/((?!assets/|ui/|vfx/|models/|textures/|locations/|icons/|lore/|fx/|audio/|favicon|.*\\..*).*)",
+      "destination": "/arpg-game/index.html"
+    },
+    {
+      "source": "/admin",
+      "destination": "/admin/index.html"
+    },
+    {
+      "source": "/admin/",
+      "destination": "/admin/index.html"
+    },
+    {
+      "source": "/admin/((?!assets/|favicon|.*\\..*).*)",
+      "destination": "/admin/index.html"
+    },
+    {
+      "source": "/asset-studio",
+      "destination": "/asset-studio/index.html"
+    },
+    {
+      "source": "/asset-studio/",
+      "destination": "/asset-studio/index.html"
+    },
+    {
+      "source": "/asset-studio/((?!assets/|favicon|.*\\..*).*)",
+      "destination": "/asset-studio/index.html"
+    },
+    {
+      "source": "/info.html",
+      "destination": "/info.html"
+    },
+    {
+      "source": "/lore.html",
+      "destination": "/lore.html"
+    },
+    {
+      "source": "/stats-guide.html",
+      "destination": "/stats-guide.html"
+    }
   ],
   "headers": [
     {
       "source": "/(.*)",
       "headers": [
-        { "key": "Content-Security-Policy", "value": "frame-ancestors 'self' https://id.grudge-studio.com https://*.grudge-studio.com https://puter.com https://*.puter.com https://*.puter.site" },
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+        {
+          "key": "Content-Security-Policy",
+          "value": "frame-ancestors 'self' https://id.grudge-studio.com https://*.grudge-studio.com https://puter.com https://*.puter.com https://*.puter.site"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        }
       ]
     },
     {
       "source": "/api/(.*)",
       "headers": [
-        { "key": "Cache-Control", "value": "no-store" }
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
       ]
     },
     {
       "source": "/arpg-game/assets/:path*",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/arpg-game/ui/:path*",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=604800, stale-while-revalidate=86400"
+        }
+      ]
+    },
+    {
+      "source": "/arpg-game/vfx/:path*",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=604800, stale-while-revalidate=86400"
+        }
       ]
     },
     {
       "source": "/arpg-game/models/:path*",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=604800, stale-while-revalidate=86400" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=604800, stale-while-revalidate=86400"
+        }
       ]
     },
     {
       "source": "/arpg-game/textures/:path*",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=604800, stale-while-revalidate=86400" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=604800, stale-while-revalidate=86400"
+        }
       ]
     },
     {
       "source": "/arpg-game/locations/:path*",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=604800, stale-while-revalidate=86400" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=604800, stale-while-revalidate=86400"
+        }
       ]
     },
     {
       "source": "/arpg-game/icons/:path*",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=2592000, immutable" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=2592000, immutable"
+        }
       ]
     }
   ]
