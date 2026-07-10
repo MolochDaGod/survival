@@ -8,6 +8,7 @@ import { FeaturePlacer } from './world/FeaturePlacer';
 import { PrefabSystem } from './world/PrefabSystem';
 import { TerrainPatchSystem, setTerrainPatchSystem } from './world/TerrainPatchSystem';
 import { bootstrapSectorMaps } from './world/SectorWorldBootstrap';
+import { bootstrapDeployGate } from './world/DeployGateBootstrap';
 import { TerrainScatter } from './world/TerrainScatter';
 import { RoadSystem } from './world/RoadSystem';
 import { GLBLocationSystem, DoorProxy } from './world/GLBLocationSystem';
@@ -66,6 +67,8 @@ export class SceneBuilder {
   private glbLocations?: GLBLocationSystem;
   /** Resolves when all 4 GLBs have finished loading (or failed). */
   private glbLocationsReady?: Promise<void>;
+  /** Boarding spawn for the deploy-gate rideable boat. */
+  private deployGateBoatSpawn: THREE.Vector3 | null = null;
   /** The handcrafted starting map (town3f2) when STARTER_MAP_MODE is on. */
   private starterMap?: StarterMap;
   /** Resolves once the starter map's GLB and BVHs are in place. */
@@ -195,6 +198,8 @@ export class SceneBuilder {
     this.addTorches();
     this.features.buildAll();
     this.roads.buildAll();
+    const deployGate = await bootstrapDeployGate(this.prefabs);
+    this.deployGateBoatSpawn = deployGate.boatSpawn;
     // Scatter craftpix terrain models across the procedural world.
     this.terrainScatter.scatter(2400, 40).catch((err) => {
       console.warn('[SceneBuilder] TerrainScatter failed:', err);
@@ -230,6 +235,11 @@ export class SceneBuilder {
   /** True when the handcrafted town map is the active world. */
   isStarterMapMode(): boolean {
     return this.starterMapModeActive;
+  }
+
+  /** World position for the deploy-gate boarding boat (null until buildEnvironment completes). */
+  getDeployGateBoatSpawn(): THREE.Vector3 | null {
+    return this.deployGateBoatSpawn;
   }
 
   /**

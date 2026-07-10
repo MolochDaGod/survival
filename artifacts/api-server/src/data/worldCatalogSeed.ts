@@ -247,7 +247,7 @@ export function buildSeedIslands(): SeedIsland[] {
         kind: 'gate',
         centerX: 0, centerZ: 42,
         radiusM: 60,
-        sceneGlb: `${CDN}/models/scenes/starter_pirates_island/scene.gltf`,
+        sceneGlb: `${NEXUS}/models/prefabs/viking_shipyard.glb`,
         platformGlb: `${CDN}/models/island/platform-planks.glb`,
         textureSet: islandTexture('town'),
         biomeTag: 'town',

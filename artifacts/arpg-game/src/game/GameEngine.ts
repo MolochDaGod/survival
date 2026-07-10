@@ -548,6 +548,15 @@ export class GameEngine {
         this.resolveInteractionPrompt();
       };
       this.boatSystem.attach();
+      const deployBoat = this.sceneBuilder.getDeployGateBoatSpawn();
+      if (deployBoat) {
+        this.boatSystem.spawn({
+          id: 'deploy-gate-boat',
+          position: deployBoat,
+          yaw: Math.PI,
+          color: 0x5a4030,
+        });
+      }
 
       this.enemyManager = new EnemyManager(this.scene, this.assetManager);
       // Apply the spawn anchor we captured earlier — the encampment hub

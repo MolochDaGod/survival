@@ -85,6 +85,7 @@ export const PREFABS: PrefabDef[] = [
   { id: 'pirate_island', file: 'stylized_pirate_island_pack__low_poly_3d_assets.glb',     kind: 'biome_pack',   label: 'Pirate Island',   scale: 1.0, footprint: 40, tags: ['coast', 'pirate'] },
 
   // ── Vehicles / boats ──────────────────────────────────────────────────────
+  { id: 'viking_shipyard', file: 'viking_shipyard.glb',                                   kind: 'building',     label: 'Viking Shipyard', scale: 6.0, footprint: 55, interaction: 'gate:deploy',     tags: ['boat', 'shipyard', 'deploy', 'dock', 'gate', 'viking'] },
   { id: 'galleon',      file: 'galleon.glb',                                              kind: 'vehicle',      label: 'Galleon',         scale: 1.2, collider: [5, 3, 12], footprint: 14, interaction: 'vehicle:galleon', tags: ['boat', 'ship', 'pirate'] },
   { id: 'raft',         file: 'the_raft.glb',                                             kind: 'vehicle',      label: 'Raft',            scale: 1.0, collider: [1.5, 0.4, 2.0], footprint: 3, interaction: 'vehicle:raft',    tags: ['boat', 'starter'] },
 
