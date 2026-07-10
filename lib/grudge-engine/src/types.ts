@@ -112,6 +112,20 @@ export const engineManifestSchema = z.object({
     forge: z.string().optional(),
     assetStudio: z.string().optional(),
   }),
+  /** Registered titles in this engine era (Flare Boss Arena, etc.). */
+  games: z
+    .array(
+      z.object({
+        id: z.string(),
+        label: z.string(),
+        route: z.string(),
+        deployUrl: z.string().optional(),
+        package: z.string(),
+        modes: z.array(z.string()).optional(),
+        playLoop: z.array(z.string()).optional(),
+      }),
+    )
+    .optional(),
 });
 
 export type EngineManifest = z.infer<typeof engineManifestSchema>;

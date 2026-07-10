@@ -1,12 +1,21 @@
 export * from "./types";
 export * from "./kind-map";
 export * from "./nexus-defaults";
+export * from "./armada-defaults";
 export { engineManifestSchema } from "./types";
 
 import { engineManifestSchema, type EngineManifest } from "./types";
 import { NEXUS_ENGINE_MANIFEST } from "./nexus-defaults";
+import { ARMADA_ENGINE_MANIFEST } from "./armada-defaults";
+
+export type EngineEra = "nexus" | "armada";
 
 export function getDefaultEngineManifest(): EngineManifest {
+  return NEXUS_ENGINE_MANIFEST;
+}
+
+export function getManifestForEra(era: EngineEra | string): EngineManifest {
+  if (era === "armada") return ARMADA_ENGINE_MANIFEST;
   return NEXUS_ENGINE_MANIFEST;
 }
 
