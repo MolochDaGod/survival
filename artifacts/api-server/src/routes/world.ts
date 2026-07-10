@@ -27,6 +27,7 @@ export const worldRouter = Router();
 worldRouter.get('/status', async (_req, res) => {
   const state = worldCatalogState();
   res.json({
+    service: 'grudge-nexus-api',
     catalog: state.available ? 'ready' : 'unavailable',
     seeded: state.seeded,
     version: state.version,
