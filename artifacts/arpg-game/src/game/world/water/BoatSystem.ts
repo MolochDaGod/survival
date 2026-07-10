@@ -21,10 +21,16 @@
  */
 
 import * as THREE from 'three';
+import { createGLTFLoader } from '@/game/loaders/createGLTFLoader';
+import { extractGltfSubnode, fitGroupToXZ } from '@/game/loaders/extractGltfSubnode';
 import { KEYBINDS } from '../../constants';
 import { LAYERS, setLayerRecursive } from '../../Layers';
 import type { PlayerController } from '../../PlayerController';
 import type { WaterSurface } from './WaterSurface';
+
+const YELLOW_CHEST_GLB = 'models/props/low_poly_farm_wood/pack.glb';
+const YELLOW_CHEST_NODE = 'Box';
+const YELLOW_CHEST_COLOR = 0xffd54f;
 
 interface BoatOpts {
   id?: string;
@@ -34,6 +40,8 @@ interface BoatOpts {
   yaw?: number;
   /** Visible color tint of the placeholder hull. */
   color?: number;
+  /** When true, the yellow inventory chest sits in the cabin; otherwise on deck. */
+  hasCabin?: boolean;
 }
 
 interface Boat {
@@ -46,6 +54,8 @@ interface Boat {
   drag: number;
   turnRate: number;     // rad/s at full input
   seatOffset: THREE.Vector3; // local-space seat anchor relative to boat origin
+  hasCabin: boolean;
+  chestOffset: THREE.Vector3;
 }
 
 const DEFAULTS = {
@@ -62,6 +72,9 @@ export class BoatSystem {
   private mountedBoatId: string | null = null;
   private player: PlayerController | null = null;
   private prompt: string | null = null;
+  private loader = createGLTFLoader();
+  private chestTemplate: THREE.Group | null = null;
+  private chestPreload: Promise<void> | null = null;
 
   /** Prompt + interaction bus subscriber. */
   onPrompt: ((label: string | null) => void) | null = null;
@@ -74,6 +87,53 @@ export class BoatSystem {
   /** Bind to the active player so `enter`/`exit` can manipulate it. */
   setPlayer(player: PlayerController): void {
     this.player = player;
+  }
+
+  /** Pre-load the yellow inventory chest mesh (farm wood pack Box node). */
+  preload(basePath: string): Promise<void> {
+    if (this.chestPreload) return this.chestPreload;
+    this.chestPreload = (async () => {
+      try {
+        const gltf = await this.loader.loadAsync(`${basePath}${YELLOW_CHEST_GLB}`);
+        const extracted = extractGltfSubnode(gltf.scene, YELLOW_CHEST_NODE);
+        if (!extracted) {
+          console.warn(`[BoatSystem] node "${YELLOW_CHEST_NODE}" missing in ${YELLOW_CHEST_GLB}`);
+          return;
+        }
+        fitGroupToXZ(extracted, 0.75);
+        extracted.traverse((o) => {
+          if (!(o instanceof THREE.Mesh)) return;
+          o.castShadow = true;
+          o.receiveShadow = true;
+          const mats = Array.isArray(o.material) ? o.material : [o.material];
+          o.material = mats.map((m) => {
+            const c = m.clone();
+            if ('color' in c) (c as THREE.MeshStandardMaterial).color.setHex(YELLOW_CHEST_COLOR);
+            if ('emissive' in c) {
+              const em = c as THREE.MeshStandardMaterial;
+              em.emissive.setHex(0x3a2800);
+              em.emissiveIntensity = 0.15;
+            }
+            return c;
+          });
+          if (!Array.isArray(o.material) && mats.length === 1) {
+            o.material = (o.material as THREE.Material[])[0];
+          }
+        });
+        this.chestTemplate = extracted;
+        this.refreshAllChests();
+      } catch (e) {
+        console.warn('[BoatSystem] yellow chest preload failed', e);
+      }
+    })();
+    return this.chestPreload;
+  }
+
+  private refreshAllChests(): void {
+    for (const boat of this.boats) {
+      if (boat.group.getObjectByName(`BoatChest:${boat.id}`)) continue;
+      this.attachChest(boat);
+    }
   }
 
   spawn(opts: BoatOpts): string {
@@ -123,7 +183,12 @@ export class BoatSystem {
     // built above (hull, bow, seat) inherit this in one walk.
     setLayerRecursive(group, LAYERS.WORLD);
 
-    this.boats.push({
+    const hasCabin = opts.hasCabin ?? false;
+    const chestOffset = hasCabin
+      ? new THREE.Vector3(0, 0.55, 0.35)
+      : new THREE.Vector3(0.55, 0.6, -1.1);
+
+    const boat: Boat = {
       id,
       group,
       yaw: opts.yaw ?? 0,
@@ -133,8 +198,20 @@ export class BoatSystem {
       drag:     DEFAULTS.drag,
       turnRate: DEFAULTS.turnRate,
       seatOffset: new THREE.Vector3(0, 1.05, -0.3),
-    });
+      hasCabin,
+      chestOffset,
+    };
+    this.boats.push(boat);
+    this.attachChest(boat);
     return id;
+  }
+
+  private attachChest(boat: Boat): void {
+    if (!this.chestTemplate) return;
+    const chest = this.chestTemplate.clone(true);
+    chest.name = `BoatChest:${boat.id}`;
+    chest.position.copy(boat.chestOffset);
+    boat.group.add(chest);
   }
 
   /** Try to mount the player onto the nearest boat within `range` metres. */
@@ -239,7 +316,7 @@ export class BoatSystem {
     if (this.player) {
       let label: string | null = null;
       if (this.mountedBoatId) {
-        label = 'Press E to Disembark';
+        label = 'Press E to Disembark · Tab for Boat Storage';
       } else {
         const p = this.player.position;
         for (const b of this.boats) {
@@ -256,6 +333,11 @@ export class BoatSystem {
   }
 
   isMounted(): boolean {
+    return this.mountedBoatId !== null;
+  }
+
+  /** True when the player is piloting a boat (boat storage UI is available). */
+  canAccessBoatStorage(): boolean {
     return this.mountedBoatId !== null;
   }
 

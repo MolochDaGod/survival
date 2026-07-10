@@ -16,6 +16,7 @@
  */
 import * as THREE from 'three';
 import { createGLTFLoader } from '@/game/loaders/createGLTFLoader';
+import { extractGltfSubnode, fitGroupToXZ, parseGltfPath } from '@/game/loaders/extractGltfSubnode';
 import { LAYERS } from '../Layers';
 
 /**
@@ -52,13 +53,22 @@ export type BuildingPieceId =
   | 'mb_chest'
   | 'mb_bookcase'
   | 'mb_bench'
-  | 'mb_lantern';
+  | 'mb_lantern'
+  // ── low_poly farm / village wood props (sub-nodes in a single GLB) ────────
+  | 'wt_fence'
+  | 'wt_bucket'
+  | 'wt_ladder'
+  | 'wt_box'
+  | 'wt_barrel'
+  | 'wt_sign';
 
 interface PieceDef {
   id: BuildingPieceId;
   glbPath: string;
   /** Preferred Y offset above the grid plane (used for floors/roofs). */
   yOffset: number;
+  /** Target longest XZ extent in metres (defaults to GRID). */
+  fitSize?: number;
 }
 
 /** Grid cell size in metres. Standard for survival-game modular kits. */
@@ -96,6 +106,14 @@ const PIECES: Record<BuildingPieceId, PieceDef> = {
   mb_bookcase: { id: 'mb_bookcase', glbPath: 'models/props/fantasy_megakit/Exports/glTF/Bookcase_2.gltf', yOffset: 0 },
   mb_bench: { id: 'mb_bench', glbPath: 'models/props/fantasy_megakit/Exports/glTF/Bench.gltf', yOffset: 0 },
   mb_lantern: { id: 'mb_lantern', glbPath: 'models/props/fantasy_megakit/Exports/glTF/Lantern_Wall.gltf', yOffset: 0 },
+
+  // low_poly farm / village wood pack — meshes extracted by node name (# suffix).
+  wt_fence:  { id: 'wt_fence',  glbPath: 'models/props/low_poly_farm_wood/pack.glb#Fence',   yOffset: 0, fitSize: 4.0 },
+  wt_bucket: { id: 'wt_bucket', glbPath: 'models/props/low_poly_farm_wood/pack.glb#Bucket',  yOffset: 0, fitSize: 1.2 },
+  wt_ladder: { id: 'wt_ladder', glbPath: 'models/props/low_poly_farm_wood/pack.glb#Ladder',  yOffset: 0, fitSize: 2.5 },
+  wt_box:    { id: 'wt_box',    glbPath: 'models/props/low_poly_farm_wood/pack.glb#Box',     yOffset: 0, fitSize: 1.5 },
+  wt_barrel: { id: 'wt_barrel', glbPath: 'models/props/low_poly_farm_wood/pack.glb#Barrel',  yOffset: 0, fitSize: 1.5 },
+  wt_sign:   { id: 'wt_sign',   glbPath: 'models/props/low_poly_farm_wood/pack.glb#Pointer', yOffset: 0, fitSize: 2.0 },
 };
 
 export interface PlacedPieceData {
@@ -126,6 +144,8 @@ export class ModularBuilding {
   private sourceCache = new Map<BuildingPieceId, THREE.Group>();
   /** Auto-computed uniform scale per piece so pieces fit the grid. */
   private scaleCache = new Map<BuildingPieceId, number>();
+  /** Shared loaded GLTF roots keyed by url (before #node extraction). */
+  private gltfRootCache = new Map<string, THREE.Group>();
 
   /** Currently selected blueprint, or null when build mode is off. */
   private activePieceId: BuildingPieceId | null = null;
@@ -177,14 +197,22 @@ export class ModularBuilding {
   private async loadPiece(def: PieceDef, basePath: string): Promise<void> {
     if (this.sourceCache.has(def.id)) return;
     try {
-      const gltf = await this.loader.loadAsync(`${basePath}${def.glbPath}`);
-      const group = gltf.scene;
-      // Auto-scale so the piece's longest XZ side fits the grid cell.
-      const bbox = new THREE.Box3().setFromObject(group);
-      const size = new THREE.Vector3();
-      bbox.getSize(size);
-      const longest = Math.max(size.x, size.z);
-      const scale = longest > 0.001 ? GRID / longest : 1;
+      const { url, nodeName } = parseGltfPath(def.glbPath);
+      const fullUrl = `${basePath}${url}`;
+      let root = this.gltfRootCache.get(fullUrl);
+      if (!root) {
+        const gltf = await this.loader.loadAsync(fullUrl);
+        root = gltf.scene;
+        this.gltfRootCache.set(fullUrl, root);
+      }
+      const group = nodeName
+        ? extractGltfSubnode(root, nodeName)
+        : root.clone(true);
+      if (!group) {
+        console.warn(`[ModularBuilding] node "${nodeName}" not found in ${url}`);
+        return;
+      }
+      const scale = fitGroupToXZ(group, def.fitSize ?? GRID);
       this.scaleCache.set(def.id, scale);
       this.sourceCache.set(def.id, group);
     } catch (e) {
@@ -428,5 +456,6 @@ export class ModularBuilding {
     // them. Three's renderer handles GPU resource cleanup on its own dispose.
     this.sourceCache.clear();
     this.scaleCache.clear();
+    this.gltfRootCache.clear();
   }
 }

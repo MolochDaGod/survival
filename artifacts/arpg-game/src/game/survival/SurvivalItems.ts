@@ -272,6 +272,27 @@ export const SURVIVAL_ITEMS: Record<string, SurvivalItemDef> = {
   sp_windmill:     { id: 'sp_windmill',     name: 'Wind Turbine',     category: 'structure', icon: '🌬️', weight: 20.0, stack: 1, modelPath: '/models/props/steampunk/scene.gltf#Eolien',          description: 'Generates power from wind. Network sector utility.', placeable: true },
   sp_bicycle:      { id: 'sp_bicycle',      name: 'Bicycle',          category: 'misc',      icon: '🚲', weight: 12.0, stack: 1, modelPath: '/models/props/steampunk/scene.gltf#Bicycle',        description: 'Rideable. 2× movement speed on roads.' },
 
+  // ===== LOW-POLY FARM / VILLAGE WOOD PROPS (buildable camp decorations) =====
+  // Meshes live in a single GLB; ModularBuilding extracts each by node name.
+  wt_fence:  { id: 'wt_fence',  name: 'Wood Fence',     category: 'structure', icon: '🚧', weight: 4.0, stack: 8,  modelPath: '/models/props/low_poly_farm_wood/pack.glb#Fence',   description: 'Low-poly fence segment. Snaps to the 4 m build grid.', placeable: true },
+  wt_bucket: { id: 'wt_bucket', name: 'Wood Bucket',    category: 'structure', icon: '🪣', weight: 1.0, stack: 4,  modelPath: '/models/props/low_poly_farm_wood/pack.glb#Bucket',  description: 'Catch rainwater or store small goods.', placeable: true },
+  wt_ladder: { id: 'wt_ladder', name: 'Wood Ladder',    category: 'structure', icon: '🪜', weight: 3.0, stack: 4,  modelPath: '/models/props/low_poly_farm_wood/pack.glb#Ladder',  description: 'Climb to a second storey or cliff ledge.', placeable: true },
+  wt_box:    { id: 'wt_box',    name: 'Wood Crate',     category: 'structure', icon: '📦', weight: 3.0, stack: 6,  modelPath: '/models/props/low_poly_farm_wood/pack.glb#Box',     description: 'Sturdy supply crate for camp storage.', placeable: true },
+  wt_barrel: { id: 'wt_barrel', name: 'Wood Barrel',    category: 'structure', icon: '🛢️', weight: 4.0, stack: 4,  modelPath: '/models/props/low_poly_farm_wood/pack.glb#Barrel',  description: 'Storage barrel — holds water or dry goods.', placeable: true },
+  wt_sign:   { id: 'wt_sign',   name: 'Wood Signpost',  category: 'structure', icon: '🪧', weight: 2.0, stack: 6,  modelPath: '/models/props/low_poly_farm_wood/pack.glb#Pointer', description: 'Directional sign for roads and camps.', placeable: true },
+
+  // Boat inventory prop — yellow-tinted crate mesh; placed in cabin or on deck.
+  boat_yellow_chest: {
+    id: 'boat_yellow_chest',
+    name: 'Boat Storage Chest',
+    category: 'misc',
+    icon: '🟨',
+    weight: 0,
+    stack: 1,
+    modelPath: '/models/props/low_poly_farm_wood/pack.glb#Box',
+    description: 'Yellow supply chest mounted on a boat. Access with Tab while aboard.',
+  },
+
   // ===== PLANTS (foragable, not directly inventory) =====
   bush_blueberry:{ id: 'bush_blueberry',name:'Blueberry Bush',category:'plant', icon:'🫐', weight:0, stack:1, modelPath:`${M_ITEM}/BlueberryBush.fbx`, description:'Forage berries.' },
 };
