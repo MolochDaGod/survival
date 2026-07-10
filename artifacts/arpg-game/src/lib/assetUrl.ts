@@ -40,3 +40,15 @@ export function assetUrl(path: string): string {
   }
   return `${CDN_BASE}/${clean}`;
 }
+
+/**
+ * Resolve a root-relative public file (UI images, landing art) with the Vite
+ * BASE_URL prefix so subpath deploys (`/arpg-game/`) work in dev and prod.
+ */
+export function publicUrl(path: string): string {
+  const base = import.meta.env.BASE_URL ?? '/';
+  const clean = path.startsWith('/') ? path.slice(1) : path;
+  return `${base}${clean}`;
+}
+
+export { resolveGameIcon } from './resolveGameIcon';
