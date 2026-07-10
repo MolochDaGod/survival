@@ -65,8 +65,8 @@ const DEFAULT_VFX: SeedVfx = {
 
 const GRID_SPAN = 20000 / 3;
 const gridCenter = (col: number, row: number) => ({
-  x: -10000 + GRID_SPAN * 0.5 + col * GRID_SPAN,
-  z: -10000 + GRID_SPAN * 0.5 + row * GRID_SPAN,
+  centerX: -10000 + GRID_SPAN * 0.5 + col * GRID_SPAN,
+  centerZ: -10000 + GRID_SPAN * 0.5 + row * GRID_SPAN,
 });
 
 function mapUrl(filename: string): string {
