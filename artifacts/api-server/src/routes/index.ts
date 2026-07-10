@@ -12,6 +12,7 @@ import statsRouter from "./stats";
 import { engineRouter } from "./engine";
 import { masksRouter } from "./masks";
 import { assistantRouter } from "./assistant";
+import { worldRouter } from "./world";
 
 const router: IRouter = Router();
 
@@ -28,5 +29,6 @@ router.use("/stats", statsRouter);
 router.use("/engine", engineRouter);
 router.use("/masks", masksRouter);
 router.use("/assistant", assistantRouter);
+router.use("/world", worldRouter);
 
 export default router;

@@ -42,4 +42,8 @@ export interface GameState {
   score: number;
   wave: number;
   gameStarted: boolean;
+  /** Active 9-sector grid cell (island-3d flow). */
+  sectorTitle?: string;
+  sectorObjective?: string;
+  sectorBeatAge?: number;
 }

@@ -6,6 +6,7 @@ import { NoiseSphereVFX, NoiseSpherePreset } from './NoiseSphereVFX';
 import { SpellFlare, FlareType } from './vfx/SpellFlare';
 import { IceShardVFX } from './vfx/IceShardVFX';
 import { FireBillboardVFX } from './vfx/FireBillboardVFX';
+import type { CombatVfxBridge } from './CombatVfxBridge';
 
 export class AbilitySystem {
   scene: THREE.Scene;
@@ -23,6 +24,8 @@ export class AbilitySystem {
   private _fireballBillboards = new Map<THREE.Mesh, THREE.Mesh>();
 
   onAbilityUsed: ((id: string, remaining: number) => void) | null = null;
+  /** Albion-style telegraph + spline spells — set by GameEngine after boot. */
+  vfxBridge: CombatVfxBridge | null = null;
 
   constructor(scene: THREE.Scene, camera: THREE.Camera) {
     this.scene  = scene;
@@ -135,6 +138,18 @@ export class AbilitySystem {
 
   private doFireball(pos: THREE.Vector3, fwd: THREE.Vector3, damage: number, onDamage: (d: number, aoe: boolean) => void) {
     const spawnPos = pos.clone().add(new THREE.Vector3(0, 1.4, 0));
+    const targetPos = pos.clone().add(fwd.clone().multiplyScalar(14)).add(new THREE.Vector3(0, 0.5, 0));
+
+    if (this.vfxBridge) {
+      this.vfxBridge.showCircleTelegraph(targetPos, 2.8, 0.55);
+      this.vfxBridge.spawnSplineSpell(spawnPos, targetPos, {
+        damage,
+        speed: 22,
+        color: this.vfxBridge.getMagicColor(),
+      });
+      setTimeout(() => onDamage(damage, true), 520);
+      return;
+    }
 
     // Shader fire sphere billboard — the projectile mesh IS the noise sphere
     const mesh = this.noiseSpheres.spawn(spawnPos, {
@@ -206,9 +221,11 @@ export class AbilitySystem {
   }
 
   private doIceSpike(pos: THREE.Vector3, fwd: THREE.Vector3, damage: number, onDamage: (d: number, aoe: boolean) => void) {
-    // Project forward to find impact point (6 m ahead, at ground level)
     const impactPos = pos.clone().add(fwd.clone().multiplyScalar(6));
-    impactPos.y = Math.max(pos.y - 0.5, 0.0);  // snap to ground
+    impactPos.y = Math.max(pos.y - 0.5, 0.0);
+    if (this.vfxBridge) {
+      this.vfxBridge.showCircleTelegraph(impactPos, 2.4, 0.45);
+    }
 
     // Ice shard burst (8 spikes + Voronoi frost disc)
     this.iceShards.burst(impactPos, 2.6, 8, 2.0);
@@ -227,6 +244,9 @@ export class AbilitySystem {
 
   private doLightningStrike(pos: THREE.Vector3, fwd: THREE.Vector3, damage: number, onDamage: (d: number, aoe: boolean) => void) {
     const strikePos = pos.clone().add(fwd.clone().multiplyScalar(8));
+    if (this.vfxBridge) {
+      this.vfxBridge.showCircleTelegraph(strikePos, 3.2, 0.4);
+    }
 
     // Lightning bolt visual
     const pts = [];

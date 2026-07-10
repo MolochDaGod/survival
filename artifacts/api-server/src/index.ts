@@ -3,6 +3,7 @@ import { WebSocketServer } from "ws";
 import app, { isOriginAllowed } from "./app";
 import { logger } from "./lib/logger";
 import { ensureCatalog } from "./lib/assetBridge";
+import { ensureWorldCatalog } from "./lib/worldCatalog";
 import { bootstrapStudioCatalog } from "./lib/assetStudioCatalog";
 import { handleWsConnection } from "./realtime/wsHandler";
 import { pool } from "@workspace/db";
@@ -48,6 +49,10 @@ server.listen(port, () => {
   // Probe D1 + ensure catalog schema in the background — never blocks boot.
   ensureCatalog(logger).catch((e) => {
     logger.error({ err: e }, "ensureCatalog threw unexpectedly");
+  });
+
+  ensureWorldCatalog(logger).catch((e) => {
+    logger.error({ err: e }, "ensureWorldCatalog threw unexpectedly");
   });
 
   // Warm the asset-studio catalog cache (snapshot in R2 → in-memory) so the

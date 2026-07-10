@@ -53,6 +53,8 @@ export interface SectorDef {
 }
 
 export const SECTOR_RADIUS_M = 2000;
+/** Safe-zone radius around Convergence Nexus (no hostile camps). */
+export const ARENA_SAFE_RADIUS = 800;
 
 export const SECTORS: SectorDef[] = [
   {
@@ -146,6 +148,82 @@ export const SECTORS: SectorDef[] = [
     hostileTypes: ['bandit_scout', 'rogue_trader', 'signal_drone', 'wild_dog_pack'],
     fauna: ['deer', 'rabbit', 'pheasant', 'wild_horse'],
     resources: ['timber_log', 'wild_herbs', 'flint_outcrop', 'clay_deposit', 'wheat_field'],
+  },
+  {
+    id: 'frostbite_fringe',
+    name: 'Frostbite Fringe',
+    owner: 'keepers',
+    center: { x: -6667, z: -6667 },
+    radius: SECTOR_RADIUS_M * 0.85,
+    biomeBias: 'highland',
+    glbMap: 'chicken_gun_western_reupload.glb',
+    description: 'NW wildlands — permafrost ridges bleeding off the Cathedral Highlands.',
+    lore: 'The fringe was never fully hallowed. Keeper patrols mark prayer stones here, but the ice remembers older winters. Scavengers who wander too far north return frostbitten or not at all.',
+    pois: [
+      { name: 'Frostbite Hollow', type: 'camp', offset: { x: 420, z: -280 }, description: 'Keeper outpost camp — herbalists and ice harvest.' },
+      { name: 'Glacier Scar', type: 'harvest', offset: { x: -640, z: 520 }, description: 'Permafrost veins and frozen ponds.' },
+      { name: 'Wolf Den', type: 'dungeon', offset: { x: 280, z: 740 }, description: 'Ice cave — wolves, bats, cave troll.' },
+    ],
+    hostileTypes: ['highland_wolf', 'skeleton_swordman', 'cave_troll'],
+    fauna: ['mountain_goat', 'cave_bat', 'black_bear'],
+    resources: ['permafrost_ore', 'iron_ore', 'crystal_node', 'frozen_pond', 'wild_herbs'],
+  },
+  {
+    id: 'stormbreak_scrub',
+    name: 'Stormbreak Scrub',
+    owner: 'tech_scavengers',
+    center: { x: 6667, z: -6667 },
+    radius: SECTOR_RADIUS_M * 0.85,
+    biomeBias: 'wreckage',
+    glbMap: 'chicken_gun_town2f_reupload.glb',
+    description: 'NE scrubland — salvage windrows between junkyard proper and the coast.',
+    lore: 'When the coastal storms break, wreckage washes into these scrub fields. Scavenger forward camps strip anything that still sparks. The law here is jury-rigged and loud.',
+    pois: [
+      { name: 'Stormbreak Relay', type: 'camp', offset: { x: -380, z: 420 }, description: 'Forward salvage camp with ammo bench.' },
+      { name: 'Wire Fields', type: 'harvest', offset: { x: 620, z: -240 }, description: 'Scrap piles, wire spools, copper.' },
+      { name: 'Drone Nest', type: 'dungeon', offset: { x: -520, z: -680 }, description: 'Rogue drone hive in a collapsed shed.' },
+    ],
+    hostileTypes: ['rogue_drone', 'miner', 'masked', 'scrap_golem'],
+    fauna: ['rat_swarm', 'crow_flock', 'junkyard_dog'],
+    resources: ['scrap_pile', 'wire_spool', 'copper_deposit', 'oil_drum', 'flint_outcrop'],
+  },
+  {
+    id: 'silt_marshes',
+    name: 'Silt Marshes',
+    owner: 'forgotten',
+    center: { x: -6667, z: 6667 },
+    radius: SECTOR_RADIUS_M * 0.85,
+    biomeBias: 'coast',
+    glbMap: 'chicken_gun_fruzer_-_encampment.glb',
+    description: 'SW tidal flats — Forgotten reed camps between Switchyard and Drowned Quarter.',
+    lore: 'The marshes swallow roads. Forgotten fishers move on stilts, coating blades in tide toxins. Every footstep sinks — every grudge lingers.',
+    pois: [
+      { name: 'Reed Stilt Camp', type: 'camp', offset: { x: 340, z: -520 }, description: 'Tide fishing camp with toxicologist.' },
+      { name: 'Salt Pan', type: 'harvest', offset: { x: -720, z: 180 }, description: 'Salt, kelp, driftwood nodes.' },
+      { name: 'Silt Maw', type: 'dungeon', offset: { x: 480, z: 640 }, description: 'Flooded tunnel — lurkers and poison frogs.' },
+    ],
+    hostileTypes: ['marsh_lurker', 'poison_frog', 'drowned_dead', 'tide_caller'],
+    fauna: ['crab', 'eel', 'saltwater_croc'],
+    resources: ['driftwood', 'salt_deposit', 'kelp_bed', 'wild_herbs', 'coral_node'],
+  },
+  {
+    id: 'convergence_nexus',
+    name: 'Convergence Nexus',
+    owner: 'network',
+    center: { x: 0, z: 0 },
+    radius: ARENA_SAFE_RADIUS,
+    biomeBias: 'town',
+    glbMap: 'chicken_gun_mistytown.glb',
+    description: 'Neutral encampment — five faction roads converge at the world origin.',
+    lore: 'Before the factions carved the map into territories, traders met here. The Nexus remains the only ground where no warband may claim blood-debt without every faction answering.',
+    pois: [
+      { name: 'Encampment', type: 'landmark', offset: { x: 0, z: 0 }, description: 'Player safe start — vendors, quest board, deploy gate.' },
+      { name: 'Deploy Gate', type: 'gate', offset: { x: 0, z: 42 }, description: 'Sail or march to any of the nine sectors.' },
+      { name: 'Quartermaster', type: 'vendor', offset: { x: -24, z: 18 }, description: 'Starter kits, maps, rations.' },
+    ],
+    hostileTypes: [],
+    fauna: ['rabbit', 'deer', 'pheasant'],
+    resources: ['wild_herbs', 'timber_log'],
   },
   {
     id: 'drowned_quarter',

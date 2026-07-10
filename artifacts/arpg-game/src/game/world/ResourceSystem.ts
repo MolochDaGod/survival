@@ -16,6 +16,7 @@ import { groundY } from '../GroundSampler';
 
 import { getSpatialTracker, EntityType, TrackedEntity } from '../SpatialTracker';
 import { getFogOfWar } from './FogOfWar';
+import { activeHarvestWeightAt } from '../../data/sectorCanon';
 
 // String key → Biome enum (const enum so we reference the imported symbols).
 const BIOME_KEY_MAP: Record<string, Biome> = {
@@ -240,7 +241,10 @@ export class ResourceSystem {
       // How many nodes should appear in this chunk?
       const chunkArea   = chunkSize * chunkSize;          // m²
       const baseCount   = (def.density / 1_000_000) * chunkArea; // density per m²
-      const count       = Math.floor(baseCount + seededRand(chunkX, chunkZ, def.id.length) * 0.5);
+      const wxMid       = originX + chunkSize * 0.5;
+      const wzMid       = originZ + chunkSize * 0.5;
+      const sectorWt    = activeHarvestWeightAt(wxMid, wzMid, def.id);
+      const count       = Math.floor((baseCount * sectorWt) + seededRand(chunkX, chunkZ, def.id.length) * 0.5);
 
       for (let i = 0; i < count; i++) {
         const rx    = seededRand(chunkX * 31 + i, chunkZ, i);

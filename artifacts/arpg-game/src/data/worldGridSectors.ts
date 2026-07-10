@@ -36,13 +36,13 @@ function gridCenter(col: number, row: number): { x: number; z: number } {
 
 /** Canonical 9-sector layout (north row = row 0). */
 export const WORLD_GRID_SECTORS: WorldGridSector[] = [
-  { id: 'grid_nw_wilds',      name: 'Frostbite Fringe',    col: 0, row: 0, center: gridCenter(0, 0), owner: 'keepers',         territoryId: 'cathedral_highlands' },
+  { id: 'grid_nw_wilds',      name: 'Frostbite Fringe',    col: 0, row: 0, center: gridCenter(0, 0), owner: 'keepers',         territoryId: 'frostbite_fringe' },
   { id: 'grid_north_uplands', name: 'Cathedral Highlands', col: 1, row: 0, center: gridCenter(1, 0), owner: 'keepers',         territoryId: 'cathedral_highlands' },
-  { id: 'grid_ne_scrub',      name: 'Stormbreak Scrub',    col: 2, row: 0, center: gridCenter(2, 0), owner: 'tech_scavengers', territoryId: 'junkyards' },
+  { id: 'grid_ne_scrub',      name: 'Stormbreak Scrub',    col: 2, row: 0, center: gridCenter(2, 0), owner: 'tech_scavengers', territoryId: 'stormbreak_scrub' },
   { id: 'grid_west_rail',     name: 'The Switchyard',      col: 0, row: 1, center: gridCenter(0, 1), owner: 'network',         territoryId: 'switchyard' },
-  { id: 'grid_convergence',   name: 'Convergence Nexus',   col: 1, row: 1, center: gridCenter(1, 1), owner: null, isSafeZone: true },
+  { id: 'grid_convergence',   name: 'Convergence Nexus',   col: 1, row: 1, center: gridCenter(1, 1), owner: null, isSafeZone: true, territoryId: 'convergence_nexus' },
   { id: 'grid_east_junk',     name: 'The Junkyards',       col: 2, row: 1, center: gridCenter(2, 1), owner: 'tech_scavengers', territoryId: 'junkyards' },
-  { id: 'grid_sw_marsh',      name: 'Silt Marshes',        col: 0, row: 2, center: gridCenter(0, 2), owner: 'forgotten',       territoryId: 'drowned_quarter' },
+  { id: 'grid_sw_marsh',      name: 'Silt Marshes',        col: 0, row: 2, center: gridCenter(0, 2), owner: 'forgotten',       territoryId: 'silt_marshes' },
   { id: 'grid_south_pit',     name: 'The Pit',             col: 1, row: 2, center: gridCenter(1, 2), owner: 'hollow_lords',    territoryId: 'the_pit' },
   { id: 'grid_se_drowned',    name: 'Drowned Quarter',     col: 2, row: 2, center: gridCenter(2, 2), owner: 'forgotten',       territoryId: 'drowned_quarter' },
 ];

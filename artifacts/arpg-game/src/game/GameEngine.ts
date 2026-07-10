@@ -50,10 +50,19 @@ import { MuzzleFlash } from './vfx/MuzzleFlash';
 import { ImpactSparks } from './vfx/ImpactSparks';
 import { SlashVFX } from './vfx/SlashVFX';
 import { ShockwaveVFX } from './vfx/ShockwaveVFX';
+import { TelegraphField } from './vfx/TelegraphField';
+import { SplineProjectileField } from './vfx/SplineProjectileField';
+import { SlashWaveField } from './vfx/SlashWaveField';
+import { SectorDeployment } from './world/SectorDeployment';
+import type { CombatVfxBridge } from './CombatVfxBridge';
 import { SurvivorSpawner, type SurvivorSpawnerSnapshot } from './township/SurvivorSpawner';
 import { getQuestSystem } from './quest/QuestSystem';
 import { createIntroQuest, createSectorQuests, ENCAMPMENT_NPCS } from './quest/EncampmentIntro';
 import { EnemyCampSystem } from './world/EnemyCampSystem';
+import {
+  applyOutdoorEnvironment,
+  loadPolyHavenEnvironment,
+} from './world/polyhaven/PolyHavenEnvironment';
 import { getMilestoneEffects, mergeEffectBags, readEffect, type MilestoneEffectBag } from '@workspace/game-systems/perks';
 import { sumPassives, getUnlockedPerks, getUnlockedCombos, type StatTrack } from './progression/PerkSystem';
 
@@ -166,6 +175,11 @@ export class GameEngine {
   private impactSparks!: ImpactSparks;
   private slashVFX!: SlashVFX;
   private shockwaveVFX!: ShockwaveVFX;
+  private telegraphField!: TelegraphField;
+  private splineField!: SplineProjectileField;
+  private slashWaveField!: SlashWaveField;
+  private sectorDeployment = new SectorDeployment();
+  private sectorBeatTimer = 0;
   private bulletTemplate: THREE.Object3D | null = null;
   assetsLoaded: boolean = false;
 
@@ -354,6 +368,13 @@ export class GameEngine {
       // gameplay starts. GLB progress is reported via assetManager.onProgress.
       await this.sceneBuilder.buildEnvironment();
 
+      const outdoor = await loadPolyHavenEnvironment(this.renderer);
+      if (outdoor) {
+        applyOutdoorEnvironment(this.scene, outdoor, { backgroundBlend: 0.5 });
+        this.assetManager.envMap = outdoor.envMap;
+        console.info('[GameEngine] Poly Haven outdoor HDR IBL active');
+      }
+
       // With both the map and the physics world ready, bake static trimesh
       // colliders against every mesh in the loaded starter map root. This
       // is what makes "ground", "wall", "tree" actually mean something to
@@ -372,6 +393,19 @@ export class GameEngine {
       this.impactSparks = new ImpactSparks(this.scene);
       this.slashVFX = new SlashVFX(this.scene);
       this.shockwaveVFX = new ShockwaveVFX(this.scene);
+      this.telegraphField = new TelegraphField(this.scene);
+      this.splineField = new SplineProjectileField(this.scene);
+      this.slashWaveField = new SlashWaveField(this.scene, (pos, color, scale) => {
+        this.impactSparks?.burst(pos, null, color, scale);
+      });
+      this.sectorDeployment.attachFog(this.fogSystem);
+      this.sectorDeployment.onSectorEnter = (beat) => {
+        this.gameState.sectorTitle = beat.title;
+        this.gameState.sectorObjective = beat.objective;
+        this.sectorBeatTimer = 5.5;
+        this.onGameStateUpdate?.({ ...this.gameState });
+      };
+      this.abilitySystem.vfxBridge = this._buildCombatVfxBridge();
       getBulletTemplate().then(tmpl => { this.bulletTemplate = tmpl; }).catch(() => { });
       this.debugPanel = new DebugPanel({
         scene: this.scene,
@@ -932,6 +966,47 @@ export class GameEngine {
 
   updateBullets(dt: number) {
     this.projectileSystem.update(dt, this.camera);
+    this.telegraphField?.update(dt);
+    const splineImpacts = this.splineField?.update(dt, this.camera) ?? [];
+    for (const imp of splineImpacts) {
+      this.shockwaveVFX?.fire(imp.point, {
+        radius: imp.radius,
+        color: this.sectorDeployment.getVfxPalette().impact,
+      });
+      this.combatFX.shake(0.12, 0.14);
+      if (imp.owner === 'player' && this.enemyManager) {
+        for (const enemy of this.enemyManager.enemies) {
+          if (enemy.state === 'dead') continue;
+          const d = enemy.mesh.position.distanceTo(imp.point);
+          if (d <= imp.radius + 1.2) {
+            enemy.health -= imp.damage;
+            this.damageNumbers?.spawn(enemy.mesh.position, imp.damage);
+            if (enemy.health <= 0) this.enemyManager.killEnemy(enemy);
+          }
+        }
+      }
+    }
+    const waveHits = this.slashWaveField?.update(
+      dt,
+      this.enemyManager
+        ? this.enemyManager.enemies
+            .filter(e => e.state !== 'dead')
+            .map((e, i) => ({
+              id: `e_${i}`,
+              position: e.mesh.position,
+              alive: true,
+            }))
+        : [],
+    ) ?? [];
+    for (const wh of waveHits) {
+      if (!this.enemyManager) continue;
+      const idx = parseInt(wh.enemyId.replace('e_', ''), 10);
+      const enemy = this.enemyManager.enemies[idx];
+      if (!enemy || enemy.state === 'dead') continue;
+      enemy.health -= wh.damage;
+      this.damageNumbers?.spawn(enemy.mesh.position, wh.damage);
+      if (enemy.health <= 0) this.enemyManager.killEnemy(enemy);
+    }
     this.muzzleFlash?.update(dt);
     this.impactSparks?.update(dt);
   }
@@ -1025,6 +1100,16 @@ export class GameEngine {
 
     // ── Fog aura + gloom ─────────────────────────────────────────────────────
     this.fogSystem.update(dt, this.player.position, this.camera.position, nowSec);
+
+    // ── 9-sector deployment — fog palette, VFX colors, UI beats ─────────────
+    this.sectorDeployment.update(this.player.position.x, this.player.position.z);
+    if (this.sectorBeatTimer > 0) {
+      this.sectorBeatTimer = Math.max(0, this.sectorBeatTimer - dt);
+      this.gameState.sectorBeatAge = this.sectorBeatTimer;
+      if (this.sectorBeatTimer === 0) {
+        this.gameState.sectorBeatAge = 0;
+      }
+    }
 
     // ── Rain (early-outs when WeatherSystem currently has it disabled) ──────
     this.rainSystem.update(dt, this.camera.position, this.player.position.y);
@@ -1245,8 +1330,16 @@ export class GameEngine {
             const slashPos = weaponBone
               ? weaponBone.getWorldPosition(new THREE.Vector3())
               : this.player.position.clone().add(fwd.clone().multiplyScalar(1.5));
-            const slashColor = isHeavy ? 0xff6600 : combo.isFinisher ? 0xffcc00 : 0xffffff;
+            const pal = this.sectorDeployment.getVfxPalette();
+            const slashColor = isHeavy ? pal.meleeSlash : combo.isFinisher ? pal.impact : pal.meleeSlash;
             this.slashVFX.fire(slashPos, slashColor, isHeavy ? 1.4 : 1.0);
+            if (combo.isFinisher && this.slashWaveField) {
+              this.slashWaveField.spawn(slashPos, fwd, {
+                damage: this.player.getAttackDamage() * combo.damageMul * 0.65,
+                color: pal.meleeSlash,
+                range: this.player.getAttackRange() * 2.2,
+              });
+            }
           }
 
           // Hitstop only on heavy weapons or the finisher of the combo —
@@ -1551,6 +1644,36 @@ export class GameEngine {
     this.player.moveSpeed = this.player['baseMoveSpeed'] * (1 + speedBonus);
   }
 
+  private _buildCombatVfxBridge(): CombatVfxBridge {
+    const engine = this;
+    return {
+      getTelegraphColor: () => engine.sectorDeployment.getVfxPalette().telegraph,
+      getMagicColor: () => engine.sectorDeployment.getVfxPalette().magicCore,
+      getArcScale: () => engine.sectorDeployment.getVfxPalette().arcScale,
+      showCircleTelegraph(origin, radius, duration) {
+        engine.telegraphField?.showCircle(
+          origin,
+          radius,
+          duration,
+          engine.sectorDeployment.getVfxPalette().telegraph,
+        );
+      },
+      spawnSplineSpell(origin, target, opts) {
+        const pal = engine.sectorDeployment.getVfxPalette();
+        engine.splineField?.spawn({
+          origin,
+          target,
+          color: opts.color ?? pal.magicCore,
+          speed: opts.speed ?? 22,
+          damage: opts.damage,
+          arcScale: pal.arcScale,
+          owner: 'player',
+          scale: 1,
+        });
+      },
+    };
+  }
+
   dispose() {
     getSaveGameService().stopAutoSave();
     cancelAnimationFrame(this.animFrameId);
@@ -1575,6 +1698,9 @@ export class GameEngine {
     if (this.mapColliders) { this.mapColliders.dispose(); this.mapColliders = null; }
     if (this.physics) { this.physics.dispose(); this.physics = null; }
     this.abilitySystem.dispose();
+    this.telegraphField?.dispose();
+    this.splineField?.dispose();
+    this.slashWaveField?.dispose();
     if (this.enemyManager) this.enemyManager.dispose();
     if (this.lootManager) this.lootManager.dispose();
     if (this.damageNumbers) this.damageNumbers.dispose();

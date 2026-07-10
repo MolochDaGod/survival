@@ -23,6 +23,7 @@ import styles from './GameCanvas.module.css';
 import { BuildMenu } from './BuildMenu';
 import { MainPanel } from './MainPanel';
 import { CoopMenu } from './CoopMenu';
+import { loadWorldCatalog } from '../data/worldCatalogClient';
 import { ItemDef, ItemStats, InventoryItem, EquipSlot } from '../game/Items';
 import { EquippedSet } from '../game/Inventory';
 import { SURVIVAL_ITEMS } from '../game/survival/SurvivalItems';
@@ -161,6 +162,7 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ characterConfig = DEFAUL
   const [interactionPrompt, setInteractionPrompt] = useState<string | null>(null);
 
   useEffect(() => {
+    loadWorldCatalog('').catch(() => {});
     if (!canvasRef.current) return;
     if (!checkWebGL()) {
       setWebglError(true);
@@ -913,6 +915,31 @@ className = { styles.adminBtn }
   <div className={ styles.interactionPrompt }>
     <span className={ styles.interactionKey }> { parsePromptKey(interactionPrompt) } </span>
           <span>{stripPromptKey(interactionPrompt)}</span>
+        </div>
+      )}
+
+      {gameState.gameStarted && !gameState.mainMenuOpen && (gameState.sectorBeatAge ?? 0) > 0 && gameState.sectorTitle && (
+        <div
+          style={{
+            position: 'absolute',
+            top: '12%',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            textAlign: 'center',
+            pointerEvents: 'none',
+            opacity: Math.min(1, (gameState.sectorBeatAge ?? 0) / 1.2),
+            transition: 'opacity 0.3s',
+            zIndex: 20,
+          }}
+        >
+          <div style={{ fontFamily: 'Cinzel, serif', fontSize: '1.1rem', color: '#ffd700', textShadow: '0 2px 8px #000' }}>
+            {gameState.sectorTitle}
+          </div>
+          {gameState.sectorObjective && (
+            <div style={{ fontSize: '0.8rem', color: '#c8d0e0', marginTop: 4, textShadow: '0 1px 4px #000' }}>
+              {gameState.sectorObjective}
+            </div>
+          )}
         </div>
       )}
 

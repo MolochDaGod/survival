@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { worldHeight, getBiome, getBiomeColor, getSettlements, WORLD_HALF } from '../game/world/WorldGen';
 import { SECTORS, TRAVEL_ROUTES, getAllPOIs } from '../data/sectors';
 import { FACTIONS } from '../data/factions';
+import { WORLD_GRID_SECTORS, GRID_SECTOR_SPAN_M } from '../data/worldGridSectors';
 
 // ─── Map generation (lazy, cached after first render) ────────────────────────
 
@@ -97,9 +98,40 @@ export function WorldMapOverlay({ player, onClose }: WorldMapOverlayProps) {
         ctx.fillStyle = vignette;
         ctx.fillRect(0, 0, SIZE, SIZE);
 
-        // Faction territory discs (rendered under markers and labels)
         const worldToPx = (w: number) => (w + WORLD_HALF) / (WORLD_HALF * 2) * SIZE;
         const radiusToPx = (r: number) => r / (WORLD_HALF * 2) * SIZE;
+
+        // 9-sector macro grid (island-3d layout)
+        const gridSpanPx = GRID_SECTOR_SPAN_M / (WORLD_HALF * 2) * SIZE;
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = 'rgba(255,255,255,0.12)';
+        for (let col = 0; col <= 3; col++) {
+          const x = worldToPx(-WORLD_HALF + col * GRID_SECTOR_SPAN_M);
+          ctx.beginPath();
+          ctx.moveTo(x, 0);
+          ctx.lineTo(x, SIZE);
+          ctx.stroke();
+        }
+        for (let row = 0; row <= 3; row++) {
+          const y = worldToPx(-WORLD_HALF + row * GRID_SECTOR_SPAN_M);
+          ctx.beginPath();
+          ctx.moveTo(0, y);
+          ctx.lineTo(SIZE, y);
+          ctx.stroke();
+        }
+        WORLD_GRID_SECTORS.forEach(cell => {
+          const cx = worldToPx(cell.center.x);
+          const cy = worldToPx(cell.center.z);
+          const color = cell.owner ? FACTIONS[cell.owner].color : '#ffd700';
+          ctx.font = '500 8px system-ui, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillStyle = 'rgba(0,0,0,0.65)';
+          ctx.fillText(cell.name, cx + 1, cy - gridSpanPx * 0.38 + 1);
+          ctx.fillStyle = cell.isSafeZone ? '#ffd700' : color;
+          ctx.fillText(cell.name, cx, cy - gridSpanPx * 0.38);
+        });
+
+        // Faction territory discs (rendered under markers and labels)
         SECTORS.forEach(sector => {
             const cx = worldToPx(sector.center.x);
             const cy = worldToPx(sector.center.z);
