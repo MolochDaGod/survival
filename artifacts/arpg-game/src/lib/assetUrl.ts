@@ -50,5 +50,3 @@ export function publicUrl(path: string): string {
   const clean = path.startsWith('/') ? path.slice(1) : path;
   return `${base}${clean}`;
 }
-
-export { resolveGameIcon } from './resolveGameIcon';

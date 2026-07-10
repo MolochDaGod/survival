@@ -1,4 +1,4 @@
-import { resolveGameIcon } from '@/lib/assetUrl';
+import { resolveGameIcon } from '@/lib/resolveGameIcon';
 
 interface GameIconProps {
   src: string;
