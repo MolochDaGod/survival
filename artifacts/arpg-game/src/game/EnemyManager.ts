@@ -237,8 +237,21 @@ export class EnemyManager {
     this.spawnEnemyAt(x, z);
   }
 
+  /** Pick an enemy type key, preferring a sector hostile pool when provided. */
+  private pickEnemyType(hostilePool?: string[]): string {
+    const defs = this.assetManager?.enemyDefs ?? ENEMY_DEFS;
+    if (hostilePool?.length) {
+      const keys = new Set(defs.map(d => d.key));
+      const valid = hostilePool.filter(k => keys.has(k));
+      if (valid.length) {
+        return valid[Math.floor(Math.random() * valid.length)];
+      }
+    }
+    return defs[Math.floor(Math.random() * defs.length)].key;
+  }
+
   /** Spawn one enemy at a fixed world position (used by enemy camp raids). */
-  spawnEnemyAt(x: number, z: number, waveOverride?: number): void {
+  spawnEnemyAt(x: number, z: number, waveOverride?: number, hostilePool?: string[]): void {
     if (this.enemies.filter(e => e.state !== 'dead').length >= this.maxEnemies) return;
 
     const wave = waveOverride ?? this.wave;
@@ -248,8 +261,7 @@ export class EnemyManager {
     const isRanged     = Math.random() < rangedChance;
     const role         = isRanged ? EnemyRole.RANGED : EnemyRole.MELEE;
 
-    const defs = this.assetManager?.enemyDefs ?? ENEMY_DEFS;
-    const enemyTypeKey = defs[Math.floor(Math.random() * defs.length)].key;
+    const enemyTypeKey = this.pickEnemyType(hostilePool);
     const group        = new THREE.Group();
     group.position.set(x, y, z);
 
@@ -326,14 +338,14 @@ export class EnemyManager {
   }
 
   /** Scatter defenders around an enemy camp centre. */
-  spawnEnemiesAtCamp(cx: number, cz: number, count: number): void {
+  spawnEnemiesAtCamp(cx: number, cz: number, count: number, hostilePool?: string[]): void {
     const campWave = Math.max(1, this.wave);
     for (let i = 0; i < count; i++) {
       const angle = (i / count) * Math.PI * 2 + Math.random() * 0.6;
       const dist  = 5 + Math.random() * 10;
       const x     = cx + Math.cos(angle) * dist;
       const z     = cz + Math.sin(angle) * dist;
-      setTimeout(() => this.spawnEnemyAt(x, z, campWave), i * 450);
+      setTimeout(() => this.spawnEnemyAt(x, z, campWave, hostilePool), i * 450);
     }
   }
 

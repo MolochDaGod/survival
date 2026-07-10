@@ -19,7 +19,7 @@ import type { PrefabSystem } from './PrefabSystem';
 import type { EnemyManager } from '../EnemyManager';
 import { getQuestSystem } from '../quest/QuestSystem';
 import { createEnemyCampQuest, rollCampDefenderCount, type CampMissionKind } from '../quest/EnemyCampMissions';
-import { getAllPOIs, SECTORS } from '../../data/sectors';
+import { getAllPOIs, getSector, getSectorForPosition, SECTORS } from '../../data/sectors';
 import { getAISeedSectors, GRID_SECTOR_SPAN_M } from '../../data/worldGridSectors';
 import type { FactionId } from '../../data/factions';
 import {
@@ -150,6 +150,17 @@ function campDefenders(camp: EnemyCamp): number {
   return tierForPopulation(camp.population).defenders;
 }
 
+/** Canonical hostile roster for a camp based on its sector / world position. */
+function hostilesForCamp(camp: EnemyCamp): string[] {
+  if (camp.sectorId) {
+    const byId = getSector(camp.sectorId);
+    if (byId?.hostileTypes.length) return byId.hostileTypes;
+  }
+  const byPos = getSectorForPosition(camp.position.x, camp.position.z);
+  if (byPos?.hostileTypes.length) return byPos.hostileTypes;
+  return ['rat', 'spider', 'snake'];
+}
+
 // ─── System ───────────────────────────────────────────────────────────────────
 
 let _nextCampId = 1;
@@ -216,7 +227,12 @@ export class EnemyCampSystem {
 
     if (!camp.enemiesSpawned) {
       camp.enemiesSpawned = true;
-      this.enemyManager.spawnEnemiesAtCamp(camp.position.x, camp.position.z, camp.killCount);
+      this.enemyManager.spawnEnemiesAtCamp(
+        camp.position.x,
+        camp.position.z,
+        camp.killCount,
+        hostilesForCamp(camp),
+      );
     }
   }
 
@@ -417,7 +433,12 @@ export class EnemyCampSystem {
           if (camp.reinforceTimer > 180) {
             camp.reinforceTimer = 0;
             const n = Math.min(2, Math.max(1, Math.floor(camp.population / 8)));
-            this.enemyManager.spawnEnemiesAtCamp(camp.position.x, camp.position.z, n);
+            this.enemyManager.spawnEnemiesAtCamp(
+              camp.position.x,
+              camp.position.z,
+              n,
+              hostilesForCamp(camp),
+            );
           }
         }
       }

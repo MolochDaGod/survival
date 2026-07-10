@@ -7,6 +7,7 @@ import { SplashFX } from './world/water/SplashFX';
 import { FeaturePlacer } from './world/FeaturePlacer';
 import { PrefabSystem } from './world/PrefabSystem';
 import { TerrainPatchSystem, setTerrainPatchSystem } from './world/TerrainPatchSystem';
+import { bootstrapSectorMaps } from './world/SectorWorldBootstrap';
 import { TerrainScatter } from './world/TerrainScatter';
 import { RoadSystem } from './world/RoadSystem';
 import { GLBLocationSystem, DoorProxy } from './world/GLBLocationSystem';
@@ -183,6 +184,11 @@ export class SceneBuilder {
       console.warn('[SceneBuilder] Winter tree system failed to load:', err);
     }
     this.terrain.build();
+    // Plant all 9 canonical sector GLB anchors (faction maps + wildlands).
+    const sectorBoot = await bootstrapSectorMaps(this.terrainPatches);
+    if (sectorBoot.failed.length) {
+      console.warn('[SceneBuilder] Sector terrain patches incomplete:', sectorBoot.failed);
+    }
     this.chunks.update(0, 0);
     this.markers.build();
     this.addDungeonElements();
