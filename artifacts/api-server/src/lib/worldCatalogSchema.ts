@@ -98,4 +98,4 @@ export const WORLD_CATALOG_SCHEMA: ReadonlyArray<string> = [
   `CREATE INDEX IF NOT EXISTS idx_gn_island_assets_role ON gn_island_assets(asset_role)`,
 ];
 
-export const WORLD_CATALOG_VERSION = 2;
+export const WORLD_CATALOG_VERSION = 3;

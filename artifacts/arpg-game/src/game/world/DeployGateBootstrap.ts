@@ -1,9 +1,10 @@
 import * as THREE from 'three';
 import { getAllPOIs } from '../../data/sectors';
 import type { PrefabSystem } from './PrefabSystem';
+import { ISLAND_DOCK_PREFAB } from './IslandDockBootstrap';
 
 /** Convergence Nexus deploy gate — sail / march to any of the nine sectors. */
-export const DEPLOY_GATE_PREFAB = 'viking_shipyard';
+export const DEPLOY_GATE_PREFAB = ISLAND_DOCK_PREFAB;
 
 export interface DeployGateBootstrapResult {
   placed: boolean;

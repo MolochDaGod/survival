@@ -77,6 +77,10 @@ function islandPlatform(): string {
   return `${CDN}/models/island/platform.glb`;
 }
 
+function islandDockUrl(): string {
+  return `${NEXUS}/models/prefabs/viking_shipyard.glb`;
+}
+
 function islandTexture(biome: string): string {
   const map: Record<string, string> = {
     tundra: `${CDN}/models/island/Textures/colormap.png`,
@@ -321,6 +325,14 @@ export function buildSectorAssets(): SeedAssetRow[] {
         metadata: { enemyType: hostile },
       });
     }
+    rows.push({
+      sectorId: s.id,
+      assetRole: 'boat_dock',
+      assetPath: 'models/prefabs/viking_shipyard.glb',
+      publicUrl: islandDockUrl(),
+      weight: 1,
+      metadata: { prefabId: 'viking_shipyard', placement: 'south_edge' },
+    });
   }
   return rows;
 }
@@ -343,6 +355,15 @@ export function buildIslandAssets(islands: SeedIsland[]): Array<{
       rows.push({ islandId: isl.id, assetRole: 'prop', assetPath: 'models/island/rocks-c.glb', publicUrl: `${CDN}/models/island/rocks-c.glb`, scale: 1 });
     } else {
       rows.push({ islandId: isl.id, assetRole: 'prop', assetPath: 'models/island/grass-plant.glb', publicUrl: `${CDN}/models/island/grass-plant.glb`, scale: 1 });
+    }
+    if (isl.kind === 'capital' || isl.kind === 'safe' || isl.kind === 'gate') {
+      rows.push({
+        islandId: isl.id,
+        assetRole: 'boat_dock',
+        assetPath: 'models/prefabs/viking_shipyard.glb',
+        publicUrl: islandDockUrl(),
+        scale: isl.kind === 'safe' || isl.kind === 'gate' ? 6 : 5,
+      });
     }
   }
   return rows;

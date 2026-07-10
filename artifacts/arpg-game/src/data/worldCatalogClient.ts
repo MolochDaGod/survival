@@ -10,6 +10,13 @@ import {
   type SectorCanonEntry,
   type SectorVfxPalette,
 } from './sectorCanon';
+import { ISLAND_DOCK_PATH, ISLAND_DOCK_PREFAB } from '../game/world/IslandDockBootstrap';
+
+export { ISLAND_DOCK_PREFAB, ISLAND_DOCK_PATH };
+
+/** Bundled CDN URL for the canonical island boat dock GLB. */
+export const ISLAND_DOCK_CDN_URL =
+  'https://assets.grudge-studio.com/grudge-nexus/models/prefabs/viking_shipyard.glb';
 
 export interface WorldCatalogAsset {
   sector_id?: string;
@@ -138,6 +145,37 @@ export function getHydratedIslands(sectorId?: string): WorldCatalogIsland[] {
 export function getSectorAssets(sectorId: string): WorldCatalogAsset[] {
   const bundle = _cachedBundles.find(b => b.sector.id === sectorId);
   return bundle?.assets ?? [];
+}
+
+/** Boat-dock asset rows for home + town islands (D1 or bundled fallback). */
+export function getIslandDockAssets(islandId?: string): WorldCatalogAsset[] {
+  const dockRow = (island_id: string): WorldCatalogAsset => ({
+    island_id,
+    asset_role: 'boat_dock',
+    asset_path: ISLAND_DOCK_PATH,
+    public_url: ISLAND_DOCK_CDN_URL,
+    weight: 1,
+    metadata_json: JSON.stringify({ prefabId: ISLAND_DOCK_PREFAB }),
+  });
+
+  if (islandId) {
+    const fromD1 = _islands
+      .find(i => i.id === islandId)
+      ?.assets?.filter(a => a.asset_role === 'boat_dock');
+    if (fromD1?.length) return fromD1;
+    const isl = _islands.find(i => i.id === islandId);
+    if (isl && (isl.kind === 'capital' || isl.kind === 'safe' || isl.kind === 'gate')) {
+      return [dockRow(islandId)];
+    }
+    return [];
+  }
+
+  return _islands
+    .filter(i => i.kind === 'capital' || i.kind === 'safe' || i.kind === 'gate')
+    .flatMap(i => {
+      const fromD1 = i.assets?.filter(a => a.asset_role === 'boat_dock');
+      return fromD1?.length ? fromD1 : [dockRow(i.id)];
+    });
 }
 
 let _cachedBundles: WorldCatalogSectorBundle[] = [];

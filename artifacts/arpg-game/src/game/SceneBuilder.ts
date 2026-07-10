@@ -9,6 +9,7 @@ import { PrefabSystem } from './world/PrefabSystem';
 import { TerrainPatchSystem, setTerrainPatchSystem } from './world/TerrainPatchSystem';
 import { bootstrapSectorMaps } from './world/SectorWorldBootstrap';
 import { bootstrapDeployGate } from './world/DeployGateBootstrap';
+import { bootstrapIslandDocks } from './world/IslandDockBootstrap';
 import { TerrainScatter } from './world/TerrainScatter';
 import { RoadSystem } from './world/RoadSystem';
 import { GLBLocationSystem, DoorProxy } from './world/GLBLocationSystem';
@@ -198,6 +199,10 @@ export class SceneBuilder {
     this.addTorches();
     this.features.buildAll();
     this.roads.buildAll();
+    const islandDocks = await bootstrapIslandDocks(this.prefabs);
+    if (islandDocks.failed.length) {
+      console.warn('[SceneBuilder] Island dock placement incomplete:', islandDocks.failed);
+    }
     const deployGate = await bootstrapDeployGate(this.prefabs);
     this.deployGateBoatSpawn = deployGate.boatSpawn;
     // Scatter craftpix terrain models across the procedural world.
