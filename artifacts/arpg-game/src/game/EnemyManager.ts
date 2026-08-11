@@ -6,6 +6,11 @@ import { sampleTerrainHeight } from './TerrainBuilder';
 import { groundY as groundFloor } from './GroundSampler';
 import { EnemyBrain, EnemyRole, CombatState } from './ai/EnemyBrain';
 import { tickAIMantle, aiMantleIsActive, clearAIMantle } from './ai/AILedgeMantle';
+import {
+  safeZones,
+  HUB_SPAWN_RING_INNER_M,
+  HUB_SPAWN_RING_OUTER_M,
+} from './world/SafeZoneSystem';
 
 /**
  * Enemy defs/keys come from `assetManager.enemyDefs` after AssetManager.loadAll()
@@ -94,14 +99,13 @@ export class EnemyManager {
 
   /**
    * Spawn anchor — the player's starting point in world space, set by the
-   * GameEngine right after `getStarterSpawn()` resolves. We refuse to drop
-   * any enemy inside `SPAWN_SAFE_RADIUS` of this point so the encampment
-   * itself stays a no-spawn zone (otherwise YUKA can sample a position
-   * inside a building or right on top of the player on session start).
+   * GameEngine right after `getStarterSpawn()` resolves. Combined with
+   * SafeZoneSystem (hub / camp / sector) so the baked map stays peaceful.
    */
   private spawnAnchor: THREE.Vector3 | null = null;
-  private static readonly SPAWN_SAFE_RADIUS = 22; // metres — covers the encampment footprint
-  private static readonly MIN_PLAYER_DIST   = 22; // never spawn within this distance of the live player
+  /** Legacy fallback if SafeZoneSystem has no hub yet (metres). */
+  private static readonly SPAWN_SAFE_RADIUS = 200;
+  private static readonly MIN_PLAYER_DIST   = 28; // never spawn within this of the live player
 
   /**
    * Intro grace — countdown set by `setIntroGrace(s)` immediately after
@@ -206,34 +210,28 @@ export class EnemyManager {
   spawnEnemy() {
     if (this.enemies.filter(e => e.state !== 'dead').length >= this.maxEnemies) return;
 
-    // Sample a candidate position in a 18-32m ring around the origin, then
-    // resample up to N times if the candidate is too close to the spawn
-    // anchor (the encampment safe zone) or to the live player. After N
-    // attempts we accept whatever we have — better an occasional bad spawn
-    // than no spawn at all if the safe zones cover most of the ring.
+    // Ring outside production hub safe zone (not 24 m — that was inside the city).
     let x = 0, z = 0;
-    const MAX_TRIES = 6;
-    const safeR2  = EnemyManager.SPAWN_SAFE_RADIUS * EnemyManager.SPAWN_SAFE_RADIUS;
+    const MAX_TRIES = 10;
     const playerR2 = EnemyManager.MIN_PLAYER_DIST * EnemyManager.MIN_PLAYER_DIST;
+    const ax = this.spawnAnchor?.x ?? 0;
+    const az = this.spawnAnchor?.z ?? 0;
+    const ringInner = HUB_SPAWN_RING_INNER_M;
+    const ringOuter = HUB_SPAWN_RING_OUTER_M;
+    let placed = false;
     for (let attempt = 0; attempt < MAX_TRIES; attempt++) {
       const angle = Math.random() * Math.PI * 2;
-      const dist  = 24 + Math.random() * 14; // pushed out a touch (was 18-32)
-      x = Math.cos(angle) * dist;
-      z = Math.sin(angle) * dist;
-      // Candidates start centred on the origin; offset toward the spawn
-      // anchor so the ring follows the player's hub instead of (0,0).
-      if (this.spawnAnchor) {
-        x += this.spawnAnchor.x;
-        z += this.spawnAnchor.z;
-      }
-      const dxA = this.spawnAnchor ? x - this.spawnAnchor.x : x;
-      const dzA = this.spawnAnchor ? z - this.spawnAnchor.z : z;
-      if (dxA * dxA + dzA * dzA < safeR2) continue;
+      const dist  = ringInner + Math.random() * (ringOuter - ringInner);
+      x = ax + Math.cos(angle) * dist;
+      z = az + Math.sin(angle) * dist;
+      if (safeZones.isSafe(x, z)) continue;
       const dxP = x - this.lastPlayerPos.x;
       const dzP = z - this.lastPlayerPos.z;
       if (dxP * dxP + dzP * dzP < playerR2) continue;
-      break; // candidate passed both checks
+      placed = true;
+      break;
     }
+    if (!placed) return; // all candidates inside safe zones — skip this tick
     this.spawnEnemyAt(x, z);
   }
 
@@ -266,6 +264,9 @@ export class EnemyManager {
   /** Spawn one enemy at a fixed world position (used by enemy camp raids). */
   spawnEnemyAt(x: number, z: number, waveOverride?: number, hostilePool?: string[]): void {
     if (this.enemies.filter(e => e.state !== 'dead').length >= this.maxEnemies) return;
+    // Production guard: never place hostiles in hub / camp / safe sector cells
+    // unless this is an explicit raid (hostilePool provided by camp system).
+    if (!hostilePool && safeZones.isSafe(x, z)) return;
 
     const wave = waveOverride ?? this.wave;
     const y    = groundFloor(x, z);

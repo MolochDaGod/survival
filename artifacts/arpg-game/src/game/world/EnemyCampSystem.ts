@@ -33,6 +33,7 @@ import {
   slotWorldPosition,
 } from './EnemyCampBuildings';
 import { getPrefab } from '../../data/prefabs';
+import { safeZones } from './SafeZoneSystem';
 
 // ─── Tuning ───────────────────────────────────────────────────────────────────
 
@@ -379,9 +380,13 @@ export class EnemyCampSystem {
   }
 
   private trySpawnPatrolCamp(px: number, pz: number): void {
+    // Never seed patrol camps inside hub / camp / Convergence safe sector
+    if (safeZones.isSafe(px, pz)) return;
+
     const seed = ++this.seedCounter + Math.floor(px * 0.01) + Math.floor(pz * 0.01);
     const pos  = samplePatrolPosition(px, pz, seed, this.camps);
     if (!pos) return;
+    if (safeZones.isSafe(pos.x, pos.z)) return;
 
     const killCount = rollCampDefenderCount();
     this.addCamp({

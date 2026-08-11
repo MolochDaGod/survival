@@ -19,6 +19,13 @@ export const REMAKE_DEFAULT_CAMERA = 'third-person' as const;
 /** Open-world stream begins beyond encampment footprint. */
 export const REMAKE_OPEN_WORLD_STREAM_M = 250;
 
+/**
+ * Hub no-hostile circle (metres) around the baked spawn / encampment.
+ * Production safe zone — must cover walkable city + starter pad.
+ * Enemy spawn rings sit outside this radius (see SafeZoneSystem).
+ */
+export const HUB_SAFE_ZONE_RADIUS_M = 200;
+
 /** Ally combat engagement radius around player. */
 export const ALLY_COMBAT_RADIUS_M = 28;
 

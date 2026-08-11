@@ -82,7 +82,8 @@ import { AfkController } from './ai/AfkController';
 import { EngagementRewards } from './progression/EngagementRewards';
 import { runSurvivalRemakeBootstrap } from './remake/SurvivalRemakeBootstrap';
 import { AllyCombatSystem } from './ai/AllyCombatSystem';
-import { REMAKE_SPAWN_LORE } from './remake/SurvivalRemakeConfig';
+import { REMAKE_SPAWN_LORE, HUB_SAFE_ZONE_RADIUS_M, CAMP_CLAIM_RADIUS_M } from './remake/SurvivalRemakeConfig';
+import { safeZones } from './world/SafeZoneSystem';
 import { LoreGameLoop } from './lore/LoreGameLoop';
 import { getUnlockedCodex } from './lore/LoreCodex';
 import { getReputationService } from './faction/ReputationService';
@@ -608,6 +609,9 @@ export class GameEngine {
       // (enemyManager is constructed a few lines below — anchor is applied
       // there once it exists.)
       this._pendingSpawnAnchor = starterSpawn ? starterSpawn.clone() : null;
+      // Production hub safe zone (baked map footprint) — no hostiles inside.
+      const hubCenter = this._pendingSpawnAnchor ?? new THREE.Vector3(0, 0, 0);
+      safeZones.setHub(hubCenter, HUB_SAFE_ZONE_RADIUS_M);
 
       // BVH-backed occluders for camera dolly + wall-climb probes.
       const occluders = collectOccluders(this.scene);
@@ -814,6 +818,7 @@ export class GameEngine {
       {
         const prevClaim = this.campClaim.onClaimed;
         this.campClaim.onClaimed = (pos, race) => {
+          safeZones.setCamp(pos, CAMP_CLAIM_RADIUS_M);
           prevClaim?.(pos, race);
           this.engagement.onFirstClaim();
         };
@@ -821,7 +826,15 @@ export class GameEngine {
       let restoredClaim = false;
       if (this._pendingCampSnapshot) {
         restoredClaim = true;
-        this.campClaim.restore(this._pendingCampSnapshot).catch((e) =>
+        const snap = this._pendingCampSnapshot;
+        this.campClaim.restore(snap).then(() => {
+          if (snap.claimed) {
+            safeZones.setCamp(
+              { x: snap.flagX, z: snap.flagZ },
+              CAMP_CLAIM_RADIUS_M,
+            );
+          }
+        }).catch((e) =>
           console.warn('[GameEngine] camp claim restore failed', e),
         );
         this._pendingCampSnapshot = null;
