@@ -160,9 +160,8 @@ export class EnemyManager {
   private lastPlayerPos = new THREE.Vector3();
 
   /**
-   * Tell the manager where the player spawned in the world. Enemies are
-   * forbidden from spawning inside `SPAWN_SAFE_RADIUS` of this point so the
-   * encampment / town hub stays peaceful.
+   * Hub spawn ring centre. Combat safe circles live in SafeZoneSystem;
+   * this anchor only positions the outer spawn ring (HUB_SPAWN_RING_*).
    */
   setSpawnAnchor(anchor: THREE.Vector3) {
     this.spawnAnchor = anchor.clone();
