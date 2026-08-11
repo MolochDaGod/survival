@@ -275,6 +275,33 @@ export interface Prefab {
 const CACHE_KEY = "grudge:prefab_cache:v1";
 const FETCH_TIMEOUT_MS = 4000;
 
+/** Map client PrefabKind → PrefabRegistry ScriptedRole. */
+function kindToRole(kind: string): ScriptedRole {
+  switch (kind) {
+    case "enemy":
+      return "enemy";
+    case "vehicle":
+      return "vehicle";
+    case "fx":
+      return "fx";
+    case "building":
+    case "city":
+    case "crafting":
+    case "terrain_patch":
+      return "building";
+    case "resource_node":
+    case "prop":
+    case "interactable":
+    case "vegetation":
+    case "biome_pack":
+    case "material":
+    case "target":
+      return "item";
+    default:
+      return "item";
+  }
+}
+
 class PrefabRegistry {
   private prefabs: Map<string, Prefab> = new Map();
   private loaded = false;
@@ -330,7 +357,46 @@ class PrefabRegistry {
       /* corrupt cache — ignore */
     }
 
-    // 3. Nothing — callers must fall back to hardcoded defaults.
+    // 3. Built-in client catalog (`src/data/prefabs.ts`) — always available
+    //    for world props, terrain patches, docks, and crafting stations even
+    //    when Railway /api/prefabs is down.
+    try {
+      const { PREFABS, prefabPath } = await import("../data/prefabs");
+      const builtin: Prefab[] = PREFABS.map((d) => {
+        const role = kindToRole(d.kind);
+        return {
+          id: d.id,
+          kind: d.kind,
+          name: d.label,
+          description: null,
+          version: 1,
+          draft: false,
+          tags: d.tags ?? [],
+          scriptedRole: role,
+          modelPath: prefabPath(d),
+          scale: d.scale,
+          texturePath: null,
+          data: {
+            clientPrefab: true,
+            footprint: d.footprint,
+            yOffset: d.yOffset,
+            interaction: d.interaction,
+            patchRadius: d.patchRadius,
+            blendRing: d.blendRing,
+            collider: d.collider,
+          },
+        };
+      });
+      this.ingest(builtin);
+      console.info(
+        `[PrefabRegistry] loaded ${builtin.length} prefabs from client catalog (builtin)`,
+      );
+      return;
+    } catch (err) {
+      console.warn("[PrefabRegistry] client catalog fallback failed:", err);
+    }
+
+    // 4. Nothing — callers must fall back to hardcoded ENEMY_DEFS etc.
     console.warn(
       "[PrefabRegistry] no prefabs available — game will use hardcoded fallbacks",
     );

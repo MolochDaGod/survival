@@ -89,3 +89,14 @@ export {
   type SurvivalItemDef,
 } from './crafting/index.js';
 export type { CraftingStation as RecipeStation } from './crafting/index.js';
+
+// World (factions, grudges, shared noise) — also `@workspace/game-systems/world`
+export {
+  FACTIONS, FACTION_IDS, REP_TIERS, getRepTier, newReputationVector,
+  type FactionId, type FactionDef, type RepTier, type RepTierDef, type ReputationVector,
+} from './world/factions.js';
+export {
+  GRUDGE_TIER_LIMITS, GRUDGE_PERMISSIONS, grudgeTierForPrestige, isHostileGrudge,
+  type GrudgeTier, type GrudgeRole, type GrudgeStance, type GrudgeMember,
+  type GrudgeClaim, type Grudge,
+} from './world/grudges.js';

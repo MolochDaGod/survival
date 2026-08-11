@@ -195,12 +195,51 @@ function scanAttachedAssets(): InsertPrefab[] {
   return out;
 }
 
+/**
+ * Client world catalog (`artifacts/arpg-game/src/data/prefabs.ts`) — terrain
+ * patches, docks, crafting stations, resource nodes. Stored as structure/prop
+ * so the DB enum stays valid; tags preserve client PrefabKind.
+ */
+const CLIENT_WORLD: InsertPrefab[] = (
+  [
+    // Sector terrain maps (SectorWorldBootstrap)
+    ["terrain_cg_western", "Western Town Map", "structure", "/models/prefabs/chicken_gun_western_reupload.glb", ["terrain_patch", "sector_map", "cg"]],
+    ["terrain_cg_town2f", "Town 2F Map", "structure", "/models/prefabs/chicken_gun_town2f_reupload.glb", ["terrain_patch", "sector_map", "cg"]],
+    ["terrain_cg_bigfarm", "Big Farm Map", "structure", "/models/prefabs/chicken_gun_bigfarm_full_map.glb", ["terrain_patch", "sector_map", "cg"]],
+    ["terrain_cg_misty", "Misty Town Map", "structure", "/models/prefabs/chicken_gun_mistytown.glb", ["terrain_patch", "sector_map", "cg"]],
+    ["terrain_cg_encamp", "Fruzer Encampment", "structure", "/models/prefabs/chicken_gun_fruzer_-_encampment.glb", ["terrain_patch", "sector_map", "cg"]],
+    ["terrain_cg_town3f", "Town 3F Map", "structure", "/models/prefabs/town3f2_chicken_gun_map_reupload.glb", ["terrain_patch", "sector_map", "cg"]],
+    // Island dock / deploy gate
+    ["viking_shipyard", "Viking Shipyard", "structure", "/models/prefabs/viking_shipyard.glb", ["dock", "island_dock", "deploy", "gate"]],
+    // Core crafting
+    ["workbench", "Workbench", "structure", "/models/props/fantasy_megakit/Exports/glTF/Workbench.gltf", ["craft", "workbench"]],
+    ["smeltery", "Smeltery", "structure", "/models/props/fantasy_megakit/Exports/glTF/Anvil_Log.gltf", ["craft", "smeltery"]],
+    ["weaponsmith", "Weaponsmith", "structure", "/models/props/fantasy_megakit/Exports/glTF/Anvil.gltf", ["craft", "weaponsmith"]],
+    // Hostile mission node
+    ["enemy_camp", "Enemy Camp", "structure", "/models/prefabs/stylized_enemy_camp_scene.glb", ["camp", "hostile", "mission"]],
+  ] as const
+).map(
+  ([id, name, kind, modelPath, tags]): InsertPrefab => ({
+    id,
+    kind: kind as PrefabKind,
+    name,
+    description: `Client world prefab (${id}).`,
+    modelPath,
+    texturePath: null,
+    scale: 1.0,
+    data: { clientPrefab: true, source: "data/prefabs.ts" },
+    tags: [...tags, "client_world"],
+    draft: false,
+  }),
+);
+
 async function main() {
-  const rows = [...CARNIVAL, ...BODIES, ...scanAttachedAssets()];
+  const attached = scanAttachedAssets();
+  const rows = [...CARNIVAL, ...BODIES, ...CLIENT_WORLD, ...attached];
   console.log(
     `[seed-prefabs] inserting ${rows.length} prefab rows ` +
-      `(${CARNIVAL.length} carnival, ${BODIES.length} bodies, ${
-        rows.length - CARNIVAL.length - BODIES.length
+      `(${CARNIVAL.length} carnival, ${BODIES.length} bodies, ${CLIENT_WORLD.length} client world, ${
+        attached.length
       } draft attached_assets)`,
   );
   // Single statement, ON CONFLICT DO NOTHING for idempotence.

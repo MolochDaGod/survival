@@ -14,7 +14,12 @@
     "./tiers": "./src/tiers.ts",
     "./loot": "./src/loot.ts",
     "./types": "./src/types.ts",
-    "./crafting": "./src/crafting/index.ts"
+    "./crafting": "./src/crafting/index.ts",
+    "./deployables": "./src/deployables.ts",
+    "./world": "./src/world/index.ts",
+    "./world/factions": "./src/world/factions.ts",
+    "./world/grudges": "./src/world/grudges.ts",
+    "./world/noise": "./src/world/noise.ts"
   },
   "dependencies": {}
 }

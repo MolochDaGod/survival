@@ -1,9 +1,11 @@
 import { SECTORS } from '../../data/sectors';
+import { getPrefab } from '../../data/prefabs';
 import type { TerrainPatchSystem } from './TerrainPatchSystem';
 
 /**
  * Maps sector anchor GLB filenames → terrain_patch prefab ids.
  * Canonical chicken-gun + city maps used for 9-sector hybrid world.
+ * Prefab rows live in `data/prefabs.ts` (ids must exist + kind terrain_patch).
  */
 const SECTOR_GLB_TO_PREFAB: Record<string, string> = {
   'chicken_gun_western_reupload.glb': 'terrain_cg_western',
@@ -15,6 +17,16 @@ const SECTOR_GLB_TO_PREFAB: Record<string, string> = {
   'town3f2_chicken_gun_map_reupload.glb': 'terrain_cg_town3f',
   'town3f2.glb': 'terrain_cg_town3f',
 };
+
+/** Validate mapping at module load (dev signal if catalog drifts). */
+for (const [glb, id] of Object.entries(SECTOR_GLB_TO_PREFAB)) {
+  const def = getPrefab(id);
+  if (!def || def.kind !== 'terrain_patch') {
+    console.warn(
+      `[SectorWorld] SECTOR_GLB_TO_PREFAB: "${glb}" → "${id}" missing or not terrain_patch`,
+    );
+  }
+}
 
 export interface SectorBootstrapOpts {
   /**

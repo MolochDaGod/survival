@@ -68,7 +68,7 @@ export function buildGameCatalog() {
   const categories = new Set(Object.values(SURVIVAL_ITEMS).map((i) => i.category));
   return {
     version: 1,
-    updatedAt: '2026-08-10T00:00:00.000Z',
+    updatedAt: new Date().toISOString(),
     recipeCount: RECIPES.length,
     itemCount: Object.keys(SURVIVAL_ITEMS).length,
     stations: RECIPE_STATIONS.map((s) => ({

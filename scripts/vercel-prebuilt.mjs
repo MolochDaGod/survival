@@ -105,4 +105,21 @@ const configPath = resolve(root, '.vercel/output/config.json');
   console.log('[prebuilt] Created config.json');
 }
 
+// Emit static /api/game catalogs into website dist + .vercel/output/static
+try {
+  const { spawnSync } = await import('child_process');
+  const gen = spawnSync(
+    process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm',
+    ['exec', 'tsx', 'scripts/gen-game-catalog.mjs'],
+    { cwd: root, stdio: 'inherit', shell: true },
+  );
+  if (gen.status !== 0) {
+    console.warn('[prebuilt] WARNING: gen-game-catalog failed — /api/game static routes may be stale');
+  } else {
+    console.log('[prebuilt] Game data catalogs written (recipes/items/stations)');
+  }
+} catch (err) {
+  console.warn('[prebuilt] WARNING: could not run gen-game-catalog:', err);
+}
+
 console.log('[prebuilt] Ready for: vercel deploy --prebuilt --prod');
