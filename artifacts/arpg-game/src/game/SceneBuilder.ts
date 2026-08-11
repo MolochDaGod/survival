@@ -22,6 +22,7 @@ import { ensureSceneGraph } from './world/SceneGraphLayers';
 import type { AssetManager } from './AssetManager';
 import type { PhysicsWorld } from './physics/PhysicsWorld';
 import { LAYERS } from './Layers';
+import { REMAKE_OPEN_WORLD_STREAM_M } from './remake/SurvivalRemakeConfig';
 
 /**
  * Hybrid world (Survival / GRUDGES era — not Warlords islands):
@@ -37,12 +38,11 @@ const LOAD_STARTER_MAP = true;
 /** Encampment / Convergence Nexus GLB under public/locations/ (CDN locations/). */
 const STARTER_MAP_NAME = 'encampment';
 /**
- * Distance from world origin at which the open-world terrain chunks begin
- * streaming. Must be larger than the encampment's footprint (~200 m) so the
- * procedural terrain doesn't poke through the GLB. The WorldChunkManager
- * starts ticking once the player crosses this radius.
+ * Distance from world origin at which open-world terrain chunks begin streaming.
+ * Single source: SurvivalRemakeConfig.REMAKE_OPEN_WORLD_STREAM_M (250 m).
+ * Must stay larger than hub safe zone (200 m) so combat ring and stream align.
  */
-export const OPEN_WORLD_STREAM_RADIUS = 250;
+export const OPEN_WORLD_STREAM_RADIUS = REMAKE_OPEN_WORLD_STREAM_M;
 
 export class SceneBuilder {
   scene: THREE.Scene;

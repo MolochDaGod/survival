@@ -21,6 +21,7 @@ import { loadRetargetedToonClips } from '../../toon/loadToonClips';
 import { normalizeToonHeight } from '../../toon/toonBoneRetarget';
 import { ProfessionsService } from '../../progression/ProfessionsService';
 import type { Profession } from '../../progression/Professions';
+import { CAMP_CLAIM_RADIUS_M } from '../../remake/SurvivalRemakeConfig';
 
 // ── Item ids that act as claim flags / benches / camp buildings ─────────────
 
@@ -76,7 +77,8 @@ export const CAMP_BUILDING_ITEM_IDS = new Set([
   'build_campfire',
 ]);
 
-export const CAMP_RADIUS_M = 80;
+/** Alias — single source is SurvivalRemakeConfig.CAMP_CLAIM_RADIUS_M. */
+export const CAMP_RADIUS_M = CAMP_CLAIM_RADIUS_M;
 export const ERA_ID = 'survival' as const;
 
 // ── State ───────────────────────────────────────────────────────────────────

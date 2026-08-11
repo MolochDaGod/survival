@@ -3,6 +3,8 @@ import { worldHeight, getBiome, getBiomeColor, getSettlements, WORLD_HALF } from
 import { SECTORS, TRAVEL_ROUTES, getAllPOIs } from '../data/sectors';
 import { FACTIONS } from '../data/factions';
 import { WORLD_GRID_SECTORS, GRID_SECTOR_SPAN_M } from '../data/worldGridSectors';
+import { safeZones } from '../game/world/SafeZoneSystem';
+import { HUB_SAFE_ZONE_RADIUS_M } from '../game/remake/SurvivalRemakeConfig';
 
 // ─── Map generation (lazy, cached after first render) ────────────────────────
 
@@ -127,9 +129,55 @@ export function WorldMapOverlay({ player, onClose }: WorldMapOverlayProps) {
           ctx.textAlign = 'center';
           ctx.fillStyle = 'rgba(0,0,0,0.65)';
           ctx.fillText(cell.name, cx + 1, cy - gridSpanPx * 0.38 + 1);
+          // Gold = political capital (no AI camps). Combat safe is hub circle below.
           ctx.fillStyle = cell.isSafeZone ? '#ffd700' : color;
           ctx.fillText(cell.name, cx, cy - gridSpanPx * 0.38);
+          if (cell.isSafeZone) {
+            ctx.fillStyle = 'rgba(255,215,0,0.06)';
+            ctx.fillRect(cx - gridSpanPx * 0.5, cy - gridSpanPx * 0.5, gridSpanPx, gridSpanPx);
+          }
         });
+
+        // Combat safe circles (hub + claimed camp) — real no-hostile radii
+        {
+          const zones = safeZones.list();
+          const fallbackHub = {
+            x: 0,
+            z: 0,
+            radius: HUB_SAFE_ZONE_RADIUS_M,
+            label: 'Hub',
+            kind: 'hub' as const,
+          };
+          const drawList = zones.length
+            ? zones
+            : [fallbackHub];
+          for (const z of drawList) {
+            const cx = worldToPx(z.x);
+            const cy = worldToPx(z.z);
+            const rp = radiusToPx(z.radius);
+            ctx.beginPath();
+            ctx.arc(cx, cy, rp, 0, Math.PI * 2);
+            ctx.fillStyle = z.kind === 'camp'
+              ? 'rgba(80,200,120,0.12)'
+              : 'rgba(255,215,0,0.14)';
+            ctx.fill();
+            ctx.setLineDash([5, 4]);
+            ctx.strokeStyle = z.kind === 'camp'
+              ? 'rgba(100,220,140,0.85)'
+              : 'rgba(255,215,0,0.9)';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+            ctx.setLineDash([]);
+            ctx.font = '600 9px system-ui,sans-serif';
+            ctx.fillStyle = z.kind === 'camp' ? '#7dff9a' : '#ffd700';
+            ctx.textAlign = 'center';
+            ctx.fillText(
+              z.kind === 'camp' ? 'CAMP SAFE' : 'HUB SAFE',
+              cx,
+              cy + 3,
+            );
+          }
+        }
 
         // Faction territory discs (rendered under markers and labels)
         SECTORS.forEach(sector => {

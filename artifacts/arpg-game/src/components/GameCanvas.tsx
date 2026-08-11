@@ -1224,7 +1224,16 @@ function seedMapMarkers(): MapMarker[] {
         : s.type === 'cave' ? 'Cave entrance'
           : 'Outpost',
   }));
-  // Static traders near spawn
+  // Hub safe zone anchor (combat no-hostile circle at Convergence)
+  markers.push({
+    id: 'hub-safe',
+    kind: 'town',
+    x: 0,
+    z: 0,
+    label: 'Convergence Hub',
+    detail: 'Safe zone · no hostiles · claim camp nearby',
+  });
+  // Static traders near spawn (inside hub)
   markers.push(
     { id: 'trader1', kind: 'trader', x: -30, z: 25, label: 'Wandering Merch.', detail: 'Stocks ammo & medkits' },
     { id: 'trader2', kind: 'trader', x: 60, z: -55, label: 'The Tinkerer', detail: 'Buys & repairs gear' },

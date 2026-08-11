@@ -380,13 +380,13 @@ export class EnemyCampSystem {
   }
 
   private trySpawnPatrolCamp(px: number, pz: number): void {
-    // Never seed patrol camps inside hub / camp / Convergence safe sector
-    if (safeZones.isSafe(px, pz)) return;
+    // Patrol camps: block hub/camp circles AND political safe sectors
+    if (safeZones.isAiCampForbidden(px, pz)) return;
 
     const seed = ++this.seedCounter + Math.floor(px * 0.01) + Math.floor(pz * 0.01);
     const pos  = samplePatrolPosition(px, pz, seed, this.camps);
     if (!pos) return;
-    if (safeZones.isSafe(pos.x, pos.z)) return;
+    if (safeZones.isAiCampForbidden(pos.x, pos.z)) return;
 
     const killCount = rollCampDefenderCount();
     this.addCamp({

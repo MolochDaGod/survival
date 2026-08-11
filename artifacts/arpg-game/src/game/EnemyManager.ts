@@ -103,9 +103,7 @@ export class EnemyManager {
    * SafeZoneSystem (hub / camp / sector) so the baked map stays peaceful.
    */
   private spawnAnchor: THREE.Vector3 | null = null;
-  /** Legacy fallback if SafeZoneSystem has no hub yet (metres). */
-  private static readonly SPAWN_SAFE_RADIUS = 200;
-  private static readonly MIN_PLAYER_DIST   = 28; // never spawn within this of the live player
+  private static readonly MIN_PLAYER_DIST = 28; // never spawn within this of the live player
 
   /**
    * Intro grace — countdown set by `setIntroGrace(s)` immediately after
@@ -224,7 +222,7 @@ export class EnemyManager {
       const dist  = ringInner + Math.random() * (ringOuter - ringInner);
       x = ax + Math.cos(angle) * dist;
       z = az + Math.sin(angle) * dist;
-      if (safeZones.isSafe(x, z)) continue;
+      if (safeZones.isCombatSafe(x, z)) continue;
       const dxP = x - this.lastPlayerPos.x;
       const dzP = z - this.lastPlayerPos.z;
       if (dxP * dxP + dzP * dzP < playerR2) continue;
@@ -264,9 +262,9 @@ export class EnemyManager {
   /** Spawn one enemy at a fixed world position (used by enemy camp raids). */
   spawnEnemyAt(x: number, z: number, waveOverride?: number, hostilePool?: string[]): void {
     if (this.enemies.filter(e => e.state !== 'dead').length >= this.maxEnemies) return;
-    // Production guard: never place hostiles in hub / camp / safe sector cells
+    // Production guard: never place hostiles in hub / camp combat circles
     // unless this is an explicit raid (hostilePool provided by camp system).
-    if (!hostilePool && safeZones.isSafe(x, z)) return;
+    if (!hostilePool && safeZones.isCombatSafe(x, z)) return;
 
     const wave = waveOverride ?? this.wave;
     const y    = groundFloor(x, z);

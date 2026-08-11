@@ -8,10 +8,24 @@
 | Layer | Source | Colliders | Notes |
 |-------|--------|-----------|-------|
 | Middle sector hub | `StarterMap` → `locations/encampment.glb` at origin | BVH + Rapier trimesh (`MapColliders`) | Handcrafted starting city |
+| **Combat safe zone** | `SafeZoneSystem` hub circle | — | **200 m** no-hostile (`HUB_SAFE_ZONE_RADIUS_M`) |
+| **Camp safe zone** | Claim flag | — | **80 m** (`CAMP_CLAIM_RADIUS_M` = `CAMP_RADIUS_M`) |
+| **Political safe sector** | `grid_convergence` `isSafeZone` | — | No AI camps; hostiles still spawn outside hub circle |
 | 9 sector anchors | Chicken-gun / town3f GLBs via `TerrainPatchSystem` | Heightfield blend | Origin skipped when starter map loaded |
 | Open world stream | `WorldChunkManager` beyond `OPEN_WORLD_STREAM_RADIUS` (250 m) | Heightfield Rapier | Procedural biomes |
+| Ground detail | Grass + rocks + sticks (`GroundDetailSystem`) | Decorative | Streams with chunks |
 | Islands / docks | `IslandDockBootstrap` + D1/world catalog | Prefab colliders | Era-isolated from Warlords home islands |
 | Player camp | `MiddleCampBootstrap` + `CampClaimSystem` | Claim 80 m | Middle pad offset (0, +10 m) |
+
+### Safe zone rules (do not re-break)
+
+| API | Meaning |
+|-----|---------|
+| `safeZones.isCombatSafe(x,z)` | Hub/camp **circles only** — use for enemy **wave/trickle** spawns |
+| `safeZones.isAiCampForbidden(x,z)` | Circles **+** full Convergence grid cell — use for **AI camp seed** |
+| Spawn ring | `HUB_SPAWN_RING_INNER_M` … `OUTER` (228–340 m from hub) |
+
+**Never** treat the full 6.7 km Convergence cell as combat-safe or hostiles will never spawn.
 
 ## Canonical maps
 
