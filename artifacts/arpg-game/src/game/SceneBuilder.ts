@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { TerrainBuilder, ArenaMarkers, sampleTerrainHeight, WORLD } from './TerrainBuilder';
 import { WorldChunkManager } from './world/WorldChunkManager';
 import { GrassSystem } from './world/GrassSystem';
+import { GroundDetailSystem } from './world/GroundDetailSystem';
 import { WaterSurface } from './world/water/WaterSurface';
 import { SplashFX } from './world/water/SplashFX';
 import { FeaturePlacer } from './world/FeaturePlacer';
@@ -17,19 +18,23 @@ import { VolumetricSky } from './world/VolumetricSky';
 import { StarterMap } from './world/StarterMap';
 import { StarterMapGrass } from './world/StarterMapGrass';
 import { getWinterTreeSystem } from './world/WinterTreeSystem';
+import { ensureSceneGraph } from './world/SceneGraphLayers';
 import type { AssetManager } from './AssetManager';
 import type { PhysicsWorld } from './physics/PhysicsWorld';
 import { LAYERS } from './Layers';
 
 /**
- * The encampment GLB is always loaded as the safe starting zone at the world
- * origin. The procedural open world (chunks, terrain, features, roads) streams
- * around it once the player leaves the encampment perimeter. Both systems
- * coexist: the encampment is a static GLB island planted at (0,0), and the
- * chunk manager fills the rest of the 20 km world procedurally.
+ * Hybrid world (Survival / GRUDGES era — not Warlords islands):
+ *
+ *   1. Starter map GLB (encampment / Convergence Nexus) at world origin —
+ *      handcrafted walkable city with BVH + Rapier colliders.
+ *   2. Procedural 20 km terrain + chicken-gun sector anchors stream outside
+ *      the encampment perimeter (OPEN_WORLD_STREAM_RADIUS).
+ *   3. Never pure STARTER-only mode that skips sectors, and never skip the
+ *      starter GLB when CDN has locations/encampment.glb.
  */
-const STARTER_MAP_MODE = false;
-/** Encampment GLB map. Loaded at world origin as the safe starting zone. */
+const LOAD_STARTER_MAP = true;
+/** Encampment / Convergence Nexus GLB under public/locations/ (CDN locations/). */
 const STARTER_MAP_NAME = 'encampment';
 /**
  * Distance from world origin at which the open-world terrain chunks begin
@@ -51,6 +56,8 @@ export class SceneBuilder {
   private chunks: WorldChunkManager;
   /** Decorative animated grass laid on top of streamed terrain chunks. */
   grass: GrassSystem;
+  /** Rocks / sticks / debris — layers 2–3 with grass (three-layer ground). */
+  groundDetail: GroundDetailSystem;
   /** New water layer — swimmable, queryable, drives boats + fishing. */
   water: WaterSurface;
   /** Pooled splash rings. Triggered by SwimController, FishingSystem, BoatSystem. */
@@ -76,8 +83,8 @@ export class SceneBuilder {
   private starterMapReady?: Promise<void>;
   /** Layered InstancedMesh grass scattered on the starter map's lawns. */
   private starterMapGrass?: StarterMapGrass;
-  /** False when the encampment GLB failed to load and we fell back to procedural. */
-  private starterMapModeActive = STARTER_MAP_MODE;
+  /** True when the encampment GLB loaded successfully at origin. */
+  private starterMapModeActive = false;
 
   /** The shadow-casting key light. Repositioned each frame. */
   private sun!: THREE.DirectionalLight;
@@ -91,6 +98,8 @@ export class SceneBuilder {
   constructor(scene: THREE.Scene, assets: AssetManager, physics: PhysicsWorld | null = null) {
     this.scene = scene;
     this.assets = assets;
+    // Three-layer outdoor graph: World / Harvest / Actors / Vfx
+    ensureSceneGraph(scene);
 
     this.sharedPillarGeo = new THREE.CylinderGeometry(0.7, 0.9, 8, 12);
     this.sharedPillarMat = new THREE.MeshStandardMaterial({
@@ -114,7 +123,9 @@ export class SceneBuilder {
     // Grass is created here (so it can register with the chunk manager
     // before the first chunk loads) and ticked from GameEngine.update().
     this.grass    = new GrassSystem(scene);
+    this.groundDetail = new GroundDetailSystem(scene);
     this.chunks.setGrassSystem(this.grass);
+    this.chunks.setGroundDetailSystem(this.groundDetail);
     this.water    = new WaterSurface(scene);
     this.splashFX = new SplashFX(scene);
     this.prefabs = new PrefabSystem(scene, physics);
@@ -138,7 +149,15 @@ export class SceneBuilder {
     this.addFog();
     this.addSkyDome();
 
-    if (STARTER_MAP_MODE) {
+    // Prefetch original-game splat textures + nature meshes (trees/rocks/ore)
+    // so terrain colour and harvestables pop in quickly after first frame.
+    void import('./world/NatureAssets').then((m) => m.prefetchNatureAssets()).catch(() => {});
+    void import('./world/BiomeTerrainMaterial').then((m) => m.enableTerrainSplatTextures()).catch(() => {});
+
+    // ── 1. Convergence Nexus starter map (middle sector / world origin) ────
+    // Handcrafted encampment GLB — walkable city with BVH + Rapier colliders.
+    // Always attempt load; on failure fall through to pure procedural.
+    if (LOAD_STARTER_MAP) {
       try {
         this.starterMap = new StarterMap(
           this.scene,
@@ -152,6 +171,7 @@ export class SceneBuilder {
           throw new Error(`Starter map "${STARTER_MAP_NAME}" did not load`);
         }
 
+        this.starterMapModeActive = true;
         const root = this.starterMap.getRoot();
         if (root) {
           this.starterMapGrass = new StarterMapGrass(this.scene);
@@ -161,14 +181,13 @@ export class SceneBuilder {
             console.warn('[SceneBuilder] StarterMapGrass build failed:', err);
           }
         }
-
-        this.terrainScatter.scatter(800, 50).catch((err) => {
-          console.warn('[SceneBuilder] TerrainScatter failed:', err);
-        });
-        return;
+        console.info(
+          `[SceneBuilder] Hybrid world: starter map "${STARTER_MAP_NAME}" at origin ` +
+            `+ sector chicken-gun anchors + procedural stream beyond ${OPEN_WORLD_STREAM_RADIUS}m`,
+        );
       } catch (err) {
         console.error(
-          '[SceneBuilder] Starter map failed — falling back to procedural world:',
+          '[SceneBuilder] Starter encampment failed — continuing with procedural + sectors only:',
           err,
         );
         this.starterMap?.dispose();
@@ -178,25 +197,35 @@ export class SceneBuilder {
       }
     }
 
-    // Procedural infinite-world mode (legacy path + starter-map fallback).
-    // Await winter tree init before seeding the first chunk so Mountain/SnowPeak
-    // chunks have models from the very first load.  On error, log and continue —
-    // spawnChunkTrees() returns [] safely so the world still loads without trees.
+    // ── 2. Procedural 20 km surface + chicken-gun sector anchors ────────────
+    // Always run this (hybrid). Terrain under the starter map is masked by
+    // OPEN_WORLD_STREAM_RADIUS so chunks don't poke through the city GLB.
     try {
       await getWinterTreeSystem(this.scene).init();
     } catch (err) {
       console.warn('[SceneBuilder] Winter tree system failed to load:', err);
     }
     this.terrain.build();
-    // Plant all 9 canonical sector GLB anchors (faction maps + wildlands).
-    const sectorBoot = await bootstrapSectorMaps(this.terrainPatches);
+    // Plant sector GLB anchors (faction chicken-gun / city maps + wildlands).
+    // Skip origin when starter encampment GLB already owns the middle sector
+    // so we don't double-stack colliders / meshes at (0,0).
+    const sectorBoot = await bootstrapSectorMaps(this.terrainPatches, {
+      skipOrigin: this.starterMapModeActive,
+      originSkipRadius: OPEN_WORLD_STREAM_RADIUS,
+    });
     if (sectorBoot.failed.length) {
       console.warn('[SceneBuilder] Sector terrain patches incomplete:', sectorBoot.failed);
     }
+    if (sectorBoot.skipped.length) {
+      console.info('[SceneBuilder] Sector patches skipped (starter covers origin):', sectorBoot.skipped);
+    }
     this.chunks.update(0, 0);
     this.markers.build();
-    this.addDungeonElements();
-    this.addTorches();
+    // Skip dungeon filler meshes when we have a real city GLB at origin
+    if (!this.starterMapModeActive) {
+      this.addDungeonElements();
+      this.addTorches();
+    }
     this.features.buildAll();
     this.roads.buildAll();
     const islandDocks = await bootstrapIslandDocks(this.prefabs);
@@ -205,8 +234,10 @@ export class SceneBuilder {
     }
     const deployGate = await bootstrapDeployGate(this.prefabs);
     this.deployGateBoatSpawn = deployGate.boatSpawn;
-    // Scatter craftpix terrain models across the procedural world.
-    this.terrainScatter.scatter(2400, 40).catch((err) => {
+    // Low-poly craftpix / farm scatter: denser so the hybrid surface reads as
+    // a living low-poly MMO world once the player leaves the hub stream edge.
+    const scatterCount = this.starterMapModeActive ? 2200 : 3200;
+    this.terrainScatter.scatter(scatterCount, 36).catch((err) => {
       console.warn('[SceneBuilder] TerrainScatter failed:', err);
     });
 
@@ -283,9 +314,29 @@ export class SceneBuilder {
     );
   }
 
+  /**
+   * Stream procedural chunks + GLB locations around the player.
+   *
+   * Hybrid world: the starter encampment owns origin, but open-world
+   * heightfields must still stream once the player leaves the hub.
+   * Previously this early-returned for the entire session whenever the
+   * starter map loaded — which killed the 20 km sector walk and left
+   * chicken-gun patches floating over missing terrain.
+   *
+   * Rules:
+   *  - Always stream when no starter map.
+   *  - With starter map, stream when outside OPEN_WORLD_STREAM_RADIUS
+   *    (and keep a soft ring so chunks exist as you approach the edge).
+   *  - Inside the hub, skip WorldChunkManager to avoid terrain poking
+   *    through the city GLB; GLB location proximity still updates.
+   */
   updateStreaming(playerX: number, playerZ: number) {
-    if (this.starterMapModeActive) return;
-    this.chunks.update(playerX, playerZ);
+    const distFromOrigin = Math.hypot(playerX, playerZ);
+    const streamEdge = OPEN_WORLD_STREAM_RADIUS * 0.85; // start loading before full exit
+
+    if (!this.starterMapModeActive || distFromOrigin >= streamEdge) {
+      this.chunks.update(playerX, playerZ);
+    }
     this.glbLocations?.update(playerX, playerZ);
   }
 

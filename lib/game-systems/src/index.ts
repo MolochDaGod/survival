@@ -69,3 +69,23 @@ export {
   tierValueMultiplier,
   type AffixDef, type AffixSlotType, type RolledAffix, type LootDrop,
 } from './loot.js';
+
+// Survival crafting catalogs (full surface: @workspace/game-systems/crafting)
+export {
+  RECIPES,
+  SURVIVAL_ITEMS,
+  RECIPE_STATIONS,
+  getRecipe,
+  getRecipesByStation,
+  recipesByStation,
+  getSurvivalItem,
+  listSurvivalItems,
+  buildGameCatalog,
+  type Recipe,
+  type RecipeInput,
+  type RecipeOutput,
+  type SurvivalCategory,
+  type ConsumeEffect,
+  type SurvivalItemDef,
+} from './crafting/index.js';
+export type { CraftingStation as RecipeStation } from './crafting/index.js';

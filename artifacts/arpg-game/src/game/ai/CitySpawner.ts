@@ -22,6 +22,8 @@ import { NPCFaction } from './NPCBrain';
 import { FollowBrain } from './FollowBrain';
 import type { AssetManager } from '../AssetManager';
 import { computeTownshipState, canRecruit, isRoleUnlocked, type NPCRole, type TownshipState } from '../township/TownshipSystem';
+import { evaluateRecruitGate } from '../township/RecruitRequirements';
+import type { CampClaimSystem } from '../survival/camp/CampClaimSystem';
 
 interface CityNPCRecord {
   brainId: string;
@@ -61,6 +63,8 @@ export class CitySpawner {
   onTalkPrompt: ((text: string | null) => void) | null = null;
   /** Callback when an NPC is recruited as a follower. */
   onRecruit: ((npcId: string) => void) | null = null;
+  /** Lore: camp claim for the Four Requirements. */
+  campClaim: CampClaimSystem | null = null;
   /** Currently active followers (recruited NPCs). */
   private followers: CityNPCRecord[] = [];
 
@@ -255,10 +259,16 @@ export class CitySpawner {
   recruitNearest(playerPos: THREE.Vector3): boolean {
     if (!this.nearestId) return false;
 
-    // Enforce Township recruit cap
+    // Enforce Township recruit cap + lore Four Requirements
     const state = this.getTownshipState();
     if (!canRecruit(state)) {
       this.onTalkPrompt?.('Recruit cap reached — invest in Township Leadership to hire more.');
+      return false;
+    }
+    const gate = evaluateRecruitGate(this.campClaim, state, this.followers.length);
+    if (!gate.ok) {
+      this.onTalkPrompt?.(gate.message);
+      console.info('[CitySpawner] Recruit blocked:', gate.missing.join(', '));
       return false;
     }
 
@@ -349,17 +359,34 @@ export class CitySpawner {
     return true;
   }
 
-  /** Get all recruited followers with their roles. */
-  getFollowers(): Array<{ id: string; role?: NPCRole; position: THREE.Vector3 }> {
-    return this.followers.map(f => ({
+  /**
+   * Recruited followers for combat AI + HUD.
+   * Includes mesh / FollowBrain for AllyCombatSystem.
+   */
+  getFollowers(): Array<{
+    id: string;
+    brainId: string;
+    role?: NPCRole;
+    position: THREE.Vector3;
+    mesh: THREE.Object3D;
+    followBrain?: FollowBrain;
+  }> {
+    return this.followers.map((f) => ({
       id: f.brainId,
+      brainId: f.brainId,
       role: f.role,
       position: f.mesh.position.clone(),
+      mesh: f.mesh,
+      followBrain: f.followBrain,
     }));
   }
 
   /** Number of currently recruited followers. */
   get followerCount(): number { return this.followers.length; }
+
+  getFollowerCount(): number {
+    return this.followers.length;
+  }
 
   dispose(): void {
     for (const rec of this.npcs) {

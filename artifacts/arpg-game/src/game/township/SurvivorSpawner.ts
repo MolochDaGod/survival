@@ -89,6 +89,12 @@ export class SurvivorSpawner {
   /** Called when a raid event starts. */
   onRaidStart: ((waveSize: number, tier: SettlementTier) => void) | null = null;
 
+  /**
+   * Optional Survival camp harvest multiplier (from CampClaimSystem buildings).
+   * Defaults to 1. Warlords-era code never sets this.
+   */
+  getCampHarvestMult: (() => number) | null = null;
+
   private nextId = 0;
 
   constructor(citySpawner: CitySpawner, enemyManager: EnemyManager | null) {
@@ -220,7 +226,8 @@ export class SurvivorSpawner {
 
     const state = this.citySpawner.getTownshipState();
     const campFollowers: CampFollower[] = followers.map(f => ({ role: f.role }));
-    const produced = computeProduction(state, campFollowers);
+    const campHarvestMult = this.getCampHarvestMult?.() ?? 1;
+    const produced = computeProduction(state, campFollowers, campHarvestMult);
 
     // Accumulate
     for (const [res, amt] of Object.entries(produced)) {

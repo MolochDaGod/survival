@@ -223,6 +223,48 @@ export const ITEM_DATABASE: Record<string, ItemDef> = {
   },
 };
 
+// ----- SURVIVAL HAND TOOLS / MELEE (equippable mainhand) -----
+// Bridge from SURVIVAL_ITEMS so inventory equip → WeaponAttachment works.
+// Models live under /assets/survival/… and resolve via HandToolCatalog.
+function registerSurvivalHandItem(
+  id: string,
+  name: string,
+  rarity: ItemRarity,
+  damage: number,
+  description: string,
+  icon: string,
+  weaponId?: string,
+): void {
+  if (ITEM_DATABASE[id]) return;
+  ITEM_DATABASE[id] = {
+    id,
+    name,
+    slot: 'mainhand',
+    rarity,
+    icon,
+    description,
+    stats: { damage },
+    weaponId: weaponId ?? id,
+  };
+}
+
+registerSurvivalHandItem('hatchet', 'Hatchet', 'common', 22, 'One-handed chopper — excellent vs timber.', '🪓');
+registerSurvivalHandItem('pickaxe', 'Pickaxe', 'common', 18, 'Mines stone and ore veins.', '⛏️');
+registerSurvivalHandItem('axe_fire', 'Fire Axe', 'uncommon', 32, 'Heavy chopping axe — great vs wood.', '🪓', 'fire_axe');
+registerSurvivalHandItem('knife', 'Hunting Knife', 'common', 18, 'Skin animals, fight close, harvest herbs.', '🔪', 'shadow_dagger');
+registerSurvivalHandItem('machete', 'Machete', 'common', 28, 'Clears brush, cleaves enemies.', '🗡️', 'iron_sword');
+registerSurvivalHandItem('cleaver', 'Cleaver', 'common', 26, "Heavy butcher's blade.", '🔪');
+registerSurvivalHandItem('baseball_bat', 'Baseball Bat', 'common', 24, 'Solid blunt weapon.', '🏏', 'thunder_mace');
+registerSurvivalHandItem('baseball_bat_nails', 'Bat with Nails', 'uncommon', 32, 'Crude but brutal.', '🏏', 'thunder_mace');
+registerSurvivalHandItem('hammer', 'Hammer', 'common', 14, 'Building tool and light melee.', '🔨', 'thunder_mace');
+registerSurvivalHandItem('crowbar', 'Crowbar', 'common', 18, 'Pries containers; decent scrap tool.', '🪛');
+registerSurvivalHandItem('shovel', 'Shovel', 'common', 12, 'Dig and dig-combat.', '🪏');
+registerSurvivalHandItem('climbing_pick', 'Climbing Pick', 'common', 14, 'Climb cliffs, light ore chip.', '⛏️');
+registerSurvivalHandItem('iron_sword', 'Iron Sword', 'common', 25, 'Balanced one-handed sword.', '⚔️');
+registerSurvivalHandItem('fire_axe', 'Fire Axe', 'uncommon', 40, 'Heavy fire-imbued axe.', '🪓');
+registerSurvivalHandItem('shadow_dagger', 'Shadow Dagger', 'uncommon', 15, 'Swift dual-purpose dagger.', '🗡️');
+registerSurvivalHandItem('thunder_mace', 'Thunder Mace', 'uncommon', 35, 'Crackling mace.', '🔨');
+
 // Loot tables — by enemy tier
 export const LOOT_TABLES: Record<string, string[]> = {
   // basic enemies

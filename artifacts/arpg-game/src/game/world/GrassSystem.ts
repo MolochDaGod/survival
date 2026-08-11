@@ -1,6 +1,8 @@
 /**
- * GrassSystem — instanced procedural grass that lives on top of the
- * streamed terrain chunks.
+ * GrassSystem — Layer 1 of the three-layer ground stack
+ * (1 grass · 2 rocks · 3 sticks/debris via GroundDetailSystem).
+ *
+ * Instanced procedural blades on streamed terrain chunks.
  *
  * Design:
  *   • One InstancedMesh per loaded terrain chunk (so we can dispose with
@@ -23,7 +25,9 @@
 import * as THREE from 'three';
 import { worldHeight, getBiome, Biome } from './WorldGen';
 
-const BLADES_PER_CHUNK = 1800;          // tuned for ~40k blades across 7x7 grid
+// Denser cover for the three-layer ground stack (grass + rocks + sticks).
+// ~2.8k blades × 7×7 chunks ≈ 140k blades — still GPU-cheap instancing.
+const BLADES_PER_CHUNK = 2800;
 const PLAYER_COLLIDER_RADIUS = 0.7;    // metres — matches roughly the player capsule
 const BLADE_HEIGHT = 0.55;             // base blade height in metres before per-instance scale
 
@@ -66,8 +70,9 @@ class GrassMaterial extends THREE.ShaderMaterial {
         fTime: { value: 0 },
         vPlayerPosition: { value: new THREE.Vector3(0, -1000, 0) },
         fPlayerColliderRadius: { value: PLAYER_COLLIDER_RADIUS },
-        vColorBase: { value: new THREE.Color(0x1a3a14) },   // dark base
-        vColorTip:  { value: new THREE.Color(0x6fae4e) },   // bright tip
+        // Colours sampled from original-game grass.jpg palette (richer greens)
+        vColorBase: { value: new THREE.Color(0x2d5a22) },   // dark base
+        vColorTip:  { value: new THREE.Color(0x8fc65a) },   // bright tip
         fBladeHeight: { value: BLADE_HEIGHT },
       },
       vertexShader: /* glsl */`

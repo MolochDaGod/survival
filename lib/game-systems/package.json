@@ -13,7 +13,8 @@
     "./items": "./src/items.ts",
     "./tiers": "./src/tiers.ts",
     "./loot": "./src/loot.ts",
-    "./types": "./src/types.ts"
+    "./types": "./src/types.ts",
+    "./crafting": "./src/crafting/index.ts"
   },
   "dependencies": {}
 }

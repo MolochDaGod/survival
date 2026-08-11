@@ -46,16 +46,19 @@ interface ChunkEntry {
 
 const terrainMat = createBiomeTerrainMaterial();
 
+// Colours aligned with original-game grass.jpg / bark palette
 const trunkMat = new THREE.MeshStandardMaterial({
-  color: 0x3d2b1f,
-  roughness: 0.95,
-  envMapIntensity: 0.3,
+  color: 0x4a3424,
+  roughness: 0.92,
+  metalness: 0.0,
+  envMapIntensity: 0.35,
 });
 
 const foliageMat = new THREE.MeshStandardMaterial({
-  color: 0x1a4028,
-  roughness: 0.9,
-  envMapIntensity: 0.4,
+  color: 0x3d8a38,
+  roughness: 0.82,
+  metalness: 0.0,
+  envMapIntensity: 0.45,
 });
 
 // ─── Shared tree geometries ────────────────────────────────────────────────────
@@ -81,10 +84,10 @@ const _rockGeo = (() => {
 })();
 
 const rockMat = new THREE.MeshStandardMaterial({
-  color: 0x686860,
-  roughness: 0.95,
-  metalness: 0.02,
-  envMapIntensity: 0.3,
+  color: 0x7a7870,
+  roughness: 0.9,
+  metalness: 0.04,
+  envMapIntensity: 0.35,
 });
 
 // ─── Manager ─────────────────────────────────────────────────────────────────
@@ -97,6 +100,8 @@ export class WorldChunkManager {
   // Optional decorative-grass overlay. Receives chunk load/evict events so
   // grass streams in/out alongside the terrain it sits on.
   private grass: GrassSystem | null = null;
+  /** Layer 2–3 ground cover (rocks, sticks, leaf debris). */
+  private groundDetail: import('./GroundDetailSystem').GroundDetailSystem | null = null;
   // Optional Rapier physics. When present, every chunk also produces a
   // heightfield collider so the player's kinematic capsule has a real
   // ground to stand on (and trees to bump into). Null skips physics
@@ -164,6 +169,21 @@ export class WorldChunkManager {
     if (grass) {
       for (const entry of this.chunks.values()) {
         grass.buildChunk(entry.cx, entry.cz, CHUNK_SIZE);
+      }
+    }
+  }
+
+  /**
+   * Rocks / sticks / debris layer (with grass = three-layer ground cover).
+   * Back-fills any chunks already resident.
+   */
+  setGroundDetailSystem(
+    detail: import('./GroundDetailSystem').GroundDetailSystem | null,
+  ) {
+    this.groundDetail = detail;
+    if (detail) {
+      for (const entry of this.chunks.values()) {
+        detail.buildChunk(entry.cx, entry.cz, CHUNK_SIZE);
       }
     }
   }
@@ -402,6 +422,8 @@ export class WorldChunkManager {
     // Plant decorative grass on top of this chunk (only on Grass/Forest
     // biomes — the GrassSystem itself filters out water, beach, mountain).
     this.grass?.buildChunk(cx, cz, CHUNK_SIZE);
+    // Rocks + sticks + leaf debris (layers 2–3 of the ground stack).
+    this.groundDetail?.buildChunk(cx, cz, CHUNK_SIZE);
   }
 
   private evictChunk(key: string, entry: ChunkEntry) {
@@ -426,6 +448,7 @@ export class WorldChunkManager {
     // Tear down the grass instance for this chunk so it doesn't leak GPU
     // memory as the player moves across the world.
     this.grass?.destroyChunk(entry.cx, entry.cz);
+    this.groundDetail?.destroyChunk(entry.cx, entry.cz);
     // Drop the matching Rapier bodies. Safe to call even if physics was
     // never attached (handle is null in that case).
     entry.physicsTerrain?.dispose();

@@ -92,6 +92,7 @@
     "@three.ez/batched-mesh-extensions": "^0.0.11",
     "@three.ez/instanced-mesh": "^0.3.15",
     "colyseus.js": "^0.16.22",
+    "grudge-control": "file:vendor/grudge-control",
     "howler": "^2.2.4",
     "lil-gui": "^0.20.0",
     "postprocessing": "^6.39.1",

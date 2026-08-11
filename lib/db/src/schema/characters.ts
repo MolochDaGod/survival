@@ -28,6 +28,17 @@ export const charactersTable = pgTable("characters", {
   isActive: boolean("is_active"),
   spriteConfig: jsonb("sprite_config"),
   model3d: jsonb("model_3d"),
+  /** Deterministic GRDG-* build fingerprint (EntitySpec hash). */
+  grudgeSpecId: varchar("grudge_spec_id", { length: 16 }),
+  /** Solana cNFT mint address when character is minted on-chain. */
+  cnftMintId: varchar("cnft_mint_id", { length: 128 }),
+  /** Canonical GRUDGE6 prefab slug (sir-aldric-valorheart, …). */
+  prefabId: varchar("prefab_id", { length: 64 }),
+  /** Compact EntitySpec spawn code (GRDG1.…). */
+  spawnCode: text("spawn_code"),
+  gameEra: text("game_era").default("warlords"),
+  activeForEra: boolean("active_for_era").default(false),
+  schemaVersion: integer("schema_version").default(1),
   gameState: jsonb("game_state"),
   /** Character creation config (race, class, appearance, origin). */
   config: jsonb("config"),

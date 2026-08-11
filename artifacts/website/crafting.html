@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Grudges — Crafting Codex</title>
+<meta name="description" content="Survival crafting recipes, stations, and materials for Grudges. Live catalog from /api/game." />
+<meta property="og:title" content="Grudges — Crafting Codex" />
+<meta property="og:description" content="Every recipe, station, and material in the Convergence Nexus." />
+<meta property="og:image" content="opengraph.png" />
+<meta property="og:type" content="website" />
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+<link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=EB+Garamond:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap" />
+<style>
+  :root {
+    --bg-deep:#0a0604; --bg:#14100a; --panel:#1c1610; --panel-2:#221a12;
+    --gold:#c5a059; --gold-bright:#f0d088; --gold-dim:rgba(197,160,89,0.4);
+    --parchment:#e8d8a8; --ink:#2a1810; --muted:#9a8a6a; --dim:#6a5a3a;
+    --ember:#d4602a; --blood:#8a2020; --moss:#6e8a3a; --chill:#5a9ad8; --bone:#c8b890;
+    --rule:rgba(197,160,89,0.25); --rule-strong:rgba(197,160,89,0.55);
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+    --display:'Cinzel',serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg-deep);color:var(--parchment);font-family:'EB Garamond',Georgia,serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+  a{color:var(--gold-bright);text-decoration:none;transition:color .15s}
+  a:hover{color:var(--ember)}
+  h1,h2,h3{font-family:var(--display);color:var(--gold-bright);letter-spacing:.03em;margin:0 0 .6rem;line-height:1.2}
+  h1{font-size:clamp(2.2rem,4vw,3.4rem);font-weight:900}
+  h2{font-size:clamp(1.4rem,2.2vw,1.9rem);font-weight:700;color:var(--gold)}
+
+  nav.site{position:sticky;top:0;z-index:50;background:linear-gradient(to bottom,rgba(10,6,4,0.96),rgba(10,6,4,0.85));border-bottom:1px solid var(--rule);backdrop-filter:blur(8px)}
+  nav.site .inner{display:flex;align-items:center;justify-content:space-between;padding:.85rem 1.5rem;max-width:1180px;margin:0 auto;gap:1rem}
+  nav.site .brand{display:flex;align-items:center;gap:.65rem;font-family:var(--display);font-weight:700;font-size:1.2rem;color:var(--gold-bright)}
+  nav.site .brand img{width:32px;height:32px}
+  nav.site ul{list-style:none;display:flex;gap:1.4rem;margin:0;padding:0;flex-wrap:wrap}
+  nav.site ul a{color:var(--parchment);font-family:var(--display);font-size:.85rem;letter-spacing:.12em;text-transform:uppercase}
+  nav.site ul a.active{color:var(--gold-bright)}
+  nav.site .play{background:linear-gradient(to bottom,var(--gold),#8a6a30);color:var(--ink);font-family:var(--display);font-weight:700;padding:.55rem 1.1rem;border-radius:2px;letter-spacing:.15em;text-transform:uppercase;font-size:.8rem;border:1px solid var(--gold-bright)}
+
+  .container{max-width:1180px;margin:0 auto;padding:0 1.5rem}
+  .page-hero{padding:3.2rem 1.5rem 2.2rem;text-align:center;border-bottom:1px solid var(--rule)}
+  .page-hero .eyebrow{font-family:var(--display);color:var(--ember);letter-spacing:.25em;text-transform:uppercase;font-size:.82rem}
+  .page-hero p.lead{font-size:1.05rem;max-width:780px;margin:.8rem auto 0;opacity:.9}
+  .meta{display:flex;justify-content:center;gap:1.6rem;flex-wrap:wrap;margin-top:1.2rem;font-family:var(--mono);font-size:.78rem;color:var(--muted)}
+  .meta b{color:var(--gold-bright);font-weight:600}
+
+  .controls{position:sticky;top:62px;z-index:40;background:rgba(20,16,10,0.96);border-bottom:1px solid var(--rule);backdrop-filter:blur(8px);padding:.9rem 0}
+  .controls .row{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap}
+  .controls input[type="search"]{flex:1 1 220px;min-width:200px;background:rgba(0,0,0,0.4);border:1px solid var(--rule);color:var(--parchment);padding:.55rem .85rem;border-radius:2px;font-family:'EB Garamond',Georgia,serif;font-size:.95rem}
+  .controls input[type="search"]:focus{outline:none;border-color:var(--gold)}
+  .chips{display:flex;gap:.4rem;flex-wrap:wrap}
+  .chip{background:rgba(0,0,0,0.35);border:1px solid var(--rule);color:var(--parchment);padding:.32rem .7rem;border-radius:2px;font-family:var(--display);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;user-select:none}
+  .chip:hover{border-color:var(--gold)}
+  .chip.active{background:linear-gradient(to bottom,var(--gold),#8a6a30);color:var(--ink);border-color:var(--gold-bright)}
+  .chip .ct{margin-left:.35em;color:var(--muted);font-family:var(--mono);font-size:.66rem}
+  .chip.active .ct{color:rgba(42,24,16,0.6)}
+  .status{font-family:var(--mono);font-size:.75rem;color:var(--muted);margin-left:auto}
+  .status.ok{color:var(--moss)}
+  .status.err{color:#e06060}
+
+  .grid-wrap{padding:2rem 0 4rem}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.1rem}
+  .card{background:linear-gradient(to bottom,var(--panel),var(--panel-2));border:1px solid var(--rule);border-left:4px solid var(--gold);border-radius:0 4px 4px 0;padding:1.05rem 1.15rem;display:flex;flex-direction:column;gap:.5rem;transition:transform .15s}
+  .card:hover{transform:translateY(-2px);border-left-color:var(--gold-bright)}
+  .card-head{display:flex;gap:.75rem;align-items:flex-start}
+  .icon{width:48px;height:48px;flex-shrink:0;border:1px solid var(--rule-strong);border-radius:3px;background:rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;font-size:1.5rem}
+  .card h3{margin:0;font-size:1.05rem;text-transform:none;letter-spacing:.02em;color:var(--gold-bright);font-family:var(--display)}
+  .station{font-size:.75rem;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;font-family:var(--display)}
+  .desc{font-size:.95rem;opacity:.9;margin:0}
+  .io{display:flex;flex-direction:column;gap:.35rem;margin-top:.25rem}
+  .io-row{display:flex;flex-wrap:wrap;gap:.35rem;align-items:center;font-size:.88rem}
+  .io-label{font-family:var(--display);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);min-width:3.2rem}
+  .pill{display:inline-flex;align-items:center;gap:.3rem;background:rgba(0,0,0,0.35);border:1px solid var(--rule);padding:.18rem .5rem;border-radius:2px;font-family:var(--mono);font-size:.72rem}
+  .pill.out{border-color:rgba(110,138,58,0.55);color:#c8e080}
+  .time{font-family:var(--mono);font-size:.72rem;color:var(--chill);margin-top:auto}
+
+  .empty,.error{text-align:center;padding:3rem 1rem;color:var(--muted)}
+  .error{color:#e08080}
+  footer{border-top:1px solid var(--rule);padding:1.5rem;text-align:center;font-size:.85rem;color:var(--muted)}
+  footer code{font-family:var(--mono);color:var(--gold);font-size:.78rem}
+</style>
+</head>
+<body>
+<nav class="site">
+  <div class="inner">
+    <a class="brand" href="/"><img src="grudges-logo.png" alt="" width="32" height="32" />Grudges</a>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/bestiary">Bestiary</a></li>
+      <li><a href="/crafting" class="active">Crafting</a></li>
+      <li><a href="/stats-guide.html">Stats</a></li>
+      <li><a href="/lore.html">Lore</a></li>
+    </ul>
+    <a class="play" href="/arpg-game/">Play</a>
+  </div>
+</nav>
+
+<header class="page-hero">
+  <div class="eyebrow">Field Codex · Survival Systems</div>
+  <h1>Crafting Codex</h1>
+  <p class="lead">Every handcraft and station recipe in the Convergence Nexus — live from the game data API.</p>
+  <div class="meta" id="meta">
+    <span>Recipes <b id="meta-recipes">—</b></span>
+    <span>Items <b id="meta-items">—</b></span>
+    <span>Stations <b id="meta-stations">—</b></span>
+  </div>
+</header>
+
+<section class="controls">
+  <div class="container row">
+    <input type="search" id="search" placeholder="Search recipes, materials…" autocomplete="off" />
+    <div class="chips" id="station-chips"></div>
+    <div class="status" id="api-status">Loading /api/game…</div>
+  </div>
+</section>
+
+<main class="grid-wrap">
+  <div class="container">
+    <div class="grid" id="grid"></div>
+    <div class="empty" id="empty" hidden>No recipes match.</div>
+    <div class="error" id="error" hidden></div>
+  </div>
+</main>
+
+<footer>
+  Data source: <code>GET /api/game/catalog</code> · also <code>/api/game/recipes</code> · <code>/api/game/items</code>
+</footer>
+
+<script>
+(function () {
+  const API = '/api/game';
+  const grid = document.getElementById('grid');
+  const empty = document.getElementById('empty');
+  const errEl = document.getElementById('error');
+  const status = document.getElementById('api-status');
+  const search = document.getElementById('search');
+  const chips = document.getElementById('station-chips');
+
+  let catalog = null;
+  let activeStation = 'all';
+  let itemsById = {};
+
+  const STATION_ICONS = {
+    none: '✋', campfire: '🔥', cooking_rack: '🍖',
+    workbench: '🪚', drying_rack: '🪵', profession_bench: '⚒️',
+  };
+
+  function itemName(id) {
+    const it = itemsById[id];
+    return it ? `${it.icon || '📦'} ${it.name}` : id;
+  }
+
+  function renderChips(stations) {
+    const all = [{ id: 'all', name: 'All', icon: '📜', recipeCount: catalog?.recipeCount ?? 0 }];
+    const list = all.concat(stations || []);
+    chips.innerHTML = list.map((s) => {
+      const id = s.id;
+      const label = s.name || id;
+      const ct = s.recipeCount ?? 0;
+      const active = id === activeStation ? ' active' : '';
+      return `<button type="button" class="chip${active}" data-station="${id}">${s.icon || STATION_ICONS[id] || '•'} ${label}<span class="ct">${ct}</span></button>`;
+    }).join('');
+    chips.querySelectorAll('.chip').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        activeStation = btn.getAttribute('data-station') || 'all';
+        renderChips(catalog.stations);
+        render();
+      });
+    });
+  }
+
+  function matches(recipe, q) {
+    if (!q) return true;
+    const hay = [
+      recipe.name, recipe.description, recipe.id, recipe.station, recipe.iconItemId,
+      ...(recipe.inputs || []).map((i) => i.itemId + ' ' + (itemsById[i.itemId]?.name || '')),
+      ...(recipe.outputs || []).map((o) => o.itemId + ' ' + (itemsById[o.itemId]?.name || '')),
+    ].join(' ').toLowerCase();
+    return hay.includes(q);
+  }
+
+  function render() {
+    if (!catalog) return;
+    const q = (search.value || '').trim().toLowerCase();
+    let recipes = catalog.recipes || [];
+    if (activeStation !== 'all') {
+      recipes = recipes.filter((r) => r.station === activeStation);
+    }
+    recipes = recipes.filter((r) => matches(r, q));
+
+    empty.hidden = recipes.length > 0;
+    grid.innerHTML = recipes.map((r) => {
+      const iconItem = itemsById[r.iconItemId];
+      const icon = iconItem?.icon || STATION_ICONS[r.station] || '🛠️';
+      const stationLabel = (catalog.stations || []).find((s) => s.id === r.station)?.name || r.station;
+      const inputs = (r.inputs || []).map((i) =>
+        `<span class="pill">${itemName(i.itemId)} ×${i.qty}</span>`
+      ).join('');
+      const outputs = (r.outputs || []).map((o) =>
+        `<span class="pill out">${itemName(o.itemId)} ×${o.qty}</span>`
+      ).join('');
+      return `<article class="card">
+        <div class="card-head">
+          <div class="icon">${icon}</div>
+          <div>
+            <h3>${escapeHtml(r.name)}</h3>
+            <div class="station">${escapeHtml(stationLabel)} · ${escapeHtml(r.id)}</div>
+          </div>
+        </div>
+        <p class="desc">${escapeHtml(r.description || '')}</p>
+        <div class="io">
+          <div class="io-row"><span class="io-label">In</span>${inputs || '<span class="pill">—</span>'}</div>
+          <div class="io-row"><span class="io-label">Out</span>${outputs || '<span class="pill out">—</span>'}</div>
+        </div>
+        <div class="time">${Number(r.craftTime || 0)}s craft time</div>
+      </article>`;
+    }).join('');
+  }
+
+  function escapeHtml(s) {
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  async function fetchCatalog() {
+    const urls = [
+      `${API}/catalog`,
+      '/data/game-catalog.json',
+    ];
+    let lastErr;
+    for (const url of urls) {
+      try {
+        const res = await fetch(url, { headers: { Accept: 'application/json' } });
+        if (!res.ok) throw new Error(`HTTP ${res.status} @ ${url}`);
+        const data = await res.json();
+        return { data, url };
+      } catch (e) {
+        lastErr = e;
+      }
+    }
+    throw lastErr || new Error('catalog unavailable');
+  }
+
+  async function load() {
+    status.textContent = 'Loading /api/game/catalog…';
+    status.className = 'status';
+    errEl.hidden = true;
+    try {
+      const { data, url } = await fetchCatalog();
+      catalog = data;
+      itemsById = catalog.items || {};
+      document.getElementById('meta-recipes').textContent = String(catalog.recipeCount ?? (catalog.recipes || []).length);
+      document.getElementById('meta-items').textContent = String(catalog.itemCount ?? Object.keys(itemsById).length);
+      document.getElementById('meta-stations').textContent = String((catalog.stations || []).length);
+      status.textContent = 'Data online · ' + url;
+      status.className = 'status ok';
+      renderChips(catalog.stations);
+      render();
+    } catch (e) {
+      status.textContent = 'API offline';
+      status.className = 'status err';
+      errEl.hidden = false;
+      errEl.textContent = 'Could not load crafting catalog. ' + (e && e.message ? e.message : e);
+    }
+  }
+
+  search.addEventListener('input', () => render());
+  load();
+})();
+</script>
+</body>
+</html>

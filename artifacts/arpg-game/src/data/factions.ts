@@ -12,9 +12,9 @@
  *   • WorldMapOverlay (faction-colored zone rendering)
  *   • Future ReputationService (player rep tracking + tier broadcasts)
  *
- * No runtime AI / raid / claim-flag systems are implied here. Adding those is
- * a separate task; this file is the single source of truth for what a faction
- * IS so those systems can be layered on without re-defining ids.
+ * Runtime claim-flag / camp systems live in survival era only:
+ *   `src/game/survival/camp/CampClaimSystem.ts` (not Warlords).
+ * This file remains the single source of truth for what a faction IS.
  */
 
 export type FactionId =

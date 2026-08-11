@@ -237,12 +237,25 @@ export class EnemyManager {
     this.spawnEnemyAt(x, z);
   }
 
+  /**
+   * Optional sector / MMO hostile pool provider (wired from SectorDeployment).
+   * When set, wave spawns prefer biome-appropriate enemy keys.
+   */
+  private hostilePoolProvider: (() => string[] | undefined) | null = null;
+
+  setHostilePoolProvider(fn: (() => string[] | undefined) | null): void {
+    this.hostilePoolProvider = fn;
+  }
+
   /** Pick an enemy type key, preferring a sector hostile pool when provided. */
   private pickEnemyType(hostilePool?: string[]): string {
     const defs = this.assetManager?.enemyDefs ?? ENEMY_DEFS;
-    if (hostilePool?.length) {
+    const pool = hostilePool?.length
+      ? hostilePool
+      : this.hostilePoolProvider?.();
+    if (pool?.length) {
       const keys = new Set(defs.map(d => d.key));
-      const valid = hostilePool.filter(k => keys.has(k));
+      const valid = pool.filter(k => keys.has(k));
       if (valid.length) {
         return valid[Math.floor(Math.random() * valid.length)];
       }

@@ -87,7 +87,8 @@ export const SECTORS: SectorDef[] = [
     center: { x: 6000, z: 0 },
     radius: SECTOR_RADIUS_M,
     biomeBias: 'wreckage',
-    glbMap: 'chicken_gun_town2f_reupload.glb',
+    /** Dense city-scale chicken-gun map (player city kit / town3f family). */
+    glbMap: 'town3f2_chicken_gun_map_reupload.glb',
     description: 'Salvage fields and workshop sheds. Every wreck is a parts shop.',
     lore: 'When The Way abandoned the surface it left rail yards, smelters, cable runs, and mountains of sorted scrap. The Tech-Scavengers were the mechanics who kept the machines alive for wages. Now they keep them alive for themselves. Their territory is corrugated steel, jury-rigged generators, gunfire, grinding wheels, and scavenger law.',
     pois: [
@@ -213,13 +214,19 @@ export const SECTORS: SectorDef[] = [
     center: { x: 0, z: 0 },
     radius: ARENA_SAFE_RADIUS,
     biomeBias: 'town',
-    glbMap: 'chicken_gun_mistytown.glb',
+    /**
+     * Handcrafted starter uses locations/encampment.glb at origin via StarterMap.
+     * Sector patch for convergence is skipped when starter map mode is active;
+     * this glbMap is the fallback anchor when pure procedural hybrid runs.
+     */
+    glbMap: 'chicken_gun_fruzer_-_encampment.glb',
     description: 'Neutral encampment — five faction roads converge at the world origin.',
-    lore: 'Before the factions carved the map into territories, traders met here. The Nexus remains the only ground where no warband may claim blood-debt without every faction answering.',
+    lore: 'Before the factions carved the map into territories, traders met here. The Nexus remains the only ground where no warband may claim blood-debt without every faction answering. Stake your Claim Flag on the middle pad — 80 m of camp authority, unarmed race guardian, benches and walls.',
     pois: [
       { name: 'Encampment', type: 'landmark', offset: { x: 0, z: 0 }, description: 'Player safe start — vendors, quest board, deploy gate.' },
+      { name: 'Middle Camp Pad', type: 'camp', offset: { x: 0, z: 10 }, description: 'Starter claim plot — flag, campfire, workbench, tent.' },
       { name: 'Deploy Gate', type: 'gate', offset: { x: 0, z: 42 }, description: 'Sail or march to any of the nine sectors.' },
-      { name: 'Quartermaster', type: 'vendor', offset: { x: -24, z: 18 }, description: 'Starter kits, maps, rations.' },
+      { name: 'Quartermaster', type: 'vendor', offset: { x: -24, z: 18 }, description: 'Starter kits, maps, rations — Rivet.' },
     ],
     hostileTypes: [],
     fauna: ['rabbit', 'deer', 'pheasant'],

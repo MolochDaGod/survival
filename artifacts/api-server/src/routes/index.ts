@@ -13,6 +13,7 @@ import { engineRouter } from "./engine";
 import { masksRouter } from "./masks";
 import { assistantRouter } from "./assistant";
 import { worldRouter } from "./world";
+import gameRouter from "./game";
 
 const router: IRouter = Router();
 
@@ -30,5 +31,7 @@ router.use("/engine", engineRouter);
 router.use("/masks", masksRouter);
 router.use("/assistant", assistantRouter);
 router.use("/world", worldRouter);
+/** Static game catalogs (crafting, items, deployables) — always online. */
+router.use("/game", gameRouter);
 
 export default router;

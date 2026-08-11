@@ -74,6 +74,22 @@ export interface MainPanelProps {
   onCraft: (recipeId: string) => void;
   onUnlockPerk: (perkId: string, track: StatTrack) => void;
   onClose: () => void;
+  /** MMO-style party / hub contacts for Friends tab. */
+  allies?: Array<{
+    name: string;
+    level: number;
+    status: string;
+    online: boolean;
+    icon?: string;
+  }>;
+  /** Active operator identity (toon callsign / faction). */
+  operatorIdentity?: {
+    callsign: string;
+    icon: string;
+    faction: string;
+    role: string;
+    blurb: string;
+  };
 }
 
 type TabId =
@@ -150,19 +166,14 @@ function getLiveQuests() {
   }
   return quests;
 }
-const SAMPLE_FRIENDS = [
-  { name: 'Shadowfang',  level: 38, status: 'In Party',  online: true  },
-  { name: 'Ironmaul',    level: 35, status: 'Old Mine',  online: true  },
-  { name: 'Emberclaw',   level: 31, status: 'Iron Hills',online: true  },
-  { name: 'Duskwhisper', level: 28, status: 'Offline',   online: false },
-];
-
 // ─── Component ────────────────────────────────────────────────────────────
 export const MainPanel: React.FC<MainPanelProps> = (props) => {
   const {
     stats, bag, bagCap, equipped, totalStats, abilities, cooldowns,
     survivalStacks, nearbyStations, perksUnlocked, perksSpent,
     onEquip, onUnequip, onDrop, onCraft, onUnlockPerk, onClose,
+    allies = [],
+    operatorIdentity,
   } = props;
 
   const [tab, setTab] = useState<TabId>('professions');
@@ -214,7 +225,10 @@ export const MainPanel: React.FC<MainPanelProps> = (props) => {
         </div>
         <div className="mp-top-info">
           <ResourceBars stats={stats} />
-          <span className="mp-name">Lv.{stats.level} Survivor</span>
+          <span className="mp-name">
+            {operatorIdentity?.icon ? `${operatorIdentity.icon} ` : ''}
+            Lv.{stats.level} {operatorIdentity?.callsign ?? 'Survivor'}
+          </span>
           <button className="mp-close" onClick={onClose} title="Close (C / Esc)">✕</button>
         </div>
       </header>
@@ -223,7 +237,7 @@ export const MainPanel: React.FC<MainPanelProps> = (props) => {
       <div className="mp-body">
         {/* LEFT — sidebar stats */}
         <aside className="mp-left">
-          <CharPreview stats={stats} totalStats={totalStats} />
+          <CharPreview stats={stats} totalStats={totalStats} operator={operatorIdentity} />
           <SidebarStats primaryStats={primaryStats} progression={progression} />
           <SidebarSurvival stats={stats} />
           <SidebarProgression stats={stats} perksSpent={perksSpent} />
@@ -250,7 +264,7 @@ export const MainPanel: React.FC<MainPanelProps> = (props) => {
             {tab === 'quest'       && <QuestTab />}
             {tab === 'skills'      && <SkillsTab perksUnlocked={perksUnlocked} perksSpent={perksSpent} onUnlock={onUnlockPerk} skillPoints={stats.skillPoints} />}
             {tab === 'crafting'    && <CraftingTab stacks={survivalStacks} nearbyStations={nearbyStations} onCraft={onCraft} />}
-            {tab === 'friends'     && <FriendsTab />}
+            {tab === 'friends'     && <FriendsTab allies={allies} />}
             {tab === 'medical'     && <MedicalTab stats={stats} stacks={survivalStacks} onCraft={onCraft} />}
           </div>
         </main>
@@ -305,10 +319,28 @@ const Bar: React.FC<{ pct: number; fill: string; label: string }> = ({ pct, fill
 );
 
 // ─── Left sidebar pieces ───────────────────────────────────────────────────
-const CharPreview: React.FC<{ stats: PlayerStats; totalStats: ItemStats }> = ({ stats }) => (
+const CharPreview: React.FC<{
+  stats: PlayerStats;
+  totalStats: ItemStats;
+  operator?: MainPanelProps['operatorIdentity'];
+}> = ({ stats, operator }) => (
   <div className="mp-char-preview">
-    <div className="mp-char-silhouette">⚔<br/>Warlord</div>
-    <div className="mp-char-lvl">Lv.{stats.level}</div>
+    <div className="mp-char-silhouette">
+      {operator?.icon ?? '⚔'}
+      <br />
+      <span style={{ fontSize: 11, letterSpacing: '0.06em' }}>
+        {operator?.callsign ?? 'Operator'}
+      </span>
+    </div>
+    <div className="mp-char-lvl">
+      Lv.{stats.level}
+      {operator?.faction ? ` · ${operator.faction}` : ''}
+    </div>
+    {operator?.role && (
+      <div className="mp-char-lvl" style={{ opacity: 0.75, fontSize: 10 }}>
+        {operator.role}
+      </div>
+    )}
   </div>
 );
 
@@ -1054,25 +1086,45 @@ const CraftingTab: React.FC<{
   );
 };
 
-// ─── FRIENDS TAB ──────────────────────────────────────────────────────────
-const FriendsTab: React.FC = () => (
+// ─── FRIENDS / PARTY TAB (MMO living camp) ─────────────────────────────────
+const FriendsTab: React.FC<{
+  allies: Array<{
+    name: string;
+    level: number;
+    status: string;
+    online: boolean;
+    icon?: string;
+  }>;
+}> = ({ allies }) => (
   <>
-    <div className="mp-section-title">Friends</div>
+    <div className="mp-section-title">
+      Party &amp; Contacts
+      <span className="mp-section-meta">
+        {allies.filter((a) => a.online).length} online · hire with F near survivors
+      </span>
+    </div>
     <div className="mp-friends">
-      {SAMPLE_FRIENDS.map((f) => (
-        <div key={f.name} className={`mp-friend ${f.online ? '' : 'offline'}`}>
+      {allies.length === 0 && (
+        <div className="mp-empty">
+          No party yet — claim a camp flag, hire survivors (F), and hub crew will list here.
+        </div>
+      )}
+      {allies.map((f) => (
+        <div key={f.name + f.status} className={`mp-friend ${f.online ? '' : 'offline'}`}>
           <div className="dot" style={{ background: f.online ? '#6ec96e' : '#555' }} />
           <div className="info">
-            <div className="name">{f.name}</div>
+            <div className="name">{f.icon ? `${f.icon} ${f.name}` : f.name}</div>
             <div className="status">{f.online ? f.status : 'Offline'}</div>
           </div>
           <div className="lvl">Lv.{f.level}</div>
-          <button className="mp-btn ghost" disabled={!f.online}>Whisper</button>
+          <button className="mp-btn ghost" disabled={!f.online} title="Party commands coming with multiplayer">
+            {f.status.includes('Party') ? 'Lead' : 'Ping'}
+          </button>
         </div>
       ))}
     </div>
     <div className="mp-empty" style={{ marginTop: 14 }}>
-      Multiplayer not yet enabled — this list is a preview of the upcoming friends system.
+      Cross-server friends sync with multiplayer — camp recruits and Nexus crew are live now.
     </div>
   </>
 );

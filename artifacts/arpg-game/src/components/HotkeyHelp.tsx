@@ -23,9 +23,20 @@ const GROUPS: Group[] = [
   {
     name: 'Combat',
     bindings: [
-      { keys: ['LMB'], action: 'Attack / fire' },
-      { keys: ['RMB'], action: 'Block / parry' },
+      { keys: ['LMB'], action: 'Attack / fire / harvest' },
+      { keys: ['RMB'], action: 'Focus ADS (ranged) / block in Combat mode' },
+      { keys: ['B'], action: 'Block / parry' },
+      { keys: ['Shift'], action: 'Dodge roll (i-frames)' },
       { keys: ['Q'], action: 'Swap weapon' },
+    ],
+  },
+  {
+    name: 'Modes & Cinema',
+    bindings: [
+      { keys: ['M'], action: 'Cycle Free / Combat / Harvest / Build' },
+      { keys: ['F9'], action: 'Toggle AFK defend script' },
+      { keys: ['F10'], action: 'Cinema orbit (Esc exit)' },
+      { keys: ['F11'], action: 'Record WebM clip' },
     ],
   },
   {

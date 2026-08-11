@@ -90,7 +90,8 @@ export const SECTOR_CANON: SectorCanonEntry[] = [
       wild_herbs: 0.8, frozen_pond: 1.5,
     },
     terrainPalette: 'tundra',
-    campBodies: ['medieval', 'witch', 'soldier'],
+    // Keepers + frost long-eye (toon operators)
+    campBodies: ['toon-nim', 'toon-suture', 'toon-permafrost'],
     vfx: { telegraph: 0x88ccff, meleeSlash: 0xccddff, magicCore: 0x66aaff, arcScale: 1.1 },
     flow: {
       title: 'Frostbite Fringe',
@@ -105,7 +106,7 @@ export const SECTOR_CANON: SectorCanonEntry[] = [
       crystal_node: 1.4, stone_outcrop: 1.1,
     },
     terrainPalette: 'highland',
-    campBodies: ['medieval', 'king', 'farmer'],
+    campBodies: ['toon-nim', 'toon-suture', 'toon-bastion'],
     vfx: { telegraph: 0xd4b870, meleeSlash: 0xffdd88, magicCore: 0xffaa44, arcScale: 1 },
     flow: {
       title: 'Cathedral Highlands',
@@ -120,7 +121,7 @@ export const SECTOR_CANON: SectorCanonEntry[] = [
       oil_drum: 1.2, wire_spool: 1.4,
     },
     terrainPalette: 'desert',
-    campBodies: ['punk', 'worker', 'scifi'],
+    campBodies: ['toon-vex', 'toon-rivet', 'toon-ashcoil'],
     vfx: { telegraph: 0xff6644, meleeSlash: 0xff8844, rangedTrail: 0xffaa00, arcScale: 0.9 },
     flow: {
       title: 'Stormbreak Scrub',
@@ -135,7 +136,7 @@ export const SECTOR_CANON: SectorCanonEntry[] = [
       wheat_field: 1.5, clay_deposit: 1.3,
     },
     terrainPalette: 'default',
-    campBodies: ['suit', 'casual', 'adventurer'],
+    campBodies: ['toon-ledger', 'toon-scope', 'toon-ashcoil'],
     vfx: { telegraph: 0x66ccaa, meleeSlash: 0xaaffcc, rangedTrail: 0x88ffdd, arcScale: 1 },
     flow: {
       title: 'The Switchyard',
@@ -149,12 +150,13 @@ export const SECTOR_CANON: SectorCanonEntry[] = [
       wild_herbs: 0.6, timber_log: 0.5, flint_outcrop: 0.4,
     },
     terrainPalette: 'default',
-    campBodies: ['adventurer', 'casual', 'beach'],
+    // Hub mix: Network law + Hollow line fighter (starter cast)
+    campBodies: ['toon-ledger', 'toon-brick', 'toon-rivet'],
     vfx: { telegraph: 0x88ffcc, meleeSlash: 0xffffff, magicCore: 0xccffee, arcScale: 0.8 },
     flow: {
       title: 'Convergence Nexus',
       subtitle: 'Safe encampment — five roads meet here',
-      objective: 'Deploy to a faction sector or resume your last route',
+      objective: 'Stake your Claim Flag on the middle pad, then pick a faction road',
     },
   }),
   entry('grid_east_junk', {
@@ -164,7 +166,7 @@ export const SECTOR_CANON: SectorCanonEntry[] = [
       wire_spool: 1.6, flint_outcrop: 1.0,
     },
     terrainPalette: 'desert',
-    campBodies: ['punk', 'worker', 'scifi'],
+    campBodies: ['toon-vex', 'toon-rivet', 'toon-bastion'],
     vfx: { telegraph: 0xff4422, meleeSlash: 0xff6622, rangedTrail: 0xffcc00, arcScale: 0.85 },
     flow: {
       title: 'The Junkyards',
@@ -179,7 +181,7 @@ export const SECTOR_CANON: SectorCanonEntry[] = [
       wild_herbs: 1.4, coral_node: 1.1,
     },
     terrainPalette: 'swamp',
-    campBodies: ['witch', 'beach', 'casual-hoodie'],
+    campBodies: ['toon-cinder', 'toon-greyvial', 'toon-permafrost'],
     vfx: { telegraph: 0x44aa66, meleeSlash: 0x66cc88, magicCore: 0x22ff88, arcScale: 1.15 },
     flow: {
       title: 'Silt Marshes',
@@ -194,7 +196,7 @@ export const SECTOR_CANON: SectorCanonEntry[] = [
       sulfur_vent: 1.4, stone_outcrop: 1.2,
     },
     terrainPalette: 'highland',
-    campBodies: ['soldier', 'punk', 'medieval'],
+    campBodies: ['toon-brick', 'toon-bastion', 'toon-cinder'],
     vfx: { telegraph: 0xff2222, meleeSlash: 0xff4400, impact: 0xffaa44, arcScale: 1.2 },
     flow: {
       title: 'The Pit',
@@ -209,7 +211,7 @@ export const SECTOR_CANON: SectorCanonEntry[] = [
       kelp_bed: 1.3, wild_herbs: 1.1,
     },
     terrainPalette: 'swamp',
-    campBodies: ['beach', 'witch', 'casual'],
+    campBodies: ['toon-greyvial', 'toon-permafrost', 'toon-cinder'],
     vfx: { telegraph: 0x2288aa, meleeSlash: 0x44aacc, magicCore: 0x00ccff, arcScale: 1.1 },
     flow: {
       title: 'Drowned Quarter',

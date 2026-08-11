@@ -14,6 +14,11 @@ import { clearAllLocalData } from "@/game/identity";
 import type { CharacterConfig } from "@/game/CharacterConfig";
 import { getActiveCharacterId, setActiveCharacterId } from "@/game/activeCharacter";
 import { resetSaveGameService } from "@/game/SaveGameService";
+import {
+  PLAYABLE_OPERATORS,
+  configFromPlayable,
+  getPlayable,
+} from "@/game/mmo/PlayableRoster";
 
 const LEGACY_SAVE_KEY = "grudge_nexus_save";
 const LEGACY_CHAR_KEY = "grudge_nexus_character";
@@ -180,6 +185,48 @@ export function CharacterSelect({
     onCreateNew(account.id);
   }, [account, onCreateNew]);
 
+  /** MMO quick-start: create a server character from the playable toon roster. */
+  const quickPlayOperator = useCallback(
+    async (opId: string) => {
+      if (!account || busy) return;
+      setBusy(true);
+      setError(null);
+      const cfg = configFromPlayable(opId);
+      try {
+        const createRes = await fetch("/api/characters", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            accountId: account.id,
+            name: cfg.name,
+            config: cfg,
+          }),
+        });
+        if (createRes.ok) {
+          const created = (await createRes.json()) as CharacterRow;
+          setActiveCharacterId(created.id);
+          resetSaveGameService();
+          onPlayCharacter(account.id, created.id, cfg);
+          return;
+        }
+      } catch {
+        /* offline path below */
+      }
+      // Offline / API down — local id + config is enough for GameCanvas
+      const localId = `local_${opId}_${Date.now().toString(36)}`;
+      try {
+        localStorage.setItem(
+          `grudge_nexus_character__${localId}`,
+          JSON.stringify(cfg),
+        );
+      } catch { /* ignore */ }
+      setActiveCharacterId(localId);
+      resetSaveGameService();
+      onPlayCharacter(account.id, localId, cfg);
+    },
+    [account, busy, onPlayCharacter],
+  );
+
   // Dev-only hard reset. Wipes every localStorage key under our two
   // namespaces (`grudge_nexus_*` for identity/character/save, `grudge:*`
   // for the prefab cache), clears sessionStorage, and reloads so all
@@ -218,26 +265,16 @@ export function CharacterSelect({
 
         {!account || !characters ? (
           <div className="select-loading">Loading characters…</div>
-        ) : characters.length === 0 ? (
-          <div className="select-empty">
-            <p>No characters yet. Forge your first.</p>
-            <button
-              type="button"
-              className="select-btn select-btn-primary"
-              onClick={createNew}
-              disabled={busy}
-            >
-              Create character
-            </button>
-          </div>
         ) : (
           <>
+            {characters.length > 0 && (
             <ul className="select-list">
               {characters.map((c) => {
                 const cfg = (c.config ?? {}) as Partial<CharacterConfig> & {
                   bodyProportion?: string;
                   gender?: string;
                 };
+                const op = getPlayable(cfg.bodyProportion);
                 const last = c.lastPlayedAt
                   ? new Date(c.lastPlayedAt).toLocaleDateString()
                   : "never";
@@ -249,23 +286,45 @@ export function CharacterSelect({
                       onClick={() => playCharacter(c)}
                       disabled={busy}
                     >
-                      <div className="select-row-name">{c.name}</div>
+                      <div className="select-row-name">
+                        {op.icon} {c.name}
+                      </div>
                       <div className="select-row-meta">
-                        {(cfg.gender ?? "—")} · {(cfg.bodyProportion ?? "athletic")} · last played {last}
+                        {op.callsign} · {op.faction} · {op.role} · last {last}
                       </div>
                     </button>
                   </li>
                 );
               })}
             </ul>
+            )}
+
+            <div className="select-ops-label">Playable operators — jump in with a low-poly toon avatar</div>
+            <div className="select-ops-grid">
+              {PLAYABLE_OPERATORS.filter((o) => o.id.startsWith("toon-")).map((op) => (
+                <button
+                  key={op.id}
+                  type="button"
+                  className="select-op-card"
+                  disabled={busy}
+                  onClick={() => void quickPlayOperator(op.id)}
+                  title={op.blurb}
+                >
+                  <span className="select-op-ico">{op.icon}</span>
+                  <span className="select-op-name">{op.callsign}</span>
+                  <span className="select-op-meta">{op.faction} · {op.role}</span>
+                </button>
+              ))}
+            </div>
+
             <div className="select-actions">
               <button
                 type="button"
-                className="select-btn select-btn-ghost"
+                className="select-btn select-btn-primary"
                 onClick={createNew}
                 disabled={busy}
               >
-                + New character
+                {characters.length === 0 ? "Custom character" : "+ New character"}
               </button>
             </div>
           </>
@@ -298,7 +357,9 @@ const SELECT_CSS = `
   padding: 24px;
 }
 .select-card {
-  width: 100%; max-width: 560px;
+  width: 100%; max-width: 720px;
+  max-height: min(92vh, 900px);
+  overflow-y: auto;
   background: rgba(20, 16, 28, 0.78);
   border: 1px solid rgba(232, 199, 104, 0.25);
   border-radius: 14px;
@@ -307,6 +368,32 @@ const SELECT_CSS = `
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }
+.select-ops-label {
+  font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: #b89c5e; margin: 8px 0 10px;
+}
+.select-ops-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.select-op-card {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 2px;
+  padding: 10px 12px; text-align: left;
+  background: rgba(0,0,0,0.35);
+  border: 1px solid rgba(232, 199, 104, 0.18);
+  border-radius: 8px; color: #e8e2d8; cursor: pointer;
+  transition: border-color .15s, transform .12s;
+}
+.select-op-card:hover:not(:disabled) {
+  border-color: rgba(232, 199, 104, 0.55);
+  transform: translateY(-1px);
+}
+.select-op-card:disabled { opacity: 0.5; cursor: wait; }
+.select-op-ico { font-size: 1.35rem; line-height: 1; }
+.select-op-name { font-weight: 600; font-size: 13px; color: #e8c768; }
+.select-op-meta { font-size: 10px; color: #8a8078; letter-spacing: 0.02em; }
 .select-eyebrow {
   font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
   color: #b89c5e; margin-bottom: 8px;

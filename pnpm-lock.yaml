@@ -297,6 +297,9 @@ importers:
       '@workspace/db':
         specifier: workspace:*
         version: link:../../lib/db
+      '@workspace/game-systems':
+        specifier: workspace:*
+        version: link:../../lib/game-systems
       '@workspace/grudge-engine':
         specifier: workspace:*
         version: link:../../lib/grudge-engine
@@ -379,6 +382,9 @@ importers:
       colyseus.js:
         specifier: ^0.16.22
         version: 0.16.22
+      grudge-control:
+        specifier: file:vendor/grudge-control
+        version: file:artifacts/arpg-game/vendor/grudge-control(@dimforge/rapier3d-compat@0.19.3)(three-mesh-bvh@0.9.9(three@0.183.2))(three@0.183.2)
       howler:
         specifier: ^2.2.4
         version: 2.2.4
@@ -4476,6 +4482,16 @@ packages:
 
   grapheme-splitter@1.0.4:
     resolution: {integrity: sha512-bzh50DW9kTPM00T8y4o8vQg89Di9oLJVLW/KaOGIXJWP/iqCN6WKYkbNOF04vFLJhwcpYUh9ydh/+5vpOqV4YQ==}
+
+  grudge-control@file:artifacts/arpg-game/vendor/grudge-control:
+    resolution: {directory: artifacts/arpg-game/vendor/grudge-control, type: directory}
+    peerDependencies:
+      '@dimforge/rapier3d-compat': '>=0.12.0'
+      three: '>=0.180.0'
+      three-mesh-bvh: '>=0.9.9'
+    peerDependenciesMeta:
+      '@dimforge/rapier3d-compat':
+        optional: true
 
   gtoken@7.1.0:
     resolution: {integrity: sha512-pCcEwRi+TKpMlxAQObHDQ56KawURgyAf6jtIY046fJ5tIv3zDe/LEIubckAO8fj6JnAxLdmWkUfNyulQ2iKdEw==}
@@ -9809,6 +9825,13 @@ snapshots:
   graceful-fs@4.2.11: {}
 
   grapheme-splitter@1.0.4: {}
+
+  grudge-control@file:artifacts/arpg-game/vendor/grudge-control(@dimforge/rapier3d-compat@0.19.3)(three-mesh-bvh@0.9.9(three@0.183.2))(three@0.183.2):
+    dependencies:
+      three: 0.183.2
+      three-mesh-bvh: 0.9.9(three@0.183.2)
+    optionalDependencies:
+      '@dimforge/rapier3d-compat': 0.19.3
 
   gtoken@7.1.0:
     dependencies:

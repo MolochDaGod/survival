@@ -29,6 +29,7 @@ import { EquippedSet } from '../game/Inventory';
 import { SURVIVAL_ITEMS } from '../game/survival/SurvivalItems';
 import { RECIPES, CraftingStation } from '../game/survival/Recipes';
 import { getSettlements } from '../game/world/WorldGen';
+import { identityFromConfig } from '../game/mmo/PlayableRoster';
 
 function checkWebGL(): boolean {
   try {
@@ -94,7 +95,10 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ characterConfig = DEFAUL
   });
   const [abilities, setAbilities] = useState<AbilityDef[]>(ABILITIES.map(a => ({ ...a })));
   const [cooldowns, setCooldowns] = useState<Record<string, number>>({});
-  const [cameraMode, setCameraMode] = useState('arpg');
+  const [cameraMode, setCameraMode] = useState('third-person');
+  const [playModeLabel, setPlayModeLabel] = useState('Free');
+  const [engagementToast, setEngagementToast] = useState<{ title: string; body: string } | null>(null);
+  const [cinemaCard, setCinemaCard] = useState<{ title: string; subtitle: string } | null>(null);
 
   // Origin → starting loadout. Resolved once at mount; if the player
   // changes Origin mid-run (currently impossible, but guards future UX)
@@ -148,7 +152,11 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ characterConfig = DEFAUL
   const [buildMenuOpen, setBuildMenuOpen] = useState(false);
   const [mainPanelOpen, setMainPanelOpen] = useState(false);
   const [selectedBuildItem, setSelectedBuildItem] = useState<string | null>(null);
-  const [nearbyStations] = useState<CraftingStation[]>(['workbench']); // placeholder until proximity wired
+  const [nearbyStations, setNearbyStations] = useState<CraftingStation[]>(['none']);
+  const [allies, setAllies] = useState<
+    Array<{ name: string; level: number; status: string; online: boolean; icon?: string }>
+  >([]);
+  const operatorIdentity = identityFromConfig(characterConfig ?? DEFAULT_CHARACTER_CONFIG);
 
   // ---------- Pixel-art books ----------
   const [bestiaryOpen, setBestiaryOpen] = useState(false);
@@ -184,6 +192,29 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ characterConfig = DEFAUL
       setCooldowns(prev => ({ ...prev, [id]: remaining }));
     };
     engine.onCameraModeChange = (mode) => setCameraMode(mode);
+    engine.onGameModeChange = (mode, label) => setPlayModeLabel(label);
+    engine.onEngagementToast = (title, body) => {
+      setEngagementToast({ title, body });
+      window.setTimeout(() => setEngagementToast(null), 3200);
+    };
+    engine.onCinemaRecordReady = (url) => {
+      setEngagementToast({ title: 'Clip ready', body: 'WebM recording saved — open from browser downloads if prompted.' });
+      // Offer download
+      try {
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `grudges-clip-${Date.now()}.webm`;
+        a.click();
+      } catch { /* ignore */ }
+      window.setTimeout(() => setEngagementToast(null), 4000);
+    };
+    engine.onCinemaTitleCard = (title, subtitle) => {
+      if (!title) {
+        setCinemaCard(null);
+        return;
+      }
+      setCinemaCard({ title, subtitle });
+    };
     engine.onLoadProgress = (fraction) => setLoadProgress(Math.min(fraction, 1));
     engine.onAssetsLoaded = () => {
       setLoadProgress(1);
@@ -249,6 +280,18 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ characterConfig = DEFAUL
         setPlayerPos({ x: p.x, y: p.y, z: p.z });
         setPlayerYaw((engine.player as any).yaw ?? 0);
         setCrosshairSpread(engine.player.spreadValue ?? 0);
+        // MainPanel crafting gate — benches within camp / proximity
+        try {
+          const stations = engine.getNearbyCraftingStations?.() ?? ['none'];
+          setNearbyStations((prev) => {
+            if (prev.length === stations.length && prev.every((s, i) => s === stations[i])) {
+              return prev;
+            }
+            return stations as CraftingStation[];
+          });
+          const roster = engine.getAllyRoster?.() ?? [];
+          setAllies(roster);
+        } catch { /* ignore pre-camp boot */ }
       }
       if (engine.fogSystem) {
         setGloom((engine.fogSystem as any).gloom ?? 0);
@@ -514,6 +557,18 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ characterConfig = DEFAUL
     } else {
       ProfessionsService.gainXp('crafting', 10);
     }
+
+    // Survival camp benches amplify profession XP when crafting inside claim radius
+    // (CampClaimSystem — not Warlords). Preferred profession inferred from recipe.
+    const eng = engineRef.current;
+    if (eng?.onCampCraftComplete) {
+      const pref =
+        id.startsWith('build_') ? 'township'
+        : id.startsWith('cook_') || id === 'fillet_fish' || id === 'boil_water' || id === 'craft_bandage'
+          ? 'chemistry'
+          : 'crafting';
+      eng.onCampCraftComplete(pref as any);
+    }
   }, [nearbyStations]);
 
   /** Consume an item: apply its consume effects to player stats and decrement
@@ -583,10 +638,14 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ characterConfig = DEFAUL
         if (document.pointerLockElement) document.exitPointerLock();
         engineRef.current.gameState.paused = true;
         setGameState((p) => ({ ...p, paused: true }));
+        engineRef.current.enterUiMode();
+        if (panel === 'build') engineRef.current.setPlayMode('build');
       } else {
         // Closing: only re-acquire lock + unpause if no other modal opened.
         engineRef.current.gameState.paused = false;
         setGameState((p) => ({ ...p, paused: false }));
+        engineRef.current.exitUiMode();
+        if (panel === 'build') engineRef.current.setPlayMode('free');
         canvasRef.current?.requestPointerLock();
       }
     },
@@ -909,6 +968,109 @@ className = { styles.adminBtn }
         <PickupToast pickups={pickups} />
       )}
 
+      {/* Play mode badge — Free / Combat / Harvest / Build / AFK / Cinema */}
+      {gameState.gameStarted && !gameState.mainMenuOpen && !gameState.paused && (
+        <div
+          style={{
+            position: 'absolute',
+            top: 14,
+            left: '50%',
+            transform: 'translateX(-50%)',
+            pointerEvents: 'none',
+            zIndex: 25,
+            display: 'flex',
+            gap: 8,
+            alignItems: 'center',
+          }}
+        >
+          <span
+            style={{
+              fontFamily: 'Cinzel, serif',
+              fontSize: 11,
+              letterSpacing: '0.14em',
+              textTransform: 'uppercase',
+              color: '#e8c768',
+              background: 'rgba(12,8,4,0.72)',
+              border: '1px solid rgba(197,160,89,0.45)',
+              padding: '4px 12px',
+              borderRadius: 2,
+            }}
+          >
+            {playModeLabel} · cam {cameraMode}
+          </span>
+          <span style={{ fontSize: 10, color: 'rgba(232,216,168,0.45)' }}>M mode · F9 AFK · F10 cinema</span>
+        </div>
+      )}
+
+      {engagementToast && (
+        <div
+          style={{
+            position: 'absolute',
+            top: '22%',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            zIndex: 40,
+            pointerEvents: 'none',
+            textAlign: 'center',
+            background: 'rgba(10,6,4,0.88)',
+            border: '1px solid rgba(197,160,89,0.5)',
+            padding: '12px 20px',
+            borderRadius: 4,
+            minWidth: 220,
+          }}
+        >
+          <div style={{ fontFamily: 'Cinzel, serif', color: '#f0d088', fontSize: 14, marginBottom: 4 }}>
+            {engagementToast.title}
+          </div>
+          <div style={{ color: '#c8b890', fontSize: 12 }}>{engagementToast.body}</div>
+        </div>
+      )}
+
+      {/* Video / cinema intro title cards (compendium beats) */}
+      {cinemaCard && (
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            zIndex: 50,
+            pointerEvents: 'none',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'flex-end',
+            paddingBottom: '18%',
+            background: 'linear-gradient(to top, rgba(10,6,4,0.75) 0%, transparent 45%)',
+          }}
+        >
+          <div
+            style={{
+              fontFamily: 'Cinzel, serif',
+              fontSize: 'clamp(1.4rem, 3vw, 2.2rem)',
+              color: '#f0d088',
+              textAlign: 'center',
+              textShadow: '0 2px 16px #000',
+              letterSpacing: '0.06em',
+              maxWidth: 640,
+              padding: '0 1.5rem',
+            }}
+          >
+            {cinemaCard.title}
+          </div>
+          <div
+            style={{
+              fontFamily: 'EB Garamond, Georgia, serif',
+              fontSize: '1.05rem',
+              color: '#c8b890',
+              marginTop: 10,
+              textAlign: 'center',
+              opacity: 0.92,
+            }}
+          >
+            {cinemaCard.subtitle}
+          </div>
+        </div>
+      )}
+
       {/* Door / NPC interaction prompt — fed by engine.onInteractionPrompt.
           Shown centered, ~35% from the bottom, only during active gameplay. */}
       {gameState.gameStarted && !gameState.mainMenuOpen && interactionPrompt && (
@@ -972,6 +1134,8 @@ className = { styles.adminBtn }
           nearbyStations={nearbyStations}
           perksUnlocked={perksUnlocked}
           perksSpent={perksSpent}
+          allies={allies}
+          operatorIdentity={operatorIdentity}
           onEquip={handleEquip}
           onUnequip={handleUnequip}
           onDrop={handleDrop}

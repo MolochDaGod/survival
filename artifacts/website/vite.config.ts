@@ -30,6 +30,8 @@ export default defineConfig({
         lore: path.resolve(import.meta.dirname, "lore.html"),
         bestiary: path.resolve(import.meta.dirname, "bestiary.html"),
         stats: path.resolve(import.meta.dirname, "stats-guide.html"),
+        crafting: path.resolve(import.meta.dirname, "crafting.html"),
+        operators: path.resolve(import.meta.dirname, "operators.html"),
       },
     },
   },

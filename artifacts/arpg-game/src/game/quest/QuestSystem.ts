@@ -9,6 +9,7 @@
  *   - 'kill'    — kill N enemies (total, not specific)
  *   - 'return'  — return to an NPC (same as 'talk' but semantically different)
  *   - 'collect' — pick up N items
+ *   - 'claim'   — Survival camp claimed (CampClaimSystem) near optional pad
  *
  * The system emits events for the HUD to display objectives and prompts.
  */
@@ -17,7 +18,7 @@ import * as THREE from 'three';
 
 // ── Step types ──────────────────────────────────────────────────────────────
 
-export type QuestStepType = 'talk' | 'goto' | 'kill' | 'return' | 'collect';
+export type QuestStepType = 'talk' | 'goto' | 'kill' | 'return' | 'collect' | 'claim';
 
 export interface QuestStep {
   type: QuestStepType;
@@ -80,6 +81,8 @@ export interface QuestState {
 export class QuestSystem {
   private quests = new Map<string, QuestDef>();
   private states = new Map<string, QuestState>();
+  /** External predicate for 'claim' steps (wired to CampClaimSystem.isClaimed). */
+  private claimPredicate: (() => boolean) | null = null;
 
   /** UI subscribes to this for objective text updates. */
   onObjectiveChange: ((text: string | null) => void) | null = null;
@@ -87,6 +90,11 @@ export class QuestSystem {
   onDialog: ((speaker: string, text: string) => void) | null = null;
   /** Called when a quest completes — passes structured rewards. */
   onQuestComplete: ((questId: string, reward: QuestReward) => void) | null = null;
+
+  /** Wire Survival CampClaimSystem (or any claim source) for 'claim' steps. */
+  setClaimPredicate(fn: (() => boolean) | null): void {
+    this.claimPredicate = fn;
+  }
 
   // ── Registration ─────────────────────────────────────────────────────────
 
@@ -162,6 +170,21 @@ export class QuestSystem {
             this.advanceStep(id);
           }
           break;
+
+        case 'claim': {
+          // Complete when camp is claimed. Optional targetPos requires player
+          // near the pad so they "confirm" the middle-sector site.
+          const claimed = this.claimPredicate?.() === true;
+          if (!claimed) break;
+          if (step.targetPos) {
+            const dx = playerPos.x - step.targetPos.x;
+            const dz = playerPos.z - step.targetPos.z;
+            const r = step.radius ?? 25;
+            if (dx * dx + dz * dz > r * r) break;
+          }
+          this.advanceStep(id);
+          break;
+        }
       }
     }
   }

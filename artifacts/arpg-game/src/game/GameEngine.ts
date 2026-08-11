@@ -57,14 +57,45 @@ import { SectorDeployment } from './world/SectorDeployment';
 import type { CombatVfxBridge } from './CombatVfxBridge';
 import { SurvivorSpawner, type SurvivorSpawnerSnapshot } from './township/SurvivorSpawner';
 import { getQuestSystem } from './quest/QuestSystem';
-import { createIntroQuest, createSectorQuests, ENCAMPMENT_NPCS } from './quest/EncampmentIntro';
+import {
+  createIntroQuest,
+  createSectorQuests,
+  createFactionPledgeQuests,
+  ENCAMPMENT_NPCS,
+} from './quest/EncampmentIntro';
 import { EnemyCampSystem } from './world/EnemyCampSystem';
+/** SURVIVAL era only — claim flag / benches / camp building buffs (not Warlords). */
+import { CampClaimSystem, type CampClaimSnapshot } from './survival/camp';
+import {
+  bootstrapMiddleStarterCamp,
+  middleCampPadWorld,
+} from './world/MiddleCampBootstrap';
+import { toonDef, isToonBodyId } from './toon/ToonSurvivalRoster';
+import { normalizeToonHeight } from './toon/toonBoneRetarget';
+import { loadRetargetedToonClips } from './toon/loadToonClips';
+import { createGLTFLoader } from './loaders/createGLTFLoader';
+import { BODY_TYPES } from './CharacterConfig';
+import { getHandToolDef, harvestMultFor } from './HandToolCatalog';
+import { GameModeController, type GameModeId } from './mode/GameModeController';
+import { CinemaDirector } from './cinema/CinemaDirector';
+import { AfkController } from './ai/AfkController';
+import { EngagementRewards } from './progression/EngagementRewards';
+import { runSurvivalRemakeBootstrap } from './remake/SurvivalRemakeBootstrap';
+import { AllyCombatSystem } from './ai/AllyCombatSystem';
+import { REMAKE_SPAWN_LORE } from './remake/SurvivalRemakeConfig';
+import { LoreGameLoop } from './lore/LoreGameLoop';
+import { getUnlockedCodex } from './lore/LoreCodex';
+import { getReputationService } from './faction/ReputationService';
+import { FactionAiDirector } from './faction/FactionAiDirector';
+import type { FactionId } from '../data/factions';
 import {
   applyOutdoorEnvironment,
   loadPolyHavenEnvironment,
 } from './world/polyhaven/PolyHavenEnvironment';
 import { getMilestoneEffects, mergeEffectBags, readEffect, type MilestoneEffectBag } from '@workspace/game-systems/perks';
 import { sumPassives, getUnlockedPerks, getUnlockedCombos, type StatTrack } from './progression/PerkSystem';
+import { engineAssets } from './EngineAssets';
+import { preloadCompressedDecoders } from './loaders/createGLTFLoader';
 
 export class GameEngine {
   renderer: THREE.WebGLRenderer;
@@ -100,8 +131,39 @@ export class GameEngine {
   breakableWallSystem?: BreakableWallSystem;
   /** RTS survivor camp system — spawns wild survivors, manages camp production + raids. */
   survivorSpawner?: SurvivorSpawner;
+  /**
+   * Survival-era claim flag / benches / building buffs.
+   * Spawns unarmed race-variant guardian on claim. Not used by Warlords.
+   */
+  campClaim?: CampClaimSystem;
   /** Procedural enemy camps (200–500 m from player) with raid missions. */
   enemyCampSystem?: EnemyCampSystem;
+  /** Central play-mode authority (combat / harvest / build / cinema / afk / ui). */
+  gameMode = new GameModeController();
+  /** Cinematic camera rails + MediaRecorder capture. */
+  cinema?: CinemaDirector;
+  /** AFK auto-defend / harvest / camp scripts. */
+  afk?: AfkController;
+  /** Session streaks, milestones, mode mastery rewards. */
+  engagement = new EngagementRewards();
+  /** Recruited allies engage hostiles (living-NPC combat assist). */
+  allyCombat = new AllyCombatSystem();
+  /** Survivor's loop + settlement buffs + recruit lore. */
+  loreLoop: LoreGameLoop | null = null;
+  /** Factions are AI players — world event pressure. */
+  factionAi = new FactionAiDirector();
+  private _remakeReady = false;
+  private _gameTimeSec = 0;
+  private _pendingCampSnapshot: CampClaimSnapshot | null = null;
+  private _pendingRepSnapshot: import('./faction/ReputationService').ReputationSnapshot | null = null;
+  /** HUD: mode / AFK / cinema / toast. */
+  onGameModeChange: ((mode: GameModeId, label: string) => void) | null = null;
+  onEngagementToast: ((title: string, body: string) => void) | null = null;
+  onCinemaRecordReady: ((url: string) => void) | null = null;
+  /** Intro / cinema lore title cards for HUD. */
+  onCinemaTitleCard: ((title: string, subtitle: string) => void) | null = null;
+  private _modeKeyHandler: ((e: KeyboardEvent) => void) | null = null;
+  private _modeMasteryTimer = 0;
   /** Aggregated perk effect bag — refreshed once per second, read every frame. */
   perkEffects: MilestoneEffectBag = {};
   /**
@@ -262,6 +324,10 @@ export class GameEngine {
     // Weather scheduler — keeps the world dry most of the time and only
     // runs rain ~10% of the play session (see WeatherSystem.ts for math).
     this.weatherSystem = new WeatherSystem(this.rainSystem, this.fogSystem, 'dry');
+    // Three-layer scene graph (World / Harvest / Actors / Vfx) + resources.
+    import('./world/SceneGraphLayers').then(({ ensureSceneGraph }) => {
+      ensureSceneGraph(this.scene);
+    }).catch(() => {});
     // Initialise the resource system for this scene (singleton).
     const resSys = getResourceSystem(this.scene);
     // Wire SWG-style profession XP onto every harvest. Node id determines
@@ -276,6 +342,8 @@ export class GameEngine {
         case 'wild_herbs':       prof = 'gathering'; amount = 5;
           ProfessionsService.gainXp('chemistry', 4);
           break;
+        case 'hemp_plant':       prof = 'gathering'; amount = 6;  break;
+        case 'scrap_pile':       prof = 'gathering'; amount = 9;  break;
         case 'iron_ore':         prof = 'gathering'; amount = 10; break;
         case 'permafrost_ore':   prof = 'gathering'; amount = 12; break;
         case 'copper_deposit':   prof = 'gathering'; amount = 8;  break;
@@ -341,9 +409,25 @@ export class GameEngine {
     // fishing minigame instead of a weapon swing.
     document.addEventListener('mousedown', this.handleFishingClick, true);
 
-    this.assetManager.loadAll((fraction) => {
-      this.onLoadProgress?.(fraction);
-    }, this.characterConfig).then(async () => {
+    // Pre-warm Draco/Basis paths + Nexus engine manifest *before* GLB boot
+    // so compressed models and camera/controller profiles are ready.
+    // Capture locals so TS definite-assignment is happy inside the async chain.
+    const bootAssetManager = this.assetManager;
+    const bootCharacterConfig = this.characterConfig;
+    const bootAfterAssets = async (): Promise<void> => {
+      try {
+        await Promise.all([
+          engineAssets.boot(),
+          preloadCompressedDecoders(),
+        ]);
+      } catch (err) {
+        console.warn('[GameEngine] EngineAssets / decoder preload degraded:', err);
+      }
+
+      await bootAssetManager.loadAll((fraction) => {
+        this.onLoadProgress?.(fraction);
+      }, bootCharacterConfig);
+
       this.assetsLoaded = true;
 
       // Bring up Rapier BEFORE SceneBuilder. The WASM blob is ~600 KB and
@@ -356,6 +440,8 @@ export class GameEngine {
       try {
         await initPhysics();
         this.physics = new PhysicsWorld();
+        // Harvestables get PROP colliders + sensors once physics is live.
+        getResourceSystem(this.scene).setPhysics(this.physics);
       } catch (err) {
         // Don't crash the boot — PlayerController falls back to its
         // legacy BVH-raycast path when physics is null. We just lose the
@@ -465,6 +551,34 @@ export class GameEngine {
         this.physics,
       );
 
+      // Seed inventory bag + equip primary melee so hand bones show the tool
+      // and the Equipment panel can swap hatchet/pickaxe/etc.
+      {
+        const { makeUid } = await import('./Items');
+        const primaryId = loadout.weapons[0];
+        if (this.inventory && primaryId) {
+          this.inventory.equipped.mainhand = { uid: makeUid(), defId: primaryId };
+          for (const toolId of ['hatchet', 'pickaxe', 'knife'] as const) {
+            if (toolId === primaryId) continue;
+            this.inventory.addToBag({ uid: makeUid(), defId: toolId });
+          }
+          this.player.buildWeaponMesh();
+        }
+      }
+
+      // ── Mode / cinema / engagement (AFK needs enemyManager — wired below) ─
+      this.wireGameModesAndSystems();
+
+      // TPS remake defaults (camera + tuning). Full remake runs after camp ready.
+      runSurvivalRemakeBootstrap({
+        player: this.player,
+        sceneBuilder: this.sceneBuilder,
+        campClaim: null,
+        cinema: this.cinema,
+        gameMode: this.gameMode,
+        playArrivalCinema: false,
+      });
+
       // If the handcrafted starter map is active, teleport the player to the
       // marker baked into the source GLB (`player` node). We lift them a
       // couple of metres so they drop onto the actual ground via the next
@@ -563,6 +677,19 @@ export class GameEngine {
       });
 
       this.enemyManager = new EnemyManager(this.scene, this.assetManager);
+      // MMO sector combat: wave/trickle spawns prefer hostiles for active grid cell
+      this.enemyManager.setHostilePoolProvider(() =>
+        this.sectorDeployment.getHostileTypes(),
+      );
+      // AFK controller needs enemies + optional camp claim
+      this.afk = new AfkController({
+        player: this.player,
+        enemyManager: this.enemyManager,
+        campClaim: this.campClaim,
+      });
+      this.afk.onTickReward = (kind) => {
+        if (kind === 'afk_minute') this.engagement.onAfkMinute();
+      };
       // Apply the spawn anchor we captured earlier — the encampment hub
       // becomes a permanent no-spawn zone of ~22m radius.
       if (this._pendingSpawnAnchor) {
@@ -591,6 +718,7 @@ export class GameEngine {
         this.gameState.killCount++;
         this.gameState.score += 100 + this.wave * 25;
         this.player.gainExperience(exp);
+        this.engagement.onKill();
         this.lootManager.dropFromEnemy(position, tier);
         this.audio.play('kill');
         this.damageNumbers.spawn(position, exp, { color: 0x69f0ae });
@@ -678,12 +806,38 @@ export class GameEngine {
         this._lastDoorLabel = label;
         this.resolveInteractionPrompt();
       };
+      // Survival camp claim — claim flag → unarmed race guardian, benches, building buffs
+      this.campClaim = new CampClaimSystem(this.scene);
+      this.campClaim.setPlayerConfig(this.characterConfig ?? DEFAULT_CHARACTER_CONFIG);
+      // Late-bind AFK + engagement (created before campClaim in boot order)
+      if (this.afk) this.afk.campClaim = this.campClaim;
+      {
+        const prevClaim = this.campClaim.onClaimed;
+        this.campClaim.onClaimed = (pos, race) => {
+          prevClaim?.(pos, race);
+          this.engagement.onFirstClaim();
+        };
+      }
+      let restoredClaim = false;
+      if (this._pendingCampSnapshot) {
+        restoredClaim = true;
+        this.campClaim.restore(this._pendingCampSnapshot).catch((e) =>
+          console.warn('[GameEngine] camp claim restore failed', e),
+        );
+        this._pendingCampSnapshot = null;
+      }
+
+      // Quest 'claim' steps complete when CampClaimSystem has authority
+      getQuestSystem().setClaimPredicate(() => this.campClaim?.isClaimed() === true);
+
       // Hook future placed doors so they become interactive immediately.
+      // Also feed Survival CampClaimSystem (flags / benches / buildings).
       if (this.modularBuilding) {
-        this.modularBuilding.onPlace = (pieceId, _pos, group) => {
+        this.modularBuilding.onPlace = (pieceId, pos, group) => {
           if (pieceId === 'mb_door' || pieceId === 'mb_wall_door') {
             this.doorSystem?.registerPlacedDoor(group);
           }
+          this.campClaim?.onStructurePlaced(pieceId, pos, group);
         };
       }
 
@@ -693,6 +847,27 @@ export class GameEngine {
       // line when the player walks up. They turn hostile if attacked
       // (NPCBrain.onPlayerAngered flips faction → ATTACK goal).
       this.citySpawner = new CitySpawner(this.scene, getNPCManager(), this.assetManager);
+      this.citySpawner.campClaim = this.campClaim ?? null;
+      this.citySpawner.onRecruit = () => {
+        this.engagement.onFirstRecruit();
+        this.loreLoop?.update(0);
+      };
+      // Lore game loop — survivor stages, cooking pot regen, smooth talker
+      this.loreLoop = new LoreGameLoop(this.player, this.playerStats);
+      this.loreLoop.attach(this.campClaim ?? null, this.citySpawner);
+      this.loreLoop.onToast = (t, b) => this.onEngagementToast?.(t, b);
+      this.loreLoop.onStageChange = (stage, blurb) => {
+        this.gameState.sectorObjective = blurb;
+        this.gameState.sectorBeatAge = 5;
+        this.onGameStateUpdate?.({ ...this.gameState });
+        this.onEngagementToast?.(`Loop: ${stage}`, blurb);
+      };
+      getReputationService().onToast = (t, b) => this.onEngagementToast?.(t, b);
+      if (this._pendingRepSnapshot) {
+        getReputationService().restore(this._pendingRepSnapshot);
+        this._pendingRepSnapshot = null;
+      }
+      this.allyCombat.getAiAbilityMult = () => this.campClaim?.getAiAbilityMultiplier() ?? 1;
       const cityCentre = this._pendingSpawnAnchor ?? new THREE.Vector3();
       // In encampment mode, spawn fewer generic NPCs (named NPCs fill the key roles).
       // In open-world mode, keep the original 6.
@@ -703,10 +878,24 @@ export class GameEngine {
         this.resolveInteractionPrompt();
       };
 
-      // ── Named encampment NPCs (Vendor, Faction, Bank, Battle Master) ─────
+      // ── Middle-sector starter camp pad (Convergence Nexus origin) ────────
+      // Fresh starts auto-claim so the player has authority immediately;
+      // saved claims are left as-is. Structures register for benches/buffs.
+      if (this.sceneBuilder.isStarterMapMode() && this.campClaim) {
+        bootstrapMiddleStarterCamp({
+          centre: cityCentre,
+          campClaim: this.campClaim,
+          autoClaim: !restoredClaim,
+          alreadyClaimed: restoredClaim,
+          prefabs: this.sceneBuilder.prefabs,
+        }).catch((e) => console.warn('[GameEngine] Middle camp bootstrap failed:', e));
+      }
+
+      // ── Named encampment NPCs (toon operators from lore roster) ─────────
       // Spawned at fixed positions from EncampmentIntro.ts. Each gets a
       // unique id that the QuestSystem references in 'talk'/'return' steps.
       if (this.sceneBuilder.isStarterMapMode()) {
+        const campPad = middleCampPadWorld(cityCentre);
         for (const npcDef of ENCAMPMENT_NPCS) {
           const pos = new THREE.Vector3(
             cityCentre.x + npcDef.offset.x,
@@ -724,43 +913,67 @@ export class GameEngine {
           // Named NPCs stand still near their post
           brain.setPosition(pos.x, pos.y, pos.z);
           brain.vehicle.maxSpeed = 0;
-          // Reuse an enemy template mesh for visual (same as CitySpawner)
-          const tplKey = [...(this.assetManager.enemyTemplates.keys())][0];
-          if (tplKey) {
+
+          // Prefer CDN toon mesh for lore cast; fall back to enemy template
+          this.spawnNamedNpcMesh(npcDef.id, npcDef.bodyId, pos, brain).catch((err) => {
+            console.warn(`[GameEngine] Toon NPC "${npcDef.id}" mesh failed:`, err);
+            const tplKey = [...(this.assetManager.enemyTemplates.keys())][0];
+            if (!tplKey) return;
             const tpl = this.assetManager.cloneEnemyTemplate(tplKey);
-            if (tpl) {
-              const wrapper = new THREE.Group();
-              wrapper.name = npcDef.id;
-              tpl.group.position.y = tpl.footOffsetY;
-              wrapper.add(tpl.group);
-              wrapper.position.copy(pos);
-              this.scene.add(wrapper);
-              brain.mesh = wrapper;
-              // Idle animation
-              if (tpl.mixer && tpl.animations.length > 0) {
-                const idleClip = tpl.animations.find(a => /idle|stand/i.test(a.name)) ?? tpl.animations[0];
-                tpl.mixer.clipAction(idleClip).play();
-                // Cache mixer for per-frame tick (avoids scene.traverse)
-                this._namedNpcMixers.push(tpl.mixer);
-              }
+            if (!tpl) return;
+            const wrapper = new THREE.Group();
+            wrapper.name = npcDef.id;
+            tpl.group.position.y = tpl.footOffsetY;
+            wrapper.add(tpl.group);
+            wrapper.position.copy(pos);
+            this.scene.add(wrapper);
+            brain.mesh = wrapper;
+            if (tpl.mixer && tpl.animations.length > 0) {
+              const idleClip =
+                tpl.animations.find((a) => /idle|stand/i.test(a.name)) ?? tpl.animations[0];
+              tpl.mixer.clipAction(idleClip).play();
+              this._namedNpcMixers.push(tpl.mixer);
             }
-          }
+          });
         }
 
         // Register + activate the intro quest, then sector quests on completion
         const questSys = getQuestSystem();
-        questSys.register(createIntroQuest(cityCentre, this.enemyManager));
-        // Pre-register sector exploration quests (inactive until intro finishes)
+        questSys.register(createIntroQuest(cityCentre, this.enemyManager, campPad));
+        // Pre-register sector + faction pledge quests (inactive until intro finishes)
         const sectorQuests = createSectorQuests();
         for (const sq of sectorQuests) questSys.register(sq);
+        const pledgeQuests = createFactionPledgeQuests();
+        for (const pq of pledgeQuests) questSys.register(pq);
         const priorComplete = questSys.onQuestComplete;
         questSys.onQuestComplete = (qid, reward) => {
           priorComplete?.(qid, reward);
-          // When the intro quest finishes, unlock all 5 sector exploration quests
+          // When the intro quest finishes, unlock sector roads + banner paths
           if (qid === 'encampment_intro') {
             for (const sq of sectorQuests) {
               questSys.activate(sq.id);
               console.log(`[Quest] Activated sector quest: ${sq.title}`);
+            }
+            for (const pq of pledgeQuests) {
+              questSys.activate(pq.id);
+              console.log(`[Quest] Activated pledge quest: ${pq.title}`);
+            }
+          }
+          // Completing a pledge quest suggests the oath — player confirms via API
+          if (qid.startsWith('pledge_')) {
+            const map: Record<string, FactionId> = {
+              pledge_keepers: 'keepers',
+              pledge_scavengers: 'tech_scavengers',
+              pledge_hollow: 'hollow_lords',
+              pledge_network: 'network',
+              pledge_forgotten: 'forgotten',
+            };
+            const fid = map[qid];
+            if (fid) {
+              this.onEngagementToast?.(
+                'Oath ready',
+                `Call engine.pledgeFaction('${fid}') or use the camp banner panel to swear.`,
+              );
             }
           }
         };
@@ -796,17 +1009,38 @@ export class GameEngine {
       // ── RTS Survivor Camp System ────────────────────────────────────────────
       // Spawns wild survivors, manages camp production ticks, triggers raids.
       this.survivorSpawner = new SurvivorSpawner(this.citySpawner!, this.enemyManager);
+      // Survival claim buildings multiply harvest production (era-isolated).
+      this.survivorSpawner.getCampHarvestMult = () =>
+        this.campClaim?.getHarvestRateMultiplier() ?? 1;
       this.survivorSpawner.onProduction = (resources) => {
         // Feed produced resources into the survival stacks UI
         for (const [itemId, count] of Object.entries(resources)) {
+          if (itemId === 'reputation') continue; // handled by lore loop
           this.onSurvivalLootDrop?.(itemId, count);
         }
+        this.loreLoop?.onProductionResources(resources);
       };
+      this.survivorSpawner.onRaidStart = (waveSize, tier) => {
+        this.onEngagementToast?.(
+          `Raid — ${tier}`,
+          `${waveSize} hostiles approach your claim. Walls before beds.`,
+        );
+        // Hostile faction pressure from natural enemies of pledge
+        const pledged = getReputationService().getPledged();
+        if (pledged) {
+          // slight rep hit with random enemy banner
+        }
+      };
+      this.factionAi.attach(this.enemyCampSystem ?? null);
+      this.factionAi.onWorldEvent = (t, b) => this.onEngagementToast?.(t, b);
       this.survivorSpawner.onJoinPrompt = (label) => {
         this.onInteractionPrompt?.(label);
       };
 
       this.onAssetsLoaded?.();
+    };
+    void bootAfterAssets().catch((err) => {
+      console.error('[GameEngine] Boot failed:', err);
     });
   }
 
@@ -898,6 +1132,12 @@ export class GameEngine {
     const saveSvc = getSaveGameService();
     saveSvc.onLoaded = (data) => {
       ProfessionsService.hydrate(data?.professions);
+      if (data && typeof data === 'object' && 'reputation' in (data as object)) {
+        this.restoreReputation(
+          (data as { reputation?: import('./faction/ReputationService').ReputationSnapshot })
+            .reputation,
+        );
+      }
     };
     saveSvc.load().catch(() => { /* no save yet — fresh start */ });
     saveSvc.startAutoSave(() => this._collectSaveData());
@@ -906,6 +1146,34 @@ export class GameEngine {
   startGameplay() {
     if (!this.enemyManager) return;
     this.enemyManager.spawnWave(1);
+
+    // Finalize remake once camp + world exist
+    if (!this._remakeReady && this.player && this.sceneBuilder) {
+      this._remakeReady = true;
+      const remake = runSurvivalRemakeBootstrap({
+        player: this.player,
+        sceneBuilder: this.sceneBuilder,
+        campClaim: this.campClaim,
+        cinema: this.cinema,
+        gameMode: this.gameMode,
+        playArrivalCinema: true,
+      });
+      this.gameState.sectorTitle = remake.lore.title;
+      this.gameState.sectorObjective = remake.lore.line;
+      this.gameState.sectorBeatAge = 6;
+      this.onGameStateUpdate?.({ ...this.gameState });
+      this.onEngagementToast?.(REMAKE_SPAWN_LORE.title, REMAKE_SPAWN_LORE.modeHint);
+      // Chain cinema end → free mode + TPS (preserve prior handlers)
+      if (this.cinema) {
+        const prevEnd = this.cinema.onClipEnd;
+        this.cinema.onClipEnd = (id) => {
+          prevEnd?.(id);
+          if (this.gameMode.getMode() === 'cinema') this.gameMode.set('free');
+          this.player?.setCameraMode('third-person');
+        };
+      }
+    }
+
     try {
       const lockResult = this.renderer.domElement.requestPointerLock();
       if (lockResult instanceof Promise) lockResult.catch(() => {});
@@ -1067,8 +1335,64 @@ export class GameEngine {
     // world only contains static map colliders + the player's kinematic
     // capsule, so a single fixed-step pass per frame is plenty.
     this.physics?.step(dt);
+
+    // Cinema / AFK run before player when they own control
+    const caps = this.gameMode.getCaps();
+    if (caps.cinemaCamera && this.cinema?.isPlaying()) {
+      this.cinema.update(dt);
+    }
+    if (caps.afkScript && this.afk?.enabled) {
+      this.afk.update(dt);
+    }
+
+    // Apply mode gates to player input
+    if (this.player) {
+      this.player.inputEnabled = caps.playerInput;
+      this.player.allowPrimaryAction = caps.primaryAction;
+      this.player.allowFocusRmb = caps.focusRmb;
+      this.player.allowDodge = caps.dodge;
+    }
+
     this.player.update(dt);
+
+    // Feed aim pitch into locomotion additive layer for responsive ADS
+    if (this.player.locomotion && this.player.isAiming) {
+      // cameraAngleV is ~0.05–1.4; map around rest 0.3 to -1..1
+      const norm = THREE.MathUtils.clamp((this.player.cameraAngleV - 0.3) / 0.7, -1, 1);
+      this.player.locomotion.setAimPitch(norm);
+    }
+
     this.abilitySystem.update(dt);
+
+    this._gameTimeSec += dt;
+
+    // Ally combat assist — recruited followers engage nearby hostiles
+    if (this.citySpawner && this.enemyManager && this.player) {
+      this.allyCombat.update(
+        dt,
+        this.citySpawner.getFollowers(),
+        this.player.position,
+        this.enemyManager,
+      );
+    }
+
+    // Survivor's loop buffs, recruit lore, faction day ticks
+    this.loreLoop?.update(dt);
+    this.factionAi.update(dt, this._gameTimeSec);
+
+    // Keep campClaim wired on city spawner (boot order safe)
+    if (this.citySpawner && this.campClaim && !this.citySpawner.campClaim) {
+      this.citySpawner.campClaim = this.campClaim;
+      this.loreLoop?.attach(this.campClaim, this.citySpawner);
+    }
+
+    // Engagement session + mode mastery
+    this.engagement.update(dt, this.gameMode.getMode());
+    this._modeMasteryTimer -= dt;
+    if (this._modeMasteryTimer <= 0) {
+      this._modeMasteryTimer = 5;
+      this.engagement.checkModeMastery(this.gameMode.getMode());
+    }
 
     // Co-op presence — interpolate remotes & push local state at ~20 Hz.
     // No-ops cheaply when the player isn't in a room.
@@ -1146,6 +1470,9 @@ export class GameEngine {
     const npcMgr = getNPCManager();
     npcMgr.playerPositions[0] = this.player.position;
     npcMgr.update(dt);
+
+    // ── Survival camp claim (guardian idle anim, flag buffs) ─────────────────
+    this.campClaim?.update(dt);
 
     // Keep the shadow-casting sun centred on the player so shadows don't
     // pop out of view at ±70m from the world origin.
@@ -1305,7 +1632,7 @@ export class GameEngine {
       this.lootManager.update(dt, performance.now() * 0.001, this.player.position);
     }
 
-    // Melee swing: damage applies once per swing during the active window.
+    // Melee swing: combat damage + harvest tool strike during the hit window.
     // Per-combo-step parameters (arc, range, damage) come from the player.
     if (!isGun && this.player.isAttacking && this.player.meleeHitPending) {
       // Gate damage to the hit-frame window defined per combo step (normalised 0-1).
@@ -1323,15 +1650,29 @@ export class GameEngine {
         const sweepOrigin = weaponBone
           ? weaponBone.getWorldPosition(new THREE.Vector3())
           : this.player.position;
-        const hits = this.enemyManager.checkPlayerAttack(
-          sweepOrigin, fwd,
-          this.player.getAttackRange() * combo.rangeMul,
-          this.player.getAttackDamage() * combo.damageMul,
-          false,
-          knockback,
-          combo.arcDot,
-        );
-        if (hits > 0) {
+        const modeCaps = this.gameMode.getCaps();
+        const hits = modeCaps.combat
+          ? this.enemyManager.checkPlayerAttack(
+              sweepOrigin, fwd,
+              this.player.getAttackRange() * combo.rangeMul,
+              this.player.getAttackDamage() * combo.damageMul,
+              false,
+              knockback,
+              combo.arcDot,
+            )
+          : 0;
+
+        // ── Harvest: same swing chips resource nodes in reach ─────────────
+        const harvested = modeCaps.harvest
+          ? this.tryMeleeHarvest(
+              sweepOrigin,
+              fwd,
+              this.player.getAttackRange() * combo.rangeMul,
+              this.player.getAttackDamage() * combo.damageMul,
+            )
+          : false;
+
+        if (hits > 0 || harvested) {
           // Only consume the swing on a hit so an enemy sliding into range
           // mid-swing still gets clipped — a single swing still only hits any
           // given enemy once because checkPlayerAttack is called per-enemy
@@ -1339,7 +1680,7 @@ export class GameEngine {
           this.player.meleeHitPending = false;
 
           // ── Slash VFX at the weapon bone position (annihilate SwordBlink) ─
-          if (this.slashVFX) {
+          if (hits > 0 && this.slashVFX) {
             const slashPos = weaponBone
               ? weaponBone.getWorldPosition(new THREE.Vector3())
               : this.player.position.clone().add(fwd.clone().multiplyScalar(1.5));
@@ -1500,7 +1841,148 @@ export class GameEngine {
       professions: ProfessionsService.serialize(),
       // RTS camp survivor spawner state.
       survivorSpawner: this.survivorSpawner?.serialize() ?? null,
+      // Survival-era claim flag / benches / camp buffs (not Warlords).
+      campClaim: this.campClaim?.serialize() ?? null,
+      // Five-faction reputation + pledge
+      reputation: getReputationService().serialize(),
     };
+  }
+
+  /** Pledge to a banner (lore). Returns error string or null on success. */
+  pledgeFaction(factionId: FactionId): string | null {
+    const r = getReputationService().pledge(factionId);
+    if (!r.ok) return r.error ?? 'Pledge failed';
+    this.loreLoop?.update(0);
+    this.onEngagementToast?.(
+      `Pledged: ${factionId}`,
+      'Natural enemies are now Hostile. Four banners watch your claim.',
+    );
+    return null;
+  }
+
+  renounceFaction(): string | null {
+    const r = getReputationService().renounce();
+    if (!r.ok) return r.error ?? 'Renounce failed';
+    this.onEngagementToast?.('Banner lowered', 'Seven days before another oath.');
+    return null;
+  }
+
+  getReputationSnapshot() {
+    return getReputationService().serialize();
+  }
+
+  getLoreStage() {
+    return this.loreLoop?.getStage() ?? 'alone';
+  }
+
+  getRecruitGateMessage() {
+    return this.loreLoop?.getRecruitGateMessage() ?? '';
+  }
+
+  /** Unlocked codex pages from compendium + stage. */
+  getCodexEntries() {
+    return getUnlockedCodex(this.loreLoop?.getStage() ?? 'alone');
+  }
+
+  restoreReputation(snap: import('./faction/ReputationService').ReputationSnapshot | null | undefined): void {
+    if (!snap) return;
+    try {
+      getReputationService().restore(snap);
+    } catch {
+      this._pendingRepSnapshot = snap;
+    }
+  }
+
+  /** Restore Survival camp claim (flag + guardian + benches). Safe no-op if missing. */
+  restoreCampClaim(snap: CampClaimSnapshot | null | undefined): void {
+    if (!snap) return;
+    if (this.campClaim) {
+      this.campClaim.restore(snap).catch((e) =>
+        console.warn('[GameEngine] campClaim restore failed', e),
+      );
+    } else {
+      this._pendingCampSnapshot = snap;
+    }
+  }
+
+  /**
+   * Notify Survival camp of a craft completion (bench profession XP).
+   * Call from GameCanvas when crafting finishes at camp.
+   */
+  onCampCraftComplete(preferredProfession?: import('./progression/Professions').Profession): number {
+    if (!this.campClaim || !this.player) return 0;
+    return this.campClaim.onCraftCompleted(this.player.position, preferredProfession);
+  }
+
+  /**
+   * Recipe stations near the player (MainPanel crafting gate).
+   * Always includes handcraft; camp benches unlock workbench tiers.
+   */
+  getNearbyCraftingStations(): import('./survival/Recipes').CraftingStation[] {
+    if (!this.player) return ['none'];
+    if (this.campClaim) {
+      return this.campClaim.getNearbyCraftingStations(this.player.position);
+    }
+    return ['none'];
+  }
+
+  /**
+   * Party / ally roster for MainPanel Friends tab (MMO-style living camp).
+   * Recruited CitySpawner followers + ambient camp NPCs when claimed.
+   */
+  getAllyRoster(): Array<{
+    name: string;
+    level: number;
+    status: string;
+    online: boolean;
+    icon?: string;
+  }> {
+    const allies: Array<{
+      name: string;
+      level: number;
+      status: string;
+      online: boolean;
+      icon?: string;
+    }> = [];
+    const followers = this.citySpawner?.getFollowers() ?? [];
+    for (const f of followers) {
+      const role = f.role ?? 'survivor';
+      allies.push({
+        name: role.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()),
+        level: Math.max(1, this.playerStats?.level ?? 1),
+        status: 'In Party · following',
+        online: true,
+        icon: role.includes('guard') || role.includes('combat') ? '🛡️' : '🧭',
+      });
+    }
+    if (this.campClaim?.isClaimed()) {
+      allies.push({
+        name: 'Camp Guardian',
+        level: Math.max(1, (this.playerStats?.level ?? 1) + 1),
+        status: 'Defending claim flag',
+        online: true,
+        icon: '🚩',
+      });
+    }
+    // Hub crew always listed as online contacts (MMO social surface)
+    for (const name of ['Ledger', 'Rivet', 'Ashcoil', 'Bastion', 'Brick']) {
+      if (!allies.some((a) => a.name === name)) {
+        allies.push({
+          name,
+          level: 5,
+          status: 'Convergence Nexus',
+          online: true,
+          icon: '📡',
+        });
+      }
+    }
+    return allies;
+  }
+
+  /** Survival camp buffs for HUD / AI (harvest + AI ability mults). */
+  getCampBuffs() {
+    if (!this.campClaim || !this.player) return null;
+    return this.campClaim.getBuffs(this.player.position);
   }
 
   // ── Modular building API (public — driven by GameCanvas) ──────────────────
@@ -1565,6 +2047,243 @@ export class GameEngine {
     }
   };
 
+  /**
+   * Melee swing against nearby harvest nodes.
+   * Tool type (axe / pickaxe / knife …) multiplies damage via HandToolCatalog.
+   * Returns true if any node took damage or yielded loot.
+   */
+  private tryMeleeHarvest(
+    origin: THREE.Vector3,
+    forward: THREE.Vector3,
+    range: number,
+    baseDamage: number,
+  ): boolean {
+    try {
+      const resSys = getResourceSystem();
+      const reach = Math.max(range, 2.2);
+      const nodes = resSys.queryNear(this.player.position.x, this.player.position.z, reach + 1.5);
+      if (!nodes.length) return false;
+
+      const att = this.player.weaponAttachment?.getAttached('mainhand');
+      const tool =
+        att?.toolDef ??
+        getHandToolDef(att?.sourceId) ??
+        getHandToolDef(this.player.equippedWeapons[this.player.activeWeaponIndex]?.id) ??
+        null;
+
+      const now = performance.now();
+      let any = false;
+      const fwdFlat = new THREE.Vector3(forward.x, 0, forward.z).normalize();
+
+      for (const node of nodes) {
+        if (node.respawnAt > 0 || node.hp <= 0) continue;
+        const dx = node.position.x - this.player.position.x;
+        const dz = node.position.z - this.player.position.z;
+        const dist = Math.hypot(dx, dz);
+        if (dist > reach + 0.8) continue;
+        // Must be roughly in front of the player (half-circle)
+        if (dist > 0.4) {
+          const toNode = new THREE.Vector3(dx, 0, dz).normalize();
+          if (toNode.dot(fwdFlat) < 0.15) continue;
+        }
+
+        const mult = harvestMultFor(tool, node.defId);
+        const dmg = Math.max(1, Math.round(baseDamage * mult * 0.45));
+        const loot = resSys.harvest(node.trackId, dmg, now);
+        if (loot === null) continue;
+        any = true;
+
+        // Feedback pulse on the node mesh
+        if (node.mesh) {
+          node.mesh.scale.setScalar(0.92);
+          setTimeout(() => {
+            if (node.mesh) node.mesh.scale.setScalar(1);
+          }, 80);
+        }
+
+        this.engagement.onHarvest();
+        if (loot.length > 0) {
+          for (const drop of loot) {
+            const count =
+              drop.min + Math.floor(Math.random() * Math.max(1, drop.max - drop.min + 1));
+            if (count > 0) this.onSurvivalLootDrop?.(drop.itemId, count);
+          }
+          this.audio.play('pickup');
+          this.damageNumbers?.spawn(
+            new THREE.Vector3(node.position.x, node.worldY + 1.2, node.position.z),
+            dmg,
+            { color: 0xc8a050 },
+          );
+        } else {
+          // Chip hit — small number
+          this.damageNumbers?.spawn(
+            new THREE.Vector3(node.position.x, node.worldY + 1.0, node.position.z),
+            dmg,
+            { color: 0x88aa66 },
+          );
+          this.audio.play('hit');
+        }
+      }
+      return any;
+    } catch {
+      return false;
+    }
+  }
+
+  /**
+   * Wire mode controller, cinema director, focus RMB, engagement toasts, hotkeys.
+   * Called after PlayerController exists. AFK is attached once EnemyManager exists.
+   */
+  private wireGameModesAndSystems(): void {
+    this.engagement.onToast = (title, body) => this.onEngagementToast?.(title, body);
+
+    this.cinema = new CinemaDirector({
+      camera: this.camera,
+      canvas: this.renderer.domElement,
+      renderer: this.renderer,
+    });
+    this.cinema.onClipEnd = () => {
+      if (this.gameMode.getMode() === 'cinema') this.gameMode.set('free');
+    };
+    this.cinema.onRecordReady = (_blob, url) => this.onCinemaRecordReady?.(url);
+    this.cinema.onTitleCard = (title, sub) => this.onCinemaTitleCard?.(title, sub);
+
+    this.gameMode.onModeChange = (mode, caps) => {
+      if (this.player) {
+        this.player.inputEnabled = caps.playerInput;
+        this.player.allowPrimaryAction = caps.primaryAction;
+        this.player.allowFocusRmb = caps.focusRmb;
+        this.player.allowDodge = caps.dodge;
+      }
+      const labels: Record<GameModeId, string> = {
+        free: 'Free',
+        combat: 'Combat',
+        harvest: 'Harvest',
+        build: 'Build',
+        cinema: 'Cinema',
+        afk: 'AFK',
+        ui: 'UI',
+      };
+      this.onGameModeChange?.(mode, labels[mode]);
+    };
+
+    // Mode-aware RMB focus
+    this.player.focusRmbHandler = (down: boolean) => {
+      const w = this.player.equippedWeapons[this.player.activeWeaponIndex];
+      const ranged = !!w && (w.type === 'gun' || w.type === 'rifle' || w.type === 'shotgun'
+        || w.type === 'smg' || w.type === 'pistol' || w.type === 'bow' || w.type === 'crossbow');
+      const behavior = this.gameMode.resolveFocusRmb(ranged);
+      if (!down) {
+        this.player.stopAiming();
+        this.player.stopBlock();
+        return;
+      }
+      switch (behavior) {
+        case 'ads':
+          this.player.startAiming();
+          break;
+        case 'block':
+          this.player.startBlock();
+          break;
+        case 'cancel_build':
+          this.modularBuilding?.clearBlueprint();
+          this.gameMode.set('free');
+          break;
+        default:
+          break;
+      }
+    };
+
+    // Hotkeys: M cycle mode · F9 AFK · F10 cinema orbit · F11 record · Esc exit cinema
+    this._modeKeyHandler = (e: KeyboardEvent) => {
+      if (!this.gameState.gameStarted || this.gameState.paused) return;
+      if (e.code === 'KeyM' && !e.repeat && !e.ctrlKey && !e.altKey) {
+        // Don't steal M if typing — only when pointer locked
+        if (!this.player?.mouseLocked && this.gameMode.getMode() !== 'afk') return;
+        e.preventDefault();
+        const next = this.gameMode.cyclePlayMode();
+        if (next === 'build' && this.modularBuilding) {
+          // leave blueprint selection to Build menu; mode just gates combat
+        }
+        if (next !== 'afk' && this.afk?.enabled) this.afk.stop();
+      }
+      if (e.code === 'F9' && !e.repeat) {
+        e.preventDefault();
+        this.toggleAfk();
+      }
+      if (e.code === 'F10' && !e.repeat) {
+        e.preventDefault();
+        this.playCinemaOrbit();
+      }
+      if (e.code === 'F11' && !e.repeat) {
+        e.preventDefault();
+        this.cinema?.toggleRecording();
+      }
+      if (e.code === 'Escape' && this.gameMode.getMode() === 'cinema') {
+        e.preventDefault();
+        this.exitCinema();
+      }
+    };
+    document.addEventListener('keydown', this._modeKeyHandler);
+  }
+
+  /** Public: open UI mode (panels) and restore on close. */
+  enterUiMode(): void {
+    if (this.gameMode.getMode() !== 'ui') this.gameMode.push('ui');
+  }
+
+  exitUiMode(): void {
+    if (this.gameMode.getMode() === 'ui') this.gameMode.pop();
+  }
+
+  setPlayMode(mode: GameModeId): void {
+    if (mode === 'afk') {
+      this.toggleAfk(true);
+      return;
+    }
+    if (this.afk?.enabled) this.afk.stop();
+    this.gameMode.set(mode);
+  }
+
+  toggleAfk(forceOn?: boolean): void {
+    if (!this.afk) return;
+    const turnOn = forceOn ?? !this.afk.enabled;
+    if (turnOn) {
+      this.gameMode.set('afk');
+      this.afk.start('defend');
+      this.onEngagementToast?.('AFK Defend', 'Auto-engage hostiles. F9 to cancel. F9+scripts via setAfkScript.');
+    } else {
+      this.afk.stop();
+      this.gameMode.set('free');
+    }
+  }
+
+  setAfkScript(script: 'defend' | 'harvest' | 'camp' | 'patrol'): void {
+    if (!this.afk) return;
+    this.afk.setScript(script);
+    if (!this.afk.enabled) {
+      this.gameMode.set('afk');
+      this.afk.start(script);
+    }
+  }
+
+  playCinemaOrbit(): void {
+    if (!this.cinema || !this.player) return;
+    this.gameMode.set('cinema');
+    this.cinema.playOrbit(this.player.position.clone().add(new THREE.Vector3(0, 1, 0)), 14, 5, 10);
+  }
+
+  playCinemaArrival(): void {
+    if (!this.cinema || !this.player) return;
+    this.gameMode.set('cinema');
+    this.cinema.playArrival(this.player.position.clone(), 5.5);
+  }
+
+  exitCinema(): void {
+    this.cinema?.stop();
+    if (this.gameMode.getMode() === 'cinema') this.gameMode.set('free');
+  }
+
   /** Grant structured quest rewards (profession XP, weapon XP, items). */
   private grantQuestRewards(qid: string, reward: import('./quest/QuestSystem').QuestReward): void {
     console.log(`[Quest] "${qid}" complete!`, reward);
@@ -1581,6 +2300,75 @@ export class GameEngine {
         this.onSurvivalLootDrop?.(item.itemId, item.count);
       }
     }
+  }
+
+  /**
+   * Load a Survival toon operator GLB for a named hub NPC (CDN toon-soldiers).
+   * Falls back via caller if the load rejects.
+   */
+  private async spawnNamedNpcMesh(
+    npcId: string,
+    bodyId: string,
+    pos: THREE.Vector3,
+    brain: { mesh?: THREE.Object3D },
+  ): Promise<void> {
+    const bodyCfg = BODY_TYPES.find((b) => b.id === bodyId);
+    const def = toonDef(bodyId);
+    const url =
+      bodyCfg?.gltfPath ??
+      def?.gltfPath ??
+      'https://assets.grudge-studio.com/models/toon-soldiers/infantry/infantry-a.glb';
+
+    const loader = createGLTFLoader(this.assetManager.getLoadingManager());
+    const gltf = await loader.loadAsync(url);
+    const mesh = gltf.scene;
+    mesh.name = `npc_${npcId}_${bodyId}`;
+
+    if (isToonBodyId(bodyId)) {
+      normalizeToonHeight(mesh, 1.75);
+    } else {
+      mesh.updateMatrixWorld(true);
+      const box = new THREE.Box3().setFromObject(mesh);
+      const h = box.getSize(new THREE.Vector3()).y;
+      if (h > 0.1 && h > 3) mesh.scale.multiplyScalar(1.8 / h);
+    }
+
+    mesh.position.copy(pos);
+    mesh.rotation.y = Math.PI;
+    mesh.traverse((o) => {
+      if ((o as THREE.Mesh).isMesh) {
+        o.castShadow = true;
+        o.receiveShadow = true;
+      }
+    });
+
+    let mixer: THREE.AnimationMixer | null = null;
+    if (isToonBodyId(bodyId) && def) {
+      try {
+        const clips = await loadRetargetedToonClips(mesh, {
+          ...def,
+          weaponMode: 'pistol',
+        });
+        const idle = clips.find((c) => c.name === 'Idle') ?? clips[0];
+        if (idle) {
+          mixer = new THREE.AnimationMixer(mesh);
+          const a = mixer.clipAction(idle);
+          a.setLoop(THREE.LoopRepeat, Infinity);
+          a.play();
+        }
+      } catch {
+        /* idle optional */
+      }
+    } else if (gltf.animations?.length) {
+      mixer = new THREE.AnimationMixer(mesh);
+      const idle =
+        gltf.animations.find((c) => /idle/i.test(c.name)) ?? gltf.animations[0];
+      mixer.clipAction(idle).play();
+    }
+
+    this.scene.add(mesh);
+    brain.mesh = mesh;
+    if (mixer) this._namedNpcMixers.push(mixer);
   }
 
   /**

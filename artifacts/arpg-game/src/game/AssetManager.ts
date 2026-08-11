@@ -7,6 +7,9 @@ import * as SkeletonUtils from 'three/examples/jsm/utils/SkeletonUtils.js';
 import { CharacterConfig, STARTING_MODEL, DEFAULT_CHARACTER_CONFIG, BODY_TYPES } from './CharacterConfig';
 import { prefabRegistry, type Prefab } from './PrefabRegistry';
 import { assetUrl } from '@/lib/assetUrl';
+import { isToonBodyId, toonDef } from './toon/ToonSurvivalRoster';
+import { loadRetargetedToonClips } from './toon/loadToonClips';
+import { normalizeToonHeight } from './toon/toonBoneRetarget';
 
 /**
  * Compute the Y offset needed to plant a model's lowest point at y=0
@@ -376,6 +379,9 @@ export class AssetManager {
       'A_TPose':       '',
     };
 
+    const isToon = isToonBodyId(config.bodyProportion);
+    const toonMeta = isToon ? toonDef(config.bodyProportion) : undefined;
+
     return new Promise<void>((resolve) => {
       this.gltfLoader.load(gltfPath, async (gltf) => {
         const group = gltf.scene as THREE.Group;
@@ -392,7 +398,12 @@ export class AssetManager {
           }
         });
 
-        this.applyCharacterColors(group, config.skinColor, config.hairColor, config.eyeColor);
+        // Toon soldiers: plant feet + scale to ~1.8 m before color/anim work
+        if (isToon) {
+          normalizeToonHeight(group, (config.heightCm || 178) / 100);
+        } else {
+          this.applyCharacterColors(group, config.skinColor, config.hairColor, config.eyeColor);
+        }
 
         const merged: THREE.AnimationClip[] = [];
         const usedTargetNames = new Set<string>();
@@ -433,6 +444,34 @@ export class AssetManager {
           }
         });
 
+        // ── Toon soldier (chicken_gun Bone rig): retarget Mixamo baked packs ──
+        if (isToon && toonMeta) {
+          try {
+            const toonClips = await loadRetargetedToonClips(group, toonMeta);
+            for (const c of toonClips) {
+              if (usedTargetNames.has(c.name)) continue;
+              merged.push(this.stripRootMotion(c));
+              usedTargetNames.add(c.name);
+            }
+            // Native multipack "Action" clips as Attack if retarget missed fire
+            if (!usedTargetNames.has('Attack')) {
+              const action = gltf.animations.find((a) => /action|fire|gun/i.test(a.name));
+              if (action) {
+                const atk = action.clone();
+                atk.name = 'Attack';
+                merged.push(this.stripRootMotion(atk));
+                usedTargetNames.add('Attack');
+              }
+            }
+            console.log(
+              `[AssetManager] Toon ${toonMeta.callsign}: ${merged.length} clips ` +
+                `(${merged.map((c) => c.name).join(', ')})`,
+            );
+          } catch (err) {
+            console.warn('[AssetManager] Toon retarget failed:', err);
+          }
+        }
+
         // Many character GLTFs ship the rig but ZERO animation clips — the
         // asset is intended to be paired with a separate animation pack.
         // The two flavours we see in this project's assets:
@@ -452,7 +491,7 @@ export class AssetManager {
         // pack we also normalise the `mixamorig:` prefix style first.
         let bindableTrackCount = 0;
         let charBoneCount = 0;
-        if (merged.length === 0) {
+        if (merged.length === 0 && !isToon) {
           const charBones = new Set<string>();
           group.traverse((o) => { if ((o as THREE.Bone).isBone) charBones.add(o.name); });
           charBoneCount = charBones.size;

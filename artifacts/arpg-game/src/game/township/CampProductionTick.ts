@@ -52,8 +52,11 @@ export interface CampFollower {
 export function computeProduction(
   state: TownshipState,
   followers: CampFollower[],
+  /** Survival CampClaim building harvest mult (default 1). Warlords never passes this. */
+  campHarvestMult: number = 1,
 ): Record<string, number> {
   const moraleMult = getMoraleHarvestMultiplier(state.morale);
+  const mult = moraleMult * Math.max(0.1, campHarvestMult);
   const output: Record<string, number> = {};
 
   for (const follower of followers) {
@@ -61,7 +64,7 @@ export function computeProduction(
     const rates = ROLE_PRODUCTION[follower.role];
     if (!rates) continue;
     for (const { resource, amount } of rates) {
-      output[resource] = (output[resource] ?? 0) + Math.floor(amount * moraleMult);
+      output[resource] = (output[resource] ?? 0) + Math.floor(amount * mult);
     }
   }
 

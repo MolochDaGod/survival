@@ -16,8 +16,16 @@ export default defineConfig({
     alias: {
       "@": path.resolve(import.meta.dirname, "src"),
       "@assets": path.resolve(import.meta.dirname, "..", "..", "attached_assets"),
+      // Vendor controller (no dist build required — resolve TypeScript source)
+      "grudge-control": path.resolve(
+        import.meta.dirname,
+        "vendor",
+        "grudge-control",
+        "src",
+        "index.ts",
+      ),
     },
-    dedupe: ["react", "react-dom"],
+    dedupe: ["react", "react-dom", "three"],
   },
   root: path.resolve(import.meta.dirname),
   build: {

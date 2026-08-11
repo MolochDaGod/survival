@@ -50,6 +50,14 @@ uniform float  uFogNear;
 uniform float  uFogFar;
 uniform float  uFogGloom;    // 0–1 global gloom intensity (night / storm)
 
+// Original-game tileable splat textures (optional — when uUseSplat > 0.5)
+uniform sampler2D tGrass;
+uniform sampler2D tSand;
+uniform sampler2D tStone;
+uniform sampler2D tSnow;
+uniform float  uUseSplat;
+uniform float  uTexRepeat;
+
 varying vec3  vColor;
 varying vec3  vNormal;
 varying vec3  vWorldPos;
@@ -212,6 +220,38 @@ void main() {
 
   // ── Base biome colour from vertex attribute ────────────────────────────────
   vec3 albedo = vColor;
+
+  // ── Original-game splat textures (grass / sand / stone / snow) ────────────
+  // Multiplied onto vertex colours so biome tints still read while detail
+  // tiles give real surface colour from the ground-game asset pack.
+  if (uUseSplat > 0.5) {
+    vec2 tiled = vWorldPos.xz * uTexRepeat;
+    vec3 texGrass = texture2D(tGrass, tiled).rgb;
+    vec3 texSand  = texture2D(tSand,  tiled).rgb;
+    vec3 texStone = texture2D(tStone, tiled).rgb;
+    vec3 texSnow  = texture2D(tSnow,  tiled).rgb;
+
+    float slopeSplat = 1.0 - abs(N.y);
+    float slopeSplatF = smoothstep(0.28, 0.72, slopeSplat);
+
+    // Height bands match WorldGen biome thresholds (beach→grass→forest→highland→snow)
+    vec3 splat;
+    if (h < 2.0) {
+      splat = mix(texSand, texGrass, linstep(-0.5, 3.5, h));
+    } else if (h < 14.0) {
+      splat = texGrass;
+    } else if (h < 40.0) {
+      splat = mix(texGrass, texStone, linstep(14.0, 32.0, h));
+    } else if (h < 62.0) {
+      splat = texStone;
+    } else {
+      splat = mix(texStone, texSnow, linstep(58.0, 70.0, h));
+    }
+    splat = mix(splat, texStone, slopeSplatF);
+
+    // Soft multiply with vertex biome colour (preserve author palette)
+    albedo = mix(albedo, albedo * (splat * 1.55 + 0.22), 0.78);
+  }
 
   // ── Diffuse lighting ──────────────────────────────────────────────────────
   float NdotL    = max(dot(N, L), 0.0);
@@ -384,10 +424,25 @@ export interface TerrainUniforms {
   uFogNear:    { value: number };
   uFogFar:     { value: number };
   uFogGloom:   { value: number };
+  tGrass:      { value: THREE.Texture | null };
+  tSand:       { value: THREE.Texture | null };
+  tStone:      { value: THREE.Texture | null };
+  tSnow:       { value: THREE.Texture | null };
+  uUseSplat:   { value: number };
+  uTexRepeat:  { value: number };
   [key: string]: { value: unknown };
 }
 
 let _sharedUniforms: TerrainUniforms | null = null;
+let _splatLoadStarted = false;
+
+/** 1×1 grey placeholder so sampler2D is never unbound before textures load. */
+function makePlaceholderTex(r: number, g: number, b: number): THREE.DataTexture {
+  const t = new THREE.DataTexture(new Uint8Array([r, g, b, 255]), 1, 1);
+  t.needsUpdate = true;
+  t.colorSpace = THREE.SRGBColorSpace;
+  return t;
+}
 
 export function getTerrainUniforms(): TerrainUniforms {
   if (!_sharedUniforms) {
@@ -401,9 +456,37 @@ export function getTerrainUniforms(): TerrainUniforms {
       uFogNear:    { value: 80 },   // fog begins 80 m from player
       uFogFar:     { value: 100 },  // fully opaque at 100 m
       uFogGloom:   { value: 0.0 },
+      tGrass:      { value: makePlaceholderTex(60, 110, 40) },
+      tSand:       { value: makePlaceholderTex(180, 160, 110) },
+      tStone:      { value: makePlaceholderTex(110, 108, 105) },
+      tSnow:       { value: makePlaceholderTex(230, 235, 240) },
+      uUseSplat:   { value: 0.0 },
+      uTexRepeat:  { value: 0.08 }, // world-metre tiling density
     };
   }
   return _sharedUniforms;
+}
+
+/**
+ * Load original-game splat textures into shared terrain uniforms.
+ * Safe to call multiple times; first call wins.
+ */
+export async function enableTerrainSplatTextures(): Promise<void> {
+  if (_splatLoadStarted) return;
+  _splatLoadStarted = true;
+  try {
+    const { loadAllTerrainTextures } = await import('./NatureAssets');
+    const tex = await loadAllTerrainTextures();
+    const u = getTerrainUniforms();
+    u.tGrass.value = tex.grass;
+    u.tSand.value = tex.sand;
+    u.tStone.value = tex.stone;
+    u.tSnow.value = tex.snow;
+    u.uUseSplat.value = 1.0;
+    console.info('[BiomeTerrain] splat textures active (grass/sand/stone/snow)');
+  } catch (err) {
+    console.warn('[BiomeTerrain] splat texture load failed — vertex colours only', err);
+  }
 }
 
 export function updateTerrainUniforms(
@@ -429,6 +512,8 @@ export function createBiomeTerrainMaterial(): THREE.ShaderMaterial {
   // The fragment shader uses fwidth() inside snowLineIQ(). This is built
   // into GLSL ES 3.0, which Three.js r163+ uses unconditionally — WebGL1
   // support (and the old `extensions.derivatives` opt-in) was removed.
+  // Kick off splat texture load (non-blocking) so detail appears once ready.
+  void enableTerrainSplatTextures();
   return new THREE.ShaderMaterial({
     vertexShader:  VERT,
     fragmentShader: FRAG,

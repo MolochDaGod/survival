@@ -54,6 +54,12 @@ export type BuildingPieceId =
   | 'mb_bookcase'
   | 'mb_bench'
   | 'mb_lantern'
+  // ── Survival camp claim / profession props (GRUDGES era — not Warlords) ──
+  | 'claim_flag'
+  | 'orc_flag'
+  | 'workbench'
+  | 'campfire'
+  | 'build_tent_personal'
   // ── low_poly farm / village wood props (sub-nodes in a single GLB) ────────
   | 'wt_fence'
   | 'wt_bucket'
@@ -106,6 +112,13 @@ const PIECES: Record<BuildingPieceId, PieceDef> = {
   mb_bookcase: { id: 'mb_bookcase', glbPath: 'models/props/fantasy_megakit/Exports/glTF/Bookcase_2.gltf', yOffset: 0 },
   mb_bench: { id: 'mb_bench', glbPath: 'models/props/fantasy_megakit/Exports/glTF/Bench.gltf', yOffset: 0 },
   mb_lantern: { id: 'mb_lantern', glbPath: 'models/props/fantasy_megakit/Exports/glTF/Lantern_Wall.gltf', yOffset: 0 },
+
+  // Survival camp claim + profession benches (reuse prop meshes until dedicated art ships)
+  claim_flag: { id: 'claim_flag', glbPath: 'models/props/orc-props/_flag.fbx', yOffset: 0, fitSize: 2.5 },
+  orc_flag: { id: 'orc_flag', glbPath: 'models/props/orc-props/_flag.fbx', yOffset: 0, fitSize: 2.5 },
+  workbench: { id: 'workbench', glbPath: 'models/props/fantasy_megakit/Exports/glTF/Workbench.gltf', yOffset: 0 },
+  campfire: { id: 'campfire', glbPath: 'models/props/fantasy_megakit/Exports/glTF/Lantern_Wall.gltf', yOffset: 0, fitSize: 1.2 },
+  build_tent_personal: { id: 'build_tent_personal', glbPath: 'models/props/fantasy_megakit/Exports/glTF/Bed_Twin1.gltf', yOffset: 0, fitSize: 2.5 },
 
   // low_poly farm / village wood pack — meshes extracted by node name (# suffix).
   wt_fence:  { id: 'wt_fence',  glbPath: 'models/props/low_poly_farm_wood/pack.glb#Fence',   yOffset: 0, fitSize: 4.0 },

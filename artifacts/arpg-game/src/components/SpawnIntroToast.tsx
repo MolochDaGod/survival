@@ -86,7 +86,7 @@ export const SpawnIntroToast: React.FC<{ onClose: () => void }> = ({ onClose }) 
           You've arrived
         </div>
         <div style={{ fontSize: 18, fontWeight: 600, color: '#e8c768', marginBottom: 10 }}>
-          The encampment. Survive the night.
+          Convergence Nexus — stake your claim.
         </div>
         <div
           style={{

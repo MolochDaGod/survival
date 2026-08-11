@@ -12,11 +12,12 @@ interface CraftingPanelProps {
 }
 
 const STATION_LABELS: Record<CraftingStation, string> = {
-  none:         'Hand',
-  campfire:     'Campfire',
-  cooking_rack: 'Cooking Rack',
-  workbench:    'Workbench',
-  drying_rack:  'Drying Rack',
+  none:              'Hand',
+  campfire:          'Campfire',
+  cooking_rack:      'Cooking Rack',
+  workbench:         'Workbench',
+  drying_rack:       'Drying Rack',
+  profession_bench:  'Profession Bench',
 };
 
 /** True when every input requirement is satisfied. */
@@ -125,6 +126,7 @@ export const CraftingPanel: React.FC<CraftingPanelProps> = ({
   const groupedRecipes = useMemo(() => {
     const byStation: Record<CraftingStation, Recipe[]> = {
       none: [], campfire: [], cooking_rack: [], workbench: [], drying_rack: [],
+      profession_bench: [],
     };
     for (const r of RECIPES) byStation[r.station].push(r);
     return byStation;
@@ -188,7 +190,7 @@ export const CraftingPanel: React.FC<CraftingPanelProps> = ({
         </div>
 
         <div style={{ padding: '14px 18px', overflowY: 'auto', flex: 1 }}>
-          {(['none', 'workbench', 'campfire', 'cooking_rack', 'drying_rack'] as CraftingStation[]).map((station) => {
+          {(['none', 'workbench', 'profession_bench', 'campfire', 'cooking_rack', 'drying_rack'] as CraftingStation[]).map((station) => {
             const list = groupedRecipes[station]
               .filter((r) => filter === 'all' || (canCraft(r, stacks) && isStationAvailable(station)));
             if (list.length === 0) return null;

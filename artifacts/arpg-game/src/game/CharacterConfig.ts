@@ -13,10 +13,16 @@ export type Gender = 'male' | 'female';
 export type BodyProportionType =
   // Legacy survivor ids kept for save-file migration only — not in BODY_TYPES.
   | 'athletic' | 'lean'
+  // Canonical feet-rooted ARPG player (shared Prim / Armada ground / arpg-game)
+  | 'arpg-player'
   // Quaternius animated packs — body-type silhouettes with built-in starter clothing
   | 'adventurer' | 'beach' | 'casual' | 'casual-hoodie' | 'farmer'
   | 'formal' | 'king' | 'medieval' | 'punk' | 'scifi'
-  | 'soldier' | 'spacesuit' | 'suit' | 'swat' | 'witch' | 'worker';
+  | 'soldier' | 'spacesuit' | 'suit' | 'swat' | 'witch' | 'worker'
+  // GRUDGES Survival toon operators (chicken_gun multipack on CDN)
+  | 'toon-vex' | 'toon-nim' | 'toon-rivet' | 'toon-ashcoil'
+  | 'toon-bastion' | 'toon-cinder' | 'toon-brick' | 'toon-ledger'
+  | 'toon-suture' | 'toon-greyvial' | 'toon-scope' | 'toon-permafrost';
 
 export interface GrudgeStats {
   bio: number;
@@ -215,6 +221,26 @@ export interface BodyTypeConfig {
  * meshes have been retired from the picker.
  */
 export const BODY_TYPES: BodyTypeConfig[] = [
+  // ── Canonical ARPG player (feet-rooted, metres) ──────────────────────────
+  // Baked via process-character.mjs --height 1.85 (origin between feet, y=0).
+  // Prefer local path for deploy; CDN mirror optional after R2 sync.
+  { id: 'arpg-player',     gender: 'male',   label: 'Operator',    icon: '🎮', category: 'survivor', scaleX: 1, scaleY: 1, gltfPath: '/models/characters/player/arpg-player.glb' },
+
+  // ── GRUDGES Survival toon operators (CDN) — primary surface cast ─────────
+  // Loaded from assets.grudge-studio.com/models/toon-soldiers/* with Mixamo retarget.
+  { id: 'toon-vex',        gender: 'male',   label: 'Vex',         icon: '🔭', category: 'survivor', scaleX: 1, scaleY: 1, gltfPath: 'https://assets.grudge-studio.com/models/toon-soldiers/scout/scout-a.glb' },
+  { id: 'toon-nim',        gender: 'female', label: 'Nim',         icon: '🌿', category: 'survivor', scaleX: 1, scaleY: 1, gltfPath: 'https://assets.grudge-studio.com/models/toon-soldiers/scout/scout-b.glb' },
+  { id: 'toon-rivet',      gender: 'male',   label: 'Rivet',       icon: '🔧', category: 'survivor', scaleX: 1, scaleY: 1, gltfPath: 'https://assets.grudge-studio.com/models/toon-soldiers/engineer/engineer-a.glb' },
+  { id: 'toon-ashcoil',    gender: 'female', label: 'Ashcoil',     icon: '📡', category: 'survivor', scaleX: 1, scaleY: 1, gltfPath: 'https://assets.grudge-studio.com/models/toon-soldiers/engineer/engineer-b.glb' },
+  { id: 'toon-bastion',    gender: 'male',   label: 'Bastion',     icon: '🛡️', category: 'survivor', scaleX: 1, scaleY: 1, gltfPath: 'https://assets.grudge-studio.com/models/toon-soldiers/gunner/gunner-a.glb' },
+  { id: 'toon-cinder',     gender: 'female', label: 'Cinder',      icon: '🔥', category: 'survivor', scaleX: 1, scaleY: 1, gltfPath: 'https://assets.grudge-studio.com/models/toon-soldiers/gunner/gunner-b.glb' },
+  { id: 'toon-brick',      gender: 'male',   label: 'Brick',       icon: '🪖', category: 'survivor', scaleX: 1, scaleY: 1, gltfPath: 'https://assets.grudge-studio.com/models/toon-soldiers/infantry/infantry-a.glb' },
+  { id: 'toon-ledger',     gender: 'male',   label: 'Ledger',      icon: '📋', category: 'survivor', scaleX: 1, scaleY: 1, gltfPath: 'https://assets.grudge-studio.com/models/toon-soldiers/infantry/infantry-b.glb' },
+  { id: 'toon-suture',     gender: 'male',   label: 'Suture',      icon: '💉', category: 'survivor', scaleX: 1, scaleY: 1, gltfPath: 'https://assets.grudge-studio.com/models/toon-soldiers/medic/medic-a.glb' },
+  { id: 'toon-greyvial',   gender: 'female', label: 'Greyvial',    icon: '⚗️', category: 'survivor', scaleX: 1, scaleY: 1, gltfPath: 'https://assets.grudge-studio.com/models/toon-soldiers/medic/medic-b.glb' },
+  { id: 'toon-scope',      gender: 'female', label: 'Scope',       icon: '🎯', category: 'survivor', scaleX: 1, scaleY: 1, gltfPath: 'https://assets.grudge-studio.com/models/toon-soldiers/sniper/sniper-a.glb' },
+  { id: 'toon-permafrost', gender: 'female', label: 'Permafrost',  icon: '❄️', category: 'survivor', scaleX: 1, scaleY: 1, gltfPath: 'https://assets.grudge-studio.com/models/toon-soldiers/sniper/sniper-b.glb' },
+
   // ── Male Quaternius variants ─────────────────────────────────────────────
   // Each loads a full clothed GLTF from R2 with 24 baked animation clips.
   { id: 'adventurer',    gender: 'male', label: 'Adventurer', icon: '⚔️',  category: 'civilian', scaleX: 1.00, scaleY: 1.00, gltfPath: '/models/characters/male/adventurer.gltf' },
@@ -288,6 +314,8 @@ export const BACKGROUNDS: CharacterBackground[] = [
         { itemId: 'bottle_full', count: 2 },
         { itemId: 'food_can',    count: 2 },
         { itemId: 'knife',       count: 1 },
+        { itemId: 'hatchet',     count: 1 },
+        { itemId: 'pickaxe',     count: 1 },
         { itemId: 'flashlight',  count: 1 },
         { itemId: 'compass',     count: 1 },
       ],
@@ -472,9 +500,14 @@ export function getStartingLoadout(backgroundId: string | undefined): StartingLo
   // their own variants).
   const ownedIds = new Set(base.survival.map(s => s.itemId));
   const extras = CONSTRUCTION_STARTER.filter(c => !ownedIds.has(c.itemId));
+  // Ensure every origin has basic harvest tools in the survival bag.
+  const harvestKit = [
+    { itemId: 'hatchet', count: 1 },
+    { itemId: 'pickaxe', count: 1 },
+  ].filter(t => !ownedIds.has(t.itemId));
   return {
     ...base,
-    survival: [...base.survival, ...extras],
+    survival: [...base.survival, ...harvestKit, ...extras],
   };
 }
 
@@ -593,7 +626,8 @@ export const MALE_OUTFITS: OutfitPreset[] = [
  */
 export const STARTING_MODEL: Record<Gender, string> = {
   female: '/models/characters/female/adventurer.gltf',
-  male:   '/models/characters/male/adventurer.gltf',
+  // Canonical feet-rooted operator for ARPG / Armada ground / Prim
+  male:   '/models/characters/player/arpg-player.glb',
 };
 
 // ── Modular Gear Variants (Quaternius "Ultimate Modular Men") ────────────────
@@ -714,18 +748,22 @@ export const DEFAULT_PERK_CHOICES: PerkChoices = {
 };
 
 export const DEFAULT_CHARACTER_CONFIG: CharacterConfig = {
-  name: 'Survivor',
-  gender: 'female',
-  bodyProportion: 'adventurer',
+  name: 'Brick',
+  gender: 'male',
+  /**
+   * Default live avatar: Hollow Lords line fighter (toon infantry).
+   * Matches site cast + TOON-SURVIVAL roster; CDN mesh with Mixamo retarget.
+   */
+  bodyProportion: 'toon-brick',
   outfitId: 'none',
-  hairStyleId: 'Hair_Long',
+  hairStyleId: 'none',
   skinColor: '#D4905A',
   hairColor: '#5C3317',
   eyeColor: '#2E6EAA',
-  heightCm: 168,
-  build: 40,
+  heightCm: 178,
+  build: 55,
   faceShape: 'oval',
   stats: { ...DEFAULT_STATS },
-  backgroundId: 'street',
+  backgroundId: 'military',
   perkChoices: { tier4: {}, tier5: {} },
 };

@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { SLIDE_TRANSITIONS, IDLE_OVERRIDE_CLIP } from './AnimationRegistry';
+import { expFactor } from './math/MathUtils';
 
 /**
  * Directional locomotion blend tree for the player.
@@ -198,7 +199,8 @@ export class LocomotionAnimator {
     // Forward / backward — we don't have a back clip, so play Walk reversed
     // by setting timeScale negative when forward < 0.
     const walkAction = this.actions.get('Walk');
-    const carryAction = this.actions.get('WALK_CARRY');
+    // Clip key must match LOCO list / AnimationRegistry (`Walk_Carry_Loop`).
+    const carryAction = this.actions.get('Walk_Carry_Loop');
     const runAction = this.actions.get('Run');
     if (walkAction) walkAction.timeScale = forward >= 0 ? 1 : -1;
     if (carryAction) carryAction.timeScale = forward >= 0 ? 1 : -1;
@@ -288,8 +290,7 @@ export class LocomotionAnimator {
     this.tickSlideExit();
 
     // Smooth each locomotion weight toward its target.
-    const k = 14;
-    const t = 1 - Math.exp(-k * dt);
+    const t = expFactor(14, dt);
 
     // While a one-shot is active, mute locomotion layer.
     const oneShotActive = this.oneShotAction != null && performance.now() < this.oneShotEndTime;
@@ -533,8 +534,7 @@ export class LocomotionAnimator {
   /** Called inside update() to tick additive aim weights. */
   private updateAimLayer(dt: number): void {
     if (this.aimActions.size === 0) return;
-    const k = 10;
-    const t = 1 - Math.exp(-k * dt);
+    const t = expFactor(10, dt);
     this.aimLayerWeight = THREE.MathUtils.lerp(this.aimLayerWeight, this.aimLayerTarget, t);
 
     const key = this.aimWeaponType;

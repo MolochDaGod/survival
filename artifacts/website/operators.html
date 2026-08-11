@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Grudges — Playable Operators</title>
+<meta name="description" content="Twelve low-poly toon operators for GRUDGES Survival — factions, roles, and jump into play." />
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=EB+Garamond:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap" />
+<style>
+  :root {
+    --bg-deep:#0a0604; --gold:#c5a059; --gold-bright:#f0d088; --parchment:#e8d8a8;
+    --ember:#d4602a; --rule:rgba(197,160,89,0.25); --display:'Cinzel',serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg-deep);color:var(--parchment);font-family:'EB Garamond',Georgia,serif;line-height:1.55}
+  a{color:var(--gold-bright);text-decoration:none}
+  a:hover{color:var(--ember)}
+  nav{display:flex;justify-content:space-between;align-items:center;padding:1rem 1.5rem;border-bottom:1px solid var(--rule);position:sticky;top:0;background:rgba(10,6,4,0.94);backdrop-filter:blur(8px)}
+  nav .brand{font-family:var(--display);font-weight:700;color:var(--gold-bright)}
+  nav ul{display:flex;gap:1.2rem;list-style:none;margin:0;padding:0;flex-wrap:wrap}
+  nav ul a{font-family:var(--display);font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:var(--parchment)}
+  .play{background:linear-gradient(to bottom,var(--gold),#8a6a30);color:#2a1810;padding:.5rem 1rem;font-family:var(--display);font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;border-radius:2px}
+  .hero{text-align:center;padding:3rem 1.5rem 2rem}
+  .hero h1{font-family:var(--display);color:var(--gold-bright);font-size:clamp(2rem,4vw,3rem);margin:0}
+  .hero p{max-width:640px;margin:1rem auto 0;opacity:.9}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem;max-width:1100px;margin:0 auto;padding:0 1.5rem 3rem}
+  .card{background:linear-gradient(to bottom,#1c1610,#221a12);border:1px solid var(--rule);border-left:4px solid var(--gold);padding:1rem 1.1rem;border-radius:0 4px 4px 0}
+  .card h3{font-family:var(--display);color:var(--gold-bright);margin:0 0 .35rem;font-size:1.05rem}
+  .meta{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:#9a8a6a;letter-spacing:.04em}
+  .blurb{margin:.55rem 0 0;font-size:.95rem;opacity:.9}
+  footer{text-align:center;padding:2rem;border-top:1px solid var(--rule);font-size:.85rem;color:#9a8a6a}
+</style>
+</head>
+<body>
+<nav>
+  <a class="brand" href="/">Grudges</a>
+  <ul>
+    <li><a href="info.html">Gameplay</a></li>
+    <li><a href="crafting.html">Crafting</a></li>
+    <li><a href="bestiary.html">Bestiary</a></li>
+    <li><a href="stats-guide.html">Stats</a></li>
+    <li><a href="operators.html" style="color:var(--gold-bright)">Operators</a></li>
+  </ul>
+  <a class="play" href="/arpg-game/">Play Now</a>
+</nav>
+<header class="hero">
+  <div style="font-family:var(--display);color:var(--ember);letter-spacing:.2em;text-transform:uppercase;font-size:.8rem">Surface cast · low-poly toons</div>
+  <h1>Playable Operators</h1>
+  <p>Twelve faction operators ship as playable avatars in the live ARPG — pick Brick, Rivet, Ledger, and more on character select, then claim camp, craft, and hold the Convergence Nexus.</p>
+</header>
+<div class="grid" id="grid"></div>
+<footer>
+  In-game: character select → operator grid · Main Panel (C) · Crafting codex at <a href="crafting.html">/crafting</a>
+</footer>
+<script>
+const ROSTER = [
+  { icon:'🔭', name:'Vex', faction:'scavs', role:'pathfinder', blurb:'Scrap Highway freebooters — strip, rewire, survive.' },
+  { icon:'🌿', name:'Nim', faction:'keepers', role:'green-runner', blurb:'Pilgrim Road wardens — heal, guide, hold the green.' },
+  { icon:'🔧', name:'Rivet', faction:'scavs', role:'rigwright', blurb:'Scrap Highway freebooters — strip, rewire, survive.' },
+  { icon:'📡', name:'Ashcoil', faction:'network', role:'gridwright', blurb:'Rail Line signals — map, log, snipe the dark.' },
+  { icon:'🛡️', name:'Bastion', faction:'hollow', role:'heavy-gun', blurb:'Descent Road iron — wall-line and heavy fire.' },
+  { icon:'🔥', name:'Cinder', faction:'forgotten', role:'ash-guard', blurb:'Tidal Path ghosts — ash, ice, and old debts.' },
+  { icon:'🪖', name:'Brick', faction:'hollow', role:'line-fighter', blurb:'Default live avatar — Hollow Lords infantry.' },
+  { icon:'📋', name:'Ledger', faction:'network', role:'patrol', blurb:'Rail Line signals — map, log, snipe the dark.' },
+  { icon:'💉', name:'Suture', faction:'keepers', role:'healer', blurb:'Pilgrim Road wardens — heal, guide, hold the green.' },
+  { icon:'⚗️', name:'Greyvial', faction:'forgotten', role:'bone-tender', blurb:'Tidal Path ghosts — ash, ice, and old debts.' },
+  { icon:'🎯', name:'Scope', faction:'network', role:'marksman', blurb:'Rail Line signals — map, log, snipe the dark.' },
+  { icon:'❄️', name:'Permafrost', faction:'forgotten', role:'long-eye', blurb:'Tidal Path ghosts — ash, ice, and old debts.' },
+];
+document.getElementById('grid').innerHTML = ROSTER.map(o => `
+  <article class="card">
+    <h3>${o.icon} ${o.name}</h3>
+    <div class="meta">${o.faction} · ${o.role}</div>
+    <p class="blurb">${o.blurb}</p>
+    <p class="meta" style="margin-top:.75rem"><a href="/arpg-game/">Play as ${o.name} →</a></p>
+  </article>
+`).join('');
+</script>
+</body>
+</html>

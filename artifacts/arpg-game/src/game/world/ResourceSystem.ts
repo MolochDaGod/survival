@@ -13,6 +13,9 @@
 import * as THREE from 'three';
 import { getBiome, worldHeight, Biome } from './WorldGen';
 import { groundY } from '../GroundSampler';
+import type { PhysicsWorld } from '../physics/PhysicsWorld';
+import { HarvestablePlacer } from './HarvestablePlacer';
+import { ensureSceneGraph } from './SceneGraphLayers';
 
 import { getSpatialTracker, EntityType, TrackedEntity } from '../SpatialTracker';
 import { getFogOfWar } from './FogOfWar';
@@ -44,7 +47,7 @@ export interface ResourceDef {
   id:         string;
   label:      string;
   biomes:     string[];      // which biome keys this spawns in
-  color:      number;        // mesh color (placeholder — swap with GLB later)
+  color:      number;        // fallback mesh color when GLB missing
   radius:     number;        // mesh bounding radius metres
   maxHp:      number;
   respawnSec: number;
@@ -52,6 +55,13 @@ export interface ResourceDef {
   /** Nodes per km² in matching biome */
   density:    number;
   minimapColor: string;      // CSS color for minimap dot
+  /**
+   * NatureAssets key (tree/bush/ore/herb/…) — loads original-game GLB with
+   * textures. When unset, falls back to procedural geometry + flat color.
+   */
+  meshKey?:   string;
+  /** Extra multiplicative tint applied after GLB load (optional). */
+  meshTint?:  number;
 }
 
 export const RESOURCE_DEFS: ResourceDef[] = [
@@ -65,10 +75,12 @@ export const RESOURCE_DEFS: ResourceDef[] = [
     respawnSec: 300,
     density: 120,
     minimapColor: '#5c3a1a',
+    meshKey: 'log',
+    meshTint: 0x5c3a1a,
     loot: [
-      { itemId: 'wood_plank',    min: 2, max: 5, chance: 1.0 },
-      { itemId: 'bark',          min: 0, max: 2, chance: 0.5 },
-      { itemId: 'tree_mushroom', min: 0, max: 1, chance: 0.2 },
+      { itemId: 'wood_chopped', min: 2, max: 5, chance: 1.0 },
+      { itemId: 'branch_a',     min: 0, max: 2, chance: 0.5 },
+      { itemId: 'branch_b',     min: 0, max: 1, chance: 0.2 },
     ],
   },
   {
@@ -81,9 +93,11 @@ export const RESOURCE_DEFS: ResourceDef[] = [
     respawnSec: 600,
     density: 40,
     minimapColor: '#888',
+    meshKey: 'ore',
+    meshTint: 0x8899bb,
     loot: [
-      { itemId: 'iron_ore',  min: 2, max: 4, chance: 1.0 },
-      { itemId: 'flint',     min: 0, max: 2, chance: 0.4 },
+      { itemId: 'rock_7', min: 2, max: 4, chance: 1.0 }, // ore chunk
+      { itemId: 'rock_5', min: 0, max: 2, chance: 0.4 }, // flint
     ],
   },
   {
@@ -96,10 +110,12 @@ export const RESOURCE_DEFS: ResourceDef[] = [
     respawnSec: 720,
     density: 35,
     minimapColor: '#9ab8dd',
+    meshKey: 'crystal',
+    meshTint: 0xaaccff,
     loot: [
-      { itemId: 'permafrost_shard', min: 1, max: 3, chance: 1.0 },
-      { itemId: 'ice_crystal',      min: 0, max: 2, chance: 0.6 },
-      { itemId: 'ancient_ore',      min: 0, max: 1, chance: 0.08 },
+      { itemId: 'rock_7', min: 1, max: 3, chance: 1.0 },
+      { itemId: 'rock_3', min: 0, max: 2, chance: 0.6 },
+      { itemId: 'rock_6', min: 0, max: 1, chance: 0.08 }, // coal rare
     ],
   },
   {
@@ -112,9 +128,11 @@ export const RESOURCE_DEFS: ResourceDef[] = [
     respawnSec: 480,
     density: 50,
     minimapColor: '#b87333',
+    meshKey: 'rock',
+    meshTint: 0xb87333,
     loot: [
-      { itemId: 'copper_ore',  min: 2, max: 5, chance: 1.0 },
-      { itemId: 'sandstone',   min: 0, max: 3, chance: 0.5 },
+      { itemId: 'rock_7', min: 2, max: 5, chance: 1.0 },
+      { itemId: 'rock_2', min: 0, max: 3, chance: 0.5 },
     ],
   },
   {
@@ -127,9 +145,44 @@ export const RESOURCE_DEFS: ResourceDef[] = [
     respawnSec: 120,
     density: 200,
     minimapColor: '#2e9e1e',
+    meshKey: 'herb',
+    meshTint: 0x44cc44,
     loot: [
-      { itemId: 'herb_common', min: 1, max: 3, chance: 1.0 },
-      { itemId: 'herb_rare',   min: 0, max: 1, chance: 0.15 },
+      { itemId: 'branch_a', min: 1, max: 3, chance: 1.0 },
+      { itemId: 'branch_b', min: 0, max: 1, chance: 0.15 },
+    ],
+  },
+  {
+    id: 'hemp_plant',
+    label: 'Wild Hemp',
+    biomes: ['grassland', 'forest', 'default'],
+    color: 0x4a8a30,
+    radius: 0.7,
+    maxHp: 8,
+    respawnSec: 180,
+    density: 90,
+    minimapColor: '#4a8a30',
+    meshKey: 'hemp',
+    meshTint: 0x66aa44,
+    loot: [
+      { itemId: 'branch_a', min: 1, max: 4, chance: 1.0 },
+      { itemId: 'wood_chopped', min: 0, max: 1, chance: 0.2 },
+    ],
+  },
+  {
+    id: 'scrap_pile',
+    label: 'Scrap Pile',
+    biomes: ['highland', 'desert', 'default'],
+    color: 0x6a6a62,
+    radius: 1.3,
+    maxHp: 35,
+    respawnSec: 480,
+    density: 25,
+    minimapColor: '#7a7a70',
+    meshKey: 'scrap',
+    loot: [
+      { itemId: 'rock_7', min: 2, max: 5, chance: 1.0 },
+      { itemId: 'rock_6', min: 0, max: 2, chance: 0.35 },
     ],
   },
   {
@@ -142,9 +195,11 @@ export const RESOURCE_DEFS: ResourceDef[] = [
     respawnSec: 240,
     density: 20,
     minimapColor: '#6ab4cc',
+    meshKey: 'rock2',
+    meshTint: 0x6ab4cc,
     loot: [
-      { itemId: 'ice_water',  min: 2, max: 4, chance: 1.0 },
-      { itemId: 'frost_fish', min: 0, max: 2, chance: 0.45 },
+      { itemId: 'bottle_full', min: 1, max: 2, chance: 0.8 },
+      { itemId: 'rock_5',     min: 0, max: 2, chance: 0.45 },
     ],
   },
   {
@@ -157,9 +212,11 @@ export const RESOURCE_DEFS: ResourceDef[] = [
     respawnSec: 200,
     density: 60,
     minimapColor: '#8a7a6a',
+    meshKey: 'rock',
+    meshTint: 0x8a7a6a,
     loot: [
-      { itemId: 'flint',    min: 2, max: 4, chance: 1.0 },
-      { itemId: 'granite',  min: 0, max: 2, chance: 0.3 },
+      { itemId: 'rock_5', min: 2, max: 4, chance: 1.0 }, // flint
+      { itemId: 'rock_2', min: 0, max: 2, chance: 0.3 },
     ],
   },
 ];
@@ -173,8 +230,11 @@ export interface ResourceNode extends TrackedEntity {
   hp:           number;
   maxHp:        number;
   respawnAt:    number;   // timestamp ms when it respawns; 0 = alive
-  mesh?:        THREE.Mesh;
+  /** Visual root under HarvestRoot (three-layer scene graph). */
+  mesh?:        THREE.Object3D;
   worldY:       number;
+  /** True once an async GLB load has been requested (avoid spam). */
+  meshLoading?: boolean;
 }
 
 // ─── Lightweight deterministic RNG (seeded by position) ──────────────────────
@@ -190,19 +250,25 @@ function seededRand(x: number, z: number, salt: number): number {
 const _geoCache = new Map<string, THREE.BufferGeometry>();
 const _matCache = new Map<string, THREE.MeshStandardMaterial>();
 
-function meshFor(def: ResourceDef): THREE.Mesh {
+/** Procedural fallback when original-game GLB is missing. */
+function proceduralMeshFor(def: ResourceDef): THREE.Mesh {
   if (!_geoCache.has(def.id)) {
-    // Ore veins = box, plants = cone, water = flat disc
-    const g = def.id.includes('herb') || def.id.includes('pond')
-      ? new THREE.ConeGeometry(def.radius * 0.8, def.radius * 1.2, 5)
-      : new THREE.DodecahedronGeometry(def.radius * 0.7);
+    // Ore veins = rock, plants = cone, water = flat disc
+    let g: THREE.BufferGeometry;
+    if (def.id.includes('pond')) {
+      g = new THREE.CylinderGeometry(def.radius, def.radius, 0.12, 12);
+    } else if (def.id.includes('herb') || def.id.includes('hemp')) {
+      g = new THREE.ConeGeometry(def.radius * 0.8, def.radius * 1.2, 5);
+    } else {
+      g = new THREE.DodecahedronGeometry(def.radius * 0.7);
+    }
     _geoCache.set(def.id, g);
   }
   if (!_matCache.has(def.id)) {
     _matCache.set(def.id, new THREE.MeshStandardMaterial({
-      color:    def.color,
+      color:     def.color,
       roughness: 0.85,
-      metalness: 0.1,
+      metalness: def.id.includes('ore') || def.id.includes('scrap') ? 0.35 : 0.08,
       fog: true,
     }));
   }
@@ -215,12 +281,31 @@ export class ResourceSystem {
   private scene:  THREE.Scene;
   private nodes:  ResourceNode[] = [];
   private byId    = new Map<string, ResourceNode>();
+  /** Canonical mesh + terrain snap + Rapier colliders (three-layer graph). */
+  private placer: HarvestablePlacer | null = null;
 
   /** Callback invoked when a node is successfully harvested */
   onHarvest?: (node: ResourceNode, loot: ResourceLoot[]) => void;
 
   constructor(scene: THREE.Scene) {
     this.scene = scene;
+    // Ensure World / Harvest / Actor / Vfx roots exist before first place.
+    ensureSceneGraph(scene);
+    this.placer = new HarvestablePlacer(scene, null);
+  }
+
+  /**
+   * Attach Rapier after async physics boot. Rebuilds placer so new harvest
+   * meshes get solid PROP colliders + harvest sensors.
+   */
+  setPhysics(physics: PhysicsWorld | null): void {
+    // Drop old visual-only placer; nodes re-stream meshes with colliders.
+    this.placer?.dispose();
+    this.placer = new HarvestablePlacer(this.scene, physics);
+    for (const n of this.nodes) {
+      n.mesh = undefined;
+      n.meshLoading = false;
+    }
   }
 
   // ── World seeding ──────────────────────────────────────────────────────────
@@ -307,18 +392,54 @@ export class ResourceSystem {
       const near = d2 <= RENDER_R2;
 
       if (near && node.respawnAt === 0) {
-        // Spawn mesh if needed
-        if (!node.mesh) {
+        // Spawn via HarvestablePlacer: plant → groundY → HarvestRoot → colliders
+        if (!node.mesh && !node.meshLoading && this.placer) {
           const def = DEF_BY_ID.get(node.defId)!;
-          const m   = meshFor(def);
-          m.position.set(node.position.x, node.worldY + def.radius * 0.5, node.position.z);
-          m.castShadow  = true;
-          this.scene.add(m);
-          node.mesh = m;
+          node.meshLoading = true;
+          // Re-sample ground when streaming in (chunk terrain may be ready now)
+          node.worldY = groundY(node.position.x, node.position.z);
+
+          const isPlant =
+            def.id.includes('herb') ||
+            def.id.includes('hemp') ||
+            def.id.includes('pond');
+          const fallback = proceduralMeshFor(def);
+          fallback.userData.disposeOnRemove = false;
+
+          this.placer
+            .place({
+              id: node.trackId,
+              wx: node.position.x,
+              wz: node.position.z,
+              worldY: node.worldY,
+              ry: seededRand(node.position.x, node.position.z, 3) * Math.PI * 2,
+              meshKey: def.meshKey,
+              tint: def.meshTint,
+              fallback,
+              radius: def.radius,
+              height: def.radius * (isPlant ? 1.1 : 1.5),
+              // Soft plants: no solid block; hard rocks/logs: cylinder solid
+              collider: isPlant ? 'none' : 'cylinder',
+              harvestSensor: true,
+              castShadow: true,
+            })
+            .then((placement) => {
+              if (!placement || !node.active) return;
+              node.mesh = placement.root;
+              node.worldY = placement.wy;
+            })
+            .catch((err) => {
+              console.warn('[ResourceSystem] place failed', node.trackId, err);
+            })
+            .finally(() => {
+              node.meshLoading = false;
+            });
         }
-        node.mesh.visible = true;
+        if (node.mesh) node.mesh.visible = true;
+        this.placer?.setVisible(node.trackId, true);
       } else if (node.mesh) {
         node.mesh.visible = false;
+        this.placer?.setVisible(node.trackId, false);
       }
     }
   }
@@ -339,6 +460,7 @@ export class ResourceSystem {
       node.hp         = 0;
       node.respawnAt  = nowMs + def.respawnSec * 1000;
       if (node.mesh) node.mesh.visible = false;
+      this.placer?.setVisible(node.trackId, false);
 
       const loot = this._rollLoot(def, node);
       this.onHarvest?.(node, loot);

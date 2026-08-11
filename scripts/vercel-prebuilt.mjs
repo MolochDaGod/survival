@@ -57,7 +57,10 @@ console.log('[prebuilt] Website copied (images excluded, icons cherry-picked)');
 // Copy arpg-game build output into /arpg-game/ subpath
 const gameSrc = resolve(root, 'artifacts/arpg-game/dist/public');
 const gameDest = resolve(dest, 'arpg-game');
-const GAME_SKIP = new Set(['models', 'icons', 'textures', 'locations', 'books', 'bestiary', 'decoders', 'vendor', 'lore']);
+// Ship JS/CSS/HTML + Draco/Basis decoders (~1.3 MB). Large art (models,
+// textures, locations, …) stays on the R2 CDN. Decoders must be co-located
+// with the app so GLTFLoader does not depend on third-party CDNs at boot.
+const GAME_SKIP = new Set(['models', 'icons', 'textures', 'locations', 'books', 'bestiary', 'vendor', 'lore']);
 if (existsSync(gameSrc)) {
   cpSync(gameSrc, gameDest, {
     recursive: true,
@@ -67,7 +70,7 @@ if (existsSync(gameSrc)) {
       return !GAME_SKIP.has(top);
     },
   });
-  console.log('[prebuilt] Copied arpg-game build → /arpg-game/ (CDN assets excluded)');
+  console.log('[prebuilt] Copied arpg-game build → /arpg-game/ (CDN assets excluded, decoders included)');
 } else {
   console.warn('[prebuilt] WARNING: arpg-game not built — run pnpm build:game first');
 }
@@ -75,10 +78,20 @@ if (existsSync(gameSrc)) {
 // Always write config.json (overwrite stale versions from previous deploys)
 const configPath = resolve(root, '.vercel/output/config.json');
 {
+  // Route order matters: static game catalogs first (always online), then
+  // Railway for dynamic APIs, then SPA fallbacks. Crafting page lives at
+  // /crafting.html with a clean /crafting URL.
   const config = {
     version: 3,
     routes: [
-{ src: '/api/(.*)', dest: 'https://survival-api-production.up.railway.app/api/$1' },
+      { src: '/api/game/?$', dest: '/data/game-index.json' },
+      { src: '/api/game/catalog/?$', dest: '/data/game-catalog.json' },
+      { src: '/api/game/recipes/?$', dest: '/data/recipes.json' },
+      { src: '/api/game/items/?$', dest: '/data/items.json' },
+      { src: '/api/game/stations/?$', dest: '/data/stations.json' },
+      { src: '/api/(.*)', dest: 'https://survival-api-production.up.railway.app/api/$1' },
+      { src: '/crafting/?$', dest: '/crafting.html' },
+      { src: '/operators/?$', dest: '/operators.html' },
       { src: '/arpg-game$', dest: '/arpg-game/index.html' },
       { src: '/arpg-game/$', dest: '/arpg-game/index.html' },
       { src: '/admin$', dest: '/admin/index.html' },

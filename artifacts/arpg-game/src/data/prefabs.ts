@@ -89,6 +89,34 @@ export const PREFABS: PrefabDef[] = [
   { id: 'galleon',      file: 'galleon.glb',                                              kind: 'vehicle',      label: 'Galleon',         scale: 1.2, collider: [5, 3, 12], footprint: 14, interaction: 'vehicle:galleon', tags: ['boat', 'ship', 'pirate'] },
   { id: 'raft',         file: 'the_raft.glb',                                             kind: 'vehicle',      label: 'Raft',            scale: 1.0, collider: [1.5, 0.4, 2.0], footprint: 3, interaction: 'vehicle:raft',    tags: ['boat', 'starter'] },
 
+  // ── Original ground-game fleet (grim-armada ships) ────────────────────────
+  { id: 'destroyer_01', file: 'destroyer_01.glb',                                         kind: 'vehicle',      label: 'Destroyer I',     scale: 0.8, collider: [8, 4, 22], footprint: 28, interaction: 'vehicle:destroyer', tags: ['ship', 'fleet', 'armada'], assetPath: '/models/ships/destroyer_01.glb' },
+  { id: 'destroyer_02', file: 'destroyer_02.glb',                                         kind: 'vehicle',      label: 'Destroyer II',    scale: 0.75, collider: [7, 3.5, 18], footprint: 24, tags: ['ship', 'fleet', 'armada'], assetPath: '/models/ships/destroyer_02.glb' },
+  { id: 'destroyer_03', file: 'destroyer_03.glb',                                         kind: 'vehicle',      label: 'Destroyer III',   scale: 0.75, collider: [7, 3.5, 18], footprint: 24, tags: ['ship', 'fleet', 'armada'], assetPath: '/models/ships/destroyer_03.glb' },
+  { id: 'cruiser_01',   file: 'light_cruiser_01.glb',                                     kind: 'vehicle',      label: 'Light Cruiser I', scale: 0.7, collider: [5, 3, 14], footprint: 18, tags: ['ship', 'fleet', 'armada'], assetPath: '/models/ships/light_cruiser_01.glb' },
+  { id: 'cruiser_02',   file: 'light_cruiser_02.glb',                                     kind: 'vehicle',      label: 'Light Cruiser II',scale: 0.7, collider: [5, 3, 14], footprint: 18, tags: ['ship', 'fleet', 'armada'], assetPath: '/models/ships/light_cruiser_02.glb' },
+  { id: 'drone_carrier',file: 'drone_carrier.glb',                                        kind: 'vehicle',      label: 'Drone Carrier',   scale: 1.0, collider: [4, 2, 8], footprint: 12, tags: ['ship', 'colony', 'drone'], assetPath: '/models/colony/drone_carrier.glb' },
+
+  // ── Original ground-game colony buildings ─────────────────────────────────
+  { id: 'colony_main_house',    file: 'main_house.glb',           kind: 'building', label: 'Colony Main House',    scale: 1.2, collider: [4, 3, 4], footprint: 8, tags: ['colony', 'home', 'armada'], assetPath: '/models/colony/main_house.glb' },
+  { id: 'colony_main_house_2',  file: 'main_house_2lv.glb',       kind: 'building', label: 'Colony Manor',         scale: 1.2, collider: [5, 4, 5], footprint: 10, tags: ['colony', 'home', 'armada'], assetPath: '/models/colony/main_house_2lv.glb' },
+  { id: 'colony_research',      file: 'research_center.glb',      kind: 'building', label: 'Research Center',      scale: 1.1, collider: [5, 3, 5], footprint: 9, interaction: 'craft:research', tags: ['colony', 'science', 'armada'], assetPath: '/models/colony/research_center.glb' },
+  { id: 'colony_farm',          file: 'farm.glb',                 kind: 'building', label: 'Colony Farm',          scale: 1.0, collider: [4, 2, 4], footprint: 8, tags: ['colony', 'farm', 'food', 'armada'], assetPath: '/models/colony/farm.glb' },
+  { id: 'colony_warehouse',     file: 'resource_warehouse.glb',   kind: 'building', label: 'Resource Warehouse',   scale: 1.1, collider: [4, 3, 5], footprint: 8, tags: ['colony', 'storage', 'armada'], assetPath: '/models/colony/resource_warehouse.glb' },
+  { id: 'colony_reactor',       file: 'reactor.glb',              kind: 'building', label: 'Colony Reactor',       scale: 1.2, collider: [3, 5, 3], footprint: 7, tags: ['colony', 'power', 'armada'], assetPath: '/models/colony/reactor.glb' },
+  { id: 'colony_solar',         file: 'solar_panel.glb',          kind: 'building', label: 'Solar Array',          scale: 1.0, collider: [2, 1, 3], footprint: 4, tags: ['colony', 'power', 'armada'], assetPath: '/models/colony/solar_panel.glb' },
+  { id: 'colony_geo',           file: 'geothermal_generator.glb', kind: 'building', label: 'Geothermal Generator', scale: 1.1, collider: [3, 3, 3], footprint: 6, tags: ['colony', 'power', 'armada'], assetPath: '/models/colony/geothermal_generator.glb' },
+  { id: 'colony_gateway',       file: 'connecting_gateway.glb',   kind: 'building', label: 'Colony Gateway',       scale: 1.0, collider: [2, 3, 1], footprint: 4, interaction: 'gate:deploy', tags: ['colony', 'gate', 'armada'], assetPath: '/models/colony/connecting_gateway.glb' },
+  { id: 'colony_runway',        file: 'runway_strip.glb',         kind: 'building', label: 'Runway Strip',         scale: 1.0, footprint: 20, tags: ['colony', 'runway', 'armada'], assetPath: '/models/colony/runway_strip.glb' },
+  { id: 'colony_home',          file: 'home_colonists.glb',       kind: 'building', label: 'Colonist Home',        scale: 1.0, collider: [3, 2.5, 3], footprint: 5, tags: ['colony', 'home', 'armada'], assetPath: '/models/colony/home_colonists.glb' },
+
+  // ── Original ground-game structures ───────────────────────────────────────
+  { id: 'struct_cabin',         file: 'cabin.glb',                kind: 'building', label: 'Frontier Cabin',       scale: 1.0, collider: [3, 2.5, 3], footprint: 5, tags: ['structure', 'home', 'armada'], assetPath: '/models/structures/cabin.glb' },
+  { id: 'struct_watchtower',    file: 'watchtower.glb',           kind: 'building', label: 'Watchtower',           scale: 1.0, collider: [1.5, 5, 1.5], footprint: 3, tags: ['structure', 'defense', 'armada'], assetPath: '/models/structures/watchtower.glb' },
+  { id: 'struct_security',      file: 'security_post.glb',        kind: 'building', label: 'Security Post',        scale: 1.0, collider: [2.5, 2.5, 2.5], footprint: 4, tags: ['structure', 'defense', 'armada'], assetPath: '/models/structures/security_post.glb' },
+  { id: 'struct_mining',        file: 'mining_station.glb',       kind: 'building', label: 'Mining Station',       scale: 1.0, collider: [6, 4, 6], footprint: 12, interaction: 'craft:mining', tags: ['structure', 'mining', 'armada'], assetPath: '/models/structures/mining_station.glb' },
+  { id: 'struct_searchlight',   file: 'searchlight.glb',          kind: 'prop',     label: 'Searchlight',          scale: 1.0, footprint: 1.2, tags: ['structure', 'light', 'armada'], assetPath: '/models/structures/searchlight.glb' },
+
   // ── Caravan = mobile market / auction node ────────────────────────────────
   { id: 'caravan',      file: 'stylized_caravan.glb',                                     kind: 'interactable', label: 'Trade Caravan',   scale: 1.2, collider: [2.0, 1.6, 4.0], footprint: 5, interaction: 'market:auction',  tags: ['market', 'auction', 'vendor', 'travel'] },
 

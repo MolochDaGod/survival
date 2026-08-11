@@ -1,9 +1,11 @@
 import * as THREE from 'three';
 import { bindWorldRaycaster } from './Layers';
+import { expFactor } from './math/MathUtils';
 
 /**
  * Cinematic third-person camera with damped follow.
- * Based on the pattern from https://discourse.threejs.org/t/third-person-camera/18624
+ * Pattern: ideal offset/lookat in player local frame + exponential smoothing
+ * (discourse.threejs.org/t/third-person-camera + modern TPS over-shoulder).
  *
  * The camera lerps toward an "ideal" offset and lookat in the player's local
  * frame, producing smooth, weighted movement instead of rigid attachment.
@@ -19,17 +21,19 @@ export interface CameraTuning {
   look: number;
 }
 
-// True over-the-shoulder: parked behind and slightly to the right of the
-// player at chest height, with the look-at biased a touch past the player
-// (z=0.6) rather than 3 m ahead. The previous (0,1.55,3) lookat aimed
-// the camera at empty space in front of the character, so the player's
-// own back was at the bottom edge of the frame; this preset puts them
-// firmly in the centre of the screen.
+/**
+ * TPS remake default (over-the-shoulder).
+ * Tuned for third-person shooter best practices:
+ *  - Shoulder bias so the gun/reticle reads cleanly
+ *  - Look-at slightly past the body so the character stays framed mid-screen
+ *  - Snappy follow for combat responsiveness (ADS multiplies further)
+ * Values may be overwritten at runtime by SurvivalRemakeBootstrap / EngineAssets.
+ */
 export const TUNING_THIRD_PERSON: CameraTuning = {
-  idealOffset: new THREE.Vector3(0.30, 1.65, -3.2),
-  idealLookat: new THREE.Vector3(0,    1.55, 0.6),
-  follow: 10,
-  look:   12,
+  idealOffset: new THREE.Vector3(0.55, 1.55, -3.4),
+  idealLookat: new THREE.Vector3(0.15, 1.45, 0.85),
+  follow: 14,
+  look: 16,
 };
 
 export const TUNING_ARPG: CameraTuning = {
@@ -43,20 +47,29 @@ export class ThirdPersonCamera {
   camera: THREE.PerspectiveCamera;
   currentPosition: THREE.Vector3 = new THREE.Vector3();
   currentLookat: THREE.Vector3 = new THREE.Vector3();
-  initialized: boolean = false;
+  initialized = false;
 
-  // dynamic camera-orbit rotation (set externally from mouse)
-  yawOffset: number = 0;
-  pitchOffset: number = 0;
+  /** Dynamic camera-orbit rotation (set externally from mouse). */
+  yawOffset = 0;
+  pitchOffset = 0;
 
   /** World meshes the camera should not clip into (walls, pillars, terrain). */
   occluders: THREE.Object3D[] = [];
   /** How far in front of a wall hit to park the camera (avoids near-plane clipping). */
-  occlusionInset: number = 0.35;
+  occlusionInset = 0.35;
+  /** Head height above logical player position for occlusion ray origin. */
+  headHeight = 1.5;
+  /** Never pull the camera closer than this (metres from head). */
+  minOcclusionDistance = 0.5;
 
   private raycaster: THREE.Raycaster = new THREE.Raycaster();
   private rayDir: THREE.Vector3 = new THREE.Vector3();
   private rayOrigin: THREE.Vector3 = new THREE.Vector3();
+  private _idealOffset = new THREE.Vector3();
+  private _idealLookat = new THREE.Vector3();
+  private _finalPos = new THREE.Vector3();
+  private static readonly _AXIS_X = new THREE.Vector3(1, 0, 0);
+  private static readonly _AXIS_Y = new THREE.Vector3(0, 1, 0);
 
   constructor(camera: THREE.PerspectiveCamera) {
     this.camera = camera;
@@ -71,22 +84,30 @@ export class ThirdPersonCamera {
    * Compute the world-space ideal offset by rotating the local-space
    * idealOffset by the player's yaw + the camera's yawOffset (mouse orbit).
    */
-  private calcIdealOffset(playerPos: THREE.Vector3, playerYaw: number, tuning: CameraTuning): THREE.Vector3 {
-    const offset = tuning.idealOffset.clone();
-    // apply pitch (rotate around X)
-    offset.applyAxisAngle(new THREE.Vector3(1, 0, 0), this.pitchOffset);
-    // apply yaw (rotate around Y) — combined player + orbit
-    offset.applyAxisAngle(new THREE.Vector3(0, 1, 0), playerYaw + this.yawOffset);
-    offset.add(playerPos);
-    return offset;
+  private calcIdealOffset(
+    playerPos: THREE.Vector3,
+    playerYaw: number,
+    tuning: CameraTuning,
+    out: THREE.Vector3,
+  ): THREE.Vector3 {
+    out.copy(tuning.idealOffset);
+    out.applyAxisAngle(ThirdPersonCamera._AXIS_X, this.pitchOffset);
+    out.applyAxisAngle(ThirdPersonCamera._AXIS_Y, playerYaw + this.yawOffset);
+    out.add(playerPos);
+    return out;
   }
 
-  private calcIdealLookat(playerPos: THREE.Vector3, playerYaw: number, tuning: CameraTuning): THREE.Vector3 {
-    const lookat = tuning.idealLookat.clone();
-    lookat.applyAxisAngle(new THREE.Vector3(1, 0, 0), this.pitchOffset * 0.5);
-    lookat.applyAxisAngle(new THREE.Vector3(0, 1, 0), playerYaw + this.yawOffset);
-    lookat.add(playerPos);
-    return lookat;
+  private calcIdealLookat(
+    playerPos: THREE.Vector3,
+    playerYaw: number,
+    tuning: CameraTuning,
+    out: THREE.Vector3,
+  ): THREE.Vector3 {
+    out.copy(tuning.idealLookat);
+    out.applyAxisAngle(ThirdPersonCamera._AXIS_X, this.pitchOffset * 0.5);
+    out.applyAxisAngle(ThirdPersonCamera._AXIS_Y, playerYaw + this.yawOffset);
+    out.add(playerPos);
+    return out;
   }
 
   /**
@@ -94,8 +115,12 @@ export class ThirdPersonCamera {
    * @param dt delta time in seconds
    */
   update(dt: number, playerPos: THREE.Vector3, playerYaw: number, tuning: CameraTuning) {
-    const idealOffset = this.calcIdealOffset(playerPos, playerYaw, tuning);
-    const idealLookat = this.calcIdealLookat(playerPos, playerYaw, tuning);
+    const idealOffset = this.calcIdealOffset(
+      playerPos, playerYaw, tuning, this._idealOffset,
+    );
+    const idealLookat = this.calcIdealLookat(
+      playerPos, playerYaw, tuning, this._idealLookat,
+    );
 
     if (!this.initialized) {
       this.currentPosition.copy(idealOffset);
@@ -103,20 +128,17 @@ export class ThirdPersonCamera {
       this.initialized = true;
     }
 
-    // exponential smoothing: factor = 1 - exp(-k * dt)
-    const tFollow = 1 - Math.exp(-tuning.follow * dt);
-    const tLook = 1 - Math.exp(-tuning.look * dt);
+    const tFollow = expFactor(tuning.follow, dt);
+    const tLook = expFactor(tuning.look, dt);
 
     this.currentPosition.lerp(idealOffset, tFollow);
     this.currentLookat.lerp(idealLookat, tLook);
 
-    // Wall occlusion: cast a ray from the player's head toward the desired
-    // camera position. If anything blocks line-of-sight, dolly the camera in
-    // to the hit point (minus inset). Uses three-mesh-bvh under the hood when
-    // available, so this is essentially free even with thousands of triangles.
-    const finalPos = this.currentPosition.clone();
+    // Wall occlusion: ray from head toward desired camera. BVH-accelerated
+    // when three-mesh-bvh is installed on the scene.
+    const finalPos = this._finalPos.copy(this.currentPosition);
     if (this.occluders.length > 0) {
-      this.rayOrigin.copy(playerPos).y += 1.5;
+      this.rayOrigin.copy(playerPos).y += this.headHeight;
       this.rayDir.copy(finalPos).sub(this.rayOrigin);
       const targetDist = this.rayDir.length();
       if (targetDist > 0.001) {
@@ -125,7 +147,10 @@ export class ThirdPersonCamera {
         this.raycaster.far = targetDist;
         const hits = this.raycaster.intersectObjects(this.occluders, true);
         if (hits.length > 0) {
-          const safeDist = Math.max(0.5, hits[0].distance - this.occlusionInset);
+          const safeDist = Math.max(
+            this.minOcclusionDistance,
+            hits[0].distance - this.occlusionInset,
+          );
           finalPos.copy(this.rayOrigin).addScaledVector(this.rayDir, safeDist);
         }
       }
