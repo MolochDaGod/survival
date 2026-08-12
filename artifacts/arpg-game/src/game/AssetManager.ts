@@ -7,9 +7,12 @@ import * as SkeletonUtils from 'three/examples/jsm/utils/SkeletonUtils.js';
 import { CharacterConfig, STARTING_MODEL, DEFAULT_CHARACTER_CONFIG, BODY_TYPES } from './CharacterConfig';
 import { prefabRegistry, type Prefab } from './PrefabRegistry';
 import { assetUrl } from '@/lib/assetUrl';
-import { isToonBodyId, toonDef } from './toon/ToonSurvivalRoster';
-import { loadRetargetedToonClips } from './toon/loadToonClips';
-import { normalizeToonHeight } from './toon/toonBoneRetarget';
+import {
+  ExplorerAvatar,
+  lookFromFourCharacters,
+  DEFAULT_EXPLORER_LOOK,
+  type ExplorerLook,
+} from './ExplorerAvatar';
 
 /**
  * Compute the Y offset needed to plant a model's lowest point at y=0
@@ -334,6 +337,38 @@ export class AssetManager {
    * the playerTemplate.
    */
   private loadCharacterGLTF(config: CharacterConfig): Promise<void> {
+    // ── Grudges law (2026-08): FULLY swap player to Explorer avatar ──────
+    // Uses the arcade Explorer blocky avatar (~1.8 m), palette from fleet
+    // 4-slot roster when present. No Quaternius/capsule hero as live body.
+    return this.loadExplorerPlayerAvatar(config);
+  }
+
+  /** Cached look for clonePlayerTemplate rebuilds. */
+  private explorerLookCache: ExplorerLook | null = null;
+
+  /** Build ExplorerAvatar as playerTemplate (no external character GLB). */
+  private loadExplorerPlayerAvatar(config: CharacterConfig): Promise<void> {
+    const look = lookFromFourCharacters({
+      ...DEFAULT_EXPLORER_LOOK,
+      skin: config.skinColor || DEFAULT_EXPLORER_LOOK.skin,
+      shirt: config.hairColor || DEFAULT_EXPLORER_LOOK.shirt,
+    });
+    this.explorerLookCache = look;
+    const avatar = new ExplorerAvatar(look);
+    avatar.root.userData.explorerAvatar = avatar;
+    this.playerTemplate = {
+      group: avatar.root,
+      animations: [],
+      footOffsetY: 0,
+    };
+    console.log(
+      `[AssetManager] Explorer avatar player (4-slot look) — SI ~1.8 m, no Quaternius GLTF`,
+    );
+    return Promise.resolve();
+  }
+
+  /** @deprecated Legacy Quaternius path — kept for reference only; not used for live player. */
+  private loadCharacterGLTF_LegacyQuaternius(config: CharacterConfig): Promise<void> {
     // Resolve the GLTF path from the player's chosen body-type FIRST. This
     // is what makes the player's character-creation pick (Adventurer / King
     // / Swat / etc.) actually load in-game; before this lookup, every save
@@ -379,9 +414,6 @@ export class AssetManager {
       'A_TPose':       '',
     };
 
-    const isToon = isToonBodyId(config.bodyProportion);
-    const toonMeta = isToon ? toonDef(config.bodyProportion) : undefined;
-
     return new Promise<void>((resolve) => {
       this.gltfLoader.load(gltfPath, async (gltf) => {
         const group = gltf.scene as THREE.Group;
@@ -398,12 +430,7 @@ export class AssetManager {
           }
         });
 
-        // Toon soldiers: plant feet + scale to ~1.8 m before color/anim work
-        if (isToon) {
-          normalizeToonHeight(group, (config.heightCm || 178) / 100);
-        } else {
-          this.applyCharacterColors(group, config.skinColor, config.hairColor, config.eyeColor);
-        }
+        this.applyCharacterColors(group, config.skinColor, config.hairColor, config.eyeColor);
 
         const merged: THREE.AnimationClip[] = [];
         const usedTargetNames = new Set<string>();
@@ -444,34 +471,6 @@ export class AssetManager {
           }
         });
 
-        // ── Toon soldier (chicken_gun Bone rig): retarget Mixamo baked packs ──
-        if (isToon && toonMeta) {
-          try {
-            const toonClips = await loadRetargetedToonClips(group, toonMeta);
-            for (const c of toonClips) {
-              if (usedTargetNames.has(c.name)) continue;
-              merged.push(this.stripRootMotion(c));
-              usedTargetNames.add(c.name);
-            }
-            // Native multipack "Action" clips as Attack if retarget missed fire
-            if (!usedTargetNames.has('Attack')) {
-              const action = gltf.animations.find((a) => /action|fire|gun/i.test(a.name));
-              if (action) {
-                const atk = action.clone();
-                atk.name = 'Attack';
-                merged.push(this.stripRootMotion(atk));
-                usedTargetNames.add('Attack');
-              }
-            }
-            console.log(
-              `[AssetManager] Toon ${toonMeta.callsign}: ${merged.length} clips ` +
-                `(${merged.map((c) => c.name).join(', ')})`,
-            );
-          } catch (err) {
-            console.warn('[AssetManager] Toon retarget failed:', err);
-          }
-        }
-
         // Many character GLTFs ship the rig but ZERO animation clips — the
         // asset is intended to be paired with a separate animation pack.
         // The two flavours we see in this project's assets:
@@ -491,7 +490,7 @@ export class AssetManager {
         // pack we also normalise the `mixamorig:` prefix style first.
         let bindableTrackCount = 0;
         let charBoneCount = 0;
-        if (merged.length === 0 && !isToon) {
+        if (merged.length === 0) {
           const charBones = new Set<string>();
           group.traverse((o) => { if ((o as THREE.Bone).isBone) charBones.add(o.name); });
           charBoneCount = charBones.size;
@@ -1099,6 +1098,17 @@ export class AssetManager {
     footOffsetY: number;
   } | null {
     if (!this.playerTemplate) return null;
+    // Explorer avatar: build a fresh instance (no skeleton / SkeletonUtils).
+    if (this.explorerLookCache || this.playerTemplate.group.name === 'ExplorerAvatar') {
+      const avatar = new ExplorerAvatar(this.explorerLookCache ?? undefined);
+      avatar.root.userData.explorerAvatar = avatar;
+      return {
+        group: avatar.root,
+        mixer: null,
+        animations: [],
+        footOffsetY: 0,
+      };
+    }
     // SkeletonUtils.clone is required for SkinnedMesh — the default
     // Object3D.clone() copies bone Object3Ds but leaves the cloned
     // SkinnedMesh.skeleton.bones array pointing at the *original* bones.

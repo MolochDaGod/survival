@@ -71,6 +71,9 @@ export const BuildMenu: React.FC<BuildMenuProps> = ({
     [buildable, stacks, showAll],
   );
 
+  // Dusty Gulch / wild-west hub: player-held friendly zone is no-build (product law).
+  const noBuildHub = true;
+
   return (
     <div style={{
       position: 'absolute',
@@ -94,9 +97,11 @@ export const BuildMenu: React.FC<BuildMenuProps> = ({
             BUILD
           </div>
           <div style={{ fontSize: '10px', color: '#7a8392', fontFamily: 'monospace', marginTop: '2px' }}>
-            {selectedItemId
-              ? `Selected: ${SURVIVAL_ITEMS[selectedItemId]?.name ?? '?'} — left-click to place`
-              : 'Pick a structure'}
+            {noBuildHub
+              ? 'Dusty Gulch hub: NO BUILD inside friendly rails (vendors/guards zone)'
+              : selectedItemId
+                ? `Selected: ${SURVIVAL_ITEMS[selectedItemId]?.name ?? '?'} — left-click to place`
+                : 'Pick a structure'}
           </div>
         </div>
         <div style={{ display: 'flex', gap: '6px' }}>

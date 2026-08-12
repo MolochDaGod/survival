@@ -215,6 +215,8 @@ export class PlayerController {
   private modelAnimations: THREE.AnimationClip[] = [];
   private currentAnimAction: THREE.AnimationAction | null = null;
   private useRealModel: boolean = false;
+  /** Procedural Explorer avatar (Grudges player body SSOT). */
+  private explorerAvatar: { update: (dt: number, moving: boolean) => void } | null = null;
   /** Public so SwimController / inventory carry-state / crouch can flip the
    *  isSwimming / isCarrying / isCrouching mode flags directly. */
   locomotion: LocomotionAnimator | null = null;
@@ -367,11 +369,19 @@ export class PlayerController {
         this.modelGroup.rotation.y = Math.PI;
         this.playerGroup.add(this.modelGroup);
 
-        // Bind the weapon attachment system to the skeleton bones
-        this.weaponAttachment.bindSkeleton(this.modelGroup);
-
-        // Bind the gear visual overlay system to the character armature
-        this.gearVisuals.bind(this.modelGroup, this.characterGender);
+        // Explorer blocky avatar (no skeleton) — procedural walk, skip bone bind
+        const ea = this.modelGroup.userData?.explorerAvatar as
+          | { update: (dt: number, moving: boolean) => void }
+          | undefined;
+        if (ea) {
+          this.explorerAvatar = ea;
+          console.log('[PlayerController] Explorer avatar active (4-slot look / procedural walk)');
+        } else {
+          // Bind the weapon attachment system to the skeleton bones
+          this.weaponAttachment.bindSkeleton(this.modelGroup);
+          // Bind the gear visual overlay system to the character armature
+          this.gearVisuals.bind(this.modelGroup, this.characterGender);
+        }
 
         // Put starting combat weapons / tools in the hand immediately
         this.syncWeaponAttachments();
@@ -393,7 +403,7 @@ export class PlayerController {
               }
             }
           });
-        } else {
+        } else if (!this.explorerAvatar) {
           this.playAnimation('Idle');
         }
       }
@@ -1068,6 +1078,11 @@ export class PlayerController {
     }
     if (this.modelMixer) this.modelMixer.update(dt);
     if (this.fpHandsMixer) this.fpHandsMixer.update(dt);
+    // Explorer procedural limbs
+    if (this.explorerAvatar) {
+      const moving = this.lastLocoSpeed01 > 0.08;
+      this.explorerAvatar.update(dt, moving);
+    }
     // Root motion: after mixer has advanced, apply the bone delta to movement
     // and suppress the code-driven lunge so RM clips self-propel the character.
     // During a mantle the climb controller already owns translation — we

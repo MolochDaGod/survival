@@ -69,6 +69,18 @@ export interface PrefabDef {
  * for fine-tuning per-asset scale before shipping.
  */
 export const PREFABS: PrefabDef[] = [
+  // ── Hub town (Grudges) ────────────────────────────────────────────────────
+  {
+    id: 'wild_west_town',
+    file: 'wild-west-town.glb',
+    kind: 'city',
+    label: 'Dusty Gulch Small Town',
+    scale: 1.0,
+    footprint: 40,
+    tags: ['town', 'western', 'friendly', 'no-build', 'hub'],
+    assetPath: '/locations/wild-west-town.glb',
+  },
+
   // ── Crafting stations ─────────────────────────────────────────────────────
   { id: 'workbench',    file: 'Workbench.gltf',                                           kind: 'crafting',     label: 'Workbench',       scale: 1.0, collider: [0.8, 0.5, 0.5], footprint: 1.2, interaction: 'craft:workbench',  tags: ['craft', 'bench', 'workbench'], assetPath: '/models/props/fantasy_megakit/Exports/glTF/Workbench.gltf' },
   { id: 'smeltery',     file: 'stylized_smeltery_setup.glb',                              kind: 'crafting',     label: 'Smeltery',        scale: 1.6, collider: [2.4, 1.5, 2.4], footprint: 4, interaction: 'craft:smeltery',   tags: ['ore', 'smith', 'fire', 'furnace'], assetPath: '/models/props/fantasy_megakit/Exports/glTF/Anvil_Log.gltf' },

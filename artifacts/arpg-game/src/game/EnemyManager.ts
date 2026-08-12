@@ -6,11 +6,6 @@ import { sampleTerrainHeight } from './TerrainBuilder';
 import { groundY as groundFloor } from './GroundSampler';
 import { EnemyBrain, EnemyRole, CombatState } from './ai/EnemyBrain';
 import { tickAIMantle, aiMantleIsActive, clearAIMantle } from './ai/AILedgeMantle';
-import {
-  safeZones,
-  HUB_SPAWN_RING_INNER_M,
-  HUB_SPAWN_RING_OUTER_M,
-} from './world/SafeZoneSystem';
 
 /**
  * Enemy defs/keys come from `assetManager.enemyDefs` after AssetManager.loadAll()
@@ -99,11 +94,15 @@ export class EnemyManager {
 
   /**
    * Spawn anchor — the player's starting point in world space, set by the
-   * GameEngine right after `getStarterSpawn()` resolves. Combined with
-   * SafeZoneSystem (hub / camp / sector) so the baked map stays peaceful.
+   * GameEngine right after `getStarterSpawn()` resolves. We refuse to drop
+   * any enemy inside `SPAWN_SAFE_RADIUS` of this point so the encampment
+   * itself stays a no-spawn zone (otherwise YUKA can sample a position
+   * inside a building or right on top of the player on session start).
    */
   private spawnAnchor: THREE.Vector3 | null = null;
-  private static readonly MIN_PLAYER_DIST = 28; // never spawn within this of the live player
+  /** Friendly base / small-town claim (Wild West hub) — no hostiles. */
+  private static readonly SPAWN_SAFE_RADIUS = 40;
+  private static readonly MIN_PLAYER_DIST   = 22; // never spawn within this distance of the live player
 
   /**
    * Intro grace — countdown set by `setIntroGrace(s)` immediately after
@@ -160,8 +159,9 @@ export class EnemyManager {
   private lastPlayerPos = new THREE.Vector3();
 
   /**
-   * Hub spawn ring centre. Combat safe circles live in SafeZoneSystem;
-   * this anchor only positions the outer spawn ring (HUB_SPAWN_RING_*).
+   * Tell the manager where the player spawned in the world. Enemies are
+   * forbidden from spawning inside `SPAWN_SAFE_RADIUS` of this point so the
+   * encampment / town hub stays peaceful.
    */
   setSpawnAnchor(anchor: THREE.Vector3) {
     this.spawnAnchor = anchor.clone();
@@ -207,63 +207,40 @@ export class EnemyManager {
   spawnEnemy() {
     if (this.enemies.filter(e => e.state !== 'dead').length >= this.maxEnemies) return;
 
-    // Ring outside production hub safe zone (not 24 m — that was inside the city).
+    // Sample a candidate position in a 18-32m ring around the origin, then
+    // resample up to N times if the candidate is too close to the spawn
+    // anchor (the encampment safe zone) or to the live player. After N
+    // attempts we accept whatever we have — better an occasional bad spawn
+    // than no spawn at all if the safe zones cover most of the ring.
     let x = 0, z = 0;
-    const MAX_TRIES = 10;
+    const MAX_TRIES = 6;
+    const safeR2  = EnemyManager.SPAWN_SAFE_RADIUS * EnemyManager.SPAWN_SAFE_RADIUS;
     const playerR2 = EnemyManager.MIN_PLAYER_DIST * EnemyManager.MIN_PLAYER_DIST;
-    const ax = this.spawnAnchor?.x ?? 0;
-    const az = this.spawnAnchor?.z ?? 0;
-    const ringInner = HUB_SPAWN_RING_INNER_M;
-    const ringOuter = HUB_SPAWN_RING_OUTER_M;
-    let placed = false;
     for (let attempt = 0; attempt < MAX_TRIES; attempt++) {
       const angle = Math.random() * Math.PI * 2;
-      const dist  = ringInner + Math.random() * (ringOuter - ringInner);
-      x = ax + Math.cos(angle) * dist;
-      z = az + Math.sin(angle) * dist;
-      if (safeZones.isCombatSafe(x, z)) continue;
+      const dist  = 24 + Math.random() * 14; // pushed out a touch (was 18-32)
+      x = Math.cos(angle) * dist;
+      z = Math.sin(angle) * dist;
+      // Candidates start centred on the origin; offset toward the spawn
+      // anchor so the ring follows the player's hub instead of (0,0).
+      if (this.spawnAnchor) {
+        x += this.spawnAnchor.x;
+        z += this.spawnAnchor.z;
+      }
+      const dxA = this.spawnAnchor ? x - this.spawnAnchor.x : x;
+      const dzA = this.spawnAnchor ? z - this.spawnAnchor.z : z;
+      if (dxA * dxA + dzA * dzA < safeR2) continue;
       const dxP = x - this.lastPlayerPos.x;
       const dzP = z - this.lastPlayerPos.z;
       if (dxP * dxP + dzP * dzP < playerR2) continue;
-      placed = true;
-      break;
+      break; // candidate passed both checks
     }
-    if (!placed) return; // all candidates inside safe zones — skip this tick
     this.spawnEnemyAt(x, z);
   }
 
-  /**
-   * Optional sector / MMO hostile pool provider (wired from SectorDeployment).
-   * When set, wave spawns prefer biome-appropriate enemy keys.
-   */
-  private hostilePoolProvider: (() => string[] | undefined) | null = null;
-
-  setHostilePoolProvider(fn: (() => string[] | undefined) | null): void {
-    this.hostilePoolProvider = fn;
-  }
-
-  /** Pick an enemy type key, preferring a sector hostile pool when provided. */
-  private pickEnemyType(hostilePool?: string[]): string {
-    const defs = this.assetManager?.enemyDefs ?? ENEMY_DEFS;
-    const pool = hostilePool?.length
-      ? hostilePool
-      : this.hostilePoolProvider?.();
-    if (pool?.length) {
-      const keys = new Set(defs.map(d => d.key));
-      const valid = pool.filter(k => keys.has(k));
-      if (valid.length) {
-        return valid[Math.floor(Math.random() * valid.length)];
-      }
-    }
-    return defs[Math.floor(Math.random() * defs.length)].key;
-  }
-
   /** Spawn one enemy at a fixed world position (used by enemy camp raids). */
-  spawnEnemyAt(x: number, z: number, waveOverride?: number, hostilePool?: string[]): void {
+  spawnEnemyAt(x: number, z: number, waveOverride?: number): void {
     if (this.enemies.filter(e => e.state !== 'dead').length >= this.maxEnemies) return;
-    // Production guard: never place hostiles in hub / camp combat circles
-    // unless this is an explicit raid (hostilePool provided by camp system).
-    if (!hostilePool && safeZones.isCombatSafe(x, z)) return;
 
     const wave = waveOverride ?? this.wave;
     const y    = groundFloor(x, z);
@@ -272,7 +249,8 @@ export class EnemyManager {
     const isRanged     = Math.random() < rangedChance;
     const role         = isRanged ? EnemyRole.RANGED : EnemyRole.MELEE;
 
-    const enemyTypeKey = this.pickEnemyType(hostilePool);
+    const defs = this.assetManager?.enemyDefs ?? ENEMY_DEFS;
+    const enemyTypeKey = defs[Math.floor(Math.random() * defs.length)].key;
     const group        = new THREE.Group();
     group.position.set(x, y, z);
 
@@ -349,14 +327,14 @@ export class EnemyManager {
   }
 
   /** Scatter defenders around an enemy camp centre. */
-  spawnEnemiesAtCamp(cx: number, cz: number, count: number, hostilePool?: string[]): void {
+  spawnEnemiesAtCamp(cx: number, cz: number, count: number): void {
     const campWave = Math.max(1, this.wave);
     for (let i = 0; i < count; i++) {
       const angle = (i / count) * Math.PI * 2 + Math.random() * 0.6;
       const dist  = 5 + Math.random() * 10;
       const x     = cx + Math.cos(angle) * dist;
       const z     = cz + Math.sin(angle) * dist;
-      setTimeout(() => this.spawnEnemyAt(x, z, campWave, hostilePool), i * 450);
+      setTimeout(() => this.spawnEnemyAt(x, z, campWave), i * 450);
     }
   }
 
