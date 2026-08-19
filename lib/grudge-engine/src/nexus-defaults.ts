@@ -5,7 +5,7 @@ export const NEXUS_ENGINE_MANIFEST = engineManifestSchema.parse({
   version: 1,
   era: "nexus",
   unit: "metres",
-  updatedAt: "2026-06-26T00:00:00.000Z",
+  updatedAt: "2026-08-19T00:00:00.000Z",
   controllers: [
     {
       id: "grudge-control-tps",
@@ -128,11 +128,31 @@ export const NEXUS_ENGINE_MANIFEST = engineManifestSchema.parse({
       label: "Mixamo Locomotion Pack",
       rig: "mixamo",
       companionPacks: ["/models/animations/"],
-      clipMap: {},
+      // Live on CDN `grudge-nexus/models/animations/` (HEAD 200). Do not ship an empty clipMap —
+      // Dash counts aliases and was advertising "0 clips" while idle/walk/run were already live.
+      clipMap: {
+        Idle: "Idle",
+        Walk: "Walk",
+        Run: "Run",
+        Sprint: "Sprint",
+        Jump: "Jump",
+        Death: "Death",
+        TPose: "TPose",
+        StrafeLeft: "StrafeLeft",
+        StrafeRight: "StrafeRight",
+        RifleIdle: "RifleIdle",
+      },
       clips: [
         { name: "Idle", source: "idle.glb", loop: true },
         { name: "Walk", source: "walk.glb", loop: true },
         { name: "Run", source: "run.glb", loop: true },
+        { name: "Sprint", source: "sprint.glb", loop: true },
+        { name: "Jump", source: "jump.glb", loop: false },
+        { name: "Death", source: "death.glb", loop: false },
+        { name: "TPose", source: "t-pose.glb", loop: true },
+        { name: "StrafeLeft", source: "strafe-left.glb", loop: true },
+        { name: "StrafeRight", source: "strafe-right.glb", loop: true },
+        { name: "RifleIdle", source: "rifle-idle.glb", loop: true },
       ],
     },
   ],
