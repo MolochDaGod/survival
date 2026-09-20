@@ -10,6 +10,10 @@
       "id": "build_floor_modular",
       "name": "Floor (modular)",
       "station": "hammer_tool",
+      "craftTime": 16,
+      "description": "Floor (modular)",
+      "unlockedBySkill": "township.buildings.1",
+      "iconItemId": "floor_modular",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -18,10 +22,12 @@
         {
           "itemId": "rock_2",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "floor_modular",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -33,6 +39,10 @@
       "id": "build_wall_modular",
       "name": "Wall (modular)",
       "station": "hammer_tool",
+      "craftTime": 16,
+      "description": "Wall (modular)",
+      "unlockedBySkill": "township.buildings.1",
+      "iconItemId": "wall_modular",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -41,10 +51,12 @@
         {
           "itemId": "rock_2",
           "count": 3
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "wall_modular",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -56,6 +68,10 @@
       "id": "build_door_round",
       "name": "Door (round)",
       "station": "hammer_tool",
+      "craftTime": 16,
+      "description": "Door (round)",
+      "unlockedBySkill": "township.buildings.1",
+      "iconItemId": "door_round",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -64,10 +80,12 @@
         {
           "itemId": "iron_ore",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "door_round",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -79,6 +97,10 @@
       "id": "build_floor_brick",
       "name": "Floor (brick)",
       "station": "hammer_tool",
+      "craftTime": 20,
+      "description": "Floor (brick)",
+      "unlockedBySkill": "township.buildings.2",
+      "iconItemId": "floor_brick",
       "inputs": [
         {
           "itemId": "rock_2",
@@ -87,10 +109,12 @@
         {
           "itemId": "wood_plank",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "floor_brick",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -102,14 +126,20 @@
       "id": "build_floor_wood_dark",
       "name": "Floor (dark wood)",
       "station": "hammer_tool",
+      "craftTime": 20,
+      "description": "Floor (dark wood)",
+      "unlockedBySkill": "township.buildings.2",
+      "iconItemId": "floor_wood_dark",
       "inputs": [
         {
           "itemId": "wood_plank",
           "count": 6
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "floor_wood_dark",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -121,6 +151,10 @@
       "id": "build_window",
       "name": "Window",
       "station": "hammer_tool",
+      "craftTime": 20,
+      "description": "Path approximate — pick by variant.",
+      "unlockedBySkill": "township.buildings.2",
+      "iconItemId": "window",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -129,10 +163,12 @@
         {
           "itemId": "rock_2",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "window",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -144,6 +180,10 @@
       "id": "build_window_shutters",
       "name": "Window Shutters",
       "station": "hammer_tool",
+      "craftTime": 20,
+      "description": "Path approximate.",
+      "unlockedBySkill": "township.buildings.2",
+      "iconItemId": "window_shutters",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -152,10 +192,12 @@
         {
           "itemId": "iron_ore",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "window_shutters",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -167,6 +209,10 @@
       "id": "build_doorframe_round",
       "name": "Door Frame (round)",
       "station": "hammer_tool",
+      "craftTime": 20,
+      "description": "Door Frame (round)",
+      "unlockedBySkill": "township.buildings.2",
+      "iconItemId": "doorframe_round",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -175,10 +221,12 @@
         {
           "itemId": "rock_2",
           "count": 3
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "doorframe_round",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -190,6 +238,10 @@
       "id": "build_roof_tile",
       "name": "Roof Tile (round)",
       "station": "hammer_tool",
+      "craftTime": 24,
+      "description": "Path approximate.",
+      "unlockedBySkill": "township.buildings.3",
+      "iconItemId": "roof_tile",
       "inputs": [
         {
           "itemId": "rock_2",
@@ -198,10 +250,12 @@
         {
           "itemId": "wood_plank",
           "count": 3
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "roof_tile",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -213,6 +267,10 @@
       "id": "build_overhang_plaster",
       "name": "Overhang (plaster)",
       "station": "hammer_tool",
+      "craftTime": 24,
+      "description": "Overhang (plaster)",
+      "unlockedBySkill": "township.buildings.3",
+      "iconItemId": "overhang_plaster",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -221,10 +279,12 @@
         {
           "itemId": "rock_2",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "overhang_plaster",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -236,6 +296,10 @@
       "id": "build_balcony_simple",
       "name": "Balcony (simple)",
       "station": "hammer_tool",
+      "craftTime": 24,
+      "description": "Balcony (simple)",
+      "unlockedBySkill": "township.buildings.3",
+      "iconItemId": "balcony_simple",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -244,10 +308,12 @@
         {
           "itemId": "iron_ore",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "balcony_simple",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -259,6 +325,10 @@
       "id": "build_stairs_modular",
       "name": "Stairs (modular)",
       "station": "hammer_tool",
+      "craftTime": 24,
+      "description": "Stairs (modular)",
+      "unlockedBySkill": "township.buildings.3",
+      "iconItemId": "stairs_modular",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -267,10 +337,12 @@
         {
           "itemId": "rock_2",
           "count": 4
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "stairs_modular",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -282,6 +354,10 @@
       "id": "build_workbench_drawers",
       "name": "Workbench (Drawers)",
       "station": "hammer_tool",
+      "craftTime": 28,
+      "description": "Same node as crafting recipe — placed building.",
+      "unlockedBySkill": "township.buildings.4",
+      "iconItemId": "workbench_drawers",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -290,10 +366,12 @@
         {
           "itemId": "iron_ore",
           "count": 6
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "workbench_drawers",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -305,6 +383,10 @@
       "id": "build_armory_chest",
       "name": "Armoury Chest",
       "station": "hammer_tool",
+      "craftTime": 28,
+      "description": "Stores weapons/armour with a tag filter.",
+      "unlockedBySkill": "township.buildings.4",
+      "iconItemId": "armory_chest",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -313,10 +395,12 @@
         {
           "itemId": "iron_ore",
           "count": 6
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "armory_chest",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -328,6 +412,10 @@
       "id": "build_metal_fence",
       "name": "Metal Fence",
       "station": "hammer_tool",
+      "craftTime": 28,
+      "description": "Metal Fence",
+      "unlockedBySkill": "township.buildings.4",
+      "iconItemId": "metal_fence",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -336,10 +424,12 @@
         {
           "itemId": "wood_plank",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "metal_fence",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -351,6 +441,10 @@
       "id": "build_overhang_uneven_brick",
       "name": "Overhang (uneven brick)",
       "station": "hammer_tool",
+      "craftTime": 32,
+      "description": "Overhang (uneven brick)",
+      "unlockedBySkill": "township.buildings.4",
+      "iconItemId": "overhang_uneven_brick",
       "inputs": [
         {
           "itemId": "rock_2",
@@ -359,10 +453,12 @@
         {
           "itemId": "wood_plank",
           "count": 3
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "overhang_uneven_brick",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -374,6 +470,10 @@
       "id": "build_balcony_cross",
       "name": "Balcony (cross)",
       "station": "hammer_tool",
+      "craftTime": 32,
+      "description": "Balcony (cross)",
+      "unlockedBySkill": "township.buildings.4",
+      "iconItemId": "balcony_cross",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -382,10 +482,12 @@
         {
           "itemId": "iron_ore",
           "count": 4
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "balcony_cross",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -397,6 +499,10 @@
       "id": "build_keep_chimney",
       "name": "Chimney",
       "station": "hammer_tool",
+      "craftTime": 32,
+      "description": "Chimney",
+      "unlockedBySkill": "township.buildings.4",
+      "iconItemId": "keep_chimney",
       "inputs": [
         {
           "itemId": "rock_2",
@@ -405,10 +511,12 @@
         {
           "itemId": "iron_ore",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "keep_chimney",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -420,6 +528,10 @@
       "id": "build_market_complex",
       "name": "Market Complex",
       "station": "hammer_tool",
+      "craftTime": 32,
+      "description": "Multi-stall market — Boomtown unlock.",
+      "unlockedBySkill": "township.master",
+      "iconItemId": "market_complex",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -432,10 +544,12 @@
         {
           "itemId": "iron_ore",
           "count": 6
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "market_complex",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -447,6 +561,10 @@
       "id": "build_banner",
       "name": "Camp Banner",
       "station": "hammer_tool",
+      "craftTime": 10,
+      "description": "Camp morale +5 in radius.",
+      "unlockedBySkill": "township.leadership.2",
+      "iconItemId": "banner",
       "inputs": [
         {
           "itemId": "silk",
@@ -455,10 +573,12 @@
         {
           "itemId": "wood_plank",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "banner",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -470,6 +590,10 @@
       "id": "build_recruit_post",
       "name": "Recruit Post",
       "station": "hammer_tool",
+      "craftTime": 20,
+      "description": "NPCs from town pool can be hired here.",
+      "unlockedBySkill": "township.leadership.3",
+      "iconItemId": "recruit_post",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -478,10 +602,12 @@
         {
           "itemId": "iron_ore",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "recruit_post",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -493,6 +619,10 @@
       "id": "build_banner_2",
       "name": "Decorated Banner",
       "station": "hammer_tool",
+      "craftTime": 14,
+      "description": "Decorated Banner",
+      "unlockedBySkill": "township.leadership.4",
+      "iconItemId": "banner_2",
       "inputs": [
         {
           "itemId": "silk",
@@ -505,10 +635,12 @@
         {
           "itemId": "gold",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "banner_2",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -520,6 +652,10 @@
       "id": "build_market_stall",
       "name": "Market Stall",
       "station": "hammer_tool",
+      "craftTime": 24,
+      "description": "Trade post for ambient NPCs.",
+      "unlockedBySkill": "township.leadership.4",
+      "iconItemId": "market_stall",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -528,10 +664,12 @@
         {
           "itemId": "silk",
           "count": 3
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "market_stall",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -543,6 +681,10 @@
       "id": "build_war_banner",
       "name": "War Banner",
       "station": "hammer_tool",
+      "craftTime": 16,
+      "description": "Combat morale buff to allied NPCs.",
+      "unlockedBySkill": "township.leadership.4",
+      "iconItemId": "war_banner",
       "inputs": [
         {
           "itemId": "silk",
@@ -555,10 +697,12 @@
         {
           "itemId": "gold",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "war_banner",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -570,6 +714,10 @@
       "id": "build_command_tent",
       "name": "Command Tent",
       "station": "hammer_tool",
+      "craftTime": 32,
+      "description": "Issue squad orders.",
+      "unlockedBySkill": "township.master",
+      "iconItemId": "command_tent",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -582,10 +730,12 @@
         {
           "itemId": "iron_ore",
           "count": 4
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "command_tent",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -597,6 +747,10 @@
       "id": "build_campfire",
       "name": "Campfire",
       "station": "hammer_tool",
+      "craftTime": 12,
+      "description": "Baseline buildable. Cooking station. Required component of any camp that hosts NPC hires (one campfire serves the whole camp).",
+      "unlockedBySkill": "(default)",
+      "iconItemId": "campfire",
       "inputs": [
         {
           "itemId": "branch_a",
@@ -605,10 +759,12 @@
         {
           "itemId": "rock_2",
           "count": 3
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "campfire",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -620,6 +776,10 @@
       "id": "build_tent_personal",
       "name": "Personal Tent",
       "station": "hammer_tool",
+      "craftTime": 12,
+      "description": "Baseline buildable. Sleeping spot for ONE camp resident (player or hire). Recruitment requires one tent per recruited NPC. NPC without an assigned tent will ref",
+      "unlockedBySkill": "(default)",
+      "iconItemId": "tent_personal",
       "inputs": [
         {
           "itemId": "silk",
@@ -632,10 +792,12 @@
         {
           "itemId": "leather",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "tent_personal",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -647,14 +809,20 @@
       "id": "build_storage_crate",
       "name": "Storage Crate",
       "station": "hammer_tool",
+      "craftTime": 12,
+      "description": "Baseline buildable. 24-slot shared storage. Required component of any camp that hosts NPC hires (one crate serves the whole camp; NPCs deposit harvested goods h",
+      "unlockedBySkill": "(default)",
+      "iconItemId": "storage_crate",
       "inputs": [
         {
           "itemId": "wood_plank",
           "count": 4
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "storage_crate",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -666,6 +834,10 @@
       "id": "build_logging_camp",
       "name": "Logging Camp",
       "station": "hammer_tool",
+      "craftTime": 20,
+      "description": "Harvester hub — required for hire_woodcutter. Assign trees within 80m.",
+      "unlockedBySkill": "township.buildings.2",
+      "iconItemId": "logging_camp",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -678,10 +850,12 @@
         {
           "itemId": "iron_ore",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "logging_camp",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -693,6 +867,10 @@
       "id": "build_mining_outpost",
       "name": "Mining Outpost",
       "station": "hammer_tool",
+      "craftTime": 24,
+      "description": "Required for hire_miner. Ore patrol radius around outpost.",
+      "unlockedBySkill": "township.buildings.3",
+      "iconItemId": "mining_outpost",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -705,10 +883,12 @@
         {
           "itemId": "iron_ore",
           "count": 4
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "mining_outpost",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -720,6 +900,10 @@
       "id": "build_field",
       "name": "Tilled Field",
       "station": "hammer_tool",
+      "craftTime": 24,
+      "description": "Required for hire_farmer. Grow ticks for herbs/grain.",
+      "unlockedBySkill": "township.buildings.4",
+      "iconItemId": "field",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -732,10 +916,12 @@
         {
           "itemId": "herb_common",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "field",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -747,6 +933,10 @@
       "id": "build_caravan_cart",
       "name": "Caravan Cart",
       "station": "hammer_tool",
+      "craftTime": 24,
+      "description": "Required for hire_caravan_master. Passive trade routes.",
+      "unlockedBySkill": "township.trade.2",
+      "iconItemId": "caravan_cart",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -759,10 +949,12 @@
         {
           "itemId": "leather",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "caravan_cart",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -774,6 +966,10 @@
       "id": "build_grand_bazaar",
       "name": "Grand Bazaar",
       "station": "hammer_tool",
+      "craftTime": 28,
+      "description": "Required for hire_bazaar_merchant. 3 rare vendor slots.",
+      "unlockedBySkill": "township.trade.4",
+      "iconItemId": "grand_bazaar",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -790,10 +986,12 @@
         {
           "itemId": "iron_ore",
           "count": 6
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "grand_bazaar",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -805,6 +1003,10 @@
       "id": "build_watchtower",
       "name": "Watchtower",
       "station": "hammer_tool",
+      "craftTime": 20,
+      "description": "Required for hire_sentry. Hostile detection + crossbow perch.",
+      "unlockedBySkill": "township.defenses.1",
+      "iconItemId": "watchtower",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -817,10 +1019,12 @@
         {
           "itemId": "iron_ore",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "watchtower",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -832,6 +1036,10 @@
       "id": "build_palisade",
       "name": "Palisade",
       "station": "hammer_tool",
+      "craftTime": 20,
+      "description": "Camp wall segment. Pairs with gate_iron for hire_gate_guard.",
+      "unlockedBySkill": "township.defenses.2",
+      "iconItemId": "palisade",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -840,10 +1048,12 @@
         {
           "itemId": "rock_2",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "palisade",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -855,6 +1065,10 @@
       "id": "build_gate_iron",
       "name": "Iron Gate",
       "station": "hammer_tool",
+      "craftTime": 20,
+      "description": "Controlled entry. Required with palisade for gate guards.",
+      "unlockedBySkill": "township.defenses.2",
+      "iconItemId": "gate_iron",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -863,10 +1077,12 @@
         {
           "itemId": "wood_plank",
           "count": 4
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "gate_iron",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -878,6 +1094,10 @@
       "id": "build_turret_basic",
       "name": "Auto-Turret",
       "station": "hammer_tool",
+      "craftTime": 24,
+      "description": "Required for hire_gunner. Base auto-fire without gunner.",
+      "unlockedBySkill": "township.defenses.3",
+      "iconItemId": "turret_basic",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -890,10 +1110,12 @@
         {
           "itemId": "wood_plank",
           "count": 4
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "turret_basic",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -905,6 +1127,10 @@
       "id": "build_turret_heavy",
       "name": "Heavy Turret",
       "station": "hammer_tool",
+      "craftTime": 28,
+      "description": "Higher DPS turret. One gunner per turret.",
+      "unlockedBySkill": "township.defenses.3",
+      "iconItemId": "turret_heavy",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -917,10 +1143,12 @@
         {
           "itemId": "wood_plank",
           "count": 6
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "turret_heavy",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -932,6 +1160,10 @@
       "id": "build_embassy",
       "name": "Embassy",
       "station": "hammer_tool",
+      "craftTime": 24,
+      "description": "Required for hire_diplomat. Faction rep +1/day while staffed.",
+      "unlockedBySkill": "township.diplomacy.3",
+      "iconItemId": "embassy",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -948,10 +1180,12 @@
         {
           "itemId": "iron_ore",
           "count": 4
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "embassy",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -963,6 +1197,10 @@
       "id": "build_workbench_station",
       "name": "Camp Workbench",
       "station": "hammer_tool",
+      "craftTime": 16,
+      "description": "Placeable workbench station — unlocks workbench recipes when near.",
+      "unlockedBySkill": "crafting.equipment.1",
+      "iconItemId": "workbench",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -971,10 +1209,12 @@
         {
           "itemId": "iron_ore",
           "count": 4
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "workbench",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -986,6 +1226,10 @@
       "id": "build_anvil_station",
       "name": "Camp Anvil",
       "station": "hammer_tool",
+      "craftTime": 24,
+      "description": "Placeable anvil — unlocks anvil recipes when near.",
+      "unlockedBySkill": "crafting.equipment.4",
+      "iconItemId": "anvil",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -994,10 +1238,12 @@
         {
           "itemId": "rock_2",
           "count": 4
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "anvil",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -1009,6 +1255,10 @@
       "id": "build_keep_fortress",
       "name": "Fortress Keep",
       "station": "hammer_tool",
+      "craftTime": 32,
+      "description": "Required for hire_captain. Core of Town/Stronghold defense.",
+      "unlockedBySkill": "township.defenses.4",
+      "iconItemId": "keep_fortress",
       "inputs": [
         {
           "itemId": "rock_2",
@@ -1021,10 +1271,12 @@
         {
           "itemId": "iron_ore",
           "count": 12
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "keep_fortress",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {

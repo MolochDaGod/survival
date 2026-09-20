@@ -2,7 +2,7 @@
   "product": "Grudges · Voxel-era lead survival MMO",
   "productEra": "voxel",
   "productNote": "Hard decision: Grudges is voxel-era only (main/lead voxel game). Nexus product era deferred. BIO…GRA remain the attribute system name.",
-  "generatedAt": "2026-09-20T00:49:29.302Z",
+  "generatedAt": "2026-09-20T14:00:53.954Z",
   "version": "1.0.0",
   "canonicalHost": "https://grudges.grudge-studio.com",
   "aliasRedirect": {
@@ -171,7 +171,7 @@
   "explain": {
     "product": "Grudges is the voxel-era lead survival MMO. Canonical host: grudges.grudge-studio.com. survival.grudge-studio.com 301-redirects here.",
     "perks": "Eight Nexus attributes (BIO…GRA), six milestone perks each. Flavor art from /icons/perks/{hero|warrior|smarts|maker}/1-30.png; tier badges from /icons/perks/stat-tiers/{stat}-t{1-6}.svg.",
-    "professions": "Seven professions (gathering, hunting, crafting, township, survival, chemistry, combat). Five branches each plus Master — 147 skills. Profession XP is independent of level skillPoints / PerksBook.",
+    "professions": "Seven professions (gathering, hunting, crafting, township, survival, chemistry, combat). Five branches each plus Master — 147 skills. Earn per-profession XP (xp-sources.csv), spend into SWG-style branch grids (rank costs 1/2/4/8 + Master 20). Independent of level skillPoints / PerksBook.",
     "crafting": "Stations gate recipes. Recipe inputs/outputs use SurvivalItems ids. Crafting feeds weapons/armor into combat power — it is not a second ally filter.",
     "icons": "Website serves /icons/* from the Grudges deploy. Faction banners: /icons/factions/banners/{id}.png. Prefer existing pack slots; do not invent new icon folders.",
     "township": "Settlement tiers Camp → Tribe → Village → Town → Stronghold scale with recruit population. Buildables unlock by tier.",

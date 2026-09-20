@@ -15,6 +15,11 @@ const CSV = path.join(ROOT, 'artifacts/arpg-game/docs/inventory/recipes.csv');
 const OUT_RECIPES = path.join(ROOT, 'artifacts/arpg-game/src/game/survival/Recipes.generated.ts');
 const OUT_ITEMS = path.join(ROOT, 'artifacts/arpg-game/src/game/survival/SurvivalItems.generated.ts');
 const EXISTING_ITEMS = path.join(ROOT, 'artifacts/arpg-game/src/game/survival/SurvivalItems.ts');
+/** Keep @workspace/game-systems (website /api/game) in lockstep with arpg CSV SSOT. */
+const OUT_GS_RECIPES = path.join(ROOT, 'lib/game-systems/src/crafting/recipes.generated.ts');
+const OUT_GS_ITEMS = path.join(ROOT, 'lib/game-systems/src/crafting/survivalItems.generated.ts');
+const EXISTING_GS_ITEMS = path.join(ROOT, 'lib/game-systems/src/crafting/survivalItems.ts');
+const WEBSITE_DATA = path.join(ROOT, 'artifacts/website/public/data');
 
 /** Map CSV station names → CraftingStation union. */
 const STATION_MAP = {
@@ -284,14 +289,14 @@ export const GENERATED_RECIPES: Recipe[] = ${JSON.stringify(recipes, null, 2).re
 `;
 
 // Fix JSON→TS: JSON.stringify with replace is fragile for nested. Use manual emit.
-function emitRecipes() {
+function emitRecipes(typeImportPath) {
   const lines = [];
   lines.push(`/**`);
   lines.push(` * AUTO-GENERATED from docs/inventory/recipes.csv`);
   lines.push(` *   node scripts/gen-recipes-from-csv.mjs`);
   lines.push(` * Do not hand-edit — change the CSV and regenerate.`);
   lines.push(` */`);
-  lines.push(`import type { Recipe } from './Recipes';`);
+  lines.push(`import type { Recipe } from '${typeImportPath}';`);
   lines.push(``);
   lines.push(`export const GENERATED_RECIPES: Recipe[] = [`);
   for (const r of recipes) {
@@ -312,21 +317,17 @@ function emitRecipes() {
   return lines.join('\n');
 }
 
-function emitItems() {
+function emitItems(typeImportPath, items) {
   const lines = [];
   lines.push(`/**`);
-  lines.push(` * AUTO-GENERATED SurvivalItems stubs for recipe IDs missing from SurvivalItems.ts`);
+  lines.push(` * AUTO-GENERATED SurvivalItems stubs from recipes.csv`);
   lines.push(` *   node scripts/gen-recipes-from-csv.mjs`);
   lines.push(` */`);
-  lines.push(`import type { SurvivalItemDef } from './SurvivalItems';`);
+  lines.push(`import type { SurvivalItemDef } from '${typeImportPath}';`);
   lines.push(``);
   lines.push(`export const GENERATED_SURVIVAL_ITEMS: Record<string, SurvivalItemDef> = {`);
-  for (const it of missingItems) {
+  for (const it of items) {
     const place = it.placeable ? ', placeable: true' : '';
-    const consume = it.consume
-      ? `, consume: ${JSON.stringify(it.consume).replace(/"/g, '')}`
-      : '';
-    // fix consume emit
     let consumeStr = '';
     if (it.consume) {
       const parts = Object.entries(it.consume).map(([k, v]) => `${k}: ${v}`);
@@ -341,11 +342,123 @@ function emitItems() {
   return lines.join('\n');
 }
 
-fs.writeFileSync(OUT_RECIPES, emitRecipes());
-fs.writeFileSync(OUT_ITEMS, emitItems());
+function missingAgainst(existingPath) {
+  const src = fs.existsSync(existingPath) ? fs.readFileSync(existingPath, 'utf8') : '';
+  const out = [];
+  for (const [id, meta] of itemMeta) {
+    const re = new RegExp(`\\b${id}\\s*:`);
+    if (re.test(src)) continue;
+    const cls = classifyItem(id, meta.recipeCategory, meta.assetPath);
+    out.push({ ...meta, ...cls });
+  }
+  for (const m of CORE_MATS) {
+    if (!new RegExp(`\\b${m.id}\\s*:`).test(src) && !out.some((x) => x.id === m.id)) {
+      out.push({ ...m, placeable: false, description: m.description });
+    }
+  }
+  return out;
+}
+
+const STATION_META = [
+  { id: 'none', name: 'Handcraft', icon: '✋', description: 'Craft anywhere — no station required.' },
+  { id: 'campfire', name: 'Campfire', icon: '🔥', description: 'Cook food and boil water.' },
+  { id: 'cooking_rack', name: 'Cooking Rack', icon: '🍖', description: 'Slow roast and smoke meats.' },
+  { id: 'workbench', name: 'Workbench', icon: '🪚', description: 'Tools, furniture, and structures.' },
+  { id: 'drying_rack', name: 'Drying Rack', icon: '🪵', description: 'Cure meat and fish for storage.' },
+  { id: 'anvil', name: 'Anvil', icon: '⚒️', description: 'Forge weapons, armour, and metalwork.' },
+  { id: 'hammer_tool', name: 'Build Hammer', icon: '🔨', description: 'Place camp buildings and defenses.' },
+];
+
+function emitGameCatalogJson(allItems) {
+  const stationCounts = {};
+  for (const r of recipes) stationCounts[r.station] = (stationCounts[r.station] ?? 0) + 1;
+  const itemsObj = {};
+  for (const it of allItems) itemsObj[it.id] = it;
+  // Ensure every recipe input/output has at least a stub name in items
+  for (const r of recipes) {
+    for (const io of [...r.inputs, ...r.outputs]) {
+      if (!itemsObj[io.itemId]) {
+        const cls = classifyItem(io.itemId, 'material', null);
+        itemsObj[io.itemId] = {
+          id: io.itemId,
+          name: titleCase(io.itemId),
+          category: cls.category,
+          icon: cls.icon,
+          weight: 0.3,
+          stack: 20,
+          modelPath: cls.modelPath,
+          description: titleCase(io.itemId),
+        };
+      }
+    }
+  }
+  const categories = [...new Set(Object.values(itemsObj).map((i) => i.category))].sort();
+  return {
+    version: 1,
+    updatedAt: new Date().toISOString(),
+    source: 'recipes.csv',
+    recipeCount: recipes.length,
+    itemCount: Object.keys(itemsObj).length,
+    stations: STATION_META.map((s) => ({ ...s, recipeCount: stationCounts[s.id] ?? 0 })),
+    categories,
+    recipes,
+    items: itemsObj,
+  };
+}
+
+const arpgMissing = missingItems; // already computed vs arpg SurvivalItems.ts
+const gsMissing = missingAgainst(EXISTING_GS_ITEMS);
+
+fs.writeFileSync(OUT_RECIPES, emitRecipes('./Recipes'));
+fs.writeFileSync(OUT_ITEMS, emitItems('./SurvivalItems', arpgMissing));
+fs.writeFileSync(OUT_GS_RECIPES, emitRecipes('./recipes'));
+fs.writeFileSync(OUT_GS_ITEMS, emitItems('./survivalItems', gsMissing));
+
+// Static website catalog (crafting.html) — full CSV set, not the old 33-recipe stub
+fs.mkdirSync(WEBSITE_DATA, { recursive: true });
+const catalogItems = [
+  ...gsMissing,
+  // Parse hand-authored game-systems items lightly via generated merge at runtime;
+  // for static JSON, include stubs for every recipe-touched id (emitGameCatalogJson fills gaps).
+];
+const catalog = emitGameCatalogJson(catalogItems);
+fs.writeFileSync(path.join(WEBSITE_DATA, 'game-catalog.json'), JSON.stringify(catalog));
+fs.writeFileSync(
+  path.join(WEBSITE_DATA, 'recipes.json'),
+  JSON.stringify({ station: 'all', count: recipes.length, recipes }),
+);
+fs.writeFileSync(
+  path.join(WEBSITE_DATA, 'items.json'),
+  JSON.stringify({ category: 'all', count: catalog.itemCount, items: Object.values(catalog.items) }),
+);
+fs.writeFileSync(
+  path.join(WEBSITE_DATA, 'stations.json'),
+  JSON.stringify({ stations: catalog.stations }),
+);
+fs.writeFileSync(
+  path.join(WEBSITE_DATA, 'game-index.json'),
+  JSON.stringify({
+    service: 'grudges-survival-game-data',
+    version: 1,
+    source: 'recipes.csv',
+    endpoints: [
+      'GET /api/game/catalog',
+      'GET /api/game/recipes',
+      'GET /api/game/items',
+      'GET /api/game/stations',
+    ],
+    counts: {
+      recipes: catalog.recipeCount,
+      items: catalog.itemCount,
+      stations: catalog.stations.length,
+    },
+  }),
+);
 
 console.log('Wrote', OUT_RECIPES, 'recipes=', recipes.length);
-console.log('Wrote', OUT_ITEMS, 'newItems=', missingItems.length);
+console.log('Wrote', OUT_ITEMS, 'newItems=', arpgMissing.length);
+console.log('Wrote', OUT_GS_RECIPES, '+', OUT_GS_ITEMS, 'gsNewItems=', gsMissing.length);
+console.log('Wrote', path.join(WEBSITE_DATA, 'game-catalog.json'), 'items=', catalog.itemCount);
 console.log('stations', [...new Set(recipes.map((r) => r.station))].join(', '));
 console.log('builds', recipes.filter((r) => r.id.startsWith('build_')).length);
 console.log('crafts', recipes.filter((r) => r.id.startsWith('craft_') || r.id.startsWith('cook_') || r.id.startsWith('brew_')).length);

@@ -102,18 +102,29 @@ function parseRecipes(tsPath) {
     const station = m[3];
     const body = m[4] || '';
     const inputs = [];
-    // Recipes.ts uses qty; some packs use count
-    const inRe = /\{\s*itemId:\s*'([^']+)'\s*,\s*(?:qty|count):\s*(\d+)/g;
-    let im;
-    while ((im = inRe.exec(body))) inputs.push({ itemId: im[1], count: +im[2] });
+    // Only scan the inputs: [...] block — do not treat outputs as inputs
+    const inputsBlock = body.match(/inputs:\s*\[([\s\S]*?)\]/);
+    if (inputsBlock) {
+      const inRe = /\{\s*itemId:\s*'([^']+)'\s*,\s*(?:qty|count):\s*(\d+)/g;
+      let im;
+      while ((im = inRe.exec(inputsBlock[1]))) inputs.push({ itemId: im[1], count: +im[2] });
+    }
     const outM =
       body.match(/outputs?:\s*\[\s*\{\s*itemId:\s*'([^']+)'\s*,\s*(?:qty|count):\s*(\d+)/) ||
       body.match(/output:\s*\{\s*itemId:\s*'([^']+)'\s*,\s*(?:qty|count):\s*(\d+)/);
+    const descM = body.match(/description:\s*'((?:\\'|[^'])*)'/);
+    const unlockM = body.match(/unlockedBySkill:\s*'((?:\\'|[^'])*)'/);
+    const timeM = body.match(/craftTime:\s*(\d+)/);
     recipes.push({
       id,
       name,
       station,
+      craftTime: timeM ? +timeM[1] : 0,
+      description: descM ? descM[1].replace(/\\'/g, "'") : '',
+      unlockedBySkill: unlockM ? unlockM[1] : '(default)',
+      iconItemId: outM ? outM[1] : id,
       inputs,
+      outputs: outM ? [{ itemId: outM[1], qty: +outM[2] }] : [],
       output: outM ? { itemId: outM[1], count: +outM[2] } : null,
     });
   }
@@ -121,7 +132,7 @@ function parseRecipes(tsPath) {
   if (!recipes.length) {
     const simple = [...src.matchAll(/id:\s*'([^']+)'\s*,\s*name:\s*'([^']+)'/g)];
     for (const s of simple.slice(0, 200)) {
-      recipes.push({ id: s[1], name: s[2], station: 'workbench', inputs: [], output: null });
+      recipes.push({ id: s[1], name: s[2], station: 'workbench', inputs: [], output: null, outputs: [] });
     }
   }
   return recipes;
@@ -168,25 +179,222 @@ function parseBranches(tsPath) {
   return branches;
 }
 
+/** Minimal CSV parser (quoted fields). */
+function parseCsv(text) {
+  const rows = [];
+  let i = 0;
+  const len = text.length;
+  let field = '';
+  let row = [];
+  let inQuotes = false;
+  while (i < len) {
+    const c = text[i];
+    if (inQuotes) {
+      if (c === '"') {
+        if (text[i + 1] === '"') {
+          field += '"';
+          i += 2;
+          continue;
+        }
+        inQuotes = false;
+        i++;
+        continue;
+      }
+      field += c;
+      i++;
+      continue;
+    }
+    if (c === '"') {
+      inQuotes = true;
+      i++;
+      continue;
+    }
+    if (c === ',') {
+      row.push(field);
+      field = '';
+      i++;
+      continue;
+    }
+    if (c === '\n' || c === '\r') {
+      if (c === '\r' && text[i + 1] === '\n') i++;
+      row.push(field);
+      field = '';
+      if (row.some((x) => String(x).trim())) rows.push(row);
+      row = [];
+      i++;
+      continue;
+    }
+    field += c;
+    i++;
+  }
+  if (field.length || row.length) {
+    row.push(field);
+    if (row.some((x) => String(x).trim())) rows.push(row);
+  }
+  return rows;
+}
+
+function slugifyProf(label) {
+  return String(label || '')
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '_');
+}
+
+/**
+ * Full SWG-style skill trees from professions.csv
+ * (7 × 5 branches × 4 ranks + Master = 147).
+ */
+function parseProfessionTrees(csvPath) {
+  if (!fs.existsSync(csvPath)) return { trees: {}, skills: [], skillCount: 0 };
+  const table = parseCsv(fs.readFileSync(csvPath, 'utf8'));
+  if (!table.length) return { trees: {}, skills: [], skillCount: 0 };
+  const header = table[0].map((h) => h.trim());
+  const idx = Object.fromEntries(header.map((h, i) => [h, i]));
+  const col = (row, name, alt) => {
+    const i = idx[name] ?? idx[alt];
+    return i == null ? '' : String(row[i] ?? '').trim();
+  };
+  const trees = {};
+  const skills = [];
+  for (const row of table.slice(1)) {
+    const profLabel = col(row, 'Profession');
+    const branchLabel = col(row, 'Specialization (Branch)', 'Branch');
+    const rankRaw = col(row, 'Rank');
+    const id = col(row, 'Skill ID');
+    if (!id || !profLabel) continue;
+    const prof = slugifyProf(profLabel);
+    const isMaster = /^m(aster)?$/i.test(rankRaw) || id.endsWith('.master') || /master/i.test(branchLabel);
+    const branch = isMaster
+      ? 'master'
+      : slugifyProf(branchLabel).replace(/^master$/, 'master');
+    const rank = isMaster ? 'M' : Number(rankRaw) || 1;
+    const cost = Number(col(row, 'Point Cost', 'Cost')) || 0;
+    const prereqRaw = col(row, 'Prereq Skill ID(s)', 'Prereq');
+    const prereq =
+      !prereqRaw || prereqRaw === '—' || prereqRaw === '-'
+        ? []
+        : prereqRaw.split(/[,;]/).map((s) => s.trim()).filter(Boolean);
+    const recipesRaw = col(row, 'Recipes Granted', 'Recipes');
+    const recipes =
+      !recipesRaw || recipesRaw === '—'
+        ? []
+        : recipesRaw.split(/[,;]/).map((s) => s.trim()).filter((s) => s && s !== '—');
+    const skill = {
+      id,
+      prof,
+      branch,
+      branchLabel: isMaster ? 'Master' : branchLabel,
+      rank,
+      name: col(row, 'Skill Name') || id,
+      desc: col(row, 'Description'),
+      cost,
+      prereq,
+      recipes,
+      signature: col(row, 'Signature Item (Wield → +25% XP for Combat/Hunting; flavor only elsewhere)', 'Signature Item') || '',
+      passive: col(row, 'Passive Effects'),
+      icon: col(row, 'Icon') || '',
+    };
+    skills.push(skill);
+    if (!trees[prof]) trees[prof] = { branches: {}, master: null };
+    if (isMaster) {
+      trees[prof].master = skill;
+    } else {
+      if (!trees[prof].branches[branch]) {
+        trees[prof].branches[branch] = { id: branch, label: branchLabel, skills: [] };
+      }
+      trees[prof].branches[branch].skills.push(skill);
+    }
+  }
+  // Normalize to arrays sorted by rank
+  const normalized = {};
+  for (const [prof, tree] of Object.entries(trees)) {
+    const branchList = Object.values(tree.branches).map((b) => ({
+      ...b,
+      skills: b.skills.slice().sort((a, b) => Number(a.rank) - Number(b.rank)),
+    }));
+    normalized[prof] = {
+      branches: branchList,
+      master: tree.master,
+      skillCount: branchList.reduce((n, b) => n + b.skills.length, 0) + (tree.master ? 1 : 0),
+      totalCost:
+        branchList.reduce((n, b) => n + b.skills.reduce((s, sk) => s + (sk.cost || 0), 0), 0) +
+        (tree.master?.cost || 0),
+    };
+  }
+  return { trees: normalized, skills, skillCount: skills.length };
+}
+
+function parseXpSources(csvPath) {
+  if (!fs.existsSync(csvPath)) return [];
+  const table = parseCsv(fs.readFileSync(csvPath, 'utf8'));
+  if (!table.length) return [];
+  const header = table[0].map((h) => h.trim());
+  const idx = Object.fromEntries(header.map((h, i) => [h, i]));
+  const col = (row, name) => {
+    const i = idx[name];
+    return i == null ? '' : String(row[i] ?? '').trim();
+  };
+  const out = [];
+  for (const row of table.slice(1)) {
+    const activity = col(row, 'Activity');
+    if (!activity) continue;
+    const prof = slugifyProf(col(row, 'Profession Awarded'));
+    const side = col(row, 'Side-Grant Profession');
+    out.push({
+      activity,
+      trigger: col(row, 'Trigger'),
+      profession: prof,
+      xp: col(row, 'XP Amount'),
+      sideProfession: !side || side === '—' ? null : slugifyProf(side),
+      sideXp: col(row, 'Side-Grant XP'),
+      modifier: col(row, 'Modifier (Effect Key)'),
+      source: col(row, 'Source File'),
+      notes: col(row, 'Notes'),
+    });
+  }
+  return out;
+}
+
 const perksPath = path.join(ROOT, 'artifacts/arpg-game/src/game/CharacterConfig.ts');
 const recipesPath = path.join(ROOT, 'artifacts/arpg-game/src/game/survival/Recipes.generated.ts');
 const profPath = path.join(ROOT, 'artifacts/arpg-game/src/game/progression/Professions.ts');
+const profCsvPath = path.join(ROOT, 'artifacts/arpg-game/docs/inventory/professions.csv');
+const xpCsvPath = path.join(ROOT, 'artifacts/arpg-game/docs/inventory/xp-sources.csv');
 
 const milestonePerks = parseMilestonePerks(perksPath);
 const recipes = parseRecipes(recipesPath);
 const professions = parseProfessionMeta(profPath);
 const branches = parseBranches(profPath);
+const { trees: professionTrees, skills: professionSkills, skillCount: professionSkillCount } =
+  parseProfessionTrees(profCsvPath);
+const xpSources = parseXpSources(xpCsvPath);
 
-const stations = [
-  { id: 'forge', name: 'Forge', profession: 'crafting', desc: 'Weapons & heavy armor. Ore + fuel.', icon: 'forge' },
-  { id: 'workbench', name: 'Workbench', profession: 'crafting', desc: 'Wood items, bows, tools.', icon: 'bench' },
-  { id: 'alchemy', name: 'Alchemy Table', profession: 'chemistry', desc: 'Potions, elixirs, poisons, oils.', icon: 'alchemy' },
-  { id: 'loom', name: 'Loom', profession: 'crafting', desc: 'Cloth armor, capes, bags.', icon: 'loom' },
-  { id: 'tannery', name: 'Tannery', profession: 'hunting', desc: 'Leather from hides.', icon: 'tannery' },
-  { id: 'enchanting', name: 'Enchanting Altar', profession: 'chemistry', desc: 'Enchantments, runes, enhancements.', icon: 'enchant' },
-  { id: 'campfire', name: 'Campfire', profession: 'survival', desc: 'Cooking, basic survival crafts.', icon: 'fire' },
-  { id: 'build', name: 'Build Hammer', profession: 'township', desc: 'Camp structures & defenses.', icon: 'build' },
-];
+// Prefer CSV branch labels when TS parse is thin
+for (const p of professions) {
+  const tree = professionTrees[p.id];
+  if (tree?.branches?.length) {
+    branches[p.id] = tree.branches.map((b) => ({ id: b.id, label: b.label }));
+  }
+}
+
+/** Stations match recipes.csv / CraftingStation (not a parallel lore-only list). */
+const STATION_LABELS = {
+  none: { name: 'Handcraft', profession: 'survival', desc: 'Craft anywhere — no station required.', icon: 'hand' },
+  campfire: { name: 'Campfire', profession: 'survival', desc: 'Cook food and boil water.', icon: 'fire' },
+  cooking_rack: { name: 'Cooking Rack', profession: 'survival', desc: 'Slow roast and smoke meats.', icon: 'cook' },
+  workbench: { name: 'Workbench', profession: 'crafting', desc: 'Tools, wood items, bows.', icon: 'bench' },
+  drying_rack: { name: 'Drying Rack', profession: 'survival', desc: 'Cure meat and fish for storage.', icon: 'dry' },
+  anvil: { name: 'Anvil', profession: 'crafting', desc: 'Forge weapons, armour, and metalwork.', icon: 'anvil' },
+  hammer_tool: { name: 'Build Hammer', profession: 'township', desc: 'Camp structures & defenses.', icon: 'build' },
+};
+const stationCounts = {};
+for (const r of recipes) stationCounts[r.station] = (stationCounts[r.station] ?? 0) + 1;
+const stations = Object.keys(STATION_LABELS).map((id) => ({
+  id,
+  ...STATION_LABELS[id],
+  recipeCount: stationCounts[id] ?? 0,
+}));
 
 const buildables = [
   { id: 'foundation', name: 'Foundation', tier: 'Camp', station: 'build', desc: '1 m modular floor slab' },
@@ -352,7 +560,20 @@ const catalog = {
   professions: {
     list: professions,
     branches,
-    note: '7 professions × 5 branches × ranks + Master = 147 skills. XP per profession, independent of level skillPoints.',
+    trees: professionTrees,
+    skills: professionSkills,
+    skillCount: professionSkillCount,
+    xpSources,
+    spendRules: {
+      style: 'SWG-style (Grudges content — not SWG IP)',
+      pool: 'Per-profession XP (independent of level skillPoints / PerksBook)',
+      spend: 'learnSkill spends cost from that profession pool; prereqs must already be learned',
+      costs: 'Rank 1=1 · 2=2 · 3=4 · 4=8 · Master=20 (95 XP to fully master one profession)',
+      persist: 'grudge_nexus_professions__<characterId> via ProfessionsService',
+      bridge: 'GrudgeProgressionBridge.ts maps skills → abilities / craft XP routing',
+      ui: 'In-game: ProfessionsBook (C → Professions). Website: /professions interactive grid + XP sandbox.',
+    },
+    note: '7 professions × 5 branches × 4 ranks + Master = 147 skills. Earn XP from activities (xp-sources.csv), spend into branch grids.',
   },
   township: {
     tiers: settlementTiers,
@@ -485,7 +706,7 @@ const EXPLAIN = {
   perks:
     'Eight Nexus attributes (BIO…GRA), six milestone perks each. Flavor art from /icons/perks/{hero|warrior|smarts|maker}/1-30.png; tier badges from /icons/perks/stat-tiers/{stat}-t{1-6}.svg.',
   professions:
-    'Seven professions (gathering, hunting, crafting, township, survival, chemistry, combat). Five branches each plus Master — 147 skills. Profession XP is independent of level skillPoints / PerksBook.',
+    'Seven professions (gathering, hunting, crafting, township, survival, chemistry, combat). Five branches each plus Master — 147 skills. Earn per-profession XP (xp-sources.csv), spend into SWG-style branch grids (rank costs 1/2/4/8 + Master 20). Independent of level skillPoints / PerksBook.',
   crafting:
     'Stations gate recipes. Recipe inputs/outputs use SurvivalItems ids. Crafting feeds weapons/armor into combat power — it is not a second ally filter.',
   icons:
@@ -579,4 +800,6 @@ console.log('Wrote', OUT_API);
 console.log('perks stats', Object.keys(milestonePerks).length);
 console.log('recipes', recipes.length);
 console.log('professions', professions.length);
+console.log('professionSkills', professionSkillCount);
+console.log('xpSources', xpSources.length);
 console.log('buildables', buildables.length);

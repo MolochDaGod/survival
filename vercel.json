@@ -71,6 +71,30 @@
       "destination": "/data/systems-combat.json"
     },
     {
+      "source": "/api/game",
+      "destination": "/data/game-index.json"
+    },
+    {
+      "source": "/api/game/",
+      "destination": "/data/game-index.json"
+    },
+    {
+      "source": "/api/game/catalog",
+      "destination": "/data/game-catalog.json"
+    },
+    {
+      "source": "/api/game/recipes",
+      "destination": "/data/recipes.json"
+    },
+    {
+      "source": "/api/game/items",
+      "destination": "/data/items.json"
+    },
+    {
+      "source": "/api/game/stations",
+      "destination": "/data/stations.json"
+    },
+    {
       "source": "/api/:path*",
       "destination": "https://survival-api-production.up.railway.app/api/:path*"
     },

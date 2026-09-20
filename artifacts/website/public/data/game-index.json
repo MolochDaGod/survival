@@ -1,1 +1,1 @@
-{"service":"grudges-survival-game-data","version":1,"source":"static-vercel","endpoints":["GET /api/game/catalog","GET /api/game/recipes","GET /api/game/items","GET /api/game/stations"],"counts":{"recipes":33,"items":193,"stations":6}}
+{"service":"grudges-survival-game-data","version":1,"source":"static-vercel","endpoints":["GET /api/game/catalog","GET /api/game/recipes","GET /api/game/items","GET /api/game/stations"],"counts":{"recipes":171,"items":373,"stations":7}}

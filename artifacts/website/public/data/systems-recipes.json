@@ -6,6 +6,10 @@
       "id": "craft_torch",
       "name": "Torch",
       "station": "none",
+      "craftTime": 8,
+      "description": "Already-shipped baseline recipe.",
+      "unlockedBySkill": "(default)",
+      "iconItemId": "torch",
       "inputs": [
         {
           "itemId": "branch_b",
@@ -14,10 +18,12 @@
         {
           "itemId": "duct_tape",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "torch",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -29,14 +35,20 @@
       "id": "craft_bandage",
       "name": "Bandage",
       "station": "none",
+      "craftTime": 8,
+      "description": "Already-shipped.",
+      "unlockedBySkill": "(default)",
+      "iconItemId": "bandage",
       "inputs": [
         {
           "itemId": "duct_tape",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "bandage",
-          "count": 2
+          "qty": 2
         }
       ],
       "output": {
@@ -48,6 +60,10 @@
       "id": "craft_arrow",
       "name": "Arrows (flint)",
       "station": "none",
+      "craftTime": 8,
+      "description": "Already-shipped — basic flint arrow.",
+      "unlockedBySkill": "(default)",
+      "iconItemId": "arrow",
       "inputs": [
         {
           "itemId": "branch_a",
@@ -56,10 +72,12 @@
         {
           "itemId": "rock_5",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "arrow",
-          "count": 5
+          "qty": 5
         }
       ],
       "output": {
@@ -71,6 +89,10 @@
       "id": "craft_bow",
       "name": "Recurve Bow (basic)",
       "station": "none",
+      "craftTime": 10,
+      "description": "Already-shipped baseline.",
+      "unlockedBySkill": "(default)",
+      "iconItemId": "bow",
       "inputs": [
         {
           "itemId": "branch_b",
@@ -79,10 +101,12 @@
         {
           "itemId": "duct_tape",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "bow",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -94,6 +118,10 @@
       "id": "craft_knife",
       "name": "Knife",
       "station": "workbench",
+      "craftTime": 10,
+      "description": "Already-shipped.",
+      "unlockedBySkill": "(default)",
+      "iconItemId": "knife",
       "inputs": [
         {
           "itemId": "branch_a",
@@ -102,10 +130,12 @@
         {
           "itemId": "iron_ore",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "knife",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -117,6 +147,10 @@
       "id": "craft_fishing_rod",
       "name": "Fishing Rod",
       "station": "workbench",
+      "craftTime": 10,
+      "description": "Fishing Rod",
+      "unlockedBySkill": "hunting.fishing.1",
+      "iconItemId": "fishing_rod",
       "inputs": [
         {
           "itemId": "branch_b",
@@ -125,10 +159,12 @@
         {
           "itemId": "silk",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "fishing_rod",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -140,6 +176,10 @@
       "id": "craft_bait_worm",
       "name": "Bait (worm jar)",
       "station": "none",
+      "craftTime": 10,
+      "description": "Bait (worm jar)",
+      "unlockedBySkill": "hunting.fishing.2",
+      "iconItemId": "bait_worm",
       "inputs": [
         {
           "itemId": "bio",
@@ -148,10 +188,12 @@
         {
           "itemId": "bottle_empty",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "bait_worm",
-          "count": 3
+          "qty": 3
         }
       ],
       "output": {
@@ -163,6 +205,10 @@
       "id": "craft_fishing_net",
       "name": "Fishing Net",
       "station": "workbench",
+      "craftTime": 12,
+      "description": "Casts wider — multi-fish per pull.",
+      "unlockedBySkill": "hunting.fishing.3",
+      "iconItemId": "fishing_net",
       "inputs": [
         {
           "itemId": "silk",
@@ -171,10 +217,12 @@
         {
           "itemId": "branch_b",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "fishing_net",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -186,6 +234,10 @@
       "id": "craft_harpoon",
       "name": "Harpoon",
       "station": "workbench",
+      "craftTime": 16,
+      "description": "Reuse Spear mesh as harpoon.",
+      "unlockedBySkill": "hunting.fishing.4",
+      "iconItemId": "harpoon",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -198,10 +250,12 @@
         {
           "itemId": "leather",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "harpoon",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -213,6 +267,10 @@
       "id": "craft_deepsea_net",
       "name": "Deep-Sea Net",
       "station": "workbench",
+      "craftTime": 14,
+      "description": "For Whale/Shark tier.",
+      "unlockedBySkill": "hunting.fishing.4",
+      "iconItemId": "deepsea_net",
       "inputs": [
         {
           "itemId": "silk",
@@ -225,10 +283,12 @@
         {
           "itemId": "iron_ore",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "deepsea_net",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -240,6 +300,10 @@
       "id": "craft_skinning_knife",
       "name": "Skinning Knife",
       "station": "workbench",
+      "craftTime": 10,
+      "description": "Reuse Dagger mesh.",
+      "unlockedBySkill": "hunting.animals.1",
+      "iconItemId": "skinning_knife",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -252,10 +316,12 @@
         {
           "itemId": "leather",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "skinning_knife",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -267,6 +333,10 @@
       "id": "craft_snare_trap",
       "name": "Snare Trap",
       "station": "workbench",
+      "craftTime": 10,
+      "description": "Catches small game (Rat/Frog).",
+      "unlockedBySkill": "hunting.animals.2",
+      "iconItemId": "snare_trap",
       "inputs": [
         {
           "itemId": "silk",
@@ -275,10 +345,12 @@
         {
           "itemId": "branch_a",
           "count": 4
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "snare_trap",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -290,6 +362,10 @@
       "id": "craft_bear_trap",
       "name": "Steel Bear Trap",
       "station": "workbench",
+      "craftTime": 12,
+      "description": "Catches large mammals.",
+      "unlockedBySkill": "hunting.animals.3",
+      "iconItemId": "bear_trap",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -302,10 +378,12 @@
         {
           "itemId": "fang",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "bear_trap",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -317,6 +395,10 @@
       "id": "craft_taxidermy_kit",
       "name": "Taxidermy Kit",
       "station": "workbench",
+      "craftTime": 12,
+      "description": "Required for trophy mounts.",
+      "unlockedBySkill": "hunting.animals.3",
+      "iconItemId": "taxidermy_kit",
       "inputs": [
         {
           "itemId": "leather",
@@ -329,10 +411,12 @@
         {
           "itemId": "herb_common",
           "count": 4
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "taxidermy_kit",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -344,6 +428,10 @@
       "id": "craft_tracking_arrow",
       "name": "Tracking Arrow",
       "station": "workbench",
+      "craftTime": 14,
+      "description": "Marks target on minimap.",
+      "unlockedBySkill": "hunting.animals.4",
+      "iconItemId": "tracking_arrow",
       "inputs": [
         {
           "itemId": "branch_a",
@@ -356,10 +444,12 @@
         {
           "itemId": "herb_rare",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "tracking_arrow",
-          "count": 5
+          "qty": 5
         }
       ],
       "output": {
@@ -371,6 +461,10 @@
       "id": "craft_trophy_mount",
       "name": "Trophy Mount",
       "station": "workbench",
+      "craftTime": 14,
+      "description": "Camp morale buff when displayed.",
+      "unlockedBySkill": "hunting.animals.4",
+      "iconItemId": "trophy_mount",
       "inputs": [
         {
           "itemId": "taxidermy_kit",
@@ -383,10 +477,12 @@
         {
           "itemId": "wood_plank",
           "count": 4
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "trophy_mount",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -398,6 +494,10 @@
       "id": "craft_bounty_poster",
       "name": "Bounty Poster",
       "station": "workbench",
+      "craftTime": 10,
+      "description": "Place at camp to spawn an animal contract.",
+      "unlockedBySkill": "hunting.bounty.1",
+      "iconItemId": "bounty_poster",
       "inputs": [
         {
           "itemId": "paper",
@@ -406,10 +506,12 @@
         {
           "itemId": "ink",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "bounty_poster",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -421,6 +523,10 @@
       "id": "craft_wanted_dossier",
       "name": "Wanted Dossier",
       "station": "workbench",
+      "craftTime": 12,
+      "description": "Reveals contract target on map.",
+      "unlockedBySkill": "hunting.bounty.2",
+      "iconItemId": "wanted_dossier",
       "inputs": [
         {
           "itemId": "paper",
@@ -433,10 +539,12 @@
         {
           "itemId": "leather",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "wanted_dossier",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -448,6 +556,10 @@
       "id": "craft_capture_net",
       "name": "Capture Net",
       "station": "workbench",
+      "craftTime": 12,
+      "description": "Non-lethal capture for live-bounty contracts.",
+      "unlockedBySkill": "hunting.bounty.3",
+      "iconItemId": "capture_net",
       "inputs": [
         {
           "itemId": "silk",
@@ -460,10 +572,12 @@
         {
           "itemId": "fang",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "capture_net",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -475,6 +589,10 @@
       "id": "craft_bounty_lockbox",
       "name": "Bounty Lockbox",
       "station": "workbench",
+      "craftTime": 12,
+      "description": "Stores contract reward gold safely at camp.",
+      "unlockedBySkill": "hunting.bounty.3",
+      "iconItemId": "bounty_lockbox",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -483,10 +601,12 @@
         {
           "itemId": "wood_plank",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "bounty_lockbox",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -498,6 +618,10 @@
       "id": "craft_villain_trophy",
       "name": "Villain Trophy",
       "station": "workbench",
+      "craftTime": 16,
+      "description": "Camp morale buff; only craftable from villain-NPC contract drops.",
+      "unlockedBySkill": "hunting.bounty.4",
+      "iconItemId": "villain_trophy",
       "inputs": [
         {
           "itemId": "taxidermy_kit",
@@ -514,10 +638,12 @@
         {
           "itemId": "gem_rare",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "villain_trophy",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -529,6 +655,10 @@
       "id": "craft_manacles",
       "name": "Manacles",
       "station": "workbench",
+      "craftTime": 14,
+      "description": "Required to bring villain bounties in alive.",
+      "unlockedBySkill": "hunting.bounty.4",
+      "iconItemId": "manacles",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -537,10 +667,12 @@
         {
           "itemId": "leather",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "manacles",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -552,6 +684,10 @@
       "id": "craft_pickaxe",
       "name": "Pickaxe",
       "station": "workbench",
+      "craftTime": 10,
+      "description": "Required for rock + crystal mining.",
+      "unlockedBySkill": "crafting.equipment.1",
+      "iconItemId": "pickaxe",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -560,10 +696,12 @@
         {
           "itemId": "wood_plank",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "pickaxe",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -575,6 +713,10 @@
       "id": "craft_hammer_tool",
       "name": "Carpenter Hammer",
       "station": "workbench",
+      "craftTime": 10,
+      "description": "Required for building placement.",
+      "unlockedBySkill": "crafting.equipment.1",
+      "iconItemId": "hammer_tool",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -583,10 +725,12 @@
         {
           "itemId": "wood_plank",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "hammer_tool",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -598,14 +742,20 @@
       "id": "craft_bucket_metal",
       "name": "Metal Bucket",
       "station": "workbench",
+      "craftTime": 10,
+      "description": "Carries water/oil.",
+      "unlockedBySkill": "crafting.equipment.1",
+      "iconItemId": "bucket_metal",
       "inputs": [
         {
           "itemId": "iron_ore",
           "count": 3
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "bucket_metal",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -617,6 +767,10 @@
       "id": "craft_repair_kit",
       "name": "Repair Kit",
       "station": "workbench",
+      "craftTime": 12,
+      "description": "Restores 50% durability.",
+      "unlockedBySkill": "crafting.equipment.2",
+      "iconItemId": "repair_kit",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -629,10 +783,12 @@
         {
           "itemId": "duct_tape",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "repair_kit",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -644,14 +800,20 @@
       "id": "craft_whetstone",
       "name": "Whetstone",
       "station": "workbench",
+      "craftTime": 12,
+      "description": "+10% melee damage for 10 min after use.",
+      "unlockedBySkill": "crafting.equipment.2",
+      "iconItemId": "whetstone",
       "inputs": [
         {
           "itemId": "rock_2",
           "count": 4
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "whetstone",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -663,6 +825,10 @@
       "id": "craft_torch_metal",
       "name": "Metal Torch",
       "station": "workbench",
+      "craftTime": 12,
+      "description": "Permanent — wall-mountable.",
+      "unlockedBySkill": "crafting.equipment.2",
+      "iconItemId": "torch_metal",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -675,10 +841,12 @@
         {
           "itemId": "branch_b",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "torch_metal",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -690,6 +858,10 @@
       "id": "craft_shield_round",
       "name": "Round Shield",
       "station": "workbench",
+      "craftTime": 12,
+      "description": "Round Shield",
+      "unlockedBySkill": "crafting.equipment.3",
+      "iconItemId": "shield_round",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -702,10 +874,12 @@
         {
           "itemId": "iron_ore",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "shield_round",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -717,6 +891,10 @@
       "id": "craft_shield_round_2",
       "name": "Round Shield (reinforced)",
       "station": "workbench",
+      "craftTime": 12,
+      "description": "Round Shield (reinforced)",
+      "unlockedBySkill": "crafting.equipment.3",
+      "iconItemId": "shield_round_2",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -729,10 +907,12 @@
         {
           "itemId": "iron_ore",
           "count": 4
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "shield_round_2",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -744,6 +924,10 @@
       "id": "craft_workbench",
       "name": "Workbench",
       "station": "none",
+      "craftTime": 14,
+      "description": "Unlocks all workbench recipes.",
+      "unlockedBySkill": "crafting.equipment.4",
+      "iconItemId": "workbench",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -752,10 +936,12 @@
         {
           "itemId": "iron_ore",
           "count": 4
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "workbench",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -767,14 +953,20 @@
       "id": "craft_anvil",
       "name": "Anvil",
       "station": "workbench",
+      "craftTime": 14,
+      "description": "Required station for higher-tier metalwork.",
+      "unlockedBySkill": "crafting.equipment.4",
+      "iconItemId": "anvil",
       "inputs": [
         {
           "itemId": "iron_ore",
           "count": 12
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "anvil",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -786,6 +978,10 @@
       "id": "craft_weapon_stand",
       "name": "Weapon Stand",
       "station": "workbench",
+      "craftTime": 14,
+      "description": "Display rack — camp morale.",
+      "unlockedBySkill": "crafting.equipment.4",
+      "iconItemId": "weapon_stand",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -794,10 +990,12 @@
         {
           "itemId": "iron_ore",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "weapon_stand",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -809,6 +1007,10 @@
       "id": "craft_shield_celtic_golden",
       "name": "Celtic Shield (Golden)",
       "station": "anvil",
+      "craftTime": 16,
+      "description": "Legendary — quest reward style.",
+      "unlockedBySkill": "crafting.master",
+      "iconItemId": "shield_celtic_golden",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -821,10 +1023,12 @@
         {
           "itemId": "mineral_crystal",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "shield_celtic_golden",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -836,6 +1040,10 @@
       "id": "craft_workbench_drawers",
       "name": "Workbench (Drawers)",
       "station": "workbench",
+      "craftTime": 16,
+      "description": "+1 inventory bag slot near station.",
+      "unlockedBySkill": "crafting.equipment.4",
+      "iconItemId": "workbench_drawers",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -844,10 +1052,12 @@
         {
           "itemId": "iron_ore",
           "count": 6
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "workbench_drawers",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -859,6 +1069,10 @@
       "id": "craft_dagger",
       "name": "Iron Dagger",
       "station": "workbench",
+      "craftTime": 13,
+      "description": "Iron Dagger",
+      "unlockedBySkill": "crafting.bladesmith.1",
+      "iconItemId": "dagger",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -867,10 +1081,12 @@
         {
           "itemId": "wood_plank",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "dagger",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -882,6 +1098,10 @@
       "id": "craft_iron_sword",
       "name": "Iron Sword",
       "station": "workbench",
+      "craftTime": 13,
+      "description": "Iron Sword",
+      "unlockedBySkill": "crafting.bladesmith.1",
+      "iconItemId": "iron_sword",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -894,10 +1114,12 @@
         {
           "itemId": "leather",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "iron_sword",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -909,6 +1131,10 @@
       "id": "craft_sword_2",
       "name": "Steel Sword",
       "station": "anvil",
+      "craftTime": 16,
+      "description": "Steel Sword",
+      "unlockedBySkill": "crafting.bladesmith.2",
+      "iconItemId": "sword_2",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -921,10 +1147,12 @@
         {
           "itemId": "leather",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "sword_2",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -936,6 +1164,10 @@
       "id": "craft_dagger_2",
       "name": "Steel Dagger",
       "station": "anvil",
+      "craftTime": 16,
+      "description": "Steel Dagger",
+      "unlockedBySkill": "crafting.bladesmith.2",
+      "iconItemId": "dagger_2",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -944,10 +1176,12 @@
         {
           "itemId": "wood_plank",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "dagger_2",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -959,6 +1193,10 @@
       "id": "craft_axe_small",
       "name": "Hatchet",
       "station": "anvil",
+      "craftTime": 16,
+      "description": "Doubles as tree-chopping tool.",
+      "unlockedBySkill": "crafting.bladesmith.2",
+      "iconItemId": "axe_small",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -967,10 +1205,12 @@
         {
           "itemId": "wood_plank",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "axe_small",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -982,6 +1222,10 @@
       "id": "craft_axe",
       "name": "Battle Axe",
       "station": "anvil",
+      "craftTime": 19,
+      "description": "Battle Axe",
+      "unlockedBySkill": "crafting.bladesmith.3",
+      "iconItemId": "axe",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -994,10 +1238,12 @@
         {
           "itemId": "leather",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "axe",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -1009,6 +1255,10 @@
       "id": "craft_hammer_small",
       "name": "War Hammer",
       "station": "anvil",
+      "craftTime": 19,
+      "description": "War Hammer",
+      "unlockedBySkill": "crafting.bladesmith.3",
+      "iconItemId": "hammer_small",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -1021,10 +1271,12 @@
         {
           "itemId": "leather",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "hammer_small",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -1036,6 +1288,10 @@
       "id": "craft_spear",
       "name": "Spear",
       "station": "workbench",
+      "craftTime": 19,
+      "description": "Two-hand reach.",
+      "unlockedBySkill": "crafting.bladesmith.3",
+      "iconItemId": "spear",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -1044,10 +1300,12 @@
         {
           "itemId": "wood_plank",
           "count": 3
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "spear",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -1059,6 +1317,10 @@
       "id": "craft_sword_big",
       "name": "Greatsword",
       "station": "anvil",
+      "craftTime": 22,
+      "description": "Greatsword",
+      "unlockedBySkill": "crafting.bladesmith.4",
+      "iconItemId": "sword_big",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -1071,10 +1333,12 @@
         {
           "itemId": "leather",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "sword_big",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -1086,6 +1350,10 @@
       "id": "craft_axe_double",
       "name": "Double Axe",
       "station": "anvil",
+      "craftTime": 22,
+      "description": "Double Axe",
+      "unlockedBySkill": "crafting.bladesmith.4",
+      "iconItemId": "axe_double",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -1098,10 +1366,12 @@
         {
           "itemId": "leather",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "axe_double",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -1113,6 +1383,10 @@
       "id": "craft_hammer_double",
       "name": "Double Hammer",
       "station": "anvil",
+      "craftTime": 22,
+      "description": "Double Hammer",
+      "unlockedBySkill": "crafting.bladesmith.4",
+      "iconItemId": "hammer_double",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -1125,10 +1399,12 @@
         {
           "itemId": "leather",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "hammer_double",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -1140,6 +1416,10 @@
       "id": "craft_claymore",
       "name": "Claymore",
       "station": "anvil",
+      "craftTime": 25,
+      "description": "Claymore",
+      "unlockedBySkill": "crafting.bladesmith.4",
+      "iconItemId": "claymore",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -1152,10 +1432,12 @@
         {
           "itemId": "mineral_crystal",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "claymore",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -1167,6 +1449,10 @@
       "id": "craft_sword_golden",
       "name": "Golden Sword",
       "station": "anvil",
+      "craftTime": 25,
+      "description": "Legendary tier.",
+      "unlockedBySkill": "crafting.master",
+      "iconItemId": "sword_golden",
       "inputs": [
         {
           "itemId": "gold",
@@ -1179,10 +1465,12 @@
         {
           "itemId": "mineral_crystal",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "sword_golden",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -1194,6 +1482,10 @@
       "id": "craft_scythe",
       "name": "Scythe",
       "station": "anvil",
+      "craftTime": 25,
+      "description": "Doubles as harvest tool.",
+      "unlockedBySkill": "crafting.bladesmith.4",
+      "iconItemId": "scythe",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -1206,10 +1498,12 @@
         {
           "itemId": "leather",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "scythe",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -1221,6 +1515,10 @@
       "id": "craft_bow_wooden",
       "name": "Wooden Bow",
       "station": "workbench",
+      "craftTime": 13,
+      "description": "Wooden Bow",
+      "unlockedBySkill": "crafting.gunsmith.1",
+      "iconItemId": "bow_wooden",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -1229,10 +1527,12 @@
         {
           "itemId": "silk",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "bow_wooden",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -1244,6 +1544,10 @@
       "id": "craft_arrow_iron",
       "name": "Iron Arrow",
       "station": "workbench",
+      "craftTime": 10,
+      "description": "Iron Arrow",
+      "unlockedBySkill": "crafting.gunsmith.1",
+      "iconItemId": "arrow_iron",
       "inputs": [
         {
           "itemId": "branch_a",
@@ -1252,10 +1556,12 @@
         {
           "itemId": "iron_ore",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "arrow_iron",
-          "count": 10
+          "qty": 10
         }
       ],
       "output": {
@@ -1267,6 +1573,10 @@
       "id": "craft_pistol_1",
       "name": "Pistol Mk I",
       "station": "workbench",
+      "craftTime": 13,
+      "description": "Pistol Mk I",
+      "unlockedBySkill": "crafting.gunsmith.1",
+      "iconItemId": "pistol_1",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -1279,10 +1589,12 @@
         {
           "itemId": "copper_ore",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "pistol_1",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -1294,6 +1606,10 @@
       "id": "craft_bow_wooden_2",
       "name": "Wooden Bow (Compound)",
       "station": "workbench",
+      "craftTime": 16,
+      "description": "Wooden Bow (Compound)",
+      "unlockedBySkill": "crafting.gunsmith.2",
+      "iconItemId": "bow_wooden_2",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -1306,10 +1622,12 @@
         {
           "itemId": "iron_ore",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "bow_wooden_2",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -1321,6 +1639,10 @@
       "id": "craft_pistol_2",
       "name": "Pistol Mk II",
       "station": "anvil",
+      "craftTime": 16,
+      "description": "Pistol Mk II",
+      "unlockedBySkill": "crafting.gunsmith.2",
+      "iconItemId": "pistol_2",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -1333,10 +1655,12 @@
         {
           "itemId": "copper_ore",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "pistol_2",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -1348,6 +1672,10 @@
       "id": "craft_pistol_3",
       "name": "Pistol Mk III",
       "station": "anvil",
+      "craftTime": 16,
+      "description": "Pistol Mk III",
+      "unlockedBySkill": "crafting.gunsmith.2",
+      "iconItemId": "pistol_3",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -1356,10 +1684,12 @@
         {
           "itemId": "copper_ore",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "pistol_3",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -1371,6 +1701,10 @@
       "id": "craft_revolver_1",
       "name": "Revolver",
       "station": "anvil",
+      "craftTime": 16,
+      "description": "Revolver",
+      "unlockedBySkill": "crafting.gunsmith.2",
+      "iconItemId": "revolver_1",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -1383,10 +1717,12 @@
         {
           "itemId": "copper_ore",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "revolver_1",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -1398,6 +1734,10 @@
       "id": "craft_smg_1",
       "name": "Submachine Gun",
       "station": "anvil",
+      "craftTime": 16,
+      "description": "Submachine Gun",
+      "unlockedBySkill": "crafting.gunsmith.2",
+      "iconItemId": "smg_1",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -1406,10 +1746,12 @@
         {
           "itemId": "copper_ore",
           "count": 3
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "smg_1",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -1421,6 +1763,10 @@
       "id": "craft_smg_2",
       "name": "Submachine Gun II",
       "station": "anvil",
+      "craftTime": 19,
+      "description": "Submachine Gun II",
+      "unlockedBySkill": "crafting.gunsmith.3",
+      "iconItemId": "smg_2",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -1433,10 +1779,12 @@
         {
           "itemId": "leather",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "smg_2",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -1448,6 +1796,10 @@
       "id": "craft_smg_3",
       "name": "Submachine Gun III",
       "station": "anvil",
+      "craftTime": 19,
+      "description": "Submachine Gun III",
+      "unlockedBySkill": "crafting.gunsmith.3",
+      "iconItemId": "smg_3",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -1456,10 +1808,12 @@
         {
           "itemId": "copper_ore",
           "count": 4
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "smg_3",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -1471,6 +1825,10 @@
       "id": "craft_shotgun_1",
       "name": "Shotgun",
       "station": "anvil",
+      "craftTime": 19,
+      "description": "Shotgun",
+      "unlockedBySkill": "crafting.gunsmith.3",
+      "iconItemId": "shotgun_1",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -1479,10 +1837,12 @@
         {
           "itemId": "wood_plank",
           "count": 3
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "shotgun_1",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -1494,6 +1854,10 @@
       "id": "craft_shotgun_2",
       "name": "Shotgun II",
       "station": "anvil",
+      "craftTime": 19,
+      "description": "Shotgun II",
+      "unlockedBySkill": "crafting.gunsmith.3",
+      "iconItemId": "shotgun_2",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -1506,10 +1870,12 @@
         {
           "itemId": "copper_ore",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "shotgun_2",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -1521,6 +1887,10 @@
       "id": "craft_bow_evil",
       "name": "Cursed Bow",
       "station": "anvil",
+      "craftTime": 19,
+      "description": "Dark/cursed variant.",
+      "unlockedBySkill": "crafting.gunsmith.3",
+      "iconItemId": "bow_evil",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -1533,10 +1903,12 @@
         {
           "itemId": "herb_rare",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "bow_evil",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -1548,6 +1920,10 @@
       "id": "craft_attach_silencer_1",
       "name": "Silencer Mk I",
       "station": "workbench",
+      "craftTime": 14,
+      "description": "Silencer Mk I",
+      "unlockedBySkill": "crafting.tinkering.1",
+      "iconItemId": "attach_silencer_1",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -1556,10 +1932,12 @@
         {
           "itemId": "copper_ore",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "attach_silencer_1",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -1571,6 +1949,10 @@
       "id": "craft_attach_scope_1",
       "name": "Scope Mk I",
       "station": "workbench",
+      "craftTime": 14,
+      "description": "Scope Mk I",
+      "unlockedBySkill": "crafting.tinkering.1",
+      "iconItemId": "attach_scope_1",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -1583,10 +1965,12 @@
         {
           "itemId": "mineral_crystal",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "attach_scope_1",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -1598,6 +1982,10 @@
       "id": "craft_assault_rifle_1",
       "name": "Assault Rifle",
       "station": "anvil",
+      "craftTime": 22,
+      "description": "Assault Rifle",
+      "unlockedBySkill": "crafting.gunsmith.4",
+      "iconItemId": "assault_rifle_1",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -1610,10 +1998,12 @@
         {
           "itemId": "ancient_ore",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "assault_rifle_1",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -1625,6 +2015,10 @@
       "id": "craft_assault_rifle_2",
       "name": "Assault Rifle II",
       "station": "anvil",
+      "craftTime": 22,
+      "description": "Assault Rifle II",
+      "unlockedBySkill": "crafting.gunsmith.4",
+      "iconItemId": "assault_rifle_2",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -1633,10 +2027,12 @@
         {
           "itemId": "copper_ore",
           "count": 5
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "assault_rifle_2",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -1648,6 +2044,10 @@
       "id": "craft_assault_rifle_3",
       "name": "Assault Rifle III",
       "station": "anvil",
+      "craftTime": 22,
+      "description": "Assault Rifle III",
+      "unlockedBySkill": "crafting.gunsmith.4",
+      "iconItemId": "assault_rifle_3",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -1660,10 +2060,12 @@
         {
           "itemId": "leather",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "assault_rifle_3",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -1675,6 +2077,10 @@
       "id": "craft_shotgun_sawedoff",
       "name": "Sawed-Off Shotgun",
       "station": "anvil",
+      "craftTime": 22,
+      "description": "Sawed-Off Shotgun",
+      "unlockedBySkill": "crafting.gunsmith.4",
+      "iconItemId": "shotgun_sawedoff",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -1683,10 +2089,12 @@
         {
           "itemId": "wood_plank",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "shotgun_sawedoff",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -1698,6 +2106,10 @@
       "id": "craft_shotgun_3",
       "name": "Shotgun III",
       "station": "anvil",
+      "craftTime": 22,
+      "description": "Shotgun III",
+      "unlockedBySkill": "crafting.gunsmith.4",
+      "iconItemId": "shotgun_3",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -1710,10 +2122,12 @@
         {
           "itemId": "copper_ore",
           "count": 3
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "shotgun_3",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -1725,6 +2139,10 @@
       "id": "craft_bullpup_1",
       "name": "Bullpup Rifle",
       "station": "anvil",
+      "craftTime": 22,
+      "description": "Bullpup Rifle",
+      "unlockedBySkill": "crafting.gunsmith.4",
+      "iconItemId": "bullpup_1",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -1733,10 +2151,12 @@
         {
           "itemId": "copper_ore",
           "count": 6
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "bullpup_1",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -1748,6 +2168,10 @@
       "id": "craft_sniper_1",
       "name": "Sniper Rifle",
       "station": "anvil",
+      "craftTime": 22,
+      "description": "Sniper Rifle",
+      "unlockedBySkill": "crafting.gunsmith.4",
+      "iconItemId": "sniper_1",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -1760,10 +2184,12 @@
         {
           "itemId": "mineral_crystal",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "sniper_1",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -1775,6 +2201,10 @@
       "id": "craft_attach_bipod",
       "name": "Bipod",
       "station": "workbench",
+      "craftTime": 16,
+      "description": "Bipod",
+      "unlockedBySkill": "crafting.tinkering.3",
+      "iconItemId": "attach_bipod",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -1783,10 +2213,12 @@
         {
           "itemId": "copper_ore",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "attach_bipod",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -1798,6 +2230,10 @@
       "id": "craft_attach_grip",
       "name": "Grip",
       "station": "workbench",
+      "craftTime": 16,
+      "description": "Grip",
+      "unlockedBySkill": "crafting.tinkering.2",
+      "iconItemId": "attach_grip",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -1806,10 +2242,12 @@
         {
           "itemId": "leather",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "attach_grip",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -1821,6 +2259,10 @@
       "id": "craft_sniper_5",
       "name": "Sniper Rifle V",
       "station": "anvil",
+      "craftTime": 25,
+      "description": "Sniper Rifle V",
+      "unlockedBySkill": "crafting.gunsmith.4",
+      "iconItemId": "sniper_5",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -1833,10 +2275,12 @@
         {
           "itemId": "mineral_crystal",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "sniper_5",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -1848,6 +2292,10 @@
       "id": "craft_sniper_6",
       "name": "Rift-Hunter Sniper",
       "station": "anvil",
+      "craftTime": 25,
+      "description": "Endgame.",
+      "unlockedBySkill": "crafting.master",
+      "iconItemId": "sniper_6",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -1860,10 +2308,12 @@
         {
           "itemId": "crystal_of_x",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "sniper_6",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -1875,6 +2325,10 @@
       "id": "craft_bow_golden",
       "name": "Golden Bow",
       "station": "anvil",
+      "craftTime": 25,
+      "description": "Legendary.",
+      "unlockedBySkill": "crafting.master",
+      "iconItemId": "bow_golden",
       "inputs": [
         {
           "itemId": "gold",
@@ -1887,10 +2341,12 @@
         {
           "itemId": "mineral_crystal",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "bow_golden",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -1902,6 +2358,10 @@
       "id": "craft_assault_rifle2_4",
       "name": "Assault Rifle (Rift-Spec)",
       "station": "anvil",
+      "craftTime": 25,
+      "description": "Assault Rifle (Rift-Spec)",
+      "unlockedBySkill": "crafting.gunsmith.4",
+      "iconItemId": "assault_rifle2_4",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -1914,10 +2374,12 @@
         {
           "itemId": "crystal_of_x",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "assault_rifle2_4",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -1929,6 +2391,10 @@
       "id": "craft_bullpup_3",
       "name": "Bullpup (Rift-Spec)",
       "station": "anvil",
+      "craftTime": 25,
+      "description": "Bullpup (Rift-Spec)",
+      "unlockedBySkill": "crafting.gunsmith.4",
+      "iconItemId": "bullpup_3",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -1941,10 +2407,12 @@
         {
           "itemId": "crystal_of_x",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "bullpup_3",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -1956,6 +2424,10 @@
       "id": "craft_attach_silencer_long",
       "name": "Silencer (Long)",
       "station": "workbench",
+      "craftTime": 18,
+      "description": "Silencer (Long)",
+      "unlockedBySkill": "crafting.tinkering.3",
+      "iconItemId": "attach_silencer_long",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -1964,10 +2436,12 @@
         {
           "itemId": "copper_ore",
           "count": 3
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "attach_silencer_long",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -1979,6 +2453,10 @@
       "id": "craft_attach_scope_3",
       "name": "Scope Mk III",
       "station": "workbench",
+      "craftTime": 18,
+      "description": "Scope Mk III",
+      "unlockedBySkill": "crafting.tinkering.3",
+      "iconItemId": "attach_scope_3",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -1991,10 +2469,12 @@
         {
           "itemId": "mineral_crystal",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "attach_scope_3",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -2006,6 +2486,10 @@
       "id": "craft_attach_tripod",
       "name": "Tripod",
       "station": "workbench",
+      "craftTime": 18,
+      "description": "Tripod",
+      "unlockedBySkill": "crafting.tinkering.3",
+      "iconItemId": "attach_tripod",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -2014,10 +2498,12 @@
         {
           "itemId": "copper_ore",
           "count": 3
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "attach_tripod",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -2029,6 +2515,10 @@
       "id": "craft_gun_scifi_pistol",
       "name": "Sci-Fi Pistol",
       "station": "anvil",
+      "craftTime": 25,
+      "description": "Energy sidearm — gateway to sci-fi tier.",
+      "unlockedBySkill": "crafting.master",
+      "iconItemId": "gun_scifi_pistol",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -2041,10 +2531,12 @@
         {
           "itemId": "crystal_of_x",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "gun_scifi_pistol",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -2056,6 +2548,10 @@
       "id": "craft_armour_peasant_chest",
       "name": "Peasant Tunic",
       "station": "workbench",
+      "craftTime": 10,
+      "description": "Use peasant_female.fbx for female slot.",
+      "unlockedBySkill": "crafting.armour.1",
+      "iconItemId": "armour_peasant_chest",
       "inputs": [
         {
           "itemId": "silk",
@@ -2064,10 +2560,12 @@
         {
           "itemId": "leather",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "armour_peasant_chest",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -2079,6 +2577,10 @@
       "id": "craft_armour_peasant_legs",
       "name": "Peasant Trousers",
       "station": "workbench",
+      "craftTime": 10,
+      "description": "Peasant Trousers",
+      "unlockedBySkill": "crafting.armour.1",
+      "iconItemId": "armour_peasant_legs",
       "inputs": [
         {
           "itemId": "silk",
@@ -2087,10 +2589,12 @@
         {
           "itemId": "leather",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "armour_peasant_legs",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -2102,14 +2606,20 @@
       "id": "craft_armour_peasant_feet",
       "name": "Peasant Boots",
       "station": "workbench",
+      "craftTime": 10,
+      "description": "Peasant Boots",
+      "unlockedBySkill": "crafting.armour.1",
+      "iconItemId": "armour_peasant_feet",
       "inputs": [
         {
           "itemId": "leather",
           "count": 3
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "armour_peasant_feet",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -2121,14 +2631,20 @@
       "id": "craft_armour_peasant_arms",
       "name": "Peasant Sleeves",
       "station": "workbench",
+      "craftTime": 10,
+      "description": "Peasant Sleeves",
+      "unlockedBySkill": "crafting.armour.1",
+      "iconItemId": "armour_peasant_arms",
       "inputs": [
         {
           "itemId": "silk",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "armour_peasant_arms",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -2140,6 +2656,10 @@
       "id": "craft_armour_leather_set",
       "name": "Leather Armour Set",
       "station": "workbench",
+      "craftTime": 12,
+      "description": "Set bonus when all 4 pieces equipped.",
+      "unlockedBySkill": "crafting.armour.2",
+      "iconItemId": "armour_leather_set",
       "inputs": [
         {
           "itemId": "leather",
@@ -2152,10 +2672,12 @@
         {
           "itemId": "iron_ore",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "armour_leather_set",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -2167,6 +2689,10 @@
       "id": "craft_helmet_open",
       "name": "Open Helmet",
       "station": "anvil",
+      "craftTime": 12,
+      "description": "Open Helmet",
+      "unlockedBySkill": "crafting.armour.2",
+      "iconItemId": "helmet_open",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -2175,10 +2701,12 @@
         {
           "itemId": "leather",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "helmet_open",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -2190,6 +2718,10 @@
       "id": "craft_armour_mail_set",
       "name": "Chain Mail Set",
       "station": "anvil",
+      "craftTime": 14,
+      "description": "Chain Mail Set",
+      "unlockedBySkill": "crafting.armour.3",
+      "iconItemId": "armour_mail_set",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -2198,10 +2730,12 @@
         {
           "itemId": "leather",
           "count": 4
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "armour_mail_set",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -2213,6 +2747,10 @@
       "id": "craft_shield_heater",
       "name": "Heater Shield",
       "station": "anvil",
+      "craftTime": 14,
+      "description": "Heater Shield",
+      "unlockedBySkill": "crafting.armour.3",
+      "iconItemId": "shield_heater",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -2225,10 +2763,12 @@
         {
           "itemId": "leather",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "shield_heater",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -2240,6 +2780,10 @@
       "id": "craft_armour_plate_set",
       "name": "Plate Armour Set",
       "station": "anvil",
+      "craftTime": 16,
+      "description": "Plate Armour Set",
+      "unlockedBySkill": "crafting.armour.4",
+      "iconItemId": "armour_plate_set",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -2252,10 +2796,12 @@
         {
           "itemId": "silk",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "armour_plate_set",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -2267,6 +2813,10 @@
       "id": "craft_shield_heater_2",
       "name": "Heater Shield (Reinforced)",
       "station": "anvil",
+      "craftTime": 16,
+      "description": "Heater Shield (Reinforced)",
+      "unlockedBySkill": "crafting.armour.4",
+      "iconItemId": "shield_heater_2",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -2279,10 +2829,12 @@
         {
           "itemId": "leather",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "shield_heater_2",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -2294,6 +2846,10 @@
       "id": "craft_helmet_full",
       "name": "Great Helm",
       "station": "anvil",
+      "craftTime": 16,
+      "description": "Great Helm",
+      "unlockedBySkill": "crafting.armour.4",
+      "iconItemId": "helmet_full",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -2302,10 +2858,12 @@
         {
           "itemId": "leather",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "helmet_full",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -2317,6 +2875,10 @@
       "id": "craft_armour_ranger_chest",
       "name": "Ranger Cuirass",
       "station": "anvil",
+      "craftTime": 18,
+      "description": "Ranger Cuirass",
+      "unlockedBySkill": "crafting.armour.4",
+      "iconItemId": "armour_ranger_chest",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -2329,10 +2891,12 @@
         {
           "itemId": "mineral_crystal",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "armour_ranger_chest",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -2344,6 +2908,10 @@
       "id": "craft_armour_ranger_legs",
       "name": "Ranger Greaves",
       "station": "anvil",
+      "craftTime": 18,
+      "description": "Ranger Greaves",
+      "unlockedBySkill": "crafting.armour.4",
+      "iconItemId": "armour_ranger_legs",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -2352,10 +2920,12 @@
         {
           "itemId": "leather",
           "count": 4
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "armour_ranger_legs",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -2367,6 +2937,10 @@
       "id": "craft_armour_ranger_feet",
       "name": "Ranger Boots",
       "station": "anvil",
+      "craftTime": 18,
+      "description": "Ranger Boots",
+      "unlockedBySkill": "crafting.armour.4",
+      "iconItemId": "armour_ranger_feet",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -2375,10 +2949,12 @@
         {
           "itemId": "leather",
           "count": 4
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "armour_ranger_feet",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -2390,6 +2966,10 @@
       "id": "craft_armour_ranger_arms",
       "name": "Ranger Bracers",
       "station": "anvil",
+      "craftTime": 18,
+      "description": "Ranger Bracers",
+      "unlockedBySkill": "crafting.armour.4",
+      "iconItemId": "armour_ranger_arms",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -2398,10 +2978,12 @@
         {
           "itemId": "leather",
           "count": 3
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "armour_ranger_arms",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -2413,6 +2995,10 @@
       "id": "craft_armour_ranger_head",
       "name": "Ranger Hood",
       "station": "anvil",
+      "craftTime": 18,
+      "description": "Ranger Hood",
+      "unlockedBySkill": "crafting.armour.4",
+      "iconItemId": "armour_ranger_head",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -2425,10 +3011,12 @@
         {
           "itemId": "silk",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "armour_ranger_head",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -2440,6 +3028,10 @@
       "id": "craft_armour_ranger_shoulders",
       "name": "Ranger Pauldrons",
       "station": "anvil",
+      "craftTime": 18,
+      "description": "Ranger Pauldrons",
+      "unlockedBySkill": "crafting.armour.4",
+      "iconItemId": "armour_ranger_shoulders",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -2448,10 +3040,12 @@
         {
           "itemId": "leather",
           "count": 4
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "armour_ranger_shoulders",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -2463,6 +3057,10 @@
       "id": "build_floor_modular",
       "name": "Floor (modular)",
       "station": "hammer_tool",
+      "craftTime": 16,
+      "description": "Floor (modular)",
+      "unlockedBySkill": "township.buildings.1",
+      "iconItemId": "floor_modular",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -2471,10 +3069,12 @@
         {
           "itemId": "rock_2",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "floor_modular",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -2486,6 +3086,10 @@
       "id": "build_wall_modular",
       "name": "Wall (modular)",
       "station": "hammer_tool",
+      "craftTime": 16,
+      "description": "Wall (modular)",
+      "unlockedBySkill": "township.buildings.1",
+      "iconItemId": "wall_modular",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -2494,10 +3098,12 @@
         {
           "itemId": "rock_2",
           "count": 3
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "wall_modular",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -2509,6 +3115,10 @@
       "id": "build_door_round",
       "name": "Door (round)",
       "station": "hammer_tool",
+      "craftTime": 16,
+      "description": "Door (round)",
+      "unlockedBySkill": "township.buildings.1",
+      "iconItemId": "door_round",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -2517,10 +3127,12 @@
         {
           "itemId": "iron_ore",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "door_round",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -2532,6 +3144,10 @@
       "id": "build_floor_brick",
       "name": "Floor (brick)",
       "station": "hammer_tool",
+      "craftTime": 20,
+      "description": "Floor (brick)",
+      "unlockedBySkill": "township.buildings.2",
+      "iconItemId": "floor_brick",
       "inputs": [
         {
           "itemId": "rock_2",
@@ -2540,10 +3156,12 @@
         {
           "itemId": "wood_plank",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "floor_brick",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -2555,14 +3173,20 @@
       "id": "build_floor_wood_dark",
       "name": "Floor (dark wood)",
       "station": "hammer_tool",
+      "craftTime": 20,
+      "description": "Floor (dark wood)",
+      "unlockedBySkill": "township.buildings.2",
+      "iconItemId": "floor_wood_dark",
       "inputs": [
         {
           "itemId": "wood_plank",
           "count": 6
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "floor_wood_dark",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -2574,6 +3198,10 @@
       "id": "build_window",
       "name": "Window",
       "station": "hammer_tool",
+      "craftTime": 20,
+      "description": "Path approximate — pick by variant.",
+      "unlockedBySkill": "township.buildings.2",
+      "iconItemId": "window",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -2582,10 +3210,12 @@
         {
           "itemId": "rock_2",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "window",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -2597,6 +3227,10 @@
       "id": "build_window_shutters",
       "name": "Window Shutters",
       "station": "hammer_tool",
+      "craftTime": 20,
+      "description": "Path approximate.",
+      "unlockedBySkill": "township.buildings.2",
+      "iconItemId": "window_shutters",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -2605,10 +3239,12 @@
         {
           "itemId": "iron_ore",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "window_shutters",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -2620,6 +3256,10 @@
       "id": "build_doorframe_round",
       "name": "Door Frame (round)",
       "station": "hammer_tool",
+      "craftTime": 20,
+      "description": "Door Frame (round)",
+      "unlockedBySkill": "township.buildings.2",
+      "iconItemId": "doorframe_round",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -2628,10 +3268,12 @@
         {
           "itemId": "rock_2",
           "count": 3
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "doorframe_round",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -2643,6 +3285,10 @@
       "id": "build_roof_tile",
       "name": "Roof Tile (round)",
       "station": "hammer_tool",
+      "craftTime": 24,
+      "description": "Path approximate.",
+      "unlockedBySkill": "township.buildings.3",
+      "iconItemId": "roof_tile",
       "inputs": [
         {
           "itemId": "rock_2",
@@ -2651,10 +3297,12 @@
         {
           "itemId": "wood_plank",
           "count": 3
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "roof_tile",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -2666,6 +3314,10 @@
       "id": "build_overhang_plaster",
       "name": "Overhang (plaster)",
       "station": "hammer_tool",
+      "craftTime": 24,
+      "description": "Overhang (plaster)",
+      "unlockedBySkill": "township.buildings.3",
+      "iconItemId": "overhang_plaster",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -2674,10 +3326,12 @@
         {
           "itemId": "rock_2",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "overhang_plaster",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -2689,6 +3343,10 @@
       "id": "build_balcony_simple",
       "name": "Balcony (simple)",
       "station": "hammer_tool",
+      "craftTime": 24,
+      "description": "Balcony (simple)",
+      "unlockedBySkill": "township.buildings.3",
+      "iconItemId": "balcony_simple",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -2697,10 +3355,12 @@
         {
           "itemId": "iron_ore",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "balcony_simple",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -2712,6 +3372,10 @@
       "id": "build_stairs_modular",
       "name": "Stairs (modular)",
       "station": "hammer_tool",
+      "craftTime": 24,
+      "description": "Stairs (modular)",
+      "unlockedBySkill": "township.buildings.3",
+      "iconItemId": "stairs_modular",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -2720,10 +3384,12 @@
         {
           "itemId": "rock_2",
           "count": 4
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "stairs_modular",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -2735,6 +3401,10 @@
       "id": "build_workbench_drawers",
       "name": "Workbench (Drawers)",
       "station": "hammer_tool",
+      "craftTime": 28,
+      "description": "Same node as crafting recipe — placed building.",
+      "unlockedBySkill": "township.buildings.4",
+      "iconItemId": "workbench_drawers",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -2743,10 +3413,12 @@
         {
           "itemId": "iron_ore",
           "count": 6
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "workbench_drawers",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -2758,6 +3430,10 @@
       "id": "build_armory_chest",
       "name": "Armoury Chest",
       "station": "hammer_tool",
+      "craftTime": 28,
+      "description": "Stores weapons/armour with a tag filter.",
+      "unlockedBySkill": "township.buildings.4",
+      "iconItemId": "armory_chest",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -2766,10 +3442,12 @@
         {
           "itemId": "iron_ore",
           "count": 6
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "armory_chest",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -2781,6 +3459,10 @@
       "id": "build_metal_fence",
       "name": "Metal Fence",
       "station": "hammer_tool",
+      "craftTime": 28,
+      "description": "Metal Fence",
+      "unlockedBySkill": "township.buildings.4",
+      "iconItemId": "metal_fence",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -2789,10 +3471,12 @@
         {
           "itemId": "wood_plank",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "metal_fence",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -2804,6 +3488,10 @@
       "id": "build_overhang_uneven_brick",
       "name": "Overhang (uneven brick)",
       "station": "hammer_tool",
+      "craftTime": 32,
+      "description": "Overhang (uneven brick)",
+      "unlockedBySkill": "township.buildings.4",
+      "iconItemId": "overhang_uneven_brick",
       "inputs": [
         {
           "itemId": "rock_2",
@@ -2812,10 +3500,12 @@
         {
           "itemId": "wood_plank",
           "count": 3
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "overhang_uneven_brick",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -2827,6 +3517,10 @@
       "id": "build_balcony_cross",
       "name": "Balcony (cross)",
       "station": "hammer_tool",
+      "craftTime": 32,
+      "description": "Balcony (cross)",
+      "unlockedBySkill": "township.buildings.4",
+      "iconItemId": "balcony_cross",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -2835,10 +3529,12 @@
         {
           "itemId": "iron_ore",
           "count": 4
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "balcony_cross",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -2850,6 +3546,10 @@
       "id": "build_keep_chimney",
       "name": "Chimney",
       "station": "hammer_tool",
+      "craftTime": 32,
+      "description": "Chimney",
+      "unlockedBySkill": "township.buildings.4",
+      "iconItemId": "keep_chimney",
       "inputs": [
         {
           "itemId": "rock_2",
@@ -2858,10 +3558,12 @@
         {
           "itemId": "iron_ore",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "keep_chimney",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -2873,6 +3575,10 @@
       "id": "build_market_complex",
       "name": "Market Complex",
       "station": "hammer_tool",
+      "craftTime": 32,
+      "description": "Multi-stall market — Boomtown unlock.",
+      "unlockedBySkill": "township.master",
+      "iconItemId": "market_complex",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -2885,10 +3591,12 @@
         {
           "itemId": "iron_ore",
           "count": 6
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "market_complex",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -2900,6 +3608,10 @@
       "id": "build_banner",
       "name": "Camp Banner",
       "station": "hammer_tool",
+      "craftTime": 10,
+      "description": "Camp morale +5 in radius.",
+      "unlockedBySkill": "township.leadership.2",
+      "iconItemId": "banner",
       "inputs": [
         {
           "itemId": "silk",
@@ -2908,10 +3620,12 @@
         {
           "itemId": "wood_plank",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "banner",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -2923,6 +3637,10 @@
       "id": "build_recruit_post",
       "name": "Recruit Post",
       "station": "hammer_tool",
+      "craftTime": 20,
+      "description": "NPCs from town pool can be hired here.",
+      "unlockedBySkill": "township.leadership.3",
+      "iconItemId": "recruit_post",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -2931,10 +3649,12 @@
         {
           "itemId": "iron_ore",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "recruit_post",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -2946,6 +3666,10 @@
       "id": "build_banner_2",
       "name": "Decorated Banner",
       "station": "hammer_tool",
+      "craftTime": 14,
+      "description": "Decorated Banner",
+      "unlockedBySkill": "township.leadership.4",
+      "iconItemId": "banner_2",
       "inputs": [
         {
           "itemId": "silk",
@@ -2958,10 +3682,12 @@
         {
           "itemId": "gold",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "banner_2",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -2973,6 +3699,10 @@
       "id": "build_market_stall",
       "name": "Market Stall",
       "station": "hammer_tool",
+      "craftTime": 24,
+      "description": "Trade post for ambient NPCs.",
+      "unlockedBySkill": "township.leadership.4",
+      "iconItemId": "market_stall",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -2981,10 +3711,12 @@
         {
           "itemId": "silk",
           "count": 3
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "market_stall",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -2996,6 +3728,10 @@
       "id": "build_war_banner",
       "name": "War Banner",
       "station": "hammer_tool",
+      "craftTime": 16,
+      "description": "Combat morale buff to allied NPCs.",
+      "unlockedBySkill": "township.leadership.4",
+      "iconItemId": "war_banner",
       "inputs": [
         {
           "itemId": "silk",
@@ -3008,10 +3744,12 @@
         {
           "itemId": "gold",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "war_banner",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -3023,6 +3761,10 @@
       "id": "build_command_tent",
       "name": "Command Tent",
       "station": "hammer_tool",
+      "craftTime": 32,
+      "description": "Issue squad orders.",
+      "unlockedBySkill": "township.master",
+      "iconItemId": "command_tent",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -3035,10 +3777,12 @@
         {
           "itemId": "iron_ore",
           "count": 4
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "command_tent",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -3050,14 +3794,20 @@
       "id": "cook_meat",
       "name": "Cook Meat",
       "station": "campfire",
+      "craftTime": 6,
+      "description": "Already-shipped baseline.",
+      "unlockedBySkill": "chemistry.growth.1",
+      "iconItemId": "meat_cooked",
       "inputs": [
         {
           "itemId": "meat_raw",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "meat_cooked",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -3069,14 +3819,20 @@
       "id": "cook_fish",
       "name": "Cook Fish",
       "station": "campfire",
+      "craftTime": 6,
+      "description": "Already-shipped baseline.",
+      "unlockedBySkill": "chemistry.growth.1",
+      "iconItemId": "fish_cooked",
       "inputs": [
         {
           "itemId": "fish_raw",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "fish_cooked",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -3088,6 +3844,10 @@
       "id": "cook_berry_jam",
       "name": "Berry Jam",
       "station": "cooking_rack",
+      "craftTime": 8,
+      "description": "Berry Jam",
+      "unlockedBySkill": "chemistry.growth.1",
+      "iconItemId": "berry_jam",
       "inputs": [
         {
           "itemId": "berries",
@@ -3096,10 +3856,12 @@
         {
           "itemId": "bottle_empty",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "berry_jam",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -3111,6 +3873,10 @@
       "id": "cook_stew",
       "name": "Hearty Stew",
       "station": "cooking_rack",
+      "craftTime": 10,
+      "description": "Buff stacks with rank 2 duration boost.",
+      "unlockedBySkill": "chemistry.growth.2",
+      "iconItemId": "stew",
       "inputs": [
         {
           "itemId": "meat_raw",
@@ -3123,10 +3889,12 @@
         {
           "itemId": "mushroom_a",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "stew",
-          "count": 2
+          "qty": 2
         }
       ],
       "output": {
@@ -3138,6 +3906,10 @@
       "id": "cook_grain_porridge",
       "name": "Grain Porridge",
       "station": "cooking_rack",
+      "craftTime": 10,
+      "description": "Grain Porridge",
+      "unlockedBySkill": "chemistry.growth.2",
+      "iconItemId": "grain_porridge",
       "inputs": [
         {
           "itemId": "grain",
@@ -3146,10 +3918,12 @@
         {
           "itemId": "ice_water",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "grain_porridge",
-          "count": 2
+          "qty": 2
         }
       ],
       "output": {
@@ -3161,14 +3935,20 @@
       "id": "cook_roast_corn",
       "name": "Roast Corn",
       "station": "campfire",
+      "craftTime": 10,
+      "description": "Roast Corn",
+      "unlockedBySkill": "chemistry.growth.2",
+      "iconItemId": "roast_corn",
       "inputs": [
         {
           "itemId": "corn",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "roast_corn",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -3180,6 +3960,10 @@
       "id": "cook_roast_meat",
       "name": "Roast Meat",
       "station": "cooking_rack",
+      "craftTime": 12,
+      "description": "Roast Meat",
+      "unlockedBySkill": "chemistry.growth.3",
+      "iconItemId": "roast_meat",
       "inputs": [
         {
           "itemId": "meat_raw",
@@ -3188,10 +3972,12 @@
         {
           "itemId": "herb_common",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "roast_meat",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -3203,6 +3989,10 @@
       "id": "cook_fish_filet_grilled",
       "name": "Grilled Fish Filet",
       "station": "cooking_rack",
+      "craftTime": 12,
+      "description": "Grilled Fish Filet",
+      "unlockedBySkill": "chemistry.growth.3",
+      "iconItemId": "fish_filet_grilled",
       "inputs": [
         {
           "itemId": "fish_filet",
@@ -3211,10 +4001,12 @@
         {
           "itemId": "herb_common",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "fish_filet_grilled",
-          "count": 2
+          "qty": 2
         }
       ],
       "output": {
@@ -3226,6 +4018,10 @@
       "id": "cook_mushroom_skewer",
       "name": "Mushroom Skewer",
       "station": "campfire",
+      "craftTime": 12,
+      "description": "Mushroom Skewer",
+      "unlockedBySkill": "chemistry.growth.3",
+      "iconItemId": "mushroom_skewer",
       "inputs": [
         {
           "itemId": "mushroom_a",
@@ -3238,10 +4034,12 @@
         {
           "itemId": "branch_a",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "mushroom_skewer",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -3253,6 +4051,10 @@
       "id": "cook_hunters_pie",
       "name": "Hunter\\",
       "station": "cooking_rack",
+      "craftTime": 14,
+      "description": "Long-duration combat buff.",
+      "unlockedBySkill": "chemistry.growth.4",
+      "iconItemId": "hunters_pie",
       "inputs": [
         {
           "itemId": "meat_raw",
@@ -3265,10 +4067,12 @@
         {
           "itemId": "mushroom_b",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "hunters_pie",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -3280,6 +4084,10 @@
       "id": "cook_camp_feast",
       "name": "Camp Feast",
       "station": "cooking_rack",
+      "craftTime": 14,
+      "description": "Group buff — feeds nearby NPCs.",
+      "unlockedBySkill": "chemistry.growth.4",
+      "iconItemId": "camp_feast",
       "inputs": [
         {
           "itemId": "meat_raw",
@@ -3296,10 +4104,12 @@
         {
           "itemId": "herb_rare",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "camp_feast",
-          "count": 4
+          "qty": 4
         }
       ],
       "output": {
@@ -3311,6 +4121,10 @@
       "id": "cook_kings_table",
       "name": "King\\",
       "station": "cooking_rack",
+      "craftTime": 16,
+      "description": "Set-piece buff.",
+      "unlockedBySkill": "chemistry.master",
+      "iconItemId": "kings_table",
       "inputs": [
         {
           "itemId": "meat_raw",
@@ -3331,10 +4145,12 @@
         {
           "itemId": "herb_rare",
           "count": 4
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "kings_table",
-          "count": 6
+          "qty": 6
         }
       ],
       "output": {
@@ -3346,6 +4162,10 @@
       "id": "cook_stratocolony_ration",
       "name": "Stratocolony Ration",
       "station": "cooking_rack",
+      "craftTime": 16,
+      "description": "Lore-flavour endgame food.",
+      "unlockedBySkill": "chemistry.growth.4",
+      "iconItemId": "stratocolony_ration",
       "inputs": [
         {
           "itemId": "meat_raw",
@@ -3358,10 +4178,12 @@
         {
           "itemId": "herb_rare",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "stratocolony_ration",
-          "count": 4
+          "qty": 4
         }
       ],
       "output": {
@@ -3373,6 +4195,10 @@
       "id": "brew_minor_health",
       "name": "Minor Health Potion",
       "station": "workbench",
+      "craftTime": 8,
+      "description": "Heals 25 HP.",
+      "unlockedBySkill": "chemistry.goos.1",
+      "iconItemId": "minor_health",
       "inputs": [
         {
           "itemId": "herb_common",
@@ -3385,10 +4211,12 @@
         {
           "itemId": "bottle_empty",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "minor_health",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -3400,6 +4228,10 @@
       "id": "brew_water_purified",
       "name": "Purified Water",
       "station": "workbench",
+      "craftTime": 8,
+      "description": "Removes 'Sick' debuff.",
+      "unlockedBySkill": "chemistry.goos.1",
+      "iconItemId": "water_purified",
       "inputs": [
         {
           "itemId": "ice_water",
@@ -3412,10 +4244,12 @@
         {
           "itemId": "bottle_empty",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "water_purified",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -3427,6 +4261,10 @@
       "id": "brew_stamina_potion",
       "name": "Stamina Potion",
       "station": "workbench",
+      "craftTime": 10,
+      "description": "+50% stamina regen for 60 s.",
+      "unlockedBySkill": "chemistry.goos.2",
+      "iconItemId": "stamina_potion",
       "inputs": [
         {
           "itemId": "herb_common",
@@ -3439,10 +4277,12 @@
         {
           "itemId": "bottle_empty",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "stamina_potion",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -3454,6 +4294,10 @@
       "id": "brew_minor_antidote",
       "name": "Minor Antidote",
       "station": "workbench",
+      "craftTime": 10,
+      "description": "Cures poison.",
+      "unlockedBySkill": "chemistry.goos.2",
+      "iconItemId": "minor_antidote",
       "inputs": [
         {
           "itemId": "herb_rare",
@@ -3466,10 +4310,12 @@
         {
           "itemId": "bottle_empty",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "minor_antidote",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -3481,6 +4327,10 @@
       "id": "brew_poison_vial",
       "name": "Poison Vial",
       "station": "workbench",
+      "craftTime": 12,
+      "description": "Coat melee weapon — DoT. Moved to Toxicology branch.",
+      "unlockedBySkill": "chemistry.tox.1",
+      "iconItemId": "poison_vial",
       "inputs": [
         {
           "itemId": "venom",
@@ -3493,10 +4343,12 @@
         {
           "itemId": "bottle_empty",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "poison_vial",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -3508,6 +4360,10 @@
       "id": "brew_health_potion",
       "name": "Health Potion",
       "station": "workbench",
+      "craftTime": 12,
+      "description": "Heals 80 HP.",
+      "unlockedBySkill": "chemistry.goos.3",
+      "iconItemId": "health_potion",
       "inputs": [
         {
           "itemId": "herb_rare",
@@ -3520,10 +4376,12 @@
         {
           "itemId": "bottle_empty",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "health_potion",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -3535,6 +4393,10 @@
       "id": "brew_speed_tonic",
       "name": "Speed Tonic",
       "station": "workbench",
+      "craftTime": 12,
+      "description": "+30% move speed for 30 s.",
+      "unlockedBySkill": "chemistry.goos.3",
+      "iconItemId": "speed_tonic",
       "inputs": [
         {
           "itemId": "wax",
@@ -3547,10 +4409,12 @@
         {
           "itemId": "bottle_empty",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "speed_tonic",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -3562,6 +4426,10 @@
       "id": "brew_greater_health",
       "name": "Greater Health Potion",
       "station": "workbench",
+      "craftTime": 14,
+      "description": "Heals 200 HP.",
+      "unlockedBySkill": "chemistry.goos.4",
+      "iconItemId": "greater_health",
       "inputs": [
         {
           "itemId": "herb_rare",
@@ -3574,10 +4442,12 @@
         {
           "itemId": "bottle_empty",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "greater_health",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -3589,6 +4459,10 @@
       "id": "brew_radiation_resist",
       "name": "Radiation Resist",
       "station": "workbench",
+      "craftTime": 14,
+      "description": "Required to enter Crystal-of-X zones.",
+      "unlockedBySkill": "chemistry.goos.4",
+      "iconItemId": "radiation_resist",
       "inputs": [
         {
           "itemId": "mineral_crystal",
@@ -3601,10 +4475,12 @@
         {
           "itemId": "bottle_empty",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "radiation_resist",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -3616,6 +4492,10 @@
       "id": "brew_invisibility_draught",
       "name": "Invisibility Draught",
       "station": "workbench",
+      "craftTime": 14,
+      "description": "30 s invis — broken by attack.",
+      "unlockedBySkill": "chemistry.goos.4",
+      "iconItemId": "invisibility_draught",
       "inputs": [
         {
           "itemId": "silk",
@@ -3632,10 +4512,12 @@
         {
           "itemId": "bottle_empty",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "invisibility_draught",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -3647,6 +4529,10 @@
       "id": "brew_elixir_eternity",
       "name": "Elixir of Eternity",
       "station": "workbench",
+      "craftTime": 16,
+      "description": "Doubles all potion potencies for 5 min.",
+      "unlockedBySkill": "chemistry.master",
+      "iconItemId": "elixir_eternity",
       "inputs": [
         {
           "itemId": "crystal_of_x",
@@ -3663,10 +4549,12 @@
         {
           "itemId": "bottle_empty",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "elixir_eternity",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -3678,6 +4566,10 @@
       "id": "brew_crystal_x_essence",
       "name": "Crystal-X Essence",
       "station": "workbench",
+      "craftTime": 16,
+      "description": "Reagent for legendary recipes.",
+      "unlockedBySkill": "chemistry.goos.4",
+      "iconItemId": "crystal_x_essence",
       "inputs": [
         {
           "itemId": "crystal_of_x",
@@ -3690,10 +4582,12 @@
         {
           "itemId": "bottle_empty",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "crystal_x_essence",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -3705,6 +4599,10 @@
       "id": "craft_legendary_trophy",
       "name": "Apex Trophy",
       "station": "workbench",
+      "craftTime": 8,
+      "description": "Apex Predator master unlock — biggest morale aura in the game.",
+      "unlockedBySkill": "hunting.master",
+      "iconItemId": "legendary_trophy",
       "inputs": [
         {
           "itemId": "taxidermy_kit",
@@ -3721,10 +4619,12 @@
         {
           "itemId": "gold",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "legendary_trophy",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -3736,6 +4636,10 @@
       "id": "build_campfire",
       "name": "Campfire",
       "station": "hammer_tool",
+      "craftTime": 12,
+      "description": "Baseline buildable. Cooking station. Required component of any camp that hosts NPC hires (one campfire serves the whole camp).",
+      "unlockedBySkill": "(default)",
+      "iconItemId": "campfire",
       "inputs": [
         {
           "itemId": "branch_a",
@@ -3744,10 +4648,12 @@
         {
           "itemId": "rock_2",
           "count": 3
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "campfire",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -3759,6 +4665,10 @@
       "id": "build_tent_personal",
       "name": "Personal Tent",
       "station": "hammer_tool",
+      "craftTime": 12,
+      "description": "Baseline buildable. Sleeping spot for ONE camp resident (player or hire). Recruitment requires one tent per recruited NPC. NPC without an assigned tent will ref",
+      "unlockedBySkill": "(default)",
+      "iconItemId": "tent_personal",
       "inputs": [
         {
           "itemId": "silk",
@@ -3771,10 +4681,12 @@
         {
           "itemId": "leather",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "tent_personal",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -3786,14 +4698,20 @@
       "id": "build_storage_crate",
       "name": "Storage Crate",
       "station": "hammer_tool",
+      "craftTime": 12,
+      "description": "Baseline buildable. 24-slot shared storage. Required component of any camp that hosts NPC hires (one crate serves the whole camp; NPCs deposit harvested goods h",
+      "unlockedBySkill": "(default)",
+      "iconItemId": "storage_crate",
       "inputs": [
         {
           "itemId": "wood_plank",
           "count": 4
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "storage_crate",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -3805,6 +4723,10 @@
       "id": "craft_claim_flag",
       "name": "Claim Flag",
       "station": "workbench",
+      "craftTime": 10,
+      "description": "Player-drawn 64×64 image painted onto silk + raised on a 3m pole. Doubles as guild logo. Placing the flag stakes a CLAIM on the surrounding 80m radius — require",
+      "unlockedBySkill": "(default)",
+      "iconItemId": "claim_flag",
       "inputs": [
         {
           "itemId": "silk",
@@ -3817,10 +4739,12 @@
         {
           "itemId": "dye_a",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "claim_flag",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -3832,6 +4756,10 @@
       "id": "build_logging_camp",
       "name": "Logging Camp",
       "station": "hammer_tool",
+      "craftTime": 20,
+      "description": "Harvester hub — required for hire_woodcutter. Assign trees within 80m.",
+      "unlockedBySkill": "township.buildings.2",
+      "iconItemId": "logging_camp",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -3844,10 +4772,12 @@
         {
           "itemId": "iron_ore",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "logging_camp",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -3859,6 +4789,10 @@
       "id": "build_mining_outpost",
       "name": "Mining Outpost",
       "station": "hammer_tool",
+      "craftTime": 24,
+      "description": "Required for hire_miner. Ore patrol radius around outpost.",
+      "unlockedBySkill": "township.buildings.3",
+      "iconItemId": "mining_outpost",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -3871,10 +4805,12 @@
         {
           "itemId": "iron_ore",
           "count": 4
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "mining_outpost",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -3886,6 +4822,10 @@
       "id": "build_field",
       "name": "Tilled Field",
       "station": "hammer_tool",
+      "craftTime": 24,
+      "description": "Required for hire_farmer. Grow ticks for herbs/grain.",
+      "unlockedBySkill": "township.buildings.4",
+      "iconItemId": "field",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -3898,10 +4838,12 @@
         {
           "itemId": "herb_common",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "field",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -3913,6 +4855,10 @@
       "id": "build_caravan_cart",
       "name": "Caravan Cart",
       "station": "hammer_tool",
+      "craftTime": 24,
+      "description": "Required for hire_caravan_master. Passive trade routes.",
+      "unlockedBySkill": "township.trade.2",
+      "iconItemId": "caravan_cart",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -3925,10 +4871,12 @@
         {
           "itemId": "leather",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "caravan_cart",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -3940,6 +4888,10 @@
       "id": "build_grand_bazaar",
       "name": "Grand Bazaar",
       "station": "hammer_tool",
+      "craftTime": 28,
+      "description": "Required for hire_bazaar_merchant. 3 rare vendor slots.",
+      "unlockedBySkill": "township.trade.4",
+      "iconItemId": "grand_bazaar",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -3956,10 +4908,12 @@
         {
           "itemId": "iron_ore",
           "count": 6
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "grand_bazaar",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -3971,6 +4925,10 @@
       "id": "build_watchtower",
       "name": "Watchtower",
       "station": "hammer_tool",
+      "craftTime": 20,
+      "description": "Required for hire_sentry. Hostile detection + crossbow perch.",
+      "unlockedBySkill": "township.defenses.1",
+      "iconItemId": "watchtower",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -3983,10 +4941,12 @@
         {
           "itemId": "iron_ore",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "watchtower",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -3998,6 +4958,10 @@
       "id": "build_palisade",
       "name": "Palisade",
       "station": "hammer_tool",
+      "craftTime": 20,
+      "description": "Camp wall segment. Pairs with gate_iron for hire_gate_guard.",
+      "unlockedBySkill": "township.defenses.2",
+      "iconItemId": "palisade",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -4006,10 +4970,12 @@
         {
           "itemId": "rock_2",
           "count": 2
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "palisade",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -4021,6 +4987,10 @@
       "id": "build_gate_iron",
       "name": "Iron Gate",
       "station": "hammer_tool",
+      "craftTime": 20,
+      "description": "Controlled entry. Required with palisade for gate guards.",
+      "unlockedBySkill": "township.defenses.2",
+      "iconItemId": "gate_iron",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -4029,10 +4999,12 @@
         {
           "itemId": "wood_plank",
           "count": 4
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "gate_iron",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -4044,6 +5016,10 @@
       "id": "build_turret_basic",
       "name": "Auto-Turret",
       "station": "hammer_tool",
+      "craftTime": 24,
+      "description": "Required for hire_gunner. Base auto-fire without gunner.",
+      "unlockedBySkill": "township.defenses.3",
+      "iconItemId": "turret_basic",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -4056,10 +5032,12 @@
         {
           "itemId": "wood_plank",
           "count": 4
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "turret_basic",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -4071,6 +5049,10 @@
       "id": "build_turret_heavy",
       "name": "Heavy Turret",
       "station": "hammer_tool",
+      "craftTime": 28,
+      "description": "Higher DPS turret. One gunner per turret.",
+      "unlockedBySkill": "township.defenses.3",
+      "iconItemId": "turret_heavy",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -4083,10 +5065,12 @@
         {
           "itemId": "wood_plank",
           "count": 6
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "turret_heavy",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -4098,6 +5082,10 @@
       "id": "build_embassy",
       "name": "Embassy",
       "station": "hammer_tool",
+      "craftTime": 24,
+      "description": "Required for hire_diplomat. Faction rep +1/day while staffed.",
+      "unlockedBySkill": "township.diplomacy.3",
+      "iconItemId": "embassy",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -4114,10 +5102,12 @@
         {
           "itemId": "iron_ore",
           "count": 4
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "embassy",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -4129,6 +5119,10 @@
       "id": "build_workbench_station",
       "name": "Camp Workbench",
       "station": "hammer_tool",
+      "craftTime": 16,
+      "description": "Placeable workbench station — unlocks workbench recipes when near.",
+      "unlockedBySkill": "crafting.equipment.1",
+      "iconItemId": "workbench",
       "inputs": [
         {
           "itemId": "wood_plank",
@@ -4137,10 +5131,12 @@
         {
           "itemId": "iron_ore",
           "count": 4
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "workbench",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -4152,6 +5148,10 @@
       "id": "build_anvil_station",
       "name": "Camp Anvil",
       "station": "hammer_tool",
+      "craftTime": 24,
+      "description": "Placeable anvil — unlocks anvil recipes when near.",
+      "unlockedBySkill": "crafting.equipment.4",
+      "iconItemId": "anvil",
       "inputs": [
         {
           "itemId": "iron_ore",
@@ -4160,10 +5160,12 @@
         {
           "itemId": "rock_2",
           "count": 4
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "anvil",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -4175,6 +5177,10 @@
       "id": "build_keep_fortress",
       "name": "Fortress Keep",
       "station": "hammer_tool",
+      "craftTime": 32,
+      "description": "Required for hire_captain. Core of Town/Stronghold defense.",
+      "unlockedBySkill": "township.defenses.4",
+      "iconItemId": "keep_fortress",
       "inputs": [
         {
           "itemId": "rock_2",
@@ -4187,10 +5193,12 @@
         {
           "itemId": "iron_ore",
           "count": 12
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "keep_fortress",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -4202,6 +5210,10 @@
       "id": "fillet_fish",
       "name": "Fillet Fish",
       "station": "none",
+      "craftTime": 4,
+      "description": "Knife required (no consumption).",
+      "unlockedBySkill": "(default)",
+      "iconItemId": "fish_filet",
       "inputs": [
         {
           "itemId": "fish_raw",
@@ -4210,10 +5222,12 @@
         {
           "itemId": "knife",
           "count": 0
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "fish_filet",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -4225,6 +5239,10 @@
       "id": "open_can",
       "name": "Open Can",
       "station": "none",
+      "craftTime": 2,
+      "description": "Pry open with any blade.",
+      "unlockedBySkill": "(default)",
+      "iconItemId": "food_can_open",
       "inputs": [
         {
           "itemId": "food_can",
@@ -4233,10 +5251,12 @@
         {
           "itemId": "knife",
           "count": 0
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "food_can_open",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {
@@ -4248,14 +5268,20 @@
       "id": "boil_water",
       "name": "Boiled Water",
       "station": "campfire",
+      "craftTime": 8,
+      "description": "Sterilize collected water in a cup or bottle.",
+      "unlockedBySkill": "(default)",
+      "iconItemId": "bottle_full",
       "inputs": [
         {
           "itemId": "bottle_empty",
           "count": 1
-        },
+        }
+      ],
+      "outputs": [
         {
           "itemId": "bottle_full",
-          "count": 1
+          "qty": 1
         }
       ],
       "output": {

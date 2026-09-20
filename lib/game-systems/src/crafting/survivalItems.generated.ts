@@ -2,7 +2,7 @@
  * AUTO-GENERATED SurvivalItems stubs from recipes.csv
  *   node scripts/gen-recipes-from-csv.mjs
  */
-import type { SurvivalItemDef } from './SurvivalItems';
+import type { SurvivalItemDef } from './survivalItems';
 
 export const GENERATED_SURVIVAL_ITEMS: Record<string, SurvivalItemDef> = {
   iron_ore: { id: 'iron_ore', name: 'Iron Ore', category: 'material', icon: '🪨', weight: 0.3, stack: 20, modelPath: '/assets/survival/items/DuckTape.fbx', description: 'Iron Ore' },
@@ -41,7 +41,6 @@ export const GENERATED_SURVIVAL_ITEMS: Record<string, SurvivalItemDef> = {
   torch_metal: { id: 'torch_metal', name: 'Metal Torch', category: 'tool', icon: '🛠️', weight: 0.3, stack: 20, modelPath: '/models/props/quaternius/Torch_Metal.gltf', description: 'Metal Torch' },
   shield_round: { id: 'shield_round', name: 'Round Shield', category: 'clothing', icon: '🛡️', weight: 0.3, stack: 20, modelPath: '/models/weapons/medieval/FBX/Shield_Round.fbx', description: 'Round Shield' },
   shield_round_2: { id: 'shield_round_2', name: 'Round Shield (reinforced)', category: 'clothing', icon: '🛡️', weight: 0.3, stack: 20, modelPath: '/models/weapons/medieval/FBX/Shield_Round_2.fbx', description: 'Round Shield (reinforced)' },
-  workbench: { id: 'workbench', name: 'Workbench', category: 'structure', icon: '🏕️', weight: 5, stack: 4, modelPath: '/models/props/quaternius/Workbench.gltf', description: 'Workbench', placeable: true },
   anvil: { id: 'anvil', name: 'Anvil', category: 'structure', icon: '🏕️', weight: 5, stack: 4, modelPath: '/models/props/quaternius/Anvil.gltf', description: 'Anvil', placeable: true },
   weapon_stand: { id: 'weapon_stand', name: 'Weapon Stand', category: 'structure', icon: '🏕️', weight: 5, stack: 4, modelPath: '/models/props/quaternius/WeaponStand.gltf', description: 'Weapon Stand', placeable: true },
   gold: { id: 'gold', name: 'Gold', category: 'material', icon: '🪨', weight: 0.3, stack: 20, modelPath: '/assets/survival/items/DuckTape.fbx', description: 'Gold' },
@@ -174,7 +173,6 @@ export const GENERATED_SURVIVAL_ITEMS: Record<string, SurvivalItemDef> = {
   tent_personal: { id: 'tent_personal', name: 'Personal Tent', category: 'structure', icon: '🏕️', weight: 5, stack: 4, modelPath: '/models/props/fantasy_megakit/Exports/glTF/Chest_Wood.gltf', description: 'Personal Tent', placeable: true },
   storage_crate: { id: 'storage_crate', name: 'Storage Crate', category: 'structure', icon: '🏕️', weight: 5, stack: 4, modelPath: '/models/props/quaternius/Chest_Wood.gltf', description: 'Storage Crate', placeable: true },
   dye_a: { id: 'dye_a', name: 'Dye A', category: 'material', icon: '🪨', weight: 0.3, stack: 20, modelPath: '/assets/survival/items/DuckTape.fbx', description: 'Dye A' },
-  claim_flag: { id: 'claim_flag', name: 'Claim Flag', category: 'tool', icon: '🛠️', weight: 5, stack: 4, modelPath: '/models/props/quaternius/Banner.gltf', description: 'Claim Flag', placeable: true },
   logging_camp: { id: 'logging_camp', name: 'Logging Camp', category: 'structure', icon: '🏕️', weight: 5, stack: 4, modelPath: '/models/props/fantasy_megakit/Exports/glTF/Chest_Wood.gltf', description: 'Logging Camp', placeable: true },
   mining_outpost: { id: 'mining_outpost', name: 'Mining Outpost', category: 'structure', icon: '🏕️', weight: 5, stack: 4, modelPath: '/models/props/fantasy_megakit/Exports/glTF/Chest_Wood.gltf', description: 'Mining Outpost', placeable: true },
   field: { id: 'field', name: 'Tilled Field', category: 'structure', icon: '🏕️', weight: 5, stack: 4, modelPath: '/models/props/fantasy_megakit/Exports/glTF/Chest_Wood.gltf', description: 'Tilled Field', placeable: true },

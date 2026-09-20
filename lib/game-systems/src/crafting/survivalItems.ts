@@ -10,7 +10,11 @@
  * Every entry references a model under `/assets/survival/...` so the
  * AssetManager can lazy-load on demand.  UI lookups go through
  * `SURVIVAL_ITEMS[id]` — never hand-roll IDs at the call site.
+ *
+ * CSV stubs: survivalItems.generated.ts (from recipes.csv via gen-recipes-from-csv.mjs).
+ * Hand-authored entries below override generated ones on id conflict.
  */
+import { GENERATED_SURVIVAL_ITEMS } from './survivalItems.generated.js';
 
 export type SurvivalCategory =
   | 'food'
@@ -90,6 +94,8 @@ const M_SPC = '/assets/survival/weapons/specials';
 const M_SCP = '/assets/survival/weapons/scopes';
 
 export const SURVIVAL_ITEMS: Record<string, SurvivalItemDef> = {
+  // CSV-driven stubs first — hand-authored entries below override on conflict.
+  ...GENERATED_SURVIVAL_ITEMS,
   // ===== FOOD =====
   apple:      { id: 'apple',      name: 'Apple',         category: 'food',    icon: '🍎', weight: 0.2, stack: 10, modelPath: `${M_ITEM}/Apple.fbx`,         description: 'Crisp fruit. Restores a little of everything.', consume: { hunger: 18, thirst: 6, health: 2 } },
   apple_green:{ id: 'apple_green',name: 'Green Apple',   category: 'food',    icon: '🍏', weight: 0.2, stack: 10, modelPath: `${M_ITEM}/AppleGreen.fbx`,    description: 'Tart and unripe.', consume: { hunger: 14, thirst: 5 } },

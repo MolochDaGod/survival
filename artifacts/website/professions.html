@@ -3,12 +3,115 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Grudges — Professions, Buildables &amp; Camp</title>
-<meta name="description" content="Seven professions, township buildables, settlement tiers, and camp systems for Grudges voxel / nexus survival MMO." />
+<title>Grudges — Professions · SWG-style XP Trees</title>
+<meta name="description" content="Seven Grudges professions with SWG-style branch grids: earn profession XP, spend into ranks, unlock recipes and passives." />
 <link rel="canonical" href="https://grudges.grudge-studio.com/professions" />
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=EB+Garamond:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap" />
 <link rel="stylesheet" href="/systems-pages.css" />
+<style>
+  .prof-tabs { display:flex; flex-wrap:wrap; gap:.4rem; margin:1rem 0 1.25rem; }
+  .prof-tab {
+    font-family:var(--display); font-size:.72rem; letter-spacing:.1em; text-transform:uppercase;
+    border:1px solid var(--rule); background:var(--panel); color:var(--ink);
+    padding:.45rem .75rem; border-radius:2px; cursor:pointer;
+  }
+  .prof-tab.active { border-color:var(--tab-color, var(--gold)); color:var(--gold-bright); box-shadow:inset 0 -2px 0 var(--tab-color, var(--gold)); }
+  .xp-bar-wrap { display:flex; flex-wrap:wrap; gap:.75rem; align-items:center; margin:.75rem 0 1rem; }
+  .xp-pill {
+    font-family:var(--mono); font-size:.78rem; background:rgba(0,0,0,.35);
+    border:1px solid var(--rule); padding:.4rem .7rem; border-radius:2px;
+  }
+  .xp-pill b { color:var(--gold-bright); }
+  .xp-actions { display:flex; flex-wrap:wrap; gap:.35rem; }
+  .xp-actions button, .learn-btn, .reset-btn {
+    font-family:var(--display); font-size:.68rem; letter-spacing:.08em; text-transform:uppercase;
+    border:1px solid var(--rule); background:var(--panel-2); color:var(--ink);
+    padding:.4rem .65rem; border-radius:2px; cursor:pointer;
+  }
+  .xp-actions button:hover, .learn-btn:hover { border-color:var(--gold); color:var(--gold-bright); }
+  .learn-btn.ready { background:linear-gradient(to bottom,var(--gold),#8a6a30); color:#1a120c; border-color:var(--gold-bright); font-weight:700; }
+  .learn-btn:disabled { opacity:.45; cursor:not-allowed; }
+  .reset-btn { color:#e08080; border-color:rgba(224,128,128,.35); }
+
+  .tree-layout {
+    display:grid; grid-template-columns:minmax(240px,320px) 1fr; gap:1.1rem; align-items:start;
+  }
+  @media (max-width:900px) { .tree-layout { grid-template-columns:1fr; } }
+
+  .skill-detail {
+    background:linear-gradient(to bottom,var(--panel),var(--panel-2));
+    border:1px solid var(--rule); border-radius:4px; padding:1rem 1.1rem;
+    min-height:280px; position:sticky; top:72px;
+  }
+  .skill-detail .rank { font-family:var(--mono); font-size:.72rem; color:var(--muted); }
+  .skill-detail h3 { text-transform:none; letter-spacing:.03em; font-size:1.15rem; color:var(--gold-bright); margin:.35rem 0; }
+  .skill-detail .desc { color:var(--ink); opacity:.9; margin:.5rem 0; }
+  .skill-detail .meta-line { font-size:.88rem; color:var(--muted); margin:.25rem 0; }
+  .skill-detail .meta-line b { color:var(--gold-bright); font-weight:600; }
+
+  .branch-block { margin-bottom:1rem; }
+  .branch-label {
+    font-family:var(--display); font-size:.78rem; letter-spacing:.14em; text-transform:uppercase;
+    margin:0 0 .45rem; color:var(--branch-color, var(--gold));
+  }
+  .skill-grid {
+    display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:.45rem;
+  }
+  @media (max-width:600px) { .skill-grid { grid-template-columns:repeat(2, minmax(0,1fr)); } }
+  .skill-tile {
+    aspect-ratio:1; border:1px solid var(--rule); border-radius:3px; background:rgba(0,0,0,.35);
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.25rem;
+    cursor:pointer; padding:.35rem; position:relative; transition:border-color .15s, transform .12s, opacity .15s;
+    opacity:.55;
+  }
+  .skill-tile:hover { transform:translateY(-1px); border-color:var(--gold); }
+  .skill-tile.available { opacity:.95; border-color:var(--branch-color, var(--gold-dim)); }
+  .skill-tile.learned { opacity:1; border-color:#3a8a3a; box-shadow:inset 0 0 0 1px rgba(58,138,58,.35); }
+  .skill-tile.selected { outline:2px solid var(--gold-bright); outline-offset:1px; }
+  .skill-tile img { width:42%; height:42%; object-fit:contain; image-rendering:auto; }
+  .skill-tile .rnk {
+    font-family:var(--mono); font-size:.62rem; color:var(--muted); letter-spacing:.06em;
+  }
+  .skill-tile .nm {
+    font-family:var(--display); font-size:.58rem; letter-spacing:.04em; text-align:center;
+    line-height:1.15; color:var(--ink); max-width:100%;
+    display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
+  }
+  .skill-tile .check {
+    position:absolute; bottom:3px; right:4px; color:#3a8a3a; font-size:.75rem; font-weight:700;
+  }
+  .master-row {
+    margin-top:.75rem; padding-top:.75rem; border-top:1px dashed var(--rule);
+    display:flex; gap:.75rem; align-items:center; flex-wrap:wrap;
+  }
+  .master-row .skill-tile { width:72px; height:72px; aspect-ratio:auto; flex:0 0 72px; }
+
+  .xp-table-wrap { overflow-x:auto; margin-top:.75rem; }
+  table.xp-data { width:100%; border-collapse:collapse; font-size:.9rem; }
+  table.xp-data th, table.xp-data td {
+    border-bottom:1px solid var(--rule); padding:.45rem .55rem; text-align:left; vertical-align:top;
+  }
+  table.xp-data th {
+    font-family:var(--display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--gold);
+  }
+  table.xp-data td.mono { font-family:var(--mono); font-size:.78rem; color:var(--gold-bright); }
+  .muted { color:var(--muted); }
+  .note-box {
+    border:1px solid var(--rule); background:rgba(0,0,0,.25); padding:.85rem 1rem; border-radius:3px;
+    font-size:.92rem; color:var(--muted); margin:1rem 0;
+  }
+  .overview-grid {
+    display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:.75rem; margin-bottom:1.5rem;
+  }
+  .overview-card {
+    border:1px solid var(--rule); border-left:3px solid var(--c, var(--gold));
+    background:var(--panel); padding:.85rem 1rem; border-radius:0 3px 3px 0; cursor:pointer;
+  }
+  .overview-card:hover { border-color:var(--gold); }
+  .overview-card h3 { text-transform:none; letter-spacing:.03em; color:var(--ink); margin:0 0 .35rem; font-size:1rem; }
+  .section { margin:2rem 0; }
+</style>
 </head>
 <body>
 <nav class="site">
@@ -29,37 +132,58 @@
 <header class="page-hero">
   <div class="bg-camp" aria-hidden="true"></div>
   <div class="inner">
-    <div class="eyebrow">Township · Work · Defend</div>
-    <h1>Professions &amp; Buildables</h1>
-    <p>Seven profession trees (147 skills), camp settlement tiers, and placeable structures — the backbone of Grudges, the <strong>voxel-era lead</strong> survival MMO.</p>
+    <div class="eyebrow">SWG-style trees · Grudges content</div>
+    <h1>Professions &amp; XP Spend</h1>
+    <p>Seven callings, each with its own XP pool. Earn XP from work (<code>xp-sources.csv</code>), spend into branch grids (ranks 1→4 + Master). Stacks with level-up perks — does not use skill points.</p>
     <div class="links">
-      <a href="info.html#camp">Camp handbook</a>
-      <a href="info.html#tiers">Settlement tiers</a>
-      <a href="crafting.html">Crafting stations</a>
-      <a href="main-panel.html">Main Panel · Professions tab</a>
+      <a href="#trees">Skill grids</a>
+      <a href="#xp-usage">XP usage table</a>
+      <a href="crafting.html">Crafting unlocks</a>
+      <a href="/arpg-game/">Play · Professions book</a>
     </div>
   </div>
 </header>
 
 <main class="container">
-  <div class="hero-camp-strip">
-    <div class="camp-shot" role="img" aria-label="Camp settlement concept"></div>
-    <div class="camp-copy">
-      <h2>Camp first</h2>
-      <p class="lead" style="margin:0">Build the wall before the bed. Population ranks your settlement; schematics unlock with tier.</p>
-      <ul>
-        <li>Place foundations, walls, stations, beds</li>
-        <li>Hire allies → Tribe → Village → Town</li>
-        <li>Township profession XP from builds &amp; defense</li>
-        <li>See full doctrine: <a href="info.html#camp">info.html#camp</a></li>
-      </ul>
-    </div>
+  <div class="note-box" id="spendNote">
+    Loading profession trees…
   </div>
 
-  <section class="section">
+  <section class="section" id="overview">
     <h2>Seven professions</h2>
-    <p class="lead" id="profNote">Independent XP per profession — separate from level skill points and perk tracks.</p>
-    <div class="grid" id="profGrid"><div class="loading">Loading…</div></div>
+    <p class="lead muted" id="profNote">Independent XP per profession — separate from level skill points and perk tracks.</p>
+    <div class="overview-grid" id="overviewGrid"></div>
+  </section>
+
+  <section class="section" id="trees">
+    <h2>Branch grids · spend XP</h2>
+    <div class="prof-tabs" id="profTabs"></div>
+    <div class="xp-bar-wrap">
+      <div class="xp-pill">Available XP <b id="xpAvail">0</b></div>
+      <div class="xp-pill">Learned <b id="xpLearned">0</b>/<span id="xpTotal">21</span></div>
+      <div class="xp-pill">Spent <b id="xpSpent">0</b></div>
+      <div class="xp-actions" id="xpGrantButtons"></div>
+      <button type="button" class="reset-btn" id="resetDemo">Reset demo</button>
+    </div>
+    <div class="tree-layout">
+      <aside class="skill-detail" id="skillDetail">
+        <p class="muted">Select a skill tile to inspect cost, prereqs, recipes, and spend XP.</p>
+      </aside>
+      <div id="branchTrees"><div class="loading">Loading trees…</div></div>
+    </div>
+  </section>
+
+  <section class="section" id="xp-usage">
+    <h2>XP usage · how you earn</h2>
+    <p class="muted">From <code>docs/inventory/xp-sources.csv</code>. Filter follows the selected profession. Side-grants feed a second pool.</p>
+    <div class="xp-table-wrap">
+      <table class="xp-data">
+        <thead>
+          <tr><th>Activity</th><th>Profession</th><th>XP</th><th>Side</th><th>Notes</th></tr>
+        </thead>
+        <tbody id="xpBody"></tbody>
+      </table>
+    </div>
   </section>
 
   <section class="section">
@@ -77,13 +201,6 @@
       </table>
     </div>
   </section>
-
-  <section class="section">
-    <h2>AI worker · deploy &amp; best practices</h2>
-    <div class="card" id="aiBox">
-      <p class="loading">Loading…</p>
-    </div>
-  </section>
 </main>
 
 <footer class="site">
@@ -94,55 +211,348 @@
     <a href="perks.html">Perks</a>
     <a href="/arpg-game/">Play</a>
   </div>
-  <p style="margin-top:1rem">147 skills · professions.csv / Professions.ts · camp SSOT info.html</p>
+  <p style="margin-top:1rem">147 skills · professions.csv · xp-sources.csv · ProfessionsBook in play</p>
 </footer>
 
 <script>
 (async function () {
-  let data;
-  try {
-    data = await (await fetch('/data/grudges-systems.json')).json();
-  } catch (e) {
-    document.getElementById('profGrid').innerHTML = '<p class="loading">Catalog missing.</p>';
-    return;
+  const DEMO_KEY = 'grudges_professions_demo_v1';
+
+  function loadDemo() {
+    try {
+      return JSON.parse(localStorage.getItem(DEMO_KEY) || '{"xp":{},"learned":[]}');
+    } catch {
+      return { xp: {}, learned: [] };
+    }
+  }
+  function saveDemo(state) {
+    localStorage.setItem(DEMO_KEY, JSON.stringify(state));
   }
 
-  const profs = (data.professions && data.professions.list) || [];
-  const branches = (data.professions && data.professions.branches) || {};
-  document.getElementById('profNote').textContent =
-    (data.professions && data.professions.note) || document.getElementById('profNote').textContent;
+  let data;
+  try {
+    data = await (await fetch('/api/systems/professions')).json();
+  } catch {
+    try {
+      const full = await (await fetch('/data/grudges-systems.json')).json();
+      data = full.professions || {};
+    } catch (e) {
+      document.getElementById('branchTrees').innerHTML = '<p class="muted">Catalog missing.</p>';
+      return;
+    }
+  }
 
-  document.getElementById('profGrid').innerHTML = profs.map((p) => {
-    const br = branches[p.id] || [];
-    const brHtml = br.length
-      ? '<p style="margin-top:.5rem">' + br.map((b) => '<span class="badge" style="margin:2px">' + b.label + '</span>').join(' ') + '</p>'
-      : '';
+  // Merge township from full catalog if needed
+  let township = data.township;
+  if (!township) {
+    try {
+      const full = await (await fetch('/data/grudges-systems.json')).json();
+      township = full.township;
+      if (!data.list && full.professions) data = { ...full.professions, ...data };
+    } catch { /* ignore */ }
+  }
+
+  const profs = data.list || [];
+  const trees = data.trees || {};
+  const xpSources = data.xpSources || [];
+  const spend = data.spendRules || {};
+  let active = (profs[0] && profs[0].id) || 'gathering';
+  let selectedId = null;
+  let demo = loadDemo();
+
+  document.getElementById('profNote').textContent = data.note || document.getElementById('profNote').textContent;
+  document.getElementById('spendNote').innerHTML =
+    '<strong style="color:var(--gold-bright)">Spend rules</strong> — ' +
+    (spend.style || 'SWG-style') + '. ' +
+    (spend.pool || 'Per-profession XP') + '. ' +
+    (spend.costs || 'Rank costs 1 / 2 / 4 / 8 + Master 20') + '. ' +
+    'This page is a <em>codex + demo sandbox</em> (localStorage). Live character XP is in the play client via <code>ProfessionsService</code>.';
+
+  function getXp(prof) { return Number(demo.xp[prof] || 0); }
+  function isLearned(id) { return demo.learned.includes(id); }
+  function getSkill(id) {
+    for (const p of Object.keys(trees)) {
+      const t = trees[p];
+      for (const b of t.branches || []) {
+        const s = (b.skills || []).find((x) => x.id === id);
+        if (s) return s;
+      }
+      if (t.master && t.master.id === id) return t.master;
+    }
+    return (data.skills || []).find((s) => s.id === id) || null;
+  }
+  function canLearn(skill) {
+    if (!skill || isLearned(skill.id)) return false;
+    if (getXp(skill.prof) < skill.cost) return false;
+    return (skill.prereq || []).every((id) => isLearned(id));
+  }
+  function learn(skill) {
+    if (!canLearn(skill)) return false;
+    demo = {
+      xp: { ...demo.xp, [skill.prof]: getXp(skill.prof) - skill.cost },
+      learned: [...demo.learned, skill.id],
+    };
+    saveDemo(demo);
+    return true;
+  }
+  function grant(prof, amount) {
+    demo = {
+      ...demo,
+      xp: { ...demo.xp, [prof]: getXp(prof) + Math.round(amount) },
+    };
+    saveDemo(demo);
+  }
+
+  function totalFor(prof) {
+    const t = trees[prof];
+    if (!t) return 21;
+    return t.skillCount || ((t.branches || []).reduce((n, b) => n + (b.skills || []).length, 0) + (t.master ? 1 : 0));
+  }
+  function learnedFor(prof) {
+    return demo.learned.filter((id) => id.startsWith(prof + '.')).length;
+  }
+  function spentFor(prof) {
+    let n = 0;
+    for (const id of demo.learned) {
+      if (!id.startsWith(prof + '.')) continue;
+      const s = getSkill(id);
+      if (s) n += s.cost || 0;
+    }
+    return n;
+  }
+
+  // Overview cards
+  document.getElementById('overviewGrid').innerHTML = profs.map((p) => {
+    const t = trees[p.id] || {};
     return (
-      '<article class="card" style="border-left:3px solid ' + (p.color || 'var(--gold)') + '">' +
-        '<div class="tier">' + p.id + '</div>' +
-        '<h3 style="text-transform:none;letter-spacing:.03em;color:var(--ink)">' + p.label + '</h3>' +
-        '<p>' + (p.blurb || '') + '</p>' + brHtml +
+      '<article class="overview-card" data-prof="' + p.id + '" style="--c:' + (p.color || 'var(--gold)') + '">' +
+        '<h3>' + escapeHtml(p.label) + '</h3>' +
+        '<p class="muted" style="margin:0;font-size:.9rem">' + escapeHtml(p.blurb || '') + '</p>' +
+        '<p class="muted" style="margin:.5rem 0 0;font-family:var(--mono);font-size:.72rem">' +
+          (t.skillCount || 21) + ' skills · master cost ' + ((t.master && t.master.cost) || 20) +
+          ' · total ' + (t.totalCost || 95) + ' XP</p>' +
       '</article>'
     );
-  }).join('') || '<p class="loading">No professions in export.</p>';
+  }).join('');
+  document.getElementById('overviewGrid').addEventListener('click', (e) => {
+    const card = e.target.closest('[data-prof]');
+    if (!card) return;
+    active = card.getAttribute('data-prof');
+    selectedId = null;
+    renderAll();
+    document.getElementById('trees').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
 
-  const tiers = (data.township && data.township.tiers) || [];
+  function escapeHtml(s) {
+    return String(s ?? '')
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  function renderTabs() {
+    document.getElementById('profTabs').innerHTML = profs.map((p) =>
+      '<button type="button" class="prof-tab' + (p.id === active ? ' active' : '') +
+      '" data-prof="' + p.id + '" style="--tab-color:' + (p.color || 'var(--gold)') + '">' +
+      escapeHtml(p.label) + '</button>'
+    ).join('');
+  }
+
+  function renderXpBar() {
+    const meta = profs.find((p) => p.id === active) || { label: active, color: '#c5a059' };
+    document.getElementById('xpAvail').textContent = String(getXp(active));
+    document.getElementById('xpAvail').style.color = meta.color;
+    document.getElementById('xpLearned').textContent = String(learnedFor(active));
+    document.getElementById('xpTotal').textContent = String(totalFor(active));
+    document.getElementById('xpSpent').textContent = String(spentFor(active));
+
+    // Demo grants from common xp sources for this profession
+    const grants = xpSources
+      .filter((x) => x.profession === active)
+      .slice(0, 6);
+    const fallback = [
+      { activity: '+5 XP', xp: '5' },
+      { activity: '+10 XP', xp: '10' },
+      { activity: '+20 XP', xp: '20' },
+    ];
+    const buttons = (grants.length ? grants : fallback).map((g) => {
+      const amt = parseFloat(String(g.xp).replace(/[^\d.]/g, ''));
+      const n = Number.isFinite(amt) && amt > 0 ? Math.round(amt) : 10;
+      const label = grants.length ? (g.activity.slice(0, 22) + ' +' + n) : g.activity;
+      return '<button type="button" data-grant="' + n + '" title="' + escapeHtml(g.activity || '') + '">' +
+        escapeHtml(label) + '</button>';
+    }).join('');
+    document.getElementById('xpGrantButtons').innerHTML = buttons;
+  }
+
+  function renderDetail() {
+    const el = document.getElementById('skillDetail');
+    const skill = selectedId ? getSkill(selectedId) : null;
+    const meta = profs.find((p) => p.id === active) || { label: active, color: '#c5a059' };
+    if (!skill) {
+      el.innerHTML =
+        '<div class="rank">' + escapeHtml(meta.label) + '</div>' +
+        '<h3>Pick a skill</h3>' +
+        '<p class="desc muted">Tap a tile in a branch row. Green border = learned. Bright = affordable + prereqs met.</p>' +
+        '<p class="meta-line">Demo XP available: <b style="color:' + meta.color + '">' + getXp(active) + '</b></p>';
+      return;
+    }
+    const learned = isLearned(skill.id);
+    const available = canLearn(skill);
+    const icon = skill.icon
+      ? '<img src="' + escapeHtml(skill.icon) + '" alt="" width="48" height="48" style="border:1px solid var(--rule);border-radius:3px;background:#000" onerror="this.style.display=\'none\'" />'
+      : '';
+    el.innerHTML =
+      '<div style="display:flex;gap:.75rem;align-items:flex-start">' + icon +
+        '<div><div class="rank">' + escapeHtml(skill.branchLabel || skill.branch) +
+        ' · Rank ' + escapeHtml(String(skill.rank)) + '</div>' +
+        '<h3>' + escapeHtml(skill.name) + '</h3></div></div>' +
+      '<p class="desc">' + escapeHtml(skill.desc || '') + '</p>' +
+      '<p class="meta-line">Cost <b>' + skill.cost + ' ' + escapeHtml(meta.label) + ' XP</b></p>' +
+      (skill.prereq && skill.prereq.length
+        ? '<p class="meta-line">Requires <b>' + escapeHtml(skill.prereq.join(', ')) + '</b></p>' : '') +
+      (skill.recipes && skill.recipes.length
+        ? '<p class="meta-line">Recipes <b>' + escapeHtml(skill.recipes.join(', ')) + '</b></p>' : '') +
+      (skill.signature
+        ? '<p class="meta-line">Signature <b>' + escapeHtml(skill.signature) + '</b></p>' : '') +
+      (skill.passive
+        ? '<p class="meta-line">Passives <b>' + escapeHtml(skill.passive) + '</b></p>' : '') +
+      '<p class="meta-line muted" style="font-family:var(--mono);font-size:.72rem">' + escapeHtml(skill.id) + '</p>' +
+      (learned
+        ? '<p style="color:#3a8a3a;font-family:var(--display);letter-spacing:.12em;margin-top:.8rem">✓ LEARNED</p>'
+        : '<button type="button" class="learn-btn' + (available ? ' ready' : '') + '" id="learnBtn" ' +
+          (available ? '' : 'disabled') + '>' +
+          (available
+            ? ('Learn — ' + skill.cost + ' XP')
+            : (getXp(skill.prof) < skill.cost
+              ? ('Need ' + (skill.cost - getXp(skill.prof)) + ' more XP')
+              : 'Locked — prereqs')) +
+          '</button>');
+    const btn = document.getElementById('learnBtn');
+    if (btn) {
+      btn.addEventListener('click', () => {
+        if (learn(skill)) renderAll();
+      });
+    }
+  }
+
+  function tileHtml(skill, color) {
+    const learned = isLearned(skill.id);
+    const available = canLearn(skill);
+    const sel = selectedId === skill.id ? ' selected' : '';
+    const cls = 'skill-tile' + (learned ? ' learned' : available ? ' available' : '') + sel;
+    const img = skill.icon
+      ? '<img src="' + escapeHtml(skill.icon) + '" alt="" loading="lazy" onerror="this.remove()" />'
+      : '<span style="font-size:1.2rem">◆</span>';
+    return (
+      '<button type="button" class="' + cls + '" data-skill="' + escapeHtml(skill.id) +
+      '" style="--branch-color:' + color + '" title="' + escapeHtml(skill.name + ' · ' + skill.cost + ' XP') + '">' +
+        img +
+        '<span class="rnk">R' + escapeHtml(String(skill.rank)) + ' · ' + skill.cost + '</span>' +
+        '<span class="nm">' + escapeHtml(skill.name) + '</span>' +
+        (learned ? '<span class="check">✓</span>' : '') +
+      '</button>'
+    );
+  }
+
+  function renderTrees() {
+    const meta = profs.find((p) => p.id === active) || { color: '#c5a059', label: active };
+    const tree = trees[active];
+    const color = meta.color || '#c5a059';
+    if (!tree || !(tree.branches || []).length) {
+      document.getElementById('branchTrees').innerHTML =
+        '<p class="muted">No tree data for ' + escapeHtml(active) + '. Re-run <code>export:systems</code>.</p>';
+      return;
+    }
+    let html = '';
+    for (const branch of tree.branches) {
+      html +=
+        '<div class="branch-block" style="--branch-color:' + color + '">' +
+          '<div class="branch-label">' + escapeHtml(branch.label) + '</div>' +
+          '<div class="skill-grid">' +
+            (branch.skills || []).map((s) => tileHtml(s, color)).join('') +
+          '</div></div>';
+    }
+    if (tree.master) {
+      html +=
+        '<div class="master-row" style="--branch-color:' + color + '">' +
+          '<div class="branch-label" style="margin:0">Master</div>' +
+          tileHtml(tree.master, color) +
+          '<div class="muted" style="font-size:.9rem">Capstone · costs ' + tree.master.cost +
+          ' XP · usually needs all five branches at rank 4</div></div>';
+    }
+    document.getElementById('branchTrees').innerHTML = html;
+  }
+
+  function renderXpTable() {
+    const rows = xpSources.filter((x) => x.profession === active || x.sideProfession === active);
+    const list = rows.length ? rows : xpSources.slice(0, 25);
+    document.getElementById('xpBody').innerHTML = list.map((x) =>
+      '<tr>' +
+        '<td><strong>' + escapeHtml(x.activity) + '</strong><div class="muted" style="font-size:.8rem">' +
+          escapeHtml(x.trigger || '') + '</div></td>' +
+        '<td class="mono">' + escapeHtml(x.profession) + '</td>' +
+        '<td class="mono">' + escapeHtml(x.xp) + '</td>' +
+        '<td class="mono">' + (x.sideProfession
+          ? escapeHtml(x.sideProfession + ' ' + (x.sideXp || ''))
+          : '—') + '</td>' +
+        '<td class="muted">' + escapeHtml(x.notes || '') + '</td>' +
+      '</tr>'
+    ).join('') || '<tr><td colspan="5" class="muted">No XP sources exported.</td></tr>';
+  }
+
+  function renderAll() {
+    renderTabs();
+    renderXpBar();
+    renderTrees();
+    renderDetail();
+    renderXpTable();
+  }
+
+  document.getElementById('profTabs').addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-prof]');
+    if (!btn) return;
+    active = btn.getAttribute('data-prof');
+    selectedId = null;
+    renderAll();
+  });
+  document.getElementById('branchTrees').addEventListener('click', (e) => {
+    const tile = e.target.closest('[data-skill]');
+    if (!tile) return;
+    selectedId = tile.getAttribute('data-skill');
+    renderAll();
+  });
+  document.getElementById('xpGrantButtons').addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-grant]');
+    if (!btn) return;
+    grant(active, Number(btn.getAttribute('data-grant')));
+    renderAll();
+  });
+  document.getElementById('resetDemo').addEventListener('click', () => {
+    demo = { xp: {}, learned: [] };
+    saveDemo(demo);
+    selectedId = null;
+    renderAll();
+  });
+
+  // Township / buildables (unchanged catalog sections)
+  const tiers = (township && township.tiers) || [];
   document.getElementById('tierGrid').innerHTML = tiers.map((t) =>
-    '<article class="card"><div class="tier">' + t.allies + ' allies</div><h3 style="text-transform:none;color:var(--ink)">' + t.name + '</h3><p>' + t.unlocks + '</p></article>'
-  ).join('');
+    '<article class="card"><div class="tier">' + escapeHtml(String(t.allies)) + ' allies</div><h3 style="text-transform:none;color:var(--ink)">' +
+    escapeHtml(t.name) + '</h3><p>' + escapeHtml(t.unlocks) + '</p></article>'
+  ).join('') || '<p class="muted">No settlement tiers in catalog.</p>';
 
-  const buildables = (data.township && data.township.buildables) || [];
+  const buildables = (township && township.buildables) || [];
   let filter = 'all';
   const tierNames = [...new Set(buildables.map((b) => b.tier))];
   const filters = document.getElementById('tierFilters');
   filters.innerHTML =
     '<button type="button" class="stat-pill active" data-t="all">All</button>' +
-    tierNames.map((t) => '<button type="button" class="stat-pill" data-t="' + t + '">' + t + '</button>').join('');
-
+    tierNames.map((t) => '<button type="button" class="stat-pill" data-t="' + escapeHtml(t) + '">' + escapeHtml(t) + '</button>').join('');
   function renderBuild() {
     const list = filter === 'all' ? buildables : buildables.filter((b) => b.tier === filter);
     document.getElementById('buildBody').innerHTML = list.map((b) =>
-      '<tr><td><strong>' + b.name + '</strong><div class="muted">' + b.id + '</div></td><td>' + b.tier + '</td><td>' + b.station + '</td><td class="muted">' + b.desc + '</td></tr>'
+      '<tr><td><strong>' + escapeHtml(b.name) + '</strong><div class="muted">' + escapeHtml(b.id) +
+      '</div></td><td>' + escapeHtml(b.tier) + '</td><td>' + escapeHtml(b.station) +
+      '</td><td class="muted">' + escapeHtml(b.desc) + '</td></tr>'
     ).join('');
   }
   filters.addEventListener('click', (e) => {
@@ -154,20 +564,7 @@
   });
   renderBuild();
 
-  const ai = data.aiWorker || {};
-  const dep = ai.deploy || {};
-  const bp = ai.bestPractices || [];
-  document.getElementById('aiBox').innerHTML =
-    '<h3 style="text-transform:none;color:var(--ink)">Deploy scripting (Grudges + voxel)</h3>' +
-    '<p class="muted">Project <strong>' + (dep.project || 'survival') + '</strong> · ' +
-    (dep.urls || []).map((u) => '<a href="https://' + u + '">' + u + '</a>').join(' · ') + '</p>' +
-    '<p><code style="color:var(--gold-bright);font-size:.85rem">' + (dep.command || '') + '</code></p>' +
-    '<p class="muted">Era: <strong>voxel</strong> only for Grudges (lead voxel MMO). Mine-Loader / GRUDOX support the same era. Nexus product era deferred.</p>' +
-    '<h3 style="margin-top:1rem;text-transform:none;color:var(--ink)">Best practices</h3>' +
-    '<ul style="margin:.4rem 0 0;padding-left:1.2rem;color:var(--muted)">' +
-    bp.map((x) => '<li>' + x + '</li>').join('') +
-    '</ul>' +
-    '<p style="margin-top:1rem"><a href="/data/grudges-systems.json">Machine-readable catalog (JSON)</a> for AI workers.</p>';
+  renderAll();
 })();
 </script>
 </body>

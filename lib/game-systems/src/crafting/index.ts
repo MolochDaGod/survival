@@ -37,7 +37,8 @@ export const RECIPE_STATIONS: {
   { id: 'cooking_rack', name: 'Cooking Rack', icon: '🍖', description: 'Slow roast and smoke meats.' },
   { id: 'workbench', name: 'Workbench', icon: '🪚', description: 'Tools, furniture, and structures.' },
   { id: 'drying_rack', name: 'Drying Rack', icon: '🪵', description: 'Cure meat and fish for storage.' },
-  { id: 'profession_bench', name: 'Profession Bench', icon: '⚒️', description: 'Camp claim professional crafts.' },
+  { id: 'anvil', name: 'Anvil', icon: '⚒️', description: 'Forge weapons, armour, and metalwork.' },
+  { id: 'hammer_tool', name: 'Build Hammer', icon: '🔨', description: 'Place camp buildings and defenses.' },
 ];
 
 export function getRecipe(id: string): Recipe | undefined {

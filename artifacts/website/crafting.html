@@ -4,9 +4,9 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Grudges — Crafting Codex</title>
-<meta name="description" content="Survival crafting recipes, stations, and materials for Grudges. Live catalog from /api/game." />
+<meta name="description" content="Full Grudges craft + build catalog: every recipe, station, and possible item from recipes.csv." />
 <meta property="og:title" content="Grudges — Crafting Codex" />
-<meta property="og:description" content="Every recipe, station, and material in the Convergence Nexus." />
+<meta property="og:description" content="Every recipe, station, material, and craftable in the Convergence Nexus." />
 <meta property="og:image" content="opengraph.png" />
 <meta property="og:type" content="website" />
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
@@ -62,11 +62,14 @@
   .status{font-family:var(--mono);font-size:.75rem;color:var(--muted);margin-left:auto}
   .status.ok{color:var(--moss)}
   .status.err{color:#e06060}
+  .view-toggle{display:flex;gap:.35rem}
+  .view-toggle .chip{letter-spacing:.1em}
 
   .grid-wrap{padding:2rem 0 4rem}
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.1rem}
   .card{background:linear-gradient(to bottom,var(--panel),var(--panel-2));border:1px solid var(--rule);border-left:4px solid var(--gold);border-radius:0 4px 4px 0;padding:1.05rem 1.15rem;display:flex;flex-direction:column;gap:.5rem;transition:transform .15s}
   .card:hover{transform:translateY(-2px);border-left-color:var(--gold-bright)}
+  .card.item{border-left-color:var(--chill)}
   .card-head{display:flex;gap:.75rem;align-items:flex-start}
   .icon{width:48px;height:48px;flex-shrink:0;border:1px solid var(--rule-strong);border-radius:3px;background:rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;font-size:1.5rem}
   .card h3{margin:0;font-size:1.05rem;text-transform:none;letter-spacing:.02em;color:var(--gold-bright);font-family:var(--display)}
@@ -77,7 +80,10 @@
   .io-label{font-family:var(--display);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);min-width:3.2rem}
   .pill{display:inline-flex;align-items:center;gap:.3rem;background:rgba(0,0,0,0.35);border:1px solid var(--rule);padding:.18rem .5rem;border-radius:2px;font-family:var(--mono);font-size:.72rem}
   .pill.out{border-color:rgba(110,138,58,0.55);color:#c8e080}
+  .pill.gate{border-color:rgba(90,154,216,0.45);color:#9ec8f0}
   .time{font-family:var(--mono);font-size:.72rem;color:var(--chill);margin-top:auto}
+  .item-meta{font-family:var(--mono);font-size:.72rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:.6rem}
+  .item-meta b{color:var(--gold-bright);font-weight:600}
 
   .empty,.error{text-align:center;padding:3rem 1rem;color:var(--muted)}
   .error{color:#e08080}
@@ -103,7 +109,7 @@
 <header class="page-hero">
   <div class="eyebrow">Field Codex · Survival Systems</div>
   <h1>Crafting Codex</h1>
-  <p class="lead">Every handcraft and station recipe in the Convergence Nexus — live from the game data API.</p>
+  <p class="lead">Full craft + build catalog from <code>recipes.csv</code> — every station recipe and every possible item id the recipes touch.</p>
   <div class="meta" id="meta">
     <span>Recipes <b id="meta-recipes">—</b></span>
     <span>Items <b id="meta-items">—</b></span>
@@ -113,97 +119,193 @@
 
 <section class="controls">
   <div class="container row">
-    <input type="search" id="search" placeholder="Search recipes, materials…" autocomplete="off" />
-    <div class="chips" id="station-chips"></div>
-    <div class="status" id="api-status">Loading /api/game…</div>
+    <div class="view-toggle" id="view-toggle">
+      <button type="button" class="chip active" data-view="recipes">Recipes</button>
+      <button type="button" class="chip" data-view="items">Items</button>
+    </div>
+    <input type="search" id="search" placeholder="Search recipes, materials, outputs…" autocomplete="off" />
+    <div class="chips" id="filter-chips"></div>
+    <div class="status" id="api-status">Loading catalog…</div>
   </div>
 </section>
 
 <main class="grid-wrap">
   <div class="container">
     <div class="grid" id="grid"></div>
-    <div class="empty" id="empty" hidden>No recipes match.</div>
+    <div class="empty" id="empty" hidden>No matches.</div>
     <div class="error" id="error" hidden></div>
   </div>
 </main>
 
 <footer>
-  Data source: <code>GET /api/game/catalog</code> · also <code>/api/game/recipes</code> · <code>/api/game/items</code>
+  Data source: <code>GET /api/game/catalog</code> · SSOT <code>artifacts/arpg-game/docs/inventory/recipes.csv</code> · also <code>/api/systems/crafting</code>
 </footer>
 
 <script>
 (function () {
-  const API = '/api/game';
   const grid = document.getElementById('grid');
   const empty = document.getElementById('empty');
   const errEl = document.getElementById('error');
   const status = document.getElementById('api-status');
   const search = document.getElementById('search');
-  const chips = document.getElementById('station-chips');
+  const chips = document.getElementById('filter-chips');
+  const viewToggle = document.getElementById('view-toggle');
 
   let catalog = null;
-  let activeStation = 'all';
+  let activeView = 'recipes';
+  let activeFilter = 'all';
   let itemsById = {};
 
   const STATION_ICONS = {
     none: '✋', campfire: '🔥', cooking_rack: '🍖',
-    workbench: '🪚', drying_rack: '🪵', profession_bench: '⚒️',
+    workbench: '🪚', drying_rack: '🪵', anvil: '⚒️',
+    hammer_tool: '🔨', profession_bench: '⚒️',
   };
+
+  function qtyOf(x) {
+    return Number(x.qty ?? x.count ?? 0);
+  }
+
+  function outputsOf(r) {
+    if (Array.isArray(r.outputs) && r.outputs.length) return r.outputs;
+    if (r.output) return [r.output];
+    return [];
+  }
 
   function itemName(id) {
     const it = itemsById[id];
     return it ? `${it.icon || '📦'} ${it.name}` : id;
   }
 
-  function renderChips(stations) {
-    const all = [{ id: 'all', name: 'All', icon: '📜', recipeCount: catalog?.recipeCount ?? 0 }];
-    const list = all.concat(stations || []);
+  function escapeHtml(s) {
+    return String(s ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function normalizeCatalog(raw) {
+    // Full game catalog shape
+    if (raw && Array.isArray(raw.recipes) && raw.items) {
+      const items = Array.isArray(raw.items)
+        ? Object.fromEntries(raw.items.map((i) => [i.id, i]))
+        : raw.items;
+      return {
+        recipeCount: raw.recipeCount ?? raw.recipes.length,
+        itemCount: raw.itemCount ?? Object.keys(items).length,
+        stations: raw.stations || [],
+        categories: raw.categories || [],
+        recipes: raw.recipes,
+        items,
+      };
+    }
+    // systems-crafting fallback (no items map)
+    if (raw && Array.isArray(raw.recipes)) {
+      const items = {};
+      for (const r of raw.recipes) {
+        for (const inp of r.inputs || []) {
+          if (!items[inp.itemId]) items[inp.itemId] = { id: inp.itemId, name: inp.itemId, icon: '📦', category: 'material' };
+        }
+        for (const o of outputsOf(r)) {
+          if (!items[o.itemId]) items[o.itemId] = { id: o.itemId, name: r.name || o.itemId, icon: '🛠️', category: 'misc' };
+        }
+      }
+      return {
+        recipeCount: raw.recipes.length,
+        itemCount: Object.keys(items).length,
+        stations: raw.stations || [],
+        categories: [],
+        recipes: raw.recipes.map((r) => ({
+          ...r,
+          outputs: outputsOf(r).map((o) => ({ itemId: o.itemId, qty: qtyOf(o) })),
+          inputs: (r.inputs || []).map((i) => ({ itemId: i.itemId, qty: qtyOf(i) })),
+          craftTime: r.craftTime || 0,
+          description: r.description || '',
+          iconItemId: r.iconItemId || (outputsOf(r)[0] && outputsOf(r)[0].itemId) || r.id,
+        })),
+        items,
+      };
+    }
+    throw new Error('Unrecognized catalog shape');
+  }
+
+  function renderChips() {
+    if (!catalog) return;
+    let list;
+    if (activeView === 'recipes') {
+      const all = [{ id: 'all', name: 'All', icon: '📜', recipeCount: catalog.recipeCount }];
+      list = all.concat((catalog.stations || []).map((s) => ({
+        id: s.id,
+        name: s.name || s.id,
+        icon: s.icon || STATION_ICONS[s.id] || '•',
+        recipeCount: s.recipeCount ?? 0,
+      })));
+    } else {
+      const cats = {};
+      for (const it of Object.values(itemsById)) {
+        const c = it.category || 'misc';
+        cats[c] = (cats[c] || 0) + 1;
+      }
+      list = [{ id: 'all', name: 'All', icon: '📦', recipeCount: catalog.itemCount }]
+        .concat(Object.keys(cats).sort().map((c) => ({
+          id: c,
+          name: c.replace(/_/g, ' '),
+          icon: '•',
+          recipeCount: cats[c],
+        })));
+    }
     chips.innerHTML = list.map((s) => {
-      const id = s.id;
-      const label = s.name || id;
-      const ct = s.recipeCount ?? 0;
-      const active = id === activeStation ? ' active' : '';
-      return `<button type="button" class="chip${active}" data-station="${id}">${s.icon || STATION_ICONS[id] || '•'} ${label}<span class="ct">${ct}</span></button>`;
+      const active = s.id === activeFilter ? ' active' : '';
+      return `<button type="button" class="chip${active}" data-filter="${escapeHtml(s.id)}">${s.icon || '•'} ${escapeHtml(s.name)}<span class="ct">${s.recipeCount ?? 0}</span></button>`;
     }).join('');
     chips.querySelectorAll('.chip').forEach((btn) => {
       btn.addEventListener('click', () => {
-        activeStation = btn.getAttribute('data-station') || 'all';
-        renderChips(catalog.stations);
+        activeFilter = btn.getAttribute('data-filter') || 'all';
+        renderChips();
         render();
       });
     });
   }
 
-  function matches(recipe, q) {
+  function matchesRecipe(recipe, q) {
     if (!q) return true;
+    const outs = outputsOf(recipe);
     const hay = [
-      recipe.name, recipe.description, recipe.id, recipe.station, recipe.iconItemId,
+      recipe.name, recipe.description, recipe.id, recipe.station, recipe.iconItemId, recipe.unlockedBySkill,
       ...(recipe.inputs || []).map((i) => i.itemId + ' ' + (itemsById[i.itemId]?.name || '')),
-      ...(recipe.outputs || []).map((o) => o.itemId + ' ' + (itemsById[o.itemId]?.name || '')),
+      ...outs.map((o) => o.itemId + ' ' + (itemsById[o.itemId]?.name || '')),
     ].join(' ').toLowerCase();
     return hay.includes(q);
   }
 
-  function render() {
-    if (!catalog) return;
+  function matchesItem(item, q) {
+    if (!q) return true;
+    const hay = [item.id, item.name, item.category, item.description].join(' ').toLowerCase();
+    return hay.includes(q);
+  }
+
+  function renderRecipes() {
     const q = (search.value || '').trim().toLowerCase();
     let recipes = catalog.recipes || [];
-    if (activeStation !== 'all') {
-      recipes = recipes.filter((r) => r.station === activeStation);
+    if (activeFilter !== 'all') {
+      recipes = recipes.filter((r) => r.station === activeFilter);
     }
-    recipes = recipes.filter((r) => matches(r, q));
-
+    recipes = recipes.filter((r) => matchesRecipe(r, q));
     empty.hidden = recipes.length > 0;
     grid.innerHTML = recipes.map((r) => {
       const iconItem = itemsById[r.iconItemId];
       const icon = iconItem?.icon || STATION_ICONS[r.station] || '🛠️';
       const stationLabel = (catalog.stations || []).find((s) => s.id === r.station)?.name || r.station;
       const inputs = (r.inputs || []).map((i) =>
-        `<span class="pill">${itemName(i.itemId)} ×${i.qty}</span>`
+        `<span class="pill">${itemName(i.itemId)} ×${qtyOf(i)}</span>`
       ).join('');
-      const outputs = (r.outputs || []).map((o) =>
-        `<span class="pill out">${itemName(o.itemId)} ×${o.qty}</span>`
+      const outputs = outputsOf(r).map((o) =>
+        `<span class="pill out">${itemName(o.itemId)} ×${qtyOf(o)}</span>`
       ).join('');
+      const unlock = r.unlockedBySkill && r.unlockedBySkill !== '(default)'
+        ? `<span class="pill gate">🔓 ${escapeHtml(r.unlockedBySkill)}</span>`
+        : '';
       return `<article class="card">
         <div class="card-head">
           <div class="icon">${icon}</div>
@@ -216,24 +318,70 @@
         <div class="io">
           <div class="io-row"><span class="io-label">In</span>${inputs || '<span class="pill">—</span>'}</div>
           <div class="io-row"><span class="io-label">Out</span>${outputs || '<span class="pill out">—</span>'}</div>
+          ${unlock ? `<div class="io-row"><span class="io-label">Gate</span>${unlock}</div>` : ''}
         </div>
         <div class="time">${Number(r.craftTime || 0)}s craft time</div>
       </article>`;
     }).join('');
   }
 
-  function escapeHtml(s) {
-    return String(s)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
+  function renderItems() {
+    const q = (search.value || '').trim().toLowerCase();
+    let items = Object.values(itemsById);
+    if (activeFilter !== 'all') {
+      items = items.filter((i) => (i.category || 'misc') === activeFilter);
+    }
+    items = items.filter((i) => matchesItem(i, q)).sort((a, b) => (a.name || a.id).localeCompare(b.name || b.id));
+    empty.hidden = items.length > 0;
+    const produced = {};
+    const used = {};
+    for (const r of catalog.recipes || []) {
+      for (const o of outputsOf(r)) {
+        (produced[o.itemId] ||= []).push(r.id);
+      }
+      for (const i of r.inputs || []) {
+        (used[i.itemId] ||= []).push(r.id);
+      }
+    }
+    grid.innerHTML = items.map((it) => {
+      const prod = produced[it.id] || [];
+      const use = used[it.id] || [];
+      const role = [
+        prod.length ? `crafted×${prod.length}` : null,
+        use.length ? `input×${use.length}` : null,
+        !prod.length && !use.length ? 'catalog' : null,
+      ].filter(Boolean).join(' · ');
+      return `<article class="card item">
+        <div class="card-head">
+          <div class="icon">${escapeHtml(it.icon || '📦')}</div>
+          <div>
+            <h3>${escapeHtml(it.name || it.id)}</h3>
+            <div class="station">${escapeHtml(it.category || 'misc')} · ${escapeHtml(it.id)}</div>
+          </div>
+        </div>
+        <p class="desc">${escapeHtml(it.description || '')}</p>
+        <div class="item-meta">
+          <span>stack <b>${it.stack ?? '—'}</b></span>
+          <span>kg <b>${it.weight ?? '—'}</b></span>
+          <span>${escapeHtml(role)}</span>
+          ${it.placeable ? '<span><b>placeable</b></span>' : ''}
+        </div>
+      </article>`;
+    }).join('');
+  }
+
+  function render() {
+    if (!catalog) return;
+    if (activeView === 'items') renderItems();
+    else renderRecipes();
   }
 
   async function fetchCatalog() {
     const urls = [
-      `${API}/catalog`,
+      '/api/game/catalog',
       '/data/game-catalog.json',
+      '/api/systems/crafting',
+      '/data/systems-crafting.json',
     ];
     let lastErr;
     for (const url of urls) {
@@ -241,7 +389,7 @@
         const res = await fetch(url, { headers: { Accept: 'application/json' } });
         if (!res.ok) throw new Error(`HTTP ${res.status} @ ${url}`);
         const data = await res.json();
-        return { data, url };
+        return { data: normalizeCatalog(data), url };
       } catch (e) {
         lastErr = e;
       }
@@ -250,19 +398,20 @@
   }
 
   async function load() {
-    status.textContent = 'Loading /api/game/catalog…';
+    status.textContent = 'Loading catalog…';
     status.className = 'status';
     errEl.hidden = true;
     try {
       const { data, url } = await fetchCatalog();
       catalog = data;
       itemsById = catalog.items || {};
-      document.getElementById('meta-recipes').textContent = String(catalog.recipeCount ?? (catalog.recipes || []).length);
-      document.getElementById('meta-items').textContent = String(catalog.itemCount ?? Object.keys(itemsById).length);
+      document.getElementById('meta-recipes').textContent = String(catalog.recipeCount);
+      document.getElementById('meta-items').textContent = String(catalog.itemCount);
       document.getElementById('meta-stations').textContent = String((catalog.stations || []).length);
-      status.textContent = 'Data online · ' + url;
+      status.textContent = `Data online · ${catalog.recipeCount} recipes · ${url}`;
       status.className = 'status ok';
-      renderChips(catalog.stations);
+      activeFilter = 'all';
+      renderChips();
       render();
     } catch (e) {
       status.textContent = 'API offline';
@@ -271,6 +420,19 @@
       errEl.textContent = 'Could not load crafting catalog. ' + (e && e.message ? e.message : e);
     }
   }
+
+  viewToggle.querySelectorAll('.chip').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      activeView = btn.getAttribute('data-view') || 'recipes';
+      viewToggle.querySelectorAll('.chip').forEach((b) => b.classList.toggle('active', b === btn));
+      activeFilter = 'all';
+      search.placeholder = activeView === 'items'
+        ? 'Search items, materials, categories…'
+        : 'Search recipes, materials, outputs…';
+      renderChips();
+      render();
+    });
+  });
 
   search.addEventListener('input', () => render());
   load();
