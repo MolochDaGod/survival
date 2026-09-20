@@ -1,4 +1,6 @@
-# GRUDGES — Nexus Era Survival-RTS-MMO
+# GRUDGES — Voxel-Era Survival MMO (lead title)
+
+**Product era: `voxel` only.** Grudges is the **main / lead game** for the voxel era (not a separate “nexus era” product — that brand is deferred). See `docs/PRODUCT_ERA_VOXEL.md`.
 
 A sci-fi survival RPG set a century after The Way sealed the orbital elevators. Five factions claw for the surface. Build, fight, trade, climb, swim, and survive a 6.4 km² procedural world.
 
@@ -6,19 +8,26 @@ A sci-fi survival RPG set a century after The Way sealed the orbital elevators. 
 
 ## Live
 
-Both `grudges.grudge-studio.com` and `survival.grudge-studio.com` are custom domains on the **same Vercel deployment** (project: `survival`). All paths below are available on either domain.
+**Canonical host: [grudges.grudge-studio.com](https://grudges.grudge-studio.com)** (Vercel project `survival`).  
+`survival.grudge-studio.com` **301-redirects** to the same path on `grudges.grudge-studio.com` (do not treat survival as a second product).
 
 | URL | Role |
 |---|---|
-| [grudges.grudge-studio.com](https://grudges.grudge-studio.com) | Primary — Lore Weaver, marketing, game launcher |
-| [survival.grudge-studio.com](https://survival.grudge-studio.com) | Alias — same deployment |
+| [grudges.grudge-studio.com](https://grudges.grudge-studio.com) | **Canonical** — Lore Weaver, marketing, game launcher |
+| [survival.grudge-studio.com](https://survival.grudge-studio.com) | Legacy alias → **301** → grudges |
 | [grudges.grudge-studio.com/arpg-game/](https://grudges.grudge-studio.com/arpg-game/) | Playable game client |
-| [grudges.grudge-studio.com/lore.html](https://grudges.grudge-studio.com/lore.html) | Five faction histories, timeline |
+| [grudges.grudge-studio.com/lore.html](https://grudges.grudge-studio.com/lore.html) | Lore SSOT — five factions, surface atlas, tools hub (`artifacts/website/lore.html`, **not** arpg-game) |
 | [grudges.grudge-studio.com/stats-guide.html](https://grudges.grudge-studio.com/stats-guide.html) | 8 Nexus attributes, 37 derived stats, perk tiers |
+| [grudges.grudge-studio.com/main-panel](https://grudges.grudge-studio.com/main-panel) | Main Panel preview — stats allocate + voxel-era equipment (mirrors in-game C hub) |
+| [grudges.grudge-studio.com/perks](https://grudges.grudge-studio.com/perks) | Milestone perks & upgrades (BIO…GRA) |
+| [grudges.grudge-studio.com/crafting](https://grudges.grudge-studio.com/crafting) | Stations, recipes, tiers, enhancements |
+| [grudges.grudge-studio.com/professions](https://grudges.grudge-studio.com/professions) | 7 professions, buildables, camp tiers, AI deploy notes |
+| [grudges.grudge-studio.com/data/grudges-systems.json](https://grudges.grudge-studio.com/data/grudges-systems.json) | Static systems catalog (icons, perks, professions, crafting) |
 | [grudges.grudge-studio.com/info.html](https://grudges.grudge-studio.com/info.html) | Combat, building, professions overview |
 | [grudges.grudge-studio.com/admin/](https://grudges.grudge-studio.com/admin/) | Admin panel (prefabs, spawn rules, assets) |
 | [grudges.grudge-studio.com/asset-studio/](https://grudges.grudge-studio.com/asset-studio/) | Asset browser & pipeline |
 | `survival-api-production.up.railway.app/api` | API server (Railway — survival project) |
+| `/api/systems*` (via grudges or Railway) | Systems catalog API — perks, professions, crafting, icons, explanations |
 | `wss://survival-api-production.up.railway.app/api/realtime` | Co-op WebSocket (Railway, direct) |
 | `assets.grudge-studio.com` | Asset CDN (Cloudflare R2) |
 
@@ -30,9 +39,9 @@ Both `grudges.grudge-studio.com` and `survival.grudge-studio.com` are custom dom
 - **Five Factions** — Keepers of the Old Faith, Tech-Scavengers, Hollow Lords, The Network, The Forgotten. Each has territory, vendors, contracts, and standing enemies.
 - **Township Building** — Modular building system (foundations, walls, doors, windows, stairs, roofs). Settlement tiers: Camp → Tribe → Village → Town → Stronghold.
 - **7 Professions, 35 Branches** — Gathering, Hunting, Crafting, Township, Survival, Chemistry, Combat. 147 learnable skills.
-- **8 Nexus Attributes** — Biomass (BIO), Neural Integrity (NEU), Kinetic Efficiency (KIN), Quantum Aptitude (QNT), Synthetic Affinity (SYN), Chronal Stability (CHR), Entropic Resistance (ENT), Gravitic Harmony (GRA). 37 derived stats with diminishing returns. 6 milestone perks per stat.
+- **8 Attributes (Nexus stat system)** — BIO…GRA names stay; product era is **voxel**. 37 derived stats, diminishing returns, 6 milestone perks per attribute.
 - **Swimming & Climbing** — Stat-tied traversal. BIO increases oxygen capacity (+2s/level). ENT improves oxygen regen. KIN boosts swim/climb speed. GRA ≥ 3 unlocks wall-run burst. Stamina-gated climbing with forward raycast wall detection.
-- **55+ Creatures** — 6 humanoid hostiles, 6 animated creatures, 5 sci-fi units, 6 endgame mechs, 23 Nexus-era surface creatures (from GLB attached assets), 7 farm animals, 9 fish/aquatic. Biome-weighted spawn tables across 5 lore biomes (permafrost, glasslands, derelict-sprawl, anomaly-field, cinder-wastes).
+- **55+ Creatures** — humanoids, animals, mechs, surface threats (GLB packs), farm stock, aquatic. Biome-weighted spawn tables across 5 lore biomes (permafrost, glasslands, derelict-sprawl, anomaly-field, cinder-wastes).
 - **Diablo-Style Loot** — 73 affixes across 8 tiers (Scrap → Legendary). Slot-aware rolling.
 - **Modular Gear** — Visual equipment overlay system with per-drop colour tinting.
 - **Action Combat** — Weapon-stance locomotion, animation-synced hit windows, 3-step combo chains, projectile system, dynamic crosshair.
@@ -83,6 +92,12 @@ All routes live under `/api` on the Railway backend:
 | `/api/spawn-rules` | CRUD | Biome spawn rules (admin) |
 | `/api/admin/*` | Various | Admin operations (requires ADMIN_TOKEN) |
 | `/api/stats/*` | GET | Stat catalog |
+| `/api/systems` | GET | Full Grudges systems catalog (perks, professions, crafting, icons, topology) |
+| `/api/systems/overview` | GET | Product + canonical host + endpoint map + explanations |
+| `/api/systems/perks` | GET | Milestone perks + icon paths |
+| `/api/systems/professions` | GET | 7 professions + branches |
+| `/api/systems/crafting` | GET | Stations, recipes, tiers |
+| `/api/systems/icons` | GET | Icon pack conventions |
 | `/api/assets/*` | GET | Asset catalog (R2 bridge) |
 | `/api/realtime` | WebSocket | Co-op multiplayer (msgpack binary) |
 

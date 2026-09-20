@@ -54,19 +54,51 @@ export type BuildingPieceId =
   | 'mb_bookcase'
   | 'mb_bench'
   | 'mb_lantern'
-  // ── Survival camp claim / profession props (GRUDGES era — not Warlords) ──
-  | 'claim_flag'
-  | 'orc_flag'
-  | 'workbench'
-  | 'campfire'
-  | 'build_tent_personal'
   // ── low_poly farm / village wood props (sub-nodes in a single GLB) ────────
   | 'wt_fence'
   | 'wt_bucket'
   | 'wt_ladder'
   | 'wt_box'
   | 'wt_barrel'
-  | 'wt_sign';
+  | 'wt_sign'
+  // ── Camp / NPC-hire placeables (recipes.csv build_* outputs) ─────────────
+  | 'campfire'
+  | 'tent_personal'
+  | 'storage_crate'
+  | 'claim_flag'
+  | 'logging_camp'
+  | 'mining_outpost'
+  | 'field'
+  | 'caravan_cart'
+  | 'market_stall'
+  | 'market_complex'
+  | 'grand_bazaar'
+  | 'watchtower'
+  | 'palisade'
+  | 'gate_iron'
+  | 'turret_basic'
+  | 'turret_heavy'
+  | 'embassy'
+  | 'workbench'
+  | 'anvil'
+  | 'recruit_post'
+  | 'command_tent'
+  | 'keep_fortress'
+  | 'banner'
+  | 'banner_2'
+  | 'war_banner'
+  // CSV modular building outputs (alias → same kits as mb_*)
+  | 'floor_modular'
+  | 'wall_modular'
+  | 'door_round'
+  | 'floor_brick'
+  | 'floor_wood_dark'
+  | 'window'
+  | 'window_shutters'
+  | 'doorframe_round'
+  | 'roof_tile'
+  | 'stairs_modular'
+  | 'metal_fence';
 
 interface PieceDef {
   id: BuildingPieceId;
@@ -113,13 +145,6 @@ const PIECES: Record<BuildingPieceId, PieceDef> = {
   mb_bench: { id: 'mb_bench', glbPath: 'models/props/fantasy_megakit/Exports/glTF/Bench.gltf', yOffset: 0 },
   mb_lantern: { id: 'mb_lantern', glbPath: 'models/props/fantasy_megakit/Exports/glTF/Lantern_Wall.gltf', yOffset: 0 },
 
-  // Survival camp claim + profession benches (reuse prop meshes until dedicated art ships)
-  claim_flag: { id: 'claim_flag', glbPath: 'models/props/orc-props/_flag.fbx', yOffset: 0, fitSize: 2.5 },
-  orc_flag: { id: 'orc_flag', glbPath: 'models/props/orc-props/_flag.fbx', yOffset: 0, fitSize: 2.5 },
-  workbench: { id: 'workbench', glbPath: 'models/props/fantasy_megakit/Exports/glTF/Workbench.gltf', yOffset: 0 },
-  campfire: { id: 'campfire', glbPath: 'models/props/fantasy_megakit/Exports/glTF/Lantern_Wall.gltf', yOffset: 0, fitSize: 1.2 },
-  build_tent_personal: { id: 'build_tent_personal', glbPath: 'models/props/fantasy_megakit/Exports/glTF/Bed_Twin1.gltf', yOffset: 0, fitSize: 2.5 },
-
   // low_poly farm / village wood pack — meshes extracted by node name (# suffix).
   wt_fence:  { id: 'wt_fence',  glbPath: 'models/props/low_poly_farm_wood/pack.glb#Fence',   yOffset: 0, fitSize: 4.0 },
   wt_bucket: { id: 'wt_bucket', glbPath: 'models/props/low_poly_farm_wood/pack.glb#Bucket',  yOffset: 0, fitSize: 1.2 },
@@ -127,6 +152,46 @@ const PIECES: Record<BuildingPieceId, PieceDef> = {
   wt_box:    { id: 'wt_box',    glbPath: 'models/props/low_poly_farm_wood/pack.glb#Box',     yOffset: 0, fitSize: 1.5 },
   wt_barrel: { id: 'wt_barrel', glbPath: 'models/props/low_poly_farm_wood/pack.glb#Barrel',  yOffset: 0, fitSize: 1.5 },
   wt_sign:   { id: 'wt_sign',   glbPath: 'models/props/low_poly_farm_wood/pack.glb#Pointer', yOffset: 0, fitSize: 2.0 },
+
+  // Camp / NPC-hire buildings — reuse existing kits until dedicated GLBs ship.
+  campfire: { id: 'campfire', glbPath: 'assets/survival/items/Campfire.fbx', yOffset: 0, fitSize: 2.0 },
+  tent_personal: { id: 'tent_personal', glbPath: 'assets/survival/items/TentBlue.fbx', yOffset: 0, fitSize: 3.0 },
+  storage_crate: { id: 'storage_crate', glbPath: 'models/props/fantasy_megakit/Exports/glTF/Chest_Wood.gltf', yOffset: 0, fitSize: 1.5 },
+  claim_flag: { id: 'claim_flag', glbPath: 'models/props/orc-props/_flag.fbx', yOffset: 0, fitSize: 2.0 },
+  logging_camp: { id: 'logging_camp', glbPath: 'models/props/fantasy_megakit/Exports/glTF/Workbench.gltf', yOffset: 0, fitSize: 3.0 },
+  mining_outpost: { id: 'mining_outpost', glbPath: 'models/props/fantasy_megakit/Exports/glTF/Anvil.gltf', yOffset: 0, fitSize: 3.0 },
+  field: { id: 'field', glbPath: 'models/environment/kaykit_dungeon/floorDecoration_wood.gltf.glb', yOffset: 0, fitSize: 4.0 },
+  caravan_cart: { id: 'caravan_cart', glbPath: 'models/props/low_poly_farm_wood/pack.glb#Box', yOffset: 0, fitSize: 3.0 },
+  market_stall: { id: 'market_stall', glbPath: 'models/props/fantasy_megakit/Exports/glTF/Table_Large.gltf', yOffset: 0, fitSize: 3.0 },
+  market_complex: { id: 'market_complex', glbPath: 'models/props/fantasy_megakit/Exports/glTF/Table_Large.gltf', yOffset: 0, fitSize: 4.0 },
+  grand_bazaar: { id: 'grand_bazaar', glbPath: 'models/props/fantasy_megakit/Exports/glTF/Bookcase_2.gltf', yOffset: 0, fitSize: 4.0 },
+  watchtower: { id: 'watchtower', glbPath: 'models/props/steampunk/scene.gltf#Time_tower', yOffset: 0, fitSize: 4.0 },
+  palisade: { id: 'palisade', glbPath: 'models/props/low_poly_farm_wood/pack.glb#Fence', yOffset: 0, fitSize: 4.0 },
+  gate_iron: { id: 'gate_iron', glbPath: 'models/environment/kaykit_dungeon/wall_door.gltf.glb', yOffset: 0, fitSize: 4.0 },
+  turret_basic: { id: 'turret_basic', glbPath: 'models/props/steampunk/scene.gltf#Tesla_coil', yOffset: 0, fitSize: 2.0 },
+  turret_heavy: { id: 'turret_heavy', glbPath: 'models/props/steampunk/scene.gltf#Tesla_coil', yOffset: 0, fitSize: 2.5 },
+  embassy: { id: 'embassy', glbPath: 'models/props/fantasy_megakit/Exports/glTF/Bookcase_2.gltf', yOffset: 0, fitSize: 3.5 },
+  workbench: { id: 'workbench', glbPath: 'models/props/fantasy_megakit/Exports/glTF/Workbench.gltf', yOffset: 0, fitSize: 2.5 },
+  anvil: { id: 'anvil', glbPath: 'models/props/fantasy_megakit/Exports/glTF/Anvil.gltf', yOffset: 0, fitSize: 1.5 },
+  recruit_post: { id: 'recruit_post', glbPath: 'models/props/low_poly_farm_wood/pack.glb#Pointer', yOffset: 0, fitSize: 2.0 },
+  command_tent: { id: 'command_tent', glbPath: 'models/props/steampunk/scene.gltf#Tent', yOffset: 0, fitSize: 4.0 },
+  keep_fortress: { id: 'keep_fortress', glbPath: 'models/environment/kaykit_dungeon/wallCorner.gltf.glb', yOffset: 0, fitSize: 4.0 },
+  banner: { id: 'banner', glbPath: 'models/props/orc-props/_flag.fbx', yOffset: 0, fitSize: 2.0 },
+  banner_2: { id: 'banner_2', glbPath: 'models/props/orc-props/_flag.fbx', yOffset: 0, fitSize: 2.0 },
+  war_banner: { id: 'war_banner', glbPath: 'models/props/orc-props/_flag.fbx', yOffset: 0, fitSize: 2.5 },
+
+  // recipes.csv modular outputs → existing kit meshes
+  floor_modular: { id: 'floor_modular', glbPath: 'models/environment/kaykit_dungeon/floorDecoration_wood.gltf.glb', yOffset: 0 },
+  wall_modular: { id: 'wall_modular', glbPath: 'models/environment/kaykit_dungeon/wall.gltf.glb', yOffset: 0 },
+  door_round: { id: 'door_round', glbPath: 'models/environment/kaykit_dungeon/door.gltf.glb', yOffset: 0 },
+  floor_brick: { id: 'floor_brick', glbPath: 'models/environment/medieval_village/glTF/Wall_UnevenBrick_Straight.gltf', yOffset: 0 },
+  floor_wood_dark: { id: 'floor_wood_dark', glbPath: 'models/environment/kaykit_dungeon/floorDecoration_wood.gltf.glb', yOffset: 0 },
+  window: { id: 'window', glbPath: 'models/environment/kaykit_dungeon/wall_window.gltf.glb', yOffset: 0 },
+  window_shutters: { id: 'window_shutters', glbPath: 'models/environment/kaykit_dungeon/wall_window.gltf.glb', yOffset: 0 },
+  doorframe_round: { id: 'doorframe_round', glbPath: 'models/environment/kaykit_dungeon/wall_door.gltf.glb', yOffset: 0 },
+  roof_tile: { id: 'roof_tile', glbPath: 'models/environment/medieval_village/glTF/Roof_RoundTiles_4x4.gltf', yOffset: 3.0 },
+  stairs_modular: { id: 'stairs_modular', glbPath: 'models/environment/kaykit_dungeon/stairs.gltf.glb', yOffset: 0 },
+  metal_fence: { id: 'metal_fence', glbPath: 'models/props/low_poly_farm_wood/pack.glb#Fence', yOffset: 0, fitSize: 4.0 },
 };
 
 export interface PlacedPieceData {

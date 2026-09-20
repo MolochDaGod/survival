@@ -3,11 +3,20 @@ import { CharacterCreation } from '@/components/CharacterCreation';
 import { CharacterSelect } from '@/components/CharacterSelect';
 import { GameCanvas } from '@/components/GameCanvas';
 import { LoginScreen } from '@/components/LoginScreen';
-import { CharacterConfig, DEFAULT_CHARACTER_CONFIG } from '@/game/CharacterConfig';
+import { CharacterConfig, DEFAULT_CHARACTER_CONFIG, withVoxelEra } from '@/game/CharacterConfig';
 import { saveCharacter } from '@/game/characterStorage';
 import { setActiveCharacterId } from '@/game/activeCharacter';
 import { resetSaveGameService } from '@/game/SaveGameService';
+import { ProfessionsService } from '@/game/progression/ProfessionsService';
+import { StatProgressionService } from '@/game/progression/StatProgressionService';
 import type { Identity } from '@/game/identity';
+
+/** Rebind per-character progression singletons after active character changes. */
+function rebindProgressionForActiveCharacter(): void {
+  resetSaveGameService();
+  ProfessionsService.reset();
+  StatProgressionService.reset();
+}
 
 type Screen = 'login' | 'select' | 'creation' | 'game';
 
@@ -29,7 +38,7 @@ function App() {
   ) => {
     setAccountId(acctId);
     setCharacterConfig(config ?? DEFAULT_CHARACTER_CONFIG);
-    // CharacterSelect already called setActiveCharacterId + resetSaveGameService.
+    // CharacterSelect already called setActiveCharacterId + rebindProgression.
     setScreen(config ? 'game' : 'creation');
   };
 
@@ -38,23 +47,30 @@ function App() {
     // Defensively clear any stale active character so a failed create
     // doesn't leak save writes into another character's namespace.
     setActiveCharacterId(null);
-    resetSaveGameService();
+    rebindProgressionForActiveCharacter();
     setScreen('creation');
   };
 
   const handleCreationComplete = async (config: CharacterConfig) => {
-    setCharacterConfig(config);
+    // Grudges product lock: always stamp era=voxel (docs/PRODUCT_ERA_VOXEL.md).
+    const voxelConfig = withVoxelEra(config);
+    setCharacterConfig(voxelConfig);
     if (accountId) {
       try {
         const res = await fetch('/api/characters', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ accountId, name: config.name, config }),
+          body: JSON.stringify({
+            accountId,
+            name: voxelConfig.name,
+            era: 'voxel',
+            config: voxelConfig,
+          }),
         });
         if (res.ok) {
           const row = (await res.json()) as { id: string };
           setActiveCharacterId(row.id);
-          resetSaveGameService();
+          rebindProgressionForActiveCharacter();
         } else {
           console.warn('[App] character create failed', res.status);
         }
@@ -63,7 +79,7 @@ function App() {
       }
     }
     // Persist character config locally (now under the active character key).
-    saveCharacter(config);
+    saveCharacter(voxelConfig);
     setScreen('game');
   };
 

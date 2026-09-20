@@ -76,19 +76,20 @@
     color: "#5a9ad8",
     icon: "/icons/perks/smarts/24.png",
   },
+  // Profession icons use perk packs 1–30 only (/icons/perks/{pack}/{n}.png).
   chemistry: {
     id: "chemistry",
     label: "Chemistry",
     blurb: "Cooking, potions, explosives, toxins, refining. Every brew, blast and meal that buys you another wave.",
     color: "#9a6ecf",
-    icon: "/icons/perks/maker/45.png",
+    icon: "/icons/perks/maker/14.png",
   },
   combat: {
     id: "combat",
     label: "Combat",
     blurb: "Pistols, rifles, blades, hammers, theft. The mastery profile of a working killer.",
     color: "#d05050",
-    icon: "/icons/perks/warrior/55.png",
+    icon: "/icons/perks/warrior/25.png",
   },
 };
 

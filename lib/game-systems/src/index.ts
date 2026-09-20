@@ -39,12 +39,28 @@ export {
   type CraftingStation, type HarvestingProfession,
 } from './tiers.js';
 
-// Derived Stats (37 combat + economy stats from 8 legacy attributes)
+// Derived Stats (legacy STR/VIT sheet — prefer Nexus bake for voxel era)
 export {
   computeDerivedStats, derivedToCombatStats, derivedToResistances,
   DERIVED_STAT_META,
   type DerivedStats, type DerivedStatMeta,
 } from './derivedStats.js';
+
+// Nexus bake — BIO…GRA → 37 derived + Main Panel / voxel-era defaults
+export {
+  DEFAULT_STATS,
+  VOXEL_ERA_STARTER_STATS,
+  cloneStats,
+  isValidGrudgeStats,
+  NEXUS_PRIMARY,
+  NEXUS_DERIVED_META,
+  computeDerivedFromNexus,
+  applyNexusToPlayerStats,
+  createVoxelEraNexusDefaults,
+  type NexusAffinity,
+  type NexusPrimaryDef,
+  type NexusDerivedSheet,
+} from './nexusDerived.js';
 
 // Deployables (turrets, drones, mechs, beacons + entity role system)
 export {
@@ -69,34 +85,3 @@ export {
   tierValueMultiplier,
   type AffixDef, type AffixSlotType, type RolledAffix, type LootDrop,
 } from './loot.js';
-
-// Survival crafting catalogs (full surface: @workspace/game-systems/crafting)
-export {
-  RECIPES,
-  SURVIVAL_ITEMS,
-  RECIPE_STATIONS,
-  getRecipe,
-  getRecipesByStation,
-  recipesByStation,
-  getSurvivalItem,
-  listSurvivalItems,
-  buildGameCatalog,
-  type Recipe,
-  type RecipeInput,
-  type RecipeOutput,
-  type SurvivalCategory,
-  type ConsumeEffect,
-  type SurvivalItemDef,
-} from './crafting/index.js';
-export type { CraftingStation as RecipeStation } from './crafting/index.js';
-
-// World (factions, grudges, shared noise) — also `@workspace/game-systems/world`
-export {
-  FACTIONS, FACTION_IDS, REP_TIERS, getRepTier, newReputationVector,
-  type FactionId, type FactionDef, type RepTier, type RepTierDef, type ReputationVector,
-} from './world/factions.js';
-export {
-  GRUDGE_TIER_LIMITS, GRUDGE_PERMISSIONS, grudgeTierForPrestige, isHostileGrudge,
-  type GrudgeTier, type GrudgeRole, type GrudgeStance, type GrudgeMember,
-  type GrudgeClaim, type Grudge,
-} from './world/grudges.js';

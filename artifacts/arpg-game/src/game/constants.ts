@@ -1,4 +1,8 @@
 import { WeaponStats, AbilityDef, SkillNode, PlayerStats } from './types';
+import {
+  applyNexusToPlayerStats,
+  VOXEL_ERA_STARTER_STATS,
+} from '@workspace/game-systems';
 
 export const WEAPONS: WeaponStats[] = [
   {
@@ -84,7 +88,8 @@ export const ABILITIES: AbilityDef[] = [
     manaCost: 20,
     cooldown: 5,
     damage: 40,
-    unlocked: true,
+    // SWG-style: unlocked by combat.blades.1 (GrudgeProgressionBridge)
+    unlocked: false,
     key: '1',
     color: '#4fc3f7',
   },
@@ -176,14 +181,14 @@ export const SKILL_TREE: SkillNode[] = [
   { id: 'abil_berserker', name: 'Berserker Rage', description: 'Unlocks Berserker Rage', maxLevel: 1, currentLevel: 0, requires: ['str3', 'agi3'], stat: 'ability', abilityId: 'berserker_rage', bonusPerLevel: 0, x: 1, y: 3 },
 ];
 
-export const INITIAL_PLAYER_STATS: PlayerStats = {
+/** Base shell before Nexus bake (survival vitals + level). */
+const _PLAYER_SHELL: PlayerStats = {
   health: 100,
   maxHealth: 100,
   mana: 80,
   maxMana: 80,
   stamina: 100,
   maxStamina: 100,
-  // Legacy 8 Attributes — all start at 10
   strength: 10,
   vitality: 10,
   endurance: 10,
@@ -195,7 +200,6 @@ export const INITIAL_PLAYER_STATS: PlayerStats = {
   level: 1,
   experience: 0,
   skillPoints: 3,
-  // Survival vitals — start fed, hydrated, rested, normothermic
   hunger: 100,
   maxHunger: 100,
   thirst: 100,
@@ -206,6 +210,16 @@ export const INITIAL_PLAYER_STATS: PlayerStats = {
   bleeding: false,
   infected: false,
 };
+
+/**
+ * Voxel-era starter combat sheet — baked from BIO/NEU/KIN = 1 via
+ * `@workspace/game-systems` `computeDerivedFromNexus` / `applyNexusToPlayerStats`.
+ * Main Panel + character create share the same SSOT.
+ */
+export const INITIAL_PLAYER_STATS: PlayerStats = applyNexusToPlayerStats(
+  _PLAYER_SHELL,
+  VOXEL_ERA_STARTER_STATS,
+);
 
 export const CAMERA_MODES = {
   'first-person': { name: 'First Person', shortcut: 'V (cycle)' },

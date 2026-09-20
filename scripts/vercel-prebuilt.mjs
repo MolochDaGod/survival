@@ -33,21 +33,14 @@ cpSync(src, dest, {
       const parts = rel.split('/');
       // Allow the directory entries themselves (needed for recursive copy)
       if (parts.length <= 1) return true;  // icons/
-      if (parts[1] === 'factions') return true;  // all faction crests
-      if (parts[1] === 'perks') {
-        if (parts.length <= 2) return true;  // icons/perks/
-        if (parts.length <= 3) return true;  // icons/perks/warrior/
-        // Only allow the specific icon files referenced in HTML
-        const NEEDED = new Set([
-          'hero/9.png','hero/12.png','hero/21.png','hero/28.png','hero/30.png','hero/33.png',
-          'maker/14.png',
-          'smarts/1.png','smarts/3.png','smarts/13.png','smarts/23.png',
-          'warrior/4.png','warrior/14.png','warrior/29.png','warrior/34.png',
-        ]);
-        const iconPath = parts.slice(2).join('/');
-        return NEEDED.has(iconPath);
+      // Faction crests + banners (map/claim identity) — skip raw Imgur dumps
+      if (parts[1] === 'factions') {
+        if (parts.includes('raw')) return false;
+        return true;
       }
-      return false;  // skip other icon subdirs
+      // Full perk packs + stat-tier SVGs for /perks production catalog
+      if (parts[1] === 'perks') return true;
+      return false;  // skip other icon subdirs (genetics etc. stay in arpg CDN/local)
     }
     return true;
   },
@@ -57,10 +50,7 @@ console.log('[prebuilt] Website copied (images excluded, icons cherry-picked)');
 // Copy arpg-game build output into /arpg-game/ subpath
 const gameSrc = resolve(root, 'artifacts/arpg-game/dist/public');
 const gameDest = resolve(dest, 'arpg-game');
-// Ship JS/CSS/HTML + Draco/Basis decoders (~1.3 MB). Large art (models,
-// textures, locations, …) stays on the R2 CDN. Decoders must be co-located
-// with the app so GLTFLoader does not depend on third-party CDNs at boot.
-const GAME_SKIP = new Set(['models', 'icons', 'textures', 'locations', 'books', 'bestiary', 'vendor', 'lore']);
+const GAME_SKIP = new Set(['models', 'icons', 'textures', 'locations', 'books', 'bestiary', 'decoders', 'vendor', 'lore']);
 if (existsSync(gameSrc)) {
   cpSync(gameSrc, gameDest, {
     recursive: true,
@@ -70,7 +60,7 @@ if (existsSync(gameSrc)) {
       return !GAME_SKIP.has(top);
     },
   });
-  console.log('[prebuilt] Copied arpg-game build → /arpg-game/ (CDN assets excluded, decoders included)');
+  console.log('[prebuilt] Copied arpg-game build → /arpg-game/ (CDN assets excluded)');
 } else {
   console.warn('[prebuilt] WARNING: arpg-game not built — run pnpm build:game first');
 }
@@ -78,24 +68,41 @@ if (existsSync(gameSrc)) {
 // Always write config.json (overwrite stale versions from previous deploys)
 const configPath = resolve(root, '.vercel/output/config.json');
 {
-  // Route order matters: static game catalogs first (always online), then
-  // Railway for dynamic APIs, then SPA fallbacks. Crafting page lives at
-  // /crafting.html with a clean /crafting URL.
   const config = {
     version: 3,
     routes: [
-      { src: '/api/game/?$', dest: '/data/game-index.json' },
-      { src: '/api/game/catalog/?$', dest: '/data/game-catalog.json' },
-      { src: '/api/game/recipes/?$', dest: '/data/recipes.json' },
-      { src: '/api/game/items/?$', dest: '/data/items.json' },
-      { src: '/api/game/stations/?$', dest: '/data/stations.json' },
+      // Canonical host: grudges.grudge-studio.com — survival.* permanently redirects.
+      {
+        src: '/(.*)',
+        has: [{ type: 'host', value: 'survival.grudge-studio.com' }],
+        status: 301,
+        headers: { Location: 'https://grudges.grudge-studio.com/$1' },
+      },
+      // Systems catalog — static slices (same payload as Railway /api/systems*).
+      // Keep BEFORE the Railway /api proxy so definitions stay available even if API lags.
+      { src: '/api/systems$', dest: '/data/grudges-systems.json' },
+      { src: '/api/systems/$', dest: '/data/grudges-systems.json' },
+      { src: '/api/systems/overview/?', dest: '/data/systems-overview.json' },
+      { src: '/api/systems/perks/?', dest: '/data/systems-perks.json' },
+      { src: '/api/systems/professions/?', dest: '/data/systems-professions.json' },
+      { src: '/api/systems/crafting/?', dest: '/data/systems-crafting.json' },
+      { src: '/api/systems/recipes/?', dest: '/data/systems-recipes.json' },
+      { src: '/api/systems/buildables/?', dest: '/data/systems-buildables.json' },
+      { src: '/api/systems/icons/?', dest: '/data/systems-icons.json' },
+      { src: '/api/systems/township/?', dest: '/data/systems-township.json' },
+      { src: '/api/systems/combat/?', dest: '/data/systems-combat.json' },
       { src: '/api/(.*)', dest: 'https://survival-api-production.up.railway.app/api/$1' },
-      { src: '/crafting/?$', dest: '/crafting.html' },
-      { src: '/operators/?$', dest: '/operators.html' },
       { src: '/arpg-game$', dest: '/arpg-game/index.html' },
       { src: '/arpg-game/$', dest: '/arpg-game/index.html' },
       { src: '/admin$', dest: '/admin/index.html' },
       { src: '/admin/$', dest: '/admin/index.html' },
+      { src: '/mapstarter$', dest: '/mapstarter.html' },
+      { src: '/mapstarter/$', dest: '/mapstarter.html' },
+      { src: '/main-panel$', dest: '/main-panel.html' },
+      { src: '/perks$', dest: '/perks.html' },
+      { src: '/crafting$', dest: '/crafting.html' },
+      { src: '/professions$', dest: '/professions.html' },
+      { src: '/combat$', dest: '/combat.html' },
       { handle: 'filesystem' },
     ],
   };
@@ -103,23 +110,6 @@ const configPath = resolve(root, '.vercel/output/config.json');
   const { writeFileSync } = await import('fs');
   writeFileSync(configPath, JSON.stringify(config, null, 2));
   console.log('[prebuilt] Created config.json');
-}
-
-// Emit static /api/game catalogs into website dist + .vercel/output/static
-try {
-  const { spawnSync } = await import('child_process');
-  const gen = spawnSync(
-    process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm',
-    ['exec', 'tsx', 'scripts/gen-game-catalog.mjs'],
-    { cwd: root, stdio: 'inherit', shell: true },
-  );
-  if (gen.status !== 0) {
-    console.warn('[prebuilt] WARNING: gen-game-catalog failed — /api/game static routes may be stale');
-  } else {
-    console.log('[prebuilt] Game data catalogs written (recipes/items/stations)');
-  }
-} catch (err) {
-  console.warn('[prebuilt] WARNING: could not run gen-game-catalog:', err);
 }
 
 console.log('[prebuilt] Ready for: vercel deploy --prebuilt --prod');

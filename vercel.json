@@ -3,67 +3,76 @@
   "alias": [
     "grudges.grudge-studio.com",
     "survival.grudge-studio.com",
-    "grudges-survival.vercel.app"
+    "grudges-survival.vercel.app",
+    "survival-grudgenexus.vercel.app"
   ],
-  "buildCommand": "pnpm --filter @workspace/website build && pnpm --filter @workspace/arpg-game build && node scripts/merge-outputs.mjs",
+  "buildCommand": "pnpm run export:systems && pnpm --filter @workspace/website build && pnpm --filter @workspace/arpg-game build && node scripts/merge-outputs.mjs",
   "installCommand": "pnpm install --no-frozen-lockfile",
   "outputDirectory": "artifacts/website/dist/public",
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "survival.grudge-studio.com" }],
+      "destination": "https://grudges.grudge-studio.com/:path*",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     {
       "source": "/api/auth/:path*",
       "destination": "https://id.grudge-studio.com/auth/:path*"
     },
     {
-      "source": "/api/characters/:path*",
-      "destination": "https://api.grudge-studio.com/api/characters/:path*"
-    },
-    {
       "source": "/api/assets/:path*",
       "destination": "https://assets.grudge-studio.com/:path*"
     },
     {
-      "source": "/api/game",
-      "destination": "/data/game-index.json"
+      "source": "/api/systems",
+      "destination": "/data/grudges-systems.json"
     },
     {
-      "source": "/api/game/",
-      "destination": "/data/game-index.json"
+      "source": "/api/systems/",
+      "destination": "/data/grudges-systems.json"
     },
     {
-      "source": "/api/game/catalog",
-      "destination": "/data/game-catalog.json"
+      "source": "/api/systems/overview",
+      "destination": "/data/systems-overview.json"
     },
     {
-      "source": "/api/game/recipes",
-      "destination": "/data/recipes.json"
+      "source": "/api/systems/perks",
+      "destination": "/data/systems-perks.json"
     },
     {
-      "source": "/api/game/items",
-      "destination": "/data/items.json"
+      "source": "/api/systems/professions",
+      "destination": "/data/systems-professions.json"
     },
     {
-      "source": "/api/game/stations",
-      "destination": "/data/stations.json"
+      "source": "/api/systems/crafting",
+      "destination": "/data/systems-crafting.json"
+    },
+    {
+      "source": "/api/systems/recipes",
+      "destination": "/data/systems-recipes.json"
+    },
+    {
+      "source": "/api/systems/buildables",
+      "destination": "/data/systems-buildables.json"
+    },
+    {
+      "source": "/api/systems/icons",
+      "destination": "/data/systems-icons.json"
+    },
+    {
+      "source": "/api/systems/township",
+      "destination": "/data/systems-township.json"
+    },
+    {
+      "source": "/api/systems/combat",
+      "destination": "/data/systems-combat.json"
     },
     {
       "source": "/api/:path*",
       "destination": "https://survival-api-production.up.railway.app/api/:path*"
-    },
-    {
-      "source": "/crafting",
-      "destination": "/crafting.html"
-    },
-    {
-      "source": "/crafting/",
-      "destination": "/crafting.html"
-    },
-    {
-      "source": "/operators",
-      "destination": "/operators.html"
-    },
-    {
-      "source": "/operators/",
-      "destination": "/operators.html"
     },
     {
       "source": "/arpg-game/locations/:path*",
@@ -116,6 +125,54 @@
     {
       "source": "/stats-guide.html",
       "destination": "/stats-guide.html"
+    },
+    {
+      "source": "/main-panel",
+      "destination": "/main-panel.html"
+    },
+    {
+      "source": "/main-panel.html",
+      "destination": "/main-panel.html"
+    },
+    {
+      "source": "/perks",
+      "destination": "/perks.html"
+    },
+    {
+      "source": "/perks.html",
+      "destination": "/perks.html"
+    },
+    {
+      "source": "/crafting",
+      "destination": "/crafting.html"
+    },
+    {
+      "source": "/crafting.html",
+      "destination": "/crafting.html"
+    },
+    {
+      "source": "/professions",
+      "destination": "/professions.html"
+    },
+    {
+      "source": "/professions.html",
+      "destination": "/professions.html"
+    },
+    {
+      "source": "/mapstarter",
+      "destination": "/mapstarter.html"
+    },
+    {
+      "source": "/mapstarter.html",
+      "destination": "/mapstarter.html"
+    },
+    {
+      "source": "/combat",
+      "destination": "/combat.html"
+    },
+    {
+      "source": "/combat.html",
+      "destination": "/combat.html"
     }
   ],
   "headers": [

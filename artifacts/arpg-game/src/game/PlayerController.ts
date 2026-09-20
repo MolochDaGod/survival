@@ -11,25 +11,18 @@ import { groundY as groundFloor } from './GroundSampler';
 import { LocomotionAnimator } from './LocomotionAnimator';
 import { PhysicsWorld } from './physics/PhysicsWorld';
 import { GROUPS_PLAYER } from './physics/PhysicsGroups';
-import {
-  DEFAULT_PLAYER_CAPSULE,
-  logicalPosToCentre,
-  centrePosToLogical,
-} from './physics/CapsuleBody';
 import { LedgeClimbController } from './LedgeClimbController';
 import { StatProgressionService } from './progression/StatProgressionService';
-import { WeaponAttachment } from './WeaponAttachment';
-import { getHandToolDef } from './HandToolCatalog';
+import { WeaponAttachment, type BladeSegment, type MuzzlePose } from './WeaponAttachment';
 import { GearVisualManager, resolveGearModelPath } from './GearVisualManager';
 import { ITEM_DATABASE } from './Items';
 import type { Gender } from './CharacterConfig';
-import { expFactor, expScale } from './math/MathUtils';
-import { downCast } from './math/TerrainRaycast';
-import { TUNING_TPS } from './remake/SurvivalRemakeConfig';
+import { SpineIK } from './ik/SpineIK';
+import { FeetPlantIK } from './ik/FeetIK';
 
 /** Player capsule height — `this.position.y` sits this far above the feet. */
 const EYE_HEIGHT = 1.65; // approx — head mesh sits at local y=1.7
-const PLAYER_HEIGHT = DEFAULT_PLAYER_CAPSULE.playerHeight;
+const PLAYER_HEIGHT = 1.8;
 /** Gravity in m/s² — used only by the legacy fallback path when no Rapier
  * world is wired in. The hybrid path lets Rapier's world gravity drive
  * falls. */
@@ -37,8 +30,8 @@ const GRAVITY = 22;
 /** Capsule shape used for both the kinematic body and the controller.
  * Half-height of the cylindrical part (top + bottom hemispheres add the
  * radius back), so total height = 2*(halfHeight + radius) = 1.8 m. */
-const CAPSULE_HALF_HEIGHT = DEFAULT_PLAYER_CAPSULE.halfHeight;
-const CAPSULE_RADIUS = DEFAULT_PLAYER_CAPSULE.radius;
+const CAPSULE_HALF_HEIGHT = 0.5;
+const CAPSULE_RADIUS = 0.4;
 
 export class PlayerController {
   /** Metres below the last known safe position before the kill-plane fires
@@ -60,19 +53,6 @@ export class PlayerController {
   isGrounded: boolean = true;
   jumpVelocity: number = 0;
   isRolling: boolean = false;
-  /**
-   * Mode gates (set by GameModeController via GameEngine).
-   * When false, corresponding input is ignored.
-   */
-  inputEnabled = true;
-  allowPrimaryAction = true;
-  allowFocusRmb = true;
-  allowDodge = true;
-  /**
-   * Optional RMB behavior override from GameEngine (ADS vs block).
-   * Called with true on mousedown, false on mouseup.
-   */
-  focusRmbHandler: ((down: boolean) => void) | null = null;
   rollTimer: number = 0;
   rollDir: THREE.Vector3 = new THREE.Vector3();
 
@@ -81,11 +61,28 @@ export class PlayerController {
   mouseDelta: { x: number; y: number } = { x: 0, y: 0 };
   mouseLocked: boolean = false;
 
+  /**
+   * Click-to-move / harvest approach target (XZ). When set and player is not
+   * pressing WASD, handleMovement walks toward it until within stopRadius.
+   */
+  private moveTarget: { x: number; z: number; stopR: number } | null = null;
+
   isAttacking: boolean = false;
   attackTimer: number = 0;
   isBlocking: boolean = false;
   isParrying: boolean = false;
+  /**
+   * Sticky combat focus (RMB short-click toggle). Replaces hold-ADS "action angle"
+   * zoom. When true: mouse look = aim, body faces camera-forward for strafe.
+   * Harvest RMB still intercepts when a node is under reticle.
+   */
+  focusEnabled: boolean = false;
+  /** @deprecated use focusEnabled — kept as alias for HUD/crosshair bindings */
   isAiming: boolean = false;
+  private _rmbDownAt = 0;
+  private _rmbMoved = false;
+  private _rmbLastX = 0;
+  private _rmbLastY = 0;
 
   /** First-person hands model + animations (fists_fp.glb). */
   private fpHandsGroup: THREE.Group | null = null;
@@ -205,6 +202,20 @@ export class PlayerController {
   weaponMesh: THREE.Mesh | null = null;
   /** Bone-based weapon attachment system for skeleton-rigged models. */
   weaponAttachment: WeaponAttachment = new WeaponAttachment();
+  /**
+   * Post-mixer spine aim IK (FP + ADS). Restored before mixer each frame so
+   * clips do not inherit IK residue — see `ik/SpineIK.ts`.
+   */
+  spineIK: SpineIK | null = null;
+  /** Plant L/R feet on GroundSampler after mixer + spine (no bone stretch). */
+  feetIK: FeetPlantIK | null = null;
+
+  /** Scratch for socket / aim queries (no GC on fire/hit path). */
+  private readonly _muzzlePos = new THREE.Vector3();
+  private readonly _muzzleDir = new THREE.Vector3();
+  private readonly _bladeBase = new THREE.Vector3();
+  private readonly _bladeTip = new THREE.Vector3();
+  private readonly _aimDir = new THREE.Vector3();
   /** Gear visual overlay system — swaps armor meshes on equip/unequip. */
   gearVisuals: GearVisualManager = new GearVisualManager();
   /** Gender for gear path resolution (set from CharacterConfig). */
@@ -215,8 +226,6 @@ export class PlayerController {
   private modelAnimations: THREE.AnimationClip[] = [];
   private currentAnimAction: THREE.AnimationAction | null = null;
   private useRealModel: boolean = false;
-  /** Procedural Explorer avatar (Grudges player body SSOT). */
-  private explorerAvatar: { update: (dt: number, moving: boolean) => void } | null = null;
   /** Public so SwimController / inventory carry-state / crouch can flip the
    *  isSwimming / isCarrying / isCrouching mode flags directly. */
   locomotion: LocomotionAnimator | null = null;
@@ -326,41 +335,29 @@ export class PlayerController {
         // the survivor and Quaternius body-type meshes export at much
         // larger units (the survivor mesh measures ~17 m tall raw). Without
         // normalization the player ends up as a 17-m giant in the world.
-        // Re-root between feet + fit ~1.8 m. Reset scale first so we never
-        // double-apply artist node scales (100× killer). Plant soles at y=0
-        // and center XZ on the mesh midpoint (between the feet).
         const PLAYER_TARGET_HEIGHT_M = 1.8;
-        this.modelGroup.scale.set(1, 1, 1);
-        this.modelGroup.position.set(0, 0, 0);
+        this.modelGroup.scale.setScalar(1.0);
         this.modelGroup.updateMatrixWorld(true);
         const rawBox = new THREE.Box3().setFromObject(this.modelGroup);
-        let rawHeight = rawBox.max.y - rawBox.min.y;
-        if (rawHeight > 20) {
-          // cm → m authoring units
-          this.modelGroup.scale.setScalar(0.01);
-          this.modelGroup.updateMatrixWorld(true);
-          rawBox.setFromObject(this.modelGroup);
-          rawHeight = rawBox.max.y - rawBox.min.y;
-        }
+        const rawHeight = rawBox.max.y - rawBox.min.y;
         const fitScale = (rawHeight > 0.01)
           ? PLAYER_TARGET_HEIGHT_M / rawHeight
           : 1.0;
-        this.modelGroup.scale.multiplyScalar(fitScale);
+        this.modelGroup.scale.setScalar(fitScale);
+        // Recompute the foot offset *after* scaling so feet land exactly
+        // on y=0 in playerGroup local space. The precomputed offset from
+        // the AssetManager is in unscaled units and would mis-plant the
+        // model after we apply fitScale here.
         this.modelGroup.updateMatrixWorld(true);
         const scaledBox = new THREE.Box3().setFromObject(this.modelGroup);
-        const center = scaledBox.getCenter(new THREE.Vector3());
-        this.modelGroup.position.set(
-          -center.x,
-          -scaledBox.min.y,
-          -center.z,
-        );
+        this.modelGroup.position.y = -scaledBox.min.y;
         // One-time sanity log so we can see the actual rendered size of
         // the player model relative to the world (1 unit ≈ 1 metre).
         const bb = new THREE.Box3().setFromObject(this.modelGroup);
         const sz = new THREE.Vector3(); bb.getSize(sz);
         console.log(
           `[PlayerController] Model bbox: ${sz.x.toFixed(2)} × ${sz.y.toFixed(2)} × ${sz.z.toFixed(2)} m`,
-          `(rawHeight=${rawHeight.toFixed(2)} fitScale=${fitScale.toFixed(3)} footY=${this.modelGroup.position.y.toFixed(2)} origin=feet-midpoint)`,
+          `(rawHeight=${rawHeight.toFixed(2)} fitScale=${fitScale.toFixed(3)} footY=${this.modelGroup.position.y.toFixed(2)})`,
         );
         // Mixamo characters bind facing +Z, but our `getForwardDir`
         // returns -Z (camera-style "into the screen") at yaw=0. Without
@@ -369,22 +366,26 @@ export class PlayerController {
         this.modelGroup.rotation.y = Math.PI;
         this.playerGroup.add(this.modelGroup);
 
-        // Explorer blocky avatar (no skeleton) — procedural walk, skip bone bind
-        const ea = this.modelGroup.userData?.explorerAvatar as
-          | { update: (dt: number, moving: boolean) => void }
-          | undefined;
-        if (ea) {
-          this.explorerAvatar = ea;
-          console.log('[PlayerController] Explorer avatar active (4-slot look / procedural walk)');
-        } else {
-          // Bind the weapon attachment system to the skeleton bones
-          this.weaponAttachment.bindSkeleton(this.modelGroup);
-          // Bind the gear visual overlay system to the character armature
-          this.gearVisuals.bind(this.modelGroup, this.characterGender);
+        // Bind the weapon attachment system to the skeleton bones
+        this.weaponAttachment.bindSkeleton(this.modelGroup);
+
+        // Spine aim IK (Mixamo / Quaternius spine chain + head for FP roll strip)
+        this.spineIK = SpineIK.fromModel(this.modelGroup, {
+          // ThirdPersonCamera owns pitch curves — only apply cam bias in FP
+          mutateCameraPitch: false,
+        });
+        if (this.spineIK?.isActive) {
+          console.log(
+            `[PlayerController] SpineIK active · ${this.spineIK.spineBones.length} spine bones` +
+              (this.spineIK.headBone ? ` · head=${this.spineIK.headBone.name}` : ''),
+          );
         }
 
-        // Put starting combat weapons / tools in the hand immediately
-        this.syncWeaponAttachments();
+        // Feet → terrain plant (after spine in update loop)
+        this.feetIK = new FeetPlantIK(this.modelGroup);
+
+        // Bind the gear visual overlay system to the character armature
+        this.gearVisuals.bind(this.modelGroup, this.characterGender);
 
         // Build the directional locomotion blender if we got a mixer +
         // multiple clips. Falls back to the simple playAnimation() path
@@ -403,7 +404,7 @@ export class PlayerController {
               }
             }
           });
-        } else if (!this.explorerAvatar) {
+        } else {
           this.playAnimation('Idle');
         }
       }
@@ -461,14 +462,15 @@ export class PlayerController {
       this.rapierCollider = null;
     }
 
-    // Body translation is the capsule CENTRE. Logical position is
-    // "ground + PLAYER_HEIGHT" — convert via CapsuleBody helpers.
-    const centre = logicalPosToCentre(
-      this.position.x, this.position.y, this.position.z,
-    );
+    // Body translation is the capsule CENTRE. `this.position` is the
+    // logical "feet+eye" reference (feet at y=position.y - PLAYER_HEIGHT,
+    // because the legacy code set position.y = ground + PLAYER_HEIGHT
+    // when grounded). We sync the centre = feet + (halfHeight + radius).
+    const feetY = this.position.y - PLAYER_HEIGHT;
+    const centreY = feetY + CAPSULE_HALF_HEIGHT + CAPSULE_RADIUS;
 
     const bodyDesc = RAPIER.RigidBodyDesc.kinematicPositionBased()
-      .setTranslation(centre.x, centre.y, centre.z);
+      .setTranslation(this.position.x, centreY, this.position.z);
     this.rapierBody = world.createRigidBody(bodyDesc);
 
     const colliderDesc = RAPIER.ColliderDesc.capsule(
@@ -525,12 +527,35 @@ export class PlayerController {
     // proof we've slipped through the world.
     this.respawnPoint.copy(pos);
     if (this.rapierBody) {
-      const centre = logicalPosToCentre(
-        this.position.x, this.position.y, this.position.z,
+      const feetY = this.position.y - PLAYER_HEIGHT;
+      const centreY = feetY + CAPSULE_HALF_HEIGHT + CAPSULE_RADIUS;
+      this.rapierBody.setNextKinematicTranslation({
+        x: this.position.x,
+        y: centreY,
+        z: this.position.z,
+      });
+      this.rapierBody.setTranslation(
+        { x: this.position.x, y: centreY, z: this.position.z },
+        true,
       );
-      this.rapierBody.setNextKinematicTranslation(centre);
-      this.rapierBody.setTranslation(centre, true);
     }
+    // Keep third-person mesh under the capsule immediately (not next frame).
+    this.playerGroup.position.set(this.position.x, this.position.y - PLAYER_HEIGHT, this.position.z);
+  }
+
+  /**
+   * Snap logical position so feet sit on GroundSampler surface.
+   * Call after home-hub / terrain BVHs are in the scene so the player model
+   * is not floating or buried under the encampment mesh.
+   */
+  snapToGround(): void {
+    const feet = groundFloor(this.position.x, this.position.z);
+    const next = new THREE.Vector3(
+      this.position.x,
+      feet + PLAYER_HEIGHT,
+      this.position.z,
+    );
+    this.teleportTo(next);
   }
 
   private playAnimation(name: string) {
@@ -640,37 +665,41 @@ export class PlayerController {
       if (e.code === 'KeyT' && !e.repeat) { this.shoulderSide = (this.shoulderSide === 1 ? -1 : 1); }
       if (e.code === KEYBINDS.SWAP_WEAPON && !e.repeat) this.swapWeapon();
       if (e.code === KEYBINDS.JUMP && this.isGrounded) this.jump();
-      if (e.code === KEYBINDS.ROLL && !e.repeat && !this.isRolling && this.allowDodge && this.inputEnabled) {
-        this.startRoll();
-      }
-      // B = explicit block (melee guard) — independent of RMB focus mode
-      if (e.code === 'KeyB' && !e.repeat && this.inputEnabled) this.startBlock();
+      if (e.code === KEYBINDS.ROLL && !e.repeat && !this.isRolling) this.startRoll();
       if (e.code === 'KeyR' && !e.repeat) this.startReload();
     });
 
-    document.addEventListener('keyup', (e) => {
-      this.keys[e.code] = false;
-      if (e.code === 'KeyB') this.stopBlock();
-    });
+    document.addEventListener('keyup', (e) => { this.keys[e.code] = false; });
     document.addEventListener('mousedown', (e) => {
       this.mouseButtons[e.button] = true;
-      if (!this.inputEnabled) return;
-      if (e.button === 0 && this.mouseLocked && this.allowPrimaryAction) this.startAttack();
-      // RMB: mode-aware focus (ADS / block) — GameEngine can override via focusRmbHandler
-      if (e.button === 2 && this.mouseLocked && this.allowFocusRmb) {
-        if (this.focusRmbHandler) this.focusRmbHandler(true);
-        else this.startAiming();
+      if (e.button === 0 && this.mouseLocked) this.startAttack();
+      // RMB: start track for focus toggle (short click) vs orbit hold (drag).
+      // Harvest capture may stopImmediatePropagation when on a resource node.
+      if (e.button === 2 && this.mouseLocked) {
+        this._rmbDownAt = performance.now();
+        this._rmbMoved = false;
+        this._rmbLastX = e.clientX;
+        this._rmbLastY = e.clientY;
       }
     });
     document.addEventListener('mouseup', (e) => {
       this.mouseButtons[e.button] = false;
-      if (e.button === 2) {
-        if (this.focusRmbHandler) this.focusRmbHandler(false);
-        else this.stopAiming();
-        this.stopBlock();
+      if (e.button === 2 && this.mouseLocked) {
+        const held = performance.now() - this._rmbDownAt;
+        // Short click, little drag → toggle sticky focus (fleet combat targeting)
+        if (!this._rmbMoved && held < 280 && !this.moveTarget) {
+          this.toggleFocus();
+        }
       }
     });
     document.addEventListener('mousemove', (e) => {
+      if (this.mouseButtons[2]) {
+        const dx = e.clientX - this._rmbLastX;
+        const dy = e.clientY - this._rmbLastY;
+        if (Math.hypot(dx, dy) > 5) this._rmbMoved = true;
+        this._rmbLastX = e.clientX;
+        this._rmbLastY = e.clientY;
+      }
       if (this.mouseLocked) {
         this.mouseDelta.x += e.movementX;
         this.mouseDelta.y += e.movementY;
@@ -691,10 +720,7 @@ export class PlayerController {
     if (this.weaponSwapCooldown > 0) return;
     this.activeWeaponIndex = this.activeWeaponIndex === 0 ? 1 : 0;
     this.weaponSwapCooldown = 0.5;
-    // If inventory mainhand is empty, hand mesh follows the combat hotbar
-    if (!this.inventory?.equipped.mainhand) {
-      this.buildWeaponMesh();
-    }
+    this.buildWeaponMesh();
     this.updateWeaponStance();
   }
 
@@ -854,23 +880,48 @@ export class PlayerController {
     this.playAnimation('Idle');
   }
 
-  startAiming() {
-    this.isAiming = true;
-    // Play weapon-specific aim pose if available
-    const weaponType = this.equippedWeapons[this.activeWeaponIndex]?.type ?? 'unarmed';
-    if (AIM_CLIP[weaponType]) {
-      this.playAnimation('Aim');
+  /** Sticky focus ON/OFF (RMB short click). */
+  toggleFocus(): boolean {
+    this.focusEnabled = !this.focusEnabled;
+    this.isAiming = this.focusEnabled; // HUD crosshair / spine bindings
+    if (this.focusEnabled) {
+      const weaponType = this.equippedWeapons[this.activeWeaponIndex]?.type ?? 'unarmed';
+      if (AIM_CLIP[weaponType]) this.playAnimation('Aim');
+      if (this.locomotion) {
+        this.locomotion.setAimWeapon(weaponType);
+        this.locomotion.setAimActive(true);
+      }
+      // Sync body to camera for strafe when focus engages
+      if (this.cameraMode !== 'first-person') {
+        this.yaw = this.cameraAngleH;
+        this.bodyYaw = this.cameraAngleH;
+      }
+    } else {
+      this.locomotion?.setAimActive(false);
     }
-    // Activate additive aim layer for supported ranged weapons.
-    if (this.locomotion) {
-      this.locomotion.setAimWeapon(weaponType);
-      this.locomotion.setAimActive(true);
-    }
+    return this.focusEnabled;
   }
 
-  stopAiming() {
+  /** Clear focus without toggling (harvest intercept / blur). */
+  clearFocus(): void {
+    if (!this.focusEnabled) {
+      this.isAiming = false;
+      this.locomotion?.setAimActive(false);
+      return;
+    }
+    this.focusEnabled = false;
     this.isAiming = false;
     this.locomotion?.setAimActive(false);
+  }
+
+  /** @deprecated hold-ADS purged — enable focus if off */
+  startAiming() {
+    if (!this.focusEnabled) this.toggleFocus();
+  }
+
+  /** @deprecated — use clearFocus */
+  stopAiming() {
+    this.clearFocus();
   }
 
   /** Trigger reload animation for the equipped ranged weapon. */
@@ -952,20 +1003,58 @@ export class PlayerController {
     return weapon.range;
   }
 
+  /**
+   * Live combat modifiers from Nexus milestones + SWG profession passives +
+   * 4-track perks. GameEngine.refreshPerkEffects() writes this each second.
+   */
+  combatMods: Record<string, number> = {};
+
   getAttackDamage(): number {
     const weapon = this.equippedWeapons[this.activeWeaponIndex];
     const eq = this.inventory?.getTotalStats();
-    const equipBonus = eq?.damage ?? 0;
+    const equipBonus = (eq?.damage ?? 0);
     const strBonus = 1 + (this.stats.strength - 10) * 0.05;
-    const critRoll = Math.random() * 100 < (eq?.critChance ?? 0) ? 2 : 1;
-    return (weapon.damage + equipBonus) * strBonus * (this.berserkerActive ? 1.5 : 1) * critRoll;
+    const mods = this.combatMods;
+    // SWG / milestone damage passives (pct). Gun paths prefer gunsmith;
+    // blades/hammers prefer bladesmith + meleeDamage.
+    const isGun =
+      weapon.type === 'pistol' ||
+      weapon.type === 'rifle' ||
+      weapon.type === 'smg' ||
+      weapon.type === 'shotgun' ||
+      weapon.type === 'gun';
+    const isBlade =
+      weapon.type === 'sword' ||
+      weapon.type === 'greatsword' ||
+      weapon.type === 'sword_shield' ||
+      weapon.type === 'dagger' ||
+      weapon.type === 'knife' ||
+      weapon.type === 'scythe' ||
+      weapon.type === 'spear' ||
+      weapon.type === 'axe' ||
+      weapon.type === 'hatchet' ||
+      weapon.type === 'greataxe' ||
+      weapon.type === 'hammer' ||
+      weapon.type === 'mace';
+    let dmgMul = 1 + (mods.meleeDamage ?? 0);
+    if (isGun) dmgMul += mods.gunsmithDamageBonus ?? 0;
+    if (isBlade) dmgMul += mods.bladesmithDamageBonus ?? 0;
+    // Diablo affix crit% is 0–100 style on gear; combatMods.critChance is 0–1.
+    const gearCritPct = eq?.critChance ?? 0;
+    const modCritPct = (mods.critChance ?? 0) * 100;
+    const critChance = gearCritPct + modCritPct;
+    const critMult = 2 * (1 + (mods.critMult ?? 0));
+    const critRoll = Math.random() * 100 < critChance ? critMult : 1;
+    return (
+      (weapon.damage + equipBonus) *
+      strBonus *
+      dmgMul *
+      (this.berserkerActive ? 1.5 : 1) *
+      critRoll
+    );
   }
 
   takeDamage(amount: number) {
-    // Dodge roll i-frames — full invuln while isRolling
-    if (this.isRolling) {
-      return;
-    }
     if (this.isParrying) {
       amount = 0;
     } else if (this.isBlocking) {
@@ -975,6 +1064,9 @@ export class PlayerController {
     const armor = this.inventory?.getTotalStats().armor ?? 0;
     const dr = Math.min(0.75, armor / (armor + 100));
     amount *= (1 - dr);
+    // Attribute / perk damageTaken (negative = resist)
+    const takenMul = 1 + (this.combatMods.damageTaken ?? 0);
+    amount *= Math.max(0.25, takenMul);
     this.stats.health = Math.max(0, this.stats.health - amount);
     this.onStatChange?.();
 
@@ -1063,26 +1155,57 @@ export class PlayerController {
     this.updatePlayerBody(dt);
     this.updateCamera();
     this.regenStats(dt);
+
+    // ── Animation + IK frame order ─────────────────────────────────────────
+    // 1) Restore spine to clean pose so mixer blends without IK residue
+    // 2) Locomotion weights + mixer.update
+    // 3) SpineIK aim (FP always / TP when ADS)
+    // 4) Root motion from hips after mixer
+    this.spineIK?.restoreBones();
+
+    const gunEngaged = this.isAiming || this.isRangedWeaponEquipped();
+    const useSpineAim =
+      !!this.spineIK?.isActive &&
+      (this.cameraMode === 'first-person' || (this.cameraMode !== 'first-person' && gunEngaged));
+
     // Locomotion blender drives weights based on the input captured during
     // handleMovement; mixer.update() then advances all weighted clips.
     if (this.locomotion) {
       this.locomotion.setMovement(this.lastLocoForward, this.lastLocoStrafe, this.lastLocoSpeed01);
-      // Feed current vertical look angle into the additive aim layer so it
-      // pitches the upper body to match where the camera is looking.
-      // pitch is clamped to ±PI/2.5 so normalise it to [-1,1].
-      const maxPitch = Math.PI / 2.5;
-      this.locomotion.setAimPitch(this.pitch / maxPitch);
+      // When SpineIK owns pitch, do not double-apply locomotion aim layer.
+      if (!useSpineAim) {
+        const maxPitch = Math.PI / 2.5;
+        this.locomotion.setAimPitch(this.pitch / maxPitch);
+      } else {
+        this.locomotion.setAimPitch(0);
+      }
       this.locomotion.update(dt);
       // Root motion: capture root bone position before mixer advances.
       this.locomotion.captureRootPos();
     }
     if (this.modelMixer) this.modelMixer.update(dt);
     if (this.fpHandsMixer) this.fpHandsMixer.update(dt);
-    // Explorer procedural limbs
-    if (this.explorerAvatar) {
-      const moving = this.lastLocoSpeed01 > 0.08;
-      this.explorerAvatar.update(dt, moving);
+
+    // Post-mixer spine aim (arms / torso follow reticle)
+    if (useSpineAim && this.spineIK) {
+      if (this.cameraMode === 'first-person') {
+        this.spineIK.applyAim1P(this.fpCamera ?? this.camera, this.pitch);
+      } else {
+        // TP ADS: drive from orbit pitch (cameraAngleV maps loosely to look-down)
+        const soft = Math.PI * (50 / 180);
+        const pitchTarget = this.isAiming
+          ? THREE.MathUtils.clamp(-(this.cameraAngleV - 0.35), -soft, soft)
+          : 0;
+        this.spineIK.applyAim3P(this.camera, this.isAiming, pitchTarget);
+      }
     }
+
+    // Feet plant on terrain — after spine so sockets still match planted pose
+    // Skip while airborne / rolling / mantling so IK does not fight jump arcs
+    if (this.feetIK?.isActive && this.isGrounded && !this.isRolling && !mantling) {
+      this.feetIK.apply(dt);
+    }
+
     // Root motion: after mixer has advanced, apply the bone delta to movement
     // and suppress the code-driven lunge so RM clips self-propel the character.
     // During a mantle the climb controller already owns translation — we
@@ -1101,6 +1224,62 @@ export class PlayerController {
         this.position.z += rmDelta.z;
       }
     }
+  }
+
+  /** True when the active loadout weapon is a firearm / bow (ranged class). */
+  isRangedWeaponEquipped(): boolean {
+    const w = this.equippedWeapons[this.activeWeaponIndex];
+    if (!w) return false;
+    return (
+      w.type === 'gun' ||
+      w.type === 'rifle' ||
+      w.type === 'shotgun' ||
+      w.type === 'smg' ||
+      w.type === 'bow' ||
+      w.type === 'crossbow' ||
+      w.type === 'pistol'
+    );
+  }
+
+  /**
+   * Full 3D aim direction for projectiles (includes pitch).
+   * FP: yaw+pitch from look. TP: camera world forward.
+   */
+  getAimDirection(out: THREE.Vector3 = this._aimDir): THREE.Vector3 {
+    if (this.cameraMode === 'first-person') {
+      const y = this.getAimYaw();
+      const p = this.pitch;
+      const cp = Math.cos(p);
+      return out.set(-Math.sin(y) * cp, Math.sin(p), -Math.cos(y) * cp).normalize();
+    }
+    this.camera.getWorldDirection(out);
+    if (out.lengthSq() < 1e-8) return this.getForwardDir();
+    return out.normalize();
+  }
+
+  /**
+   * Muzzle world pose after skeleton + SpineIK this frame.
+   * Falls back to chest + aim dir when no weapon mesh is attached.
+   */
+  getMuzzleSpawn(): MuzzlePose {
+    const pose = this.weaponAttachment.getMuzzlePose('mainhand', this._muzzlePos, this._muzzleDir);
+    if (pose) {
+      // Prefer true aim direction for shot accuracy; keep muzzle position from socket
+      const aim = this.getAimDirection(this._aimDir);
+      pose.direction.copy(aim);
+      return pose;
+    }
+    // Fallback: chest height along aim
+    const aim = this.getAimDirection(this._aimDir);
+    this._muzzlePos.copy(this.position).addScaledVector(aim, 0.55);
+    this._muzzlePos.y += 1.15;
+    this._muzzleDir.copy(aim);
+    return { position: this._muzzlePos, direction: this._muzzleDir };
+  }
+
+  /** Blade base→tip after IK; null if unarmed / no mesh. */
+  getBladeSegment(): BladeSegment | null {
+    return this.weaponAttachment.getBladeSegment('mainhand', this._bladeBase, this._bladeTip);
   }
 
   private handleMouse(dt: number) {
@@ -1162,11 +1341,34 @@ export class PlayerController {
       // for W and -1 for S; strafeInput is +1 for D, -1 for A. These
       // values are independent of camera/yaw — they describe the player's
       // intent in body-relative space.
-      const fwdInput = (this.keys[KEYBINDS.MOVE_FORWARD] ? 1 : 0) - (this.keys[KEYBINDS.MOVE_BACKWARD] ? 1 : 0);
-      const strafeInput = (this.keys[KEYBINDS.MOVE_RIGHT] ? 1 : 0) - (this.keys[KEYBINDS.MOVE_LEFT] ? 1 : 0);
-      if (fwdInput !== 0) { targetDir.addScaledVector(forward, fwdInput); moving = true; }
-      if (strafeInput !== 0) { targetDir.addScaledVector(right, strafeInput); moving = true; }
-      if (targetDir.lengthSq() > 0) targetDir.normalize().multiplyScalar(speed);
+      let fwdInput = (this.keys[KEYBINDS.MOVE_FORWARD] ? 1 : 0) - (this.keys[KEYBINDS.MOVE_BACKWARD] ? 1 : 0);
+      let strafeInput = (this.keys[KEYBINDS.MOVE_RIGHT] ? 1 : 0) - (this.keys[KEYBINDS.MOVE_LEFT] ? 1 : 0);
+
+      // Harvest / click-to-move: when no WASD, steer toward moveTarget in body space.
+      if (fwdInput === 0 && strafeInput === 0 && this.moveTarget) {
+        const dx = this.moveTarget.x - this.position.x;
+        const dz = this.moveTarget.z - this.position.z;
+        const dist = Math.hypot(dx, dz);
+        if (dist <= this.moveTarget.stopR) {
+          this.moveTarget = null;
+        } else {
+          // Walk in world XZ toward node; face travel direction for harvest approach
+          const dir = new THREE.Vector3(dx, 0, dz).normalize();
+          targetDir.copy(dir).multiplyScalar(speed);
+          moving = true;
+          fwdInput = THREE.MathUtils.clamp(dir.dot(forward), -1, 1);
+          strafeInput = THREE.MathUtils.clamp(dir.dot(right), -1, 1);
+          this.yaw = Math.atan2(-dx, -dz);
+        }
+      } else {
+        if (fwdInput !== 0 || strafeInput !== 0) {
+          // Manual input cancels approach
+          this.moveTarget = null;
+        }
+        if (fwdInput !== 0) { targetDir.addScaledVector(forward, fwdInput); moving = true; }
+        if (strafeInput !== 0) { targetDir.addScaledVector(right, strafeInput); moving = true; }
+        if (targetDir.lengthSq() > 0) targetDir.normalize().multiplyScalar(speed);
+      }
 
       // Speed envelope for run/walk blend: full input + berserker → run.
       // Blocking caps the speed below the run threshold automatically via
@@ -1178,7 +1380,8 @@ export class PlayerController {
 
       // Frame-rate independent exponential smoothing on the velocity vector.
       // Higher k = snappier; ~14/s feels responsive without being twitchy.
-      const t = expFactor(moving ? 16 : 12, dt);
+      const k = moving ? 16 : 12;
+      const t = 1 - Math.exp(-k * dt);
       this.smoothedMove.lerp(targetDir, t);
       moveVec.copy(this.smoothedMove);
     }
@@ -1193,7 +1396,7 @@ export class PlayerController {
       if (this.lungeTimer > 0) {
         this._pendingMoveX += this.lungeVelocity.x * dt;
         this._pendingMoveZ += this.lungeVelocity.z * dt;
-        this.lungeVelocity.multiplyScalar(expScale(6, dt));
+        this.lungeVelocity.multiplyScalar(Math.exp(-6 * dt));
       }
     } else {
       this.position.x += moveVec.x * dt;
@@ -1203,7 +1406,7 @@ export class PlayerController {
       if (this.lungeTimer > 0) {
         this.position.x += this.lungeVelocity.x * dt;
         this.position.z += this.lungeVelocity.z * dt;
-        this.lungeVelocity.multiplyScalar(expScale(6, dt));
+        this.lungeVelocity.multiplyScalar(Math.exp(-6 * dt));
       }
 
       // Vestigial 180 m arena clamp from the procedural-only days. Rapier
@@ -1305,11 +1508,12 @@ export class PlayerController {
       const newZ = t.z + corrected.z;
       this.rapierBody.setNextKinematicTranslation({ x: newX, y: newY, z: newZ });
 
-      // Centre → logical (feet + PLAYER_HEIGHT) via CapsuleBody.
-      const logical = centrePosToLogical(newX, newY, newZ);
-      this.position.x = logical.x;
-      this.position.y = logical.y;
-      this.position.z = logical.z;
+      // Logical position has feet at (position.y - PLAYER_HEIGHT). Capsule
+      // body translation is the centre, so feet = centre - (halfHeight + radius).
+      const feetY = newY - (CAPSULE_HALF_HEIGHT + CAPSULE_RADIUS);
+      this.position.x = newX;
+      this.position.z = newZ;
+      this.position.y = feetY + PLAYER_HEIGHT;
 
       const grounded = this.rapierController.computedGrounded();
       this.isGrounded = grounded;
@@ -1344,19 +1548,7 @@ export class PlayerController {
     // surface height (terrain mesh triangles), which can drift slightly
     // from the analytic noise at chunk seams. Falls back to analytic
     // when no scene is registered or no surface is hit.
-    // Fast falls use FPI sphere-trace (TerrainRaycast.downCast) so we
-    // don't tunnel through thin terrain when |vy| is large.
-    let sampledGround = groundFloor(this.position.x, this.position.z);
-    if (!this.isGrounded && Math.abs(this.jumpVelocity) > 5) {
-      sampledGround = downCast(
-        this.position.x,
-        this.position.y,
-        this.position.z,
-        this.jumpVelocity,
-        dt,
-      );
-    }
-    const groundY = sampledGround + PLAYER_HEIGHT;
+    const groundY = groundFloor(this.position.x, this.position.z) + PLAYER_HEIGHT;
 
     if (!this.isGrounded) {
       this.jumpVelocity -= GRAVITY * dt;
@@ -1364,7 +1556,7 @@ export class PlayerController {
     } else {
       // While grounded, smoothly snap to terrain (handles slope traversal
       // without making jumps feel sticky). Lerp factor is per-second.
-      const t = expFactor(18, dt);
+      const t = 1 - Math.exp(-18 * dt);
       this.position.y = THREE.MathUtils.lerp(this.position.y, groundY, t);
     }
 
@@ -1405,7 +1597,7 @@ export class PlayerController {
     }
     // Collapse to 0 during ADS; decay normally otherwise
     const decayRate = this.isAiming ? 8 : 3;
-    this.spreadValue = Math.max(0, this.spreadValue * expScale(decayRate, dt));
+    this.spreadValue = Math.max(0, this.spreadValue * Math.exp(-decayRate * dt));
 
     if (this.parryTimer > 0) this.parryTimer -= dt;
     else this.isParrying = false;
@@ -1426,12 +1618,12 @@ export class PlayerController {
     // so the kick reads as a punctual punch, not a slow drift. Below
     // ~0.0001 rad it's invisible, so clamp to avoid endless tiny work.
     if (this.recoilPitch > 0) {
-      this.recoilPitch *= expScale(10, dt);
+      this.recoilPitch *= Math.exp(-10 * dt);
       if (this.recoilPitch < 0.0001) this.recoilPitch = 0;
     }
     // Smoothly chase the active shoulder side so KeyT toggles read as a
     // pan rather than a snap (~250 ms with k=8).
-    this.shoulderLerp = THREE.MathUtils.lerp(this.shoulderLerp, this.shoulderSide, expFactor(8, dt));
+    this.shoulderLerp = THREE.MathUtils.lerp(this.shoulderLerp, this.shoulderSide, 1 - Math.exp(-8 * dt));
   }
 
   private updatePlayerBody(dt: number) {
@@ -1454,20 +1646,23 @@ export class PlayerController {
     }
 
     // Body facing:
-    // - First-person: body yaw == player yaw (mouse-driven).
-    // - Third-person / ARPG: body smoothly turns to face the actual
-    //   movement direction. When the player is standing still the body
-    //   keeps its last facing instead of snapping to the camera.
-    if (this.cameraMode === 'first-person') {
-      this.bodyYaw = this.yaw;
+    // - Focus ON / FP: body faces camera-forward (strafe / look)
+    // - Focus OFF: body faces movement direction (tank feel when moving)
+    if (this.cameraMode === 'first-person' || this.focusEnabled) {
+      const faceYaw = this.cameraMode === 'first-person' ? this.yaw : this.cameraAngleH;
+      let delta = faceYaw - this.bodyYaw;
+      while (delta > Math.PI) delta -= Math.PI * 2;
+      while (delta < -Math.PI) delta += Math.PI * 2;
+      const t = 1 - Math.exp(-(this.focusEnabled ? 10 : 14) * dt);
+      this.bodyYaw += delta * t;
+      if (this.cameraMode !== 'first-person') this.yaw = this.cameraAngleH;
     } else if (this.smoothedMove.lengthSq() > 0.04) {
       const desired = Math.atan2(-this.smoothedMove.x, -this.smoothedMove.z);
-      // Wrap shortest-path delta into (-π, π] before lerping so the body
-      // never spins the long way around through 2π.
       let delta = desired - this.bodyYaw;
       while (delta > Math.PI)  delta -= Math.PI * 2;
       while (delta < -Math.PI) delta += Math.PI * 2;
-      this.bodyYaw += delta * expFactor(12, dt);
+      const t = 1 - Math.exp(-12 * dt);
+      this.bodyYaw += delta * t;
     }
     this.playerGroup.rotation.y = this.bodyYaw;
 
@@ -1525,6 +1720,10 @@ export class PlayerController {
   }
 
   private updateCamera() {
+    // Stable FOV — action-angle / ADS FOV zoom purged. Focus is look, not zoom.
+    const aimFovFP = 75;
+    const aimFovTP = 60;
+
     if (this.cameraMode === 'first-person') {
       // When Rapier owns the capsule, derive eye height from the simulated
       // feet position (`position.y - PLAYER_HEIGHT`) instead of resampling
@@ -1554,35 +1753,23 @@ export class PlayerController {
       // back to zero in ~70 ms so the next shot can stack cleanly.
       this.camera.rotation.x -= this.recoilPitch;
 
-      // Smooth FOV transition (TPS remake: tighter ADS)
-      this.camera.fov = THREE.MathUtils.lerp(this.camera.fov, this.isAiming ? 50 : 75, 0.14);
+      // Smooth FOV transition
+      this.camera.fov = THREE.MathUtils.lerp(this.camera.fov, aimFovFP, 0.12);
       this.camera.updateProjectionMatrix();
     } else {
       const baseTuning = this.cameraMode === 'arpg' ? TUNING_ARPG : TUNING_THIRD_PERSON;
-      // ADS in TP: dolly closer to the shoulder and a touch above the
-      // line of fire so the crosshair sits in the middle of frame
-      // instead of behind the player's head. Crucially keep the X bias
-      // at full magnitude — shrinking the whole offset (the previous
-      // .multiplyScalar(0.55) approach) collapsed the over-shoulder
-      // bias and put the camera directly behind the head, which made
-      // the gun barrel obscure the target.
+      // Focus: light shoulder only — no ADS dolly / action-angle cam (purged).
       const aimedOffset = baseTuning.idealOffset.clone();
-      if (this.isAiming && this.cameraMode === 'third-person') {
-        // TPS best practice from TUNING_TPS: widen shoulder, dolly in, slight height drop
-        aimedOffset.x *= TUNING_TPS.adsShoulderMul;
-        aimedOffset.y *= 0.92;
-        aimedOffset.z *= TUNING_TPS.adsDollyZ;
+      if (this.focusEnabled && this.cameraMode === 'third-person') {
+        aimedOffset.x *= 1.12;
+        aimedOffset.z *= 0.92;
       }
-      // Shoulder side bias is applied *after* aim tightening so KeyT
-      // mirrors the aimed cam too. shoulderLerp is in [-1, 1] and
-      // smoothly animates between sides.
       if (this.cameraMode === 'third-person') {
         aimedOffset.x *= this.shoulderLerp;
       }
       const tuning = {
         ...baseTuning,
         idealOffset: aimedOffset,
-        ...(this.isAiming ? { follow: baseTuning.follow * 1.5, look: baseTuning.look * 1.5 } : {}),
       };
 
       this.tpCamera.yawOffset = 0;
@@ -1595,9 +1782,7 @@ export class PlayerController {
       this.tpCamera.pitchOffset = basePitch - this.recoilPitch;
       this.tpCamera.update(this._lastDt, this.position.clone(), this.cameraAngleH + Math.PI, tuning);
 
-      // Hip / ADS FOV from remake config (classic TPS readability)
-      const targetFov = this.isAiming ? TUNING_TPS.adsFov : TUNING_TPS.hipFov;
-      this.camera.fov = THREE.MathUtils.lerp(this.camera.fov, targetFov, 0.14);
+      this.camera.fov = THREE.MathUtils.lerp(this.camera.fov, aimFovTP, 0.12);
       this.camera.updateProjectionMatrix();
     }
   }
@@ -1614,57 +1799,79 @@ export class PlayerController {
     this.onStatChange?.();
   }
 
-  /**
-   * Sync bone-attached weapon / tool meshes with inventory + combat hotbar.
-   *
-   * Priority (mainhand):
-   *   1. Inventory equipped mainhand (tools, melee, looted gear)
-   *   2. Active combat weapon from equippedWeapons hotbar
-   *
-   * Offhand: inventory offhand only (shield / dual).
-   */
-  private syncWeaponAttachments(): void {
-    if (!this.weaponAttachment.hasSkeleton()) return;
+  // ── Harvest / approach move target ─────────────────────────────────────────
 
-    const mainhand = this.inventory?.equipped.mainhand ?? null;
-    const offhand = this.inventory?.equipped.offhand ?? null;
+  setMoveTarget(x: number, z: number, stopR = 1.2): void {
+    this.moveTarget = { x, z, stopR };
+  }
 
-    if (mainhand) {
-      this.weaponAttachment.attachWeapon(mainhand, 'mainhand').catch((e) =>
-        console.warn('[Player] mainhand attach failed', e),
-      );
-    } else {
-      const combat = this.equippedWeapons[this.activeWeaponIndex];
-      if (combat) {
-        this.weaponAttachment.attachWeaponStats(combat, 'mainhand').catch((e) =>
-          console.warn('[Player] combat weapon attach failed', e),
-        );
-      } else {
-        this.weaponAttachment.detachWeapon('mainhand');
-      }
-    }
+  clearMoveTarget(): void {
+    this.moveTarget = null;
+  }
 
-    if (offhand) {
-      this.weaponAttachment.attachWeapon(offhand, 'offhand').catch((e) =>
-        console.warn('[Player] offhand attach failed', e),
-      );
-    } else {
-      this.weaponAttachment.detachWeapon('offhand');
-    }
+  hasMoveTarget(): boolean {
+    return this.moveTarget !== null;
+  }
+
+  hasManualMoveInput(): boolean {
+    return !!(
+      this.keys[KEYBINDS.MOVE_FORWARD] ||
+      this.keys[KEYBINDS.MOVE_BACKWARD] ||
+      this.keys[KEYBINDS.MOVE_LEFT] ||
+      this.keys[KEYBINDS.MOVE_RIGHT]
+    );
+  }
+
+  /** Yaw face toward world XZ (harvest approach / swing). */
+  faceToward(x: number, z: number): void {
+    const dx = x - this.position.x;
+    const dz = z - this.position.z;
+    if (dx * dx + dz * dz < 1e-6) return;
+    this.yaw = Math.atan2(-dx, -dz);
   }
 
   /**
-   * Equip a survival tool / weapon id into the main hand (bone attach +
-   * optional inventory mainhand slot). Used by hotbar / survival bag UI.
+   * Play a survival interact one-shot (Farm_Harvest, TreeChopping_Loop, …).
+   * Used by PlayerHarvest — does not start a combat melee hit.
    */
-  equipHandTool(itemId: string): void {
-    if (!this.weaponAttachment.hasSkeleton()) return;
-    this.weaponAttachment.attachById(itemId, 'mainhand', null).catch((e) =>
-      console.warn('[Player] equipHandTool failed', e),
-    );
-    const tool = getHandToolDef(itemId);
-    if (tool && tool.weaponType !== 'gun' && tool.weaponType !== 'unarmed') {
-      this.updateWeaponStance();
+  playInteractClip(clipName: string): void {
+    if (this.isAttacking) return;
+    const def = ANIM.byClip.get(clipName);
+    const dur = def?.duration ?? 1.45;
+    this.isAttacking = true;
+    this.attackTimer = dur;
+    this.attackAnimTimer = dur;
+    if (this.locomotion) {
+      const hasClip =
+        !!THREE.AnimationClip.findByName(this.modelAnimations, clipName) ||
+        !!THREE.AnimationClip.findByName(this.modelAnimations, clipName.toLowerCase());
+      if (hasClip) {
+        this.locomotion.playOneShot(clipName, this.modelAnimations, dur);
+        return;
+      }
+    }
+    this.playAnimation(clipName);
+  }
+
+  /**
+   * Sync bone-attached weapon models with currently equipped inventory items.
+   * Called on every inventory change. Falls back to procedural weapons if no
+   * skeleton is bound (procedural player body).
+   */
+  private syncWeaponAttachments(): void {
+    if (!this.inventory || !this.weaponAttachment.hasSkeleton()) return;
+    const mainhand = this.inventory.equipped.mainhand;
+    const offhand = this.inventory.equipped.offhand;
+
+    if (mainhand) {
+      this.weaponAttachment.attachWeapon(mainhand, 'mainhand');
+    } else {
+      this.weaponAttachment.detachWeapon('mainhand');
+    }
+    if (offhand) {
+      this.weaponAttachment.attachWeapon(offhand, 'offhand');
+    } else {
+      this.weaponAttachment.detachWeapon('offhand');
     }
   }
 

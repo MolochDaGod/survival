@@ -1,0 +1,73 @@
+{
+  "explain": "Website serves /icons/* from the Grudges deploy. Faction banners: /icons/factions/banners/{id}.png. Prefer existing pack slots; do not invent new icon folders.",
+  "base": "https://grudges.grudge-studio.com",
+  "packs": {
+    "perkFlavor": [
+      "/icons/perks/hero/",
+      "/icons/perks/warrior/",
+      "/icons/perks/smarts/",
+      "/icons/perks/maker/"
+    ],
+    "perkTiers": "/icons/perks/stat-tiers/",
+    "factions": "/icons/factions/",
+    "factionBanners": "/icons/factions/banners/"
+  },
+  "fromCatalog": {
+    "factionBanners": "/icons/factions/banners/{id}.png",
+    "perkArt": "/icons/perks/{hero|warrior|smarts|maker}/{1-30}.png",
+    "perkTiers": "/icons/perks/stat-tiers/{stat}-t{1-6}.svg",
+    "hudUi": "/textures/ui/unit-frames/* (CraftPix)"
+  },
+  "perkTracks": [
+    {
+      "id": "hero",
+      "label": "Hero",
+      "color": "#ff7d87"
+    },
+    {
+      "id": "warrior",
+      "label": "Warrior",
+      "color": "#ffb16d"
+    },
+    {
+      "id": "smarts",
+      "label": "Smarts",
+      "color": "#bb95ff"
+    },
+    {
+      "id": "maker",
+      "label": "Maker",
+      "color": "#49de95"
+    }
+  ],
+  "professionIcons": [
+    {
+      "id": "gathering",
+      "icon": "/icons/perks/maker/15.png"
+    },
+    {
+      "id": "hunting",
+      "icon": "/icons/perks/hero/5.png"
+    },
+    {
+      "id": "crafting",
+      "icon": "/icons/perks/warrior/15.png"
+    },
+    {
+      "id": "township",
+      "icon": "/icons/perks/hero/26.png"
+    },
+    {
+      "id": "survival",
+      "icon": "/icons/perks/smarts/24.png"
+    },
+    {
+      "id": "chemistry",
+      "icon": "/icons/perks/maker/14.png"
+    },
+    {
+      "id": "combat",
+      "icon": "/icons/perks/warrior/25.png"
+    }
+  ]
+}

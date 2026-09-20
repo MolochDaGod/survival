@@ -1,0 +1,193 @@
+{
+  "product": "Grudges · Voxel-era lead survival MMO",
+  "productEra": "voxel",
+  "productNote": "Hard decision: Grudges is voxel-era only (main/lead voxel game). Nexus product era deferred. BIO…GRA remain the attribute system name.",
+  "generatedAt": "2026-09-20T00:49:29.302Z",
+  "version": "1.0.0",
+  "canonicalHost": "https://grudges.grudge-studio.com",
+  "aliasRedirect": {
+    "from": "https://survival.grudge-studio.com",
+    "to": "https://grudges.grudge-studio.com",
+    "status": 301
+  },
+  "links": {
+    "info": "/info.html",
+    "camp": "/info.html#camp",
+    "lore": "/lore.html",
+    "stats": "/stats-guide.html",
+    "mainPanel": "/main-panel",
+    "perks": "/perks",
+    "crafting": "/crafting",
+    "professions": "/professions",
+    "mapstarter": "/mapstarter",
+    "play": "/arpg-game/",
+    "factions": "/icons/factions/banners/",
+    "eraDoc": "docs/PRODUCT_ERA_VOXEL.md",
+    "productionSsot": "docs/PRODUCTION_SSOT.md"
+  },
+  "topology": {
+    "product": "Grudges",
+    "productEra": "voxel",
+    "client": {
+      "host": "grudges.grudge-studio.com",
+      "path": "/arpg-game/",
+      "repo": "artifacts/arpg-game",
+      "hud": [
+        "HUD.tsx (CraftPix unit frames)",
+        "MainPanel.tsx (C hub)",
+        "SurvivalHUD.tsx",
+        "WorldMapOverlay.tsx"
+      ]
+    },
+    "website": {
+      "host": "grudges.grudge-studio.com",
+      "repo": "artifacts/website",
+      "pages": [
+        "/",
+        "/perks",
+        "/crafting",
+        "/professions",
+        "/main-panel",
+        "/mapstarter",
+        "/info.html",
+        "/lore.html"
+      ]
+    },
+    "api": {
+      "host": "survival-api-production.up.railway.app",
+      "proxy": "/api/* → Railway (also via grudges.grudge-studio.com/api/*)",
+      "health": "/api/healthz",
+      "systems": "/api/systems",
+      "systemsOverview": "/api/systems/overview",
+      "systemsPerks": "/api/systems/perks",
+      "systemsProfessions": "/api/systems/professions",
+      "systemsCrafting": "/api/systems/crafting",
+      "systemsIcons": "/api/systems/icons",
+      "canonicalWeb": "https://grudges.grudge-studio.com",
+      "survivalRedirect": "https://survival.grudge-studio.com → 301 → grudges.grudge-studio.com"
+    },
+    "identity": {
+      "sso": "id.grudge-studio.com",
+      "characters": "era=voxel for Grudges roster",
+      "foundry": "character.grudge-studio.com create era=voxel"
+    },
+    "assets": {
+      "cdn": "assets.grudge-studio.com",
+      "r2Bucket": "grudge-assets",
+      "r2KeyPrefix": "grudge-nexus",
+      "viteCdnEnv": "VITE_ASSET_CDN_URL=https://assets.grudge-studio.com/grudge-nexus",
+      "locationsAtBucketRoot": true,
+      "d1": "asset index only (skill grudge-d1-r2) — never player roster",
+      "playerSsot": "Railway Postgres via survival-api-production",
+      "syncScript": "node scripts/sync-assets-to-r2.mjs",
+      "localPublic": "artifacts/arpg-game/public + website/public",
+      "factionBanners": "/icons/factions/banners/{id}.png",
+      "perkArt": "/icons/perks/{hero|warrior|smarts|maker}/{1-30}.png",
+      "perkTiers": "/icons/perks/stat-tiers/{stat}-t{1-6}.svg",
+      "hudUi": "/textures/ui/unit-frames/* (CraftPix)",
+      "hubMap": "locations/encampment.glb",
+      "worldHeightSsot": "world/WorldGen.worldHeight + GroundSampler.groundY"
+    },
+    "world": {
+      "sizeKm": 20,
+      "halfM": 10000,
+      "arenaPadM": 50,
+      "hubNoCampM": 220,
+      "enemySpawnSafeM": 80,
+      "sectors": 9,
+      "safeZoneId": "grid_convergence",
+      "safeZoneName": "Convergence Hub",
+      "heightSsot": "worldHeight",
+      "terrainLessons": "docs/SNAKEY_TERRAIN_LESSONS.md",
+      "productionWorld": "docs/PRODUCTION_WORLD_VOXEL.md",
+      "bootLayers": [
+        "hub encampment GLB",
+        "procedural chunks",
+        "sector terrain patches",
+        "island docks",
+        "deploy gate",
+        "resources / camps outside hub"
+      ]
+    }
+  },
+  "stats": [
+    {
+      "key": "bio",
+      "abbr": "BIO",
+      "label": "Biomass",
+      "color": "#4caf50",
+      "archetype": "Survivor / Forager / Field Medic"
+    },
+    {
+      "key": "neu",
+      "abbr": "NEU",
+      "label": "Neural Integrity",
+      "color": "#00bcd4",
+      "archetype": "Hacker / Scout / Sniper"
+    },
+    {
+      "key": "kin",
+      "abbr": "KIN",
+      "label": "Kinetic Efficiency",
+      "color": "#ff9800",
+      "archetype": "Bladesman / Gunfighter / Sprinter"
+    },
+    {
+      "key": "qnt",
+      "abbr": "QNT",
+      "label": "Quantum Aptitude",
+      "color": "#9c27b0",
+      "archetype": "Salvager / Anomaly Hunter"
+    },
+    {
+      "key": "syn",
+      "abbr": "SYN",
+      "label": "Synthetic Affinity",
+      "color": "#2196f3",
+      "archetype": "Architect / Drone Master"
+    },
+    {
+      "key": "chr",
+      "abbr": "CHR",
+      "label": "Chronal Stability",
+      "color": "#c9a000",
+      "archetype": "Chrono-Operative"
+    },
+    {
+      "key": "ent",
+      "abbr": "ENT",
+      "label": "Entropic Resistance",
+      "color": "#f44336",
+      "archetype": "Reclaimer / Preserver"
+    },
+    {
+      "key": "gra",
+      "abbr": "GRA",
+      "label": "Gravitic Harmony",
+      "color": "#009688",
+      "archetype": "Orbital Specialist"
+    }
+  ],
+  "explain": {
+    "product": "Grudges is the voxel-era lead survival MMO. Canonical host: grudges.grudge-studio.com. survival.grudge-studio.com 301-redirects here.",
+    "perks": "Eight Nexus attributes (BIO…GRA), six milestone perks each. Flavor art from /icons/perks/{hero|warrior|smarts|maker}/1-30.png; tier badges from /icons/perks/stat-tiers/{stat}-t{1-6}.svg.",
+    "professions": "Seven professions (gathering, hunting, crafting, township, survival, chemistry, combat). Five branches each plus Master — 147 skills. Profession XP is independent of level skillPoints / PerksBook.",
+    "crafting": "Stations gate recipes. Recipe inputs/outputs use SurvivalItems ids. Crafting feeds weapons/armor into combat power — it is not a second ally filter.",
+    "icons": "Website serves /icons/* from the Grudges deploy. Faction banners: /icons/factions/banners/{id}.png. Prefer existing pack slots; do not invent new icon folders.",
+    "township": "Settlement tiers Camp → Tribe → Village → Town → Stronghold scale with recruit population. Buildables unlock by tier.",
+    "api": "This catalog is read-only definitions. Player bag/XP/characters stay on Railway Postgres via /api/accounts|/api/characters|/api/savegame."
+  },
+  "endpoints": {
+    "full": "/api/systems",
+    "overview": "/api/systems/overview",
+    "perks": "/api/systems/perks",
+    "professions": "/api/systems/professions",
+    "crafting": "/api/systems/crafting",
+    "icons": "/api/systems/icons",
+    "township": "/api/systems/township",
+    "combat": "/api/systems/combat",
+    "statsCatalog": "/api/stats/catalog",
+    "engineManifest": "/api/engine/manifest",
+    "staticCatalog": "/data/grudges-systems.json"
+  }
+}

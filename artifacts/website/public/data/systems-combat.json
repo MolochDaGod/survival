@@ -1,0 +1,158 @@
+{
+  "docs": {
+    "page": "/combat.html",
+    "ssot": "docs/COMBAT_POWER_SSOT.md"
+  },
+  "note": "Crafting feeds weapons/armor into this loop. Allies that fight use fighter roles, not craft stations.",
+  "pillars": [
+    {
+      "id": "weapons",
+      "label": "Weapons",
+      "systems": [
+        "WEAPONS catalog",
+        "weapon combos",
+        "WeaponAttachment sockets",
+        "SlashWave residual"
+      ],
+      "files": [
+        "constants.ts WEAPONS",
+        "AnimationRegistry combos",
+        "WeaponAttachment.ts",
+        "SlashWaveField"
+      ]
+    },
+    {
+      "id": "upgrades",
+      "label": "Upgrades",
+      "systems": [
+        "BIO…GRA milestones",
+        "hero/warrior/smarts/maker tracks",
+        "gear tiers T1–T8"
+      ],
+      "files": [
+        "CharacterConfig milestones",
+        "StatPerkChoices",
+        "crafting tiers"
+      ]
+    },
+    {
+      "id": "mobility",
+      "label": "Mobility",
+      "systems": [
+        "roll/dodge",
+        "slide",
+        "sprint",
+        "climb",
+        "swim",
+        "focus strafe"
+      ],
+      "files": [
+        "PlayerController",
+        "ClimbController",
+        "SwimController"
+      ]
+    },
+    {
+      "id": "effects",
+      "label": "Effects / VFX",
+      "systems": [
+        "AbilitySystem projectiles",
+        "CombatVfxBridge",
+        "noise spheres",
+        "ice/fire flares"
+      ],
+      "files": [
+        "AbilitySystem.ts",
+        "CombatVfxBridge.ts"
+      ]
+    },
+    {
+      "id": "procs",
+      "label": "Procs",
+      "systems": [
+        "profession passives (crit, damage, gadget crit)",
+        "milestone effect bags"
+      ],
+      "files": [
+        "ProfessionsService",
+        "@workspace/game-systems perks"
+      ]
+    },
+    {
+      "id": "defensives",
+      "label": "Defensives",
+      "systems": [
+        "block/parry by weapon",
+        "roll i-frames",
+        "BIO/ENT survivability",
+        "armor crafts"
+      ],
+      "files": [
+        "PlayerController block",
+        "AnimationRegistry block clips"
+      ]
+    },
+    {
+      "id": "allies_combat",
+      "label": "Allies (combat)",
+      "systems": [
+        "mercenary",
+        "captain",
+        "sentry",
+        "gate_guard",
+        "gunner"
+      ],
+      "files": [
+        "TownshipSystem NPC_ROLES family fighter",
+        "CitySpawner.assignRole"
+      ]
+    }
+  ],
+  "allyFamilies": {
+    "fighter": [
+      "sentry",
+      "gate_guard",
+      "gunner",
+      "captain",
+      "mercenary"
+    ],
+    "harvester": [
+      "woodcutter",
+      "miner",
+      "farmer",
+      "forager",
+      "trapper"
+    ],
+    "vendor": [
+      "stall",
+      "caravan_master",
+      "fence",
+      "bazaar_merchant"
+    ],
+    "diplomacy": [
+      "diplomat"
+    ]
+  },
+  "abilitiesHotkeys": [
+    "1–5 classic AbilitySystem",
+    "6–0 linear skillshots (frost/storm/cinder/nova/snare)",
+    "[ ] cycle linear variant",
+    "LMB attack combo",
+    "RMB focus toggle",
+    "block key",
+    "roll/slide"
+  ],
+  "linearCasts": {
+    "source": "https://github.com/MolochDaGod/LinearAbiltyCastingThreeJS",
+    "doc": "docs/VOXEL_LINEAR_CAST_SSOT.md",
+    "ids": [
+      "frost_lance",
+      "storm_lance",
+      "cinder_fall",
+      "nova_beam",
+      "voltaic_snare"
+    ],
+    "destruction": "PinataDebrisField + BreakableWallSystem"
+  },
+  "doc": "docs/COMBAT_POWER_SSOT.md"
+}

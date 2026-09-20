@@ -1,0 +1,5425 @@
+{
+  "version": "1.0.0",
+  "generatedAt": "2026-09-20T00:49:29.302Z",
+  "product": "Grudges · Voxel-era lead survival MMO",
+  "productEra": "voxel",
+  "productNote": "Hard decision: Grudges is voxel-era only (main/lead voxel game). Nexus product era deferred. BIO…GRA remain the attribute system name.",
+  "links": {
+    "info": "/info.html",
+    "camp": "/info.html#camp",
+    "lore": "/lore.html",
+    "stats": "/stats-guide.html",
+    "mainPanel": "/main-panel",
+    "perks": "/perks",
+    "crafting": "/crafting",
+    "professions": "/professions",
+    "mapstarter": "/mapstarter",
+    "play": "/arpg-game/",
+    "factions": "/icons/factions/banners/",
+    "eraDoc": "docs/PRODUCT_ERA_VOXEL.md",
+    "productionSsot": "docs/PRODUCTION_SSOT.md"
+  },
+  "topology": {
+    "product": "Grudges",
+    "productEra": "voxel",
+    "client": {
+      "host": "grudges.grudge-studio.com",
+      "path": "/arpg-game/",
+      "repo": "artifacts/arpg-game",
+      "hud": [
+        "HUD.tsx (CraftPix unit frames)",
+        "MainPanel.tsx (C hub)",
+        "SurvivalHUD.tsx",
+        "WorldMapOverlay.tsx"
+      ]
+    },
+    "website": {
+      "host": "grudges.grudge-studio.com",
+      "repo": "artifacts/website",
+      "pages": [
+        "/",
+        "/perks",
+        "/crafting",
+        "/professions",
+        "/main-panel",
+        "/mapstarter",
+        "/info.html",
+        "/lore.html"
+      ]
+    },
+    "api": {
+      "host": "survival-api-production.up.railway.app",
+      "proxy": "/api/* → Railway (also via grudges.grudge-studio.com/api/*)",
+      "health": "/api/healthz",
+      "systems": "/api/systems",
+      "systemsOverview": "/api/systems/overview",
+      "systemsPerks": "/api/systems/perks",
+      "systemsProfessions": "/api/systems/professions",
+      "systemsCrafting": "/api/systems/crafting",
+      "systemsIcons": "/api/systems/icons",
+      "canonicalWeb": "https://grudges.grudge-studio.com",
+      "survivalRedirect": "https://survival.grudge-studio.com → 301 → grudges.grudge-studio.com"
+    },
+    "identity": {
+      "sso": "id.grudge-studio.com",
+      "characters": "era=voxel for Grudges roster",
+      "foundry": "character.grudge-studio.com create era=voxel"
+    },
+    "assets": {
+      "cdn": "assets.grudge-studio.com",
+      "r2Bucket": "grudge-assets",
+      "r2KeyPrefix": "grudge-nexus",
+      "viteCdnEnv": "VITE_ASSET_CDN_URL=https://assets.grudge-studio.com/grudge-nexus",
+      "locationsAtBucketRoot": true,
+      "d1": "asset index only (skill grudge-d1-r2) — never player roster",
+      "playerSsot": "Railway Postgres via survival-api-production",
+      "syncScript": "node scripts/sync-assets-to-r2.mjs",
+      "localPublic": "artifacts/arpg-game/public + website/public",
+      "factionBanners": "/icons/factions/banners/{id}.png",
+      "perkArt": "/icons/perks/{hero|warrior|smarts|maker}/{1-30}.png",
+      "perkTiers": "/icons/perks/stat-tiers/{stat}-t{1-6}.svg",
+      "hudUi": "/textures/ui/unit-frames/* (CraftPix)",
+      "hubMap": "locations/encampment.glb",
+      "worldHeightSsot": "world/WorldGen.worldHeight + GroundSampler.groundY"
+    },
+    "world": {
+      "sizeKm": 20,
+      "halfM": 10000,
+      "arenaPadM": 50,
+      "hubNoCampM": 220,
+      "enemySpawnSafeM": 80,
+      "sectors": 9,
+      "safeZoneId": "grid_convergence",
+      "safeZoneName": "Convergence Hub",
+      "heightSsot": "worldHeight",
+      "terrainLessons": "docs/SNAKEY_TERRAIN_LESSONS.md",
+      "productionWorld": "docs/PRODUCTION_WORLD_VOXEL.md",
+      "bootLayers": [
+        "hub encampment GLB",
+        "procedural chunks",
+        "sector terrain patches",
+        "island docks",
+        "deploy gate",
+        "resources / camps outside hub"
+      ]
+    }
+  },
+  "stats": [
+    {
+      "key": "bio",
+      "abbr": "BIO",
+      "label": "Biomass",
+      "color": "#4caf50",
+      "archetype": "Survivor / Forager / Field Medic"
+    },
+    {
+      "key": "neu",
+      "abbr": "NEU",
+      "label": "Neural Integrity",
+      "color": "#00bcd4",
+      "archetype": "Hacker / Scout / Sniper"
+    },
+    {
+      "key": "kin",
+      "abbr": "KIN",
+      "label": "Kinetic Efficiency",
+      "color": "#ff9800",
+      "archetype": "Bladesman / Gunfighter / Sprinter"
+    },
+    {
+      "key": "qnt",
+      "abbr": "QNT",
+      "label": "Quantum Aptitude",
+      "color": "#9c27b0",
+      "archetype": "Salvager / Anomaly Hunter"
+    },
+    {
+      "key": "syn",
+      "abbr": "SYN",
+      "label": "Synthetic Affinity",
+      "color": "#2196f3",
+      "archetype": "Architect / Drone Master"
+    },
+    {
+      "key": "chr",
+      "abbr": "CHR",
+      "label": "Chronal Stability",
+      "color": "#c9a000",
+      "archetype": "Chrono-Operative"
+    },
+    {
+      "key": "ent",
+      "abbr": "ENT",
+      "label": "Entropic Resistance",
+      "color": "#f44336",
+      "archetype": "Reclaimer / Preserver"
+    },
+    {
+      "key": "gra",
+      "abbr": "GRA",
+      "label": "Gravitic Harmony",
+      "color": "#009688",
+      "archetype": "Orbital Specialist"
+    }
+  ],
+  "perks": {
+    "description": "6 milestone perks per Nexus attribute (BIO…GRA). Unlocks as you allocate ranks 1–6.",
+    "byStat": {
+      "bio": [
+        {
+          "name": "Iron Constitution",
+          "desc": "+5 Max HP. Minor bleed resistance.",
+          "icon": "🩸",
+          "tier": 1,
+          "iconPath": "/icons/perks/hero/1.png",
+          "tierBadge": "/icons/perks/stat-tiers/bio-t1.svg"
+        },
+        {
+          "name": "Cellular Regen",
+          "desc": "+10 Max HP. Toxin Resist I. Natural regen 0.5 HP/s.",
+          "icon": "🔄",
+          "tier": 2,
+          "iconPath": "/icons/perks/hero/2.png",
+          "tierBadge": "/icons/perks/stat-tiers/bio-t2.svg"
+        },
+        {
+          "name": "Augment Compatibility",
+          "desc": "+20 Max HP. Implant Slot unlocked. Toxin Resist II.",
+          "icon": "🔩",
+          "tier": 3,
+          "iconPath": "/icons/perks/hero/3.png",
+          "tierBadge": "/icons/perks/stat-tiers/bio-t3.svg"
+        },
+        {
+          "name": "Nanoflesh Matrix",
+          "desc": "+35 Max HP. Rapid Heal I. Disease Immunity.",
+          "icon": "🧬",
+          "tier": 4,
+          "iconPath": "/icons/perks/hero/4.png",
+          "tierBadge": "/icons/perks/stat-tiers/bio-t4.svg"
+        },
+        {
+          "name": "Apex Physiology",
+          "desc": "+55 Max HP. Rapid Heal II. Combat Regen.",
+          "icon": "💪",
+          "tier": 5,
+          "iconPath": "/icons/perks/hero/5.png",
+          "tierBadge": "/icons/perks/stat-tiers/bio-t5.svg"
+        },
+        {
+          "name": "Undying Protocol",
+          "desc": "+80 Max HP. Death Defiance: survive one lethal blow once per mission.",
+          "icon": "☠️",
+          "tier": 6,
+          "iconPath": "/icons/perks/hero/6.png",
+          "tierBadge": "/icons/perks/stat-tiers/bio-t6.svg"
+        }
+      ],
+      "neu": [
+        {
+          "name": "Signal Clarity",
+          "desc": "+5 Sanity. Psionic Shielding I.",
+          "icon": "📡",
+          "tier": 1,
+          "iconPath": "/icons/perks/smarts/7.png",
+          "tierBadge": "/icons/perks/stat-tiers/neu-t1.svg"
+        },
+        {
+          "name": "Neural Firewall",
+          "desc": "Hack Resist I. AI Co-Processor Tier I unlocked.",
+          "icon": "🧱",
+          "tier": 2,
+          "iconPath": "/icons/perks/smarts/8.png",
+          "tierBadge": "/icons/perks/stat-tiers/neu-t2.svg"
+        },
+        {
+          "name": "Deep Focus",
+          "desc": "Psionic Shielding II. Neural Overclock (temp INT +20%).",
+          "icon": "🎯",
+          "tier": 3,
+          "iconPath": "/icons/perks/smarts/9.png",
+          "tierBadge": "/icons/perks/stat-tiers/neu-t3.svg"
+        },
+        {
+          "name": "Synaptic Overdrive",
+          "desc": "Hack Resist II. AI Co-Proc Tier II. Mind Link with allies.",
+          "icon": "⚡",
+          "tier": 4,
+          "iconPath": "/icons/perks/smarts/10.png",
+          "tierBadge": "/icons/perks/stat-tiers/neu-t4.svg"
+        },
+        {
+          "name": "Transcendent Logic",
+          "desc": "Psionic Mastery. Reality Anchor. Neural Dominance.",
+          "icon": "🌐",
+          "tier": 5,
+          "iconPath": "/icons/perks/smarts/11.png",
+          "tierBadge": "/icons/perks/stat-tiers/neu-t5.svg"
+        },
+        {
+          "name": "Enlightened Arch.",
+          "desc": "Full Psionic Immunity. Quantum Cognition. AI Symbiosis.",
+          "icon": "🧠",
+          "tier": 6,
+          "iconPath": "/icons/perks/smarts/12.png",
+          "tierBadge": "/icons/perks/stat-tiers/neu-t6.svg"
+        }
+      ],
+      "kin": [
+        {
+          "name": "Fleet Footed",
+          "desc": "+5% movement speed. Minor fall damage resist.",
+          "icon": "🏃",
+          "tier": 1,
+          "iconPath": "/icons/perks/warrior/13.png",
+          "tierBadge": "/icons/perks/stat-tiers/kin-t1.svg"
+        },
+        {
+          "name": "Combat Cadence",
+          "desc": "+10% melee damage. Stamina Regen +0.5/s.",
+          "icon": "⚔️",
+          "tier": 2,
+          "iconPath": "/icons/perks/warrior/14.png",
+          "tierBadge": "/icons/perks/stat-tiers/kin-t2.svg"
+        },
+        {
+          "name": "Zero-G Trained",
+          "desc": "+15% movement. Zero-G combat unlock. Dodge window +20ms.",
+          "icon": "🚀",
+          "tier": 3,
+          "iconPath": "/icons/perks/warrior/15.png",
+          "tierBadge": "/icons/perks/stat-tiers/kin-t3.svg"
+        },
+        {
+          "name": "Kinetic Amplifier",
+          "desc": "+25% melee damage. Momentum Strikes (combo chain bonus).",
+          "icon": "💥",
+          "tier": 4,
+          "iconPath": "/icons/perks/warrior/16.png",
+          "tierBadge": "/icons/perks/stat-tiers/kin-t4.svg"
+        },
+        {
+          "name": "Apex Predator",
+          "desc": "Sprint never drains stamina. Aerial assault unlocked.",
+          "icon": "🐆",
+          "tier": 5,
+          "iconPath": "/icons/perks/warrior/17.png",
+          "tierBadge": "/icons/perks/stat-tiers/kin-t5.svg"
+        },
+        {
+          "name": "Unstoppable Force",
+          "desc": "Immune to knockback. Ground slam ability. +40% melee damage total.",
+          "icon": "🌪️",
+          "tier": 6,
+          "iconPath": "/icons/perks/warrior/18.png",
+          "tierBadge": "/icons/perks/stat-tiers/kin-t6.svg"
+        }
+      ],
+      "qnt": [
+        {
+          "name": "Tech Intuition",
+          "desc": "Quantum devices recognized on scan. +5 tech comprehension.",
+          "icon": "🔭",
+          "tier": 1,
+          "iconPath": "/icons/perks/smarts/19.png",
+          "tierBadge": "/icons/perks/stat-tiers/qnt-t1.svg"
+        },
+        {
+          "name": "Probability Sense",
+          "desc": "Hazard pre-detection. +1 quantum device slot.",
+          "icon": "🎲",
+          "tier": 2,
+          "iconPath": "/icons/perks/smarts/20.png",
+          "tierBadge": "/icons/perks/stat-tiers/qnt-t2.svg"
+        },
+        {
+          "name": "Field Theorist",
+          "desc": "Quantum shield modulator. +2 device slots. Exotic material crafting.",
+          "icon": "🧪",
+          "tier": 3,
+          "iconPath": "/icons/perks/smarts/21.png",
+          "tierBadge": "/icons/perks/stat-tiers/qnt-t3.svg"
+        },
+        {
+          "name": "Phase Manipulator",
+          "desc": "Phase-step dodge (short blink). Quantum grenade fabrication.",
+          "icon": "🌀",
+          "tier": 4,
+          "iconPath": "/icons/perks/smarts/22.png",
+          "tierBadge": "/icons/perks/stat-tiers/qnt-t4.svg"
+        },
+        {
+          "name": "Reality Weaver",
+          "desc": "Probability bubble (slow projectiles near you). +3 device slots.",
+          "icon": "🕸️",
+          "tier": 5,
+          "iconPath": "/icons/perks/smarts/23.png",
+          "tierBadge": "/icons/perks/stat-tiers/qnt-t5.svg"
+        },
+        {
+          "name": "Quantum Sovereign",
+          "desc": "Temporal suspension (stop time for 2s, 1×/mission). Max device slots.",
+          "icon": "⏳",
+          "tier": 6,
+          "iconPath": "/icons/perks/smarts/24.png",
+          "tierBadge": "/icons/perks/stat-tiers/qnt-t6.svg"
+        }
+      ],
+      "syn": [
+        {
+          "name": "Network Aware",
+          "desc": "Nearby devices show on minimap. +1 drone slot.",
+          "icon": "📶",
+          "tier": 1,
+          "iconPath": "/icons/perks/maker/25.png",
+          "tierBadge": "/icons/perks/stat-tiers/syn-t1.svg"
+        },
+        {
+          "name": "Ghost Protocol",
+          "desc": "Hack speed +30%. Basic AI negotiation unlocked.",
+          "icon": "👻",
+          "tier": 2,
+          "iconPath": "/icons/perks/maker/26.png",
+          "tierBadge": "/icons/perks/stat-tiers/syn-t2.svg"
+        },
+        {
+          "name": "Swarm Link",
+          "desc": "+2 drone slots. Swarm intel (area scan). Firewall bypass I.",
+          "icon": "🤖",
+          "tier": 3,
+          "iconPath": "/icons/perks/maker/27.png",
+          "tierBadge": "/icons/perks/stat-tiers/syn-t3.svg"
+        },
+        {
+          "name": "Neural Mesh",
+          "desc": "Passive drone repair. AI faction trust +20. Firewall bypass II.",
+          "icon": "🕹️",
+          "tier": 4,
+          "iconPath": "/icons/perks/maker/28.png",
+          "tierBadge": "/icons/perks/stat-tiers/syn-t4.svg"
+        },
+        {
+          "name": "Hive Mind Conduit",
+          "desc": "Direct AI faction diplomacy. Drones inherit combat skills.",
+          "icon": "🧿",
+          "tier": 5,
+          "iconPath": "/icons/perks/maker/29.png",
+          "tierBadge": "/icons/perks/stat-tiers/syn-t5.svg"
+        },
+        {
+          "name": "Synthetic Ascension",
+          "desc": "Become machine-recognized ally. Full drone autonomous control.",
+          "icon": "💎",
+          "tier": 6,
+          "iconPath": "/icons/perks/maker/30.png",
+          "tierBadge": "/icons/perks/stat-tiers/syn-t6.svg"
+        }
+      ],
+      "chr": [
+        {
+          "name": "Temporal Grounding",
+          "desc": "Anomaly resistance +10%. Chronal sickness immunity.",
+          "icon": "⏱️",
+          "tier": 1,
+          "iconPath": "/icons/perks/hero/1.png",
+          "tierBadge": "/icons/perks/stat-tiers/chr-t1.svg"
+        },
+        {
+          "name": "Echo Perception",
+          "desc": "See 2s into future (danger sense). Causality shield I.",
+          "icon": "👁️",
+          "tier": 2,
+          "iconPath": "/icons/perks/hero/2.png",
+          "tierBadge": "/icons/perks/stat-tiers/chr-t2.svg"
+        },
+        {
+          "name": "Phase Anchor",
+          "desc": "Cannot be displaced by temporal events. Rewind I (undo last action).",
+          "icon": "⚓",
+          "tier": 3,
+          "iconPath": "/icons/perks/hero/3.png",
+          "tierBadge": "/icons/perks/stat-tiers/chr-t3.svg"
+        },
+        {
+          "name": "Paradox Engine",
+          "desc": "Duplicate self for 5s. Causality shield II. Chrono gear unlock.",
+          "icon": "🔮",
+          "tier": 4,
+          "iconPath": "/icons/perks/hero/4.png",
+          "tierBadge": "/icons/perks/stat-tiers/chr-t4.svg"
+        },
+        {
+          "name": "Timeline Bender",
+          "desc": "Rewind II (15s window). Temporal stasis projectile.",
+          "icon": "🌊",
+          "tier": 5,
+          "iconPath": "/icons/perks/hero/5.png",
+          "tierBadge": "/icons/perks/stat-tiers/chr-t5.svg"
+        },
+        {
+          "name": "Eternal Observer",
+          "desc": "Outside timeline during death (1×/mission). Perfect chronal immunity.",
+          "icon": "♾️",
+          "tier": 6,
+          "iconPath": "/icons/perks/hero/6.png",
+          "tierBadge": "/icons/perks/stat-tiers/chr-t6.svg"
+        }
+      ],
+      "ent": [
+        {
+          "name": "Hardy Materials",
+          "desc": "Equipment durability +20%. Salvage yield +10%.",
+          "icon": "🪨",
+          "tier": 1,
+          "iconPath": "/icons/perks/maker/7.png",
+          "tierBadge": "/icons/perks/stat-tiers/ent-t1.svg"
+        },
+        {
+          "name": "Decay Shield",
+          "desc": "Resource spoilage –30%. Corrosion resist I.",
+          "icon": "🛡️",
+          "tier": 2,
+          "iconPath": "/icons/perks/maker/8.png",
+          "tierBadge": "/icons/perks/stat-tiers/ent-t2.svg"
+        },
+        {
+          "name": "Reclamation Expert",
+          "desc": "Craft from degraded materials. Gear repair costs –25%.",
+          "icon": "♻️",
+          "tier": 3,
+          "iconPath": "/icons/perks/maker/9.png",
+          "tierBadge": "/icons/perks/stat-tiers/ent-t3.svg"
+        },
+        {
+          "name": "Entropy Sink",
+          "desc": "Absorb environmental decay as energy. Gear never breaks below 10%.",
+          "icon": "🌀",
+          "tier": 4,
+          "iconPath": "/icons/perks/maker/10.png",
+          "tierBadge": "/icons/perks/stat-tiers/ent-t4.svg"
+        },
+        {
+          "name": "Void Preservation",
+          "desc": "Slow entropy field (debuffs enemies in range). Full corrosion immunity.",
+          "icon": "🫙",
+          "tier": 5,
+          "iconPath": "/icons/perks/maker/11.png",
+          "tierBadge": "/icons/perks/stat-tiers/ent-t5.svg"
+        },
+        {
+          "name": "Eternal Engine",
+          "desc": "Gear is indestructible. Entropy absorption heals 1 HP/s passively.",
+          "icon": "⚙️",
+          "tier": 6,
+          "iconPath": "/icons/perks/maker/12.png",
+          "tierBadge": "/icons/perks/stat-tiers/ent-t6.svg"
+        }
+      ],
+      "gra": [
+        {
+          "name": "Light Footed",
+          "desc": "Fall damage –25%. Minor zero-G stability.",
+          "icon": "🪶",
+          "tier": 1,
+          "iconPath": "/icons/perks/warrior/13.png",
+          "tierBadge": "/icons/perks/stat-tiers/gra-t1.svg"
+        },
+        {
+          "name": "Grav Adapted",
+          "desc": "Fall damage –50%. Zero-G navigation unlock. +5% spatial awareness.",
+          "icon": "🌙",
+          "tier": 2,
+          "iconPath": "/icons/perks/warrior/14.png",
+          "tierBadge": "/icons/perks/stat-tiers/gra-t2.svg"
+        },
+        {
+          "name": "Force Sense",
+          "desc": "Detect gravitational anomalies. Grav-pulse push (short range).",
+          "icon": "🎯",
+          "tier": 3,
+          "iconPath": "/icons/perks/warrior/15.png",
+          "tierBadge": "/icons/perks/stat-tiers/gra-t3.svg"
+        },
+        {
+          "name": "Orbital Mastery",
+          "desc": "Full zero-G combat. Grav anchor (pin enemies). Wall-running.",
+          "icon": "🛸",
+          "tier": 4,
+          "iconPath": "/icons/perks/warrior/16.png",
+          "tierBadge": "/icons/perks/stat-tiers/gra-t4.svg"
+        },
+        {
+          "name": "Graviton Weave",
+          "desc": "Personal gravity manipulation. Launch enemies skyward.",
+          "icon": "🌌",
+          "tier": 5,
+          "iconPath": "/icons/perks/warrior/17.png",
+          "tierBadge": "/icons/perks/stat-tiers/gra-t5.svg"
+        },
+        {
+          "name": "Event Horizon Body",
+          "desc": "Micro singularity ability. Total fall immunity. Gravity reversal field.",
+          "icon": "🕳️",
+          "tier": 6,
+          "iconPath": "/icons/perks/warrior/18.png",
+          "tierBadge": "/icons/perks/stat-tiers/gra-t6.svg"
+        }
+      ]
+    },
+    "art": {
+      "note": "iconPath + tierBadge resolved at export from on-disk packs — do not invent new folders.",
+      "packs": {
+        "bio": "hero",
+        "neu": "smarts",
+        "kin": "warrior",
+        "qnt": "smarts",
+        "syn": "maker",
+        "chr": "hero",
+        "ent": "maker",
+        "gra": "warrior"
+      },
+      "tierBadgePattern": "/icons/perks/stat-tiers/{stat}-t{tier}.svg"
+    },
+    "tracks": [
+      {
+        "id": "hero",
+        "label": "Hero",
+        "color": "#ff7d87"
+      },
+      {
+        "id": "warrior",
+        "label": "Warrior",
+        "color": "#ffb16d"
+      },
+      {
+        "id": "smarts",
+        "label": "Smarts",
+        "color": "#bb95ff"
+      },
+      {
+        "id": "maker",
+        "label": "Maker",
+        "color": "#49de95"
+      }
+    ]
+  },
+  "crafting": {
+    "stations": [
+      {
+        "id": "forge",
+        "name": "Forge",
+        "profession": "crafting",
+        "desc": "Weapons & heavy armor. Ore + fuel.",
+        "icon": "forge"
+      },
+      {
+        "id": "workbench",
+        "name": "Workbench",
+        "profession": "crafting",
+        "desc": "Wood items, bows, tools.",
+        "icon": "bench"
+      },
+      {
+        "id": "alchemy",
+        "name": "Alchemy Table",
+        "profession": "chemistry",
+        "desc": "Potions, elixirs, poisons, oils.",
+        "icon": "alchemy"
+      },
+      {
+        "id": "loom",
+        "name": "Loom",
+        "profession": "crafting",
+        "desc": "Cloth armor, capes, bags.",
+        "icon": "loom"
+      },
+      {
+        "id": "tannery",
+        "name": "Tannery",
+        "profession": "hunting",
+        "desc": "Leather from hides.",
+        "icon": "tannery"
+      },
+      {
+        "id": "enchanting",
+        "name": "Enchanting Altar",
+        "profession": "chemistry",
+        "desc": "Enchantments, runes, enhancements.",
+        "icon": "enchant"
+      },
+      {
+        "id": "campfire",
+        "name": "Campfire",
+        "profession": "survival",
+        "desc": "Cooking, basic survival crafts.",
+        "icon": "fire"
+      },
+      {
+        "id": "build",
+        "name": "Build Hammer",
+        "profession": "township",
+        "desc": "Camp structures & defenses.",
+        "icon": "build"
+      }
+    ],
+    "recipes": [
+      {
+        "id": "craft_torch",
+        "name": "Torch",
+        "station": "none",
+        "inputs": [
+          {
+            "itemId": "branch_b",
+            "count": 1
+          },
+          {
+            "itemId": "duct_tape",
+            "count": 1
+          },
+          {
+            "itemId": "torch",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "torch",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_bandage",
+        "name": "Bandage",
+        "station": "none",
+        "inputs": [
+          {
+            "itemId": "duct_tape",
+            "count": 1
+          },
+          {
+            "itemId": "bandage",
+            "count": 2
+          }
+        ],
+        "output": {
+          "itemId": "bandage",
+          "count": 2
+        }
+      },
+      {
+        "id": "craft_arrow",
+        "name": "Arrows (flint)",
+        "station": "none",
+        "inputs": [
+          {
+            "itemId": "branch_a",
+            "count": 2
+          },
+          {
+            "itemId": "rock_5",
+            "count": 1
+          },
+          {
+            "itemId": "arrow",
+            "count": 5
+          }
+        ],
+        "output": {
+          "itemId": "arrow",
+          "count": 5
+        }
+      },
+      {
+        "id": "craft_bow",
+        "name": "Recurve Bow (basic)",
+        "station": "none",
+        "inputs": [
+          {
+            "itemId": "branch_b",
+            "count": 3
+          },
+          {
+            "itemId": "duct_tape",
+            "count": 2
+          },
+          {
+            "itemId": "bow",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "bow",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_knife",
+        "name": "Knife",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "branch_a",
+            "count": 1
+          },
+          {
+            "itemId": "iron_ore",
+            "count": 1
+          },
+          {
+            "itemId": "knife",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "knife",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_fishing_rod",
+        "name": "Fishing Rod",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "branch_b",
+            "count": 2
+          },
+          {
+            "itemId": "silk",
+            "count": 1
+          },
+          {
+            "itemId": "fishing_rod",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "fishing_rod",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_bait_worm",
+        "name": "Bait (worm jar)",
+        "station": "none",
+        "inputs": [
+          {
+            "itemId": "bio",
+            "count": 2
+          },
+          {
+            "itemId": "bottle_empty",
+            "count": 1
+          },
+          {
+            "itemId": "bait_worm",
+            "count": 3
+          }
+        ],
+        "output": {
+          "itemId": "bait_worm",
+          "count": 3
+        }
+      },
+      {
+        "id": "craft_fishing_net",
+        "name": "Fishing Net",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "silk",
+            "count": 4
+          },
+          {
+            "itemId": "branch_b",
+            "count": 2
+          },
+          {
+            "itemId": "fishing_net",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "fishing_net",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_harpoon",
+        "name": "Harpoon",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 3
+          },
+          {
+            "itemId": "wood_plank",
+            "count": 2
+          },
+          {
+            "itemId": "leather",
+            "count": 1
+          },
+          {
+            "itemId": "harpoon",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "harpoon",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_deepsea_net",
+        "name": "Deep-Sea Net",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "silk",
+            "count": 8
+          },
+          {
+            "itemId": "leather",
+            "count": 4
+          },
+          {
+            "itemId": "iron_ore",
+            "count": 2
+          },
+          {
+            "itemId": "deepsea_net",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "deepsea_net",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_skinning_knife",
+        "name": "Skinning Knife",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 2
+          },
+          {
+            "itemId": "wood_plank",
+            "count": 1
+          },
+          {
+            "itemId": "leather",
+            "count": 1
+          },
+          {
+            "itemId": "skinning_knife",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "skinning_knife",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_snare_trap",
+        "name": "Snare Trap",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "silk",
+            "count": 3
+          },
+          {
+            "itemId": "branch_a",
+            "count": 4
+          },
+          {
+            "itemId": "snare_trap",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "snare_trap",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_bear_trap",
+        "name": "Steel Bear Trap",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 6
+          },
+          {
+            "itemId": "wood_plank",
+            "count": 2
+          },
+          {
+            "itemId": "fang",
+            "count": 2
+          },
+          {
+            "itemId": "bear_trap",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "bear_trap",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_taxidermy_kit",
+        "name": "Taxidermy Kit",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "leather",
+            "count": 4
+          },
+          {
+            "itemId": "silk",
+            "count": 2
+          },
+          {
+            "itemId": "herb_common",
+            "count": 4
+          },
+          {
+            "itemId": "taxidermy_kit",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "taxidermy_kit",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_tracking_arrow",
+        "name": "Tracking Arrow",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "branch_a",
+            "count": 2
+          },
+          {
+            "itemId": "iron_ore",
+            "count": 1
+          },
+          {
+            "itemId": "herb_rare",
+            "count": 1
+          },
+          {
+            "itemId": "tracking_arrow",
+            "count": 5
+          }
+        ],
+        "output": {
+          "itemId": "tracking_arrow",
+          "count": 5
+        }
+      },
+      {
+        "id": "craft_trophy_mount",
+        "name": "Trophy Mount",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "taxidermy_kit",
+            "count": 1
+          },
+          {
+            "itemId": "bone",
+            "count": 4
+          },
+          {
+            "itemId": "wood_plank",
+            "count": 4
+          },
+          {
+            "itemId": "trophy_mount",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "trophy_mount",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_bounty_poster",
+        "name": "Bounty Poster",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "paper",
+            "count": 1
+          },
+          {
+            "itemId": "ink",
+            "count": 1
+          },
+          {
+            "itemId": "bounty_poster",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "bounty_poster",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_wanted_dossier",
+        "name": "Wanted Dossier",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "paper",
+            "count": 3
+          },
+          {
+            "itemId": "ink",
+            "count": 2
+          },
+          {
+            "itemId": "leather",
+            "count": 1
+          },
+          {
+            "itemId": "wanted_dossier",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "wanted_dossier",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_capture_net",
+        "name": "Capture Net",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "silk",
+            "count": 6
+          },
+          {
+            "itemId": "branch_a",
+            "count": 2
+          },
+          {
+            "itemId": "fang",
+            "count": 1
+          },
+          {
+            "itemId": "capture_net",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "capture_net",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_bounty_lockbox",
+        "name": "Bounty Lockbox",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 4
+          },
+          {
+            "itemId": "wood_plank",
+            "count": 2
+          },
+          {
+            "itemId": "bounty_lockbox",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "bounty_lockbox",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_villain_trophy",
+        "name": "Villain Trophy",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "taxidermy_kit",
+            "count": 1
+          },
+          {
+            "itemId": "bone",
+            "count": 4
+          },
+          {
+            "itemId": "silk",
+            "count": 4
+          },
+          {
+            "itemId": "gem_rare",
+            "count": 1
+          },
+          {
+            "itemId": "villain_trophy",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "villain_trophy",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_manacles",
+        "name": "Manacles",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 4
+          },
+          {
+            "itemId": "leather",
+            "count": 1
+          },
+          {
+            "itemId": "manacles",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "manacles",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_pickaxe",
+        "name": "Pickaxe",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 3
+          },
+          {
+            "itemId": "wood_plank",
+            "count": 2
+          },
+          {
+            "itemId": "pickaxe",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "pickaxe",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_hammer_tool",
+        "name": "Carpenter Hammer",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 2
+          },
+          {
+            "itemId": "wood_plank",
+            "count": 1
+          },
+          {
+            "itemId": "hammer_tool",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "hammer_tool",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_bucket_metal",
+        "name": "Metal Bucket",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 3
+          },
+          {
+            "itemId": "bucket_metal",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "bucket_metal",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_repair_kit",
+        "name": "Repair Kit",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 2
+          },
+          {
+            "itemId": "leather",
+            "count": 1
+          },
+          {
+            "itemId": "duct_tape",
+            "count": 2
+          },
+          {
+            "itemId": "repair_kit",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "repair_kit",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_whetstone",
+        "name": "Whetstone",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "rock_2",
+            "count": 4
+          },
+          {
+            "itemId": "whetstone",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "whetstone",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_torch_metal",
+        "name": "Metal Torch",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 2
+          },
+          {
+            "itemId": "wax",
+            "count": 2
+          },
+          {
+            "itemId": "branch_b",
+            "count": 1
+          },
+          {
+            "itemId": "torch_metal",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "torch_metal",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_shield_round",
+        "name": "Round Shield",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "wood_plank",
+            "count": 6
+          },
+          {
+            "itemId": "leather",
+            "count": 3
+          },
+          {
+            "itemId": "iron_ore",
+            "count": 2
+          },
+          {
+            "itemId": "shield_round",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "shield_round",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_shield_round_2",
+        "name": "Round Shield (reinforced)",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "wood_plank",
+            "count": 6
+          },
+          {
+            "itemId": "leather",
+            "count": 4
+          },
+          {
+            "itemId": "iron_ore",
+            "count": 4
+          },
+          {
+            "itemId": "shield_round_2",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "shield_round_2",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_workbench",
+        "name": "Workbench",
+        "station": "none",
+        "inputs": [
+          {
+            "itemId": "wood_plank",
+            "count": 8
+          },
+          {
+            "itemId": "iron_ore",
+            "count": 4
+          },
+          {
+            "itemId": "workbench",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "workbench",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_anvil",
+        "name": "Anvil",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 12
+          },
+          {
+            "itemId": "anvil",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "anvil",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_weapon_stand",
+        "name": "Weapon Stand",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "wood_plank",
+            "count": 6
+          },
+          {
+            "itemId": "iron_ore",
+            "count": 2
+          },
+          {
+            "itemId": "weapon_stand",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "weapon_stand",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_shield_celtic_golden",
+        "name": "Celtic Shield (Golden)",
+        "station": "anvil",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 8
+          },
+          {
+            "itemId": "gold",
+            "count": 4
+          },
+          {
+            "itemId": "mineral_crystal",
+            "count": 2
+          },
+          {
+            "itemId": "shield_celtic_golden",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "shield_celtic_golden",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_workbench_drawers",
+        "name": "Workbench (Drawers)",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "wood_plank",
+            "count": 12
+          },
+          {
+            "itemId": "iron_ore",
+            "count": 6
+          },
+          {
+            "itemId": "workbench_drawers",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "workbench_drawers",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_dagger",
+        "name": "Iron Dagger",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 2
+          },
+          {
+            "itemId": "wood_plank",
+            "count": 1
+          },
+          {
+            "itemId": "dagger",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "dagger",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_iron_sword",
+        "name": "Iron Sword",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 4
+          },
+          {
+            "itemId": "wood_plank",
+            "count": 2
+          },
+          {
+            "itemId": "leather",
+            "count": 1
+          },
+          {
+            "itemId": "iron_sword",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "iron_sword",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_sword_2",
+        "name": "Steel Sword",
+        "station": "anvil",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 6
+          },
+          {
+            "itemId": "wood_plank",
+            "count": 2
+          },
+          {
+            "itemId": "leather",
+            "count": 1
+          },
+          {
+            "itemId": "sword_2",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "sword_2",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_dagger_2",
+        "name": "Steel Dagger",
+        "station": "anvil",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 3
+          },
+          {
+            "itemId": "wood_plank",
+            "count": 1
+          },
+          {
+            "itemId": "dagger_2",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "dagger_2",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_axe_small",
+        "name": "Hatchet",
+        "station": "anvil",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 3
+          },
+          {
+            "itemId": "wood_plank",
+            "count": 2
+          },
+          {
+            "itemId": "axe_small",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "axe_small",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_axe",
+        "name": "Battle Axe",
+        "station": "anvil",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 5
+          },
+          {
+            "itemId": "wood_plank",
+            "count": 2
+          },
+          {
+            "itemId": "leather",
+            "count": 1
+          },
+          {
+            "itemId": "axe",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "axe",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_hammer_small",
+        "name": "War Hammer",
+        "station": "anvil",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 6
+          },
+          {
+            "itemId": "wood_plank",
+            "count": 2
+          },
+          {
+            "itemId": "leather",
+            "count": 1
+          },
+          {
+            "itemId": "hammer_small",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "hammer_small",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_spear",
+        "name": "Spear",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 3
+          },
+          {
+            "itemId": "wood_plank",
+            "count": 3
+          },
+          {
+            "itemId": "spear",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "spear",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_sword_big",
+        "name": "Greatsword",
+        "station": "anvil",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 8
+          },
+          {
+            "itemId": "wood_plank",
+            "count": 3
+          },
+          {
+            "itemId": "leather",
+            "count": 2
+          },
+          {
+            "itemId": "sword_big",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "sword_big",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_axe_double",
+        "name": "Double Axe",
+        "station": "anvil",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 8
+          },
+          {
+            "itemId": "wood_plank",
+            "count": 3
+          },
+          {
+            "itemId": "leather",
+            "count": 1
+          },
+          {
+            "itemId": "axe_double",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "axe_double",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_hammer_double",
+        "name": "Double Hammer",
+        "station": "anvil",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 10
+          },
+          {
+            "itemId": "wood_plank",
+            "count": 3
+          },
+          {
+            "itemId": "leather",
+            "count": 1
+          },
+          {
+            "itemId": "hammer_double",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "hammer_double",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_claymore",
+        "name": "Claymore",
+        "station": "anvil",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 10
+          },
+          {
+            "itemId": "wood_plank",
+            "count": 4
+          },
+          {
+            "itemId": "mineral_crystal",
+            "count": 1
+          },
+          {
+            "itemId": "claymore",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "claymore",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_sword_golden",
+        "name": "Golden Sword",
+        "station": "anvil",
+        "inputs": [
+          {
+            "itemId": "gold",
+            "count": 6
+          },
+          {
+            "itemId": "iron_ore",
+            "count": 4
+          },
+          {
+            "itemId": "mineral_crystal",
+            "count": 2
+          },
+          {
+            "itemId": "sword_golden",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "sword_golden",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_scythe",
+        "name": "Scythe",
+        "station": "anvil",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 6
+          },
+          {
+            "itemId": "wood_plank",
+            "count": 4
+          },
+          {
+            "itemId": "leather",
+            "count": 1
+          },
+          {
+            "itemId": "scythe",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "scythe",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_bow_wooden",
+        "name": "Wooden Bow",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "wood_plank",
+            "count": 4
+          },
+          {
+            "itemId": "silk",
+            "count": 1
+          },
+          {
+            "itemId": "bow_wooden",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "bow_wooden",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_arrow_iron",
+        "name": "Iron Arrow",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "branch_a",
+            "count": 2
+          },
+          {
+            "itemId": "iron_ore",
+            "count": 1
+          },
+          {
+            "itemId": "arrow_iron",
+            "count": 10
+          }
+        ],
+        "output": {
+          "itemId": "arrow_iron",
+          "count": 10
+        }
+      },
+      {
+        "id": "craft_pistol_1",
+        "name": "Pistol Mk I",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 4
+          },
+          {
+            "itemId": "wood_plank",
+            "count": 1
+          },
+          {
+            "itemId": "copper_ore",
+            "count": 1
+          },
+          {
+            "itemId": "pistol_1",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "pistol_1",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_bow_wooden_2",
+        "name": "Wooden Bow (Compound)",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "wood_plank",
+            "count": 6
+          },
+          {
+            "itemId": "silk",
+            "count": 2
+          },
+          {
+            "itemId": "iron_ore",
+            "count": 1
+          },
+          {
+            "itemId": "bow_wooden_2",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "bow_wooden_2",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_pistol_2",
+        "name": "Pistol Mk II",
+        "station": "anvil",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 6
+          },
+          {
+            "itemId": "wood_plank",
+            "count": 1
+          },
+          {
+            "itemId": "copper_ore",
+            "count": 2
+          },
+          {
+            "itemId": "pistol_2",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "pistol_2",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_pistol_3",
+        "name": "Pistol Mk III",
+        "station": "anvil",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 7
+          },
+          {
+            "itemId": "copper_ore",
+            "count": 2
+          },
+          {
+            "itemId": "pistol_3",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "pistol_3",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_revolver_1",
+        "name": "Revolver",
+        "station": "anvil",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 8
+          },
+          {
+            "itemId": "wood_plank",
+            "count": 1
+          },
+          {
+            "itemId": "copper_ore",
+            "count": 2
+          },
+          {
+            "itemId": "revolver_1",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "revolver_1",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_smg_1",
+        "name": "Submachine Gun",
+        "station": "anvil",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 8
+          },
+          {
+            "itemId": "copper_ore",
+            "count": 3
+          },
+          {
+            "itemId": "smg_1",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "smg_1",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_smg_2",
+        "name": "Submachine Gun II",
+        "station": "anvil",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 9
+          },
+          {
+            "itemId": "copper_ore",
+            "count": 3
+          },
+          {
+            "itemId": "leather",
+            "count": 1
+          },
+          {
+            "itemId": "smg_2",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "smg_2",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_smg_3",
+        "name": "Submachine Gun III",
+        "station": "anvil",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 10
+          },
+          {
+            "itemId": "copper_ore",
+            "count": 4
+          },
+          {
+            "itemId": "smg_3",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "smg_3",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_shotgun_1",
+        "name": "Shotgun",
+        "station": "anvil",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 10
+          },
+          {
+            "itemId": "wood_plank",
+            "count": 3
+          },
+          {
+            "itemId": "shotgun_1",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "shotgun_1",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_shotgun_2",
+        "name": "Shotgun II",
+        "station": "anvil",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 11
+          },
+          {
+            "itemId": "wood_plank",
+            "count": 3
+          },
+          {
+            "itemId": "copper_ore",
+            "count": 2
+          },
+          {
+            "itemId": "shotgun_2",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "shotgun_2",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_bow_evil",
+        "name": "Cursed Bow",
+        "station": "anvil",
+        "inputs": [
+          {
+            "itemId": "wood_plank",
+            "count": 6
+          },
+          {
+            "itemId": "snake_skin",
+            "count": 4
+          },
+          {
+            "itemId": "herb_rare",
+            "count": 2
+          },
+          {
+            "itemId": "bow_evil",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "bow_evil",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_attach_silencer_1",
+        "name": "Silencer Mk I",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 3
+          },
+          {
+            "itemId": "copper_ore",
+            "count": 2
+          },
+          {
+            "itemId": "attach_silencer_1",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "attach_silencer_1",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_attach_scope_1",
+        "name": "Scope Mk I",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 3
+          },
+          {
+            "itemId": "copper_ore",
+            "count": 1
+          },
+          {
+            "itemId": "mineral_crystal",
+            "count": 1
+          },
+          {
+            "itemId": "attach_scope_1",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "attach_scope_1",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_assault_rifle_1",
+        "name": "Assault Rifle",
+        "station": "anvil",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 12
+          },
+          {
+            "itemId": "copper_ore",
+            "count": 4
+          },
+          {
+            "itemId": "ancient_ore",
+            "count": 1
+          },
+          {
+            "itemId": "assault_rifle_1",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "assault_rifle_1",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_assault_rifle_2",
+        "name": "Assault Rifle II",
+        "station": "anvil",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 13
+          },
+          {
+            "itemId": "copper_ore",
+            "count": 5
+          },
+          {
+            "itemId": "assault_rifle_2",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "assault_rifle_2",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_assault_rifle_3",
+        "name": "Assault Rifle III",
+        "station": "anvil",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 14
+          },
+          {
+            "itemId": "copper_ore",
+            "count": 5
+          },
+          {
+            "itemId": "leather",
+            "count": 2
+          },
+          {
+            "itemId": "assault_rifle_3",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "assault_rifle_3",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_shotgun_sawedoff",
+        "name": "Sawed-Off Shotgun",
+        "station": "anvil",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 8
+          },
+          {
+            "itemId": "wood_plank",
+            "count": 2
+          },
+          {
+            "itemId": "shotgun_sawedoff",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "shotgun_sawedoff",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_shotgun_3",
+        "name": "Shotgun III",
+        "station": "anvil",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 12
+          },
+          {
+            "itemId": "wood_plank",
+            "count": 3
+          },
+          {
+            "itemId": "copper_ore",
+            "count": 3
+          },
+          {
+            "itemId": "shotgun_3",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "shotgun_3",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_bullpup_1",
+        "name": "Bullpup Rifle",
+        "station": "anvil",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 14
+          },
+          {
+            "itemId": "copper_ore",
+            "count": 6
+          },
+          {
+            "itemId": "bullpup_1",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "bullpup_1",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_sniper_1",
+        "name": "Sniper Rifle",
+        "station": "anvil",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 16
+          },
+          {
+            "itemId": "copper_ore",
+            "count": 4
+          },
+          {
+            "itemId": "mineral_crystal",
+            "count": 1
+          },
+          {
+            "itemId": "sniper_1",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "sniper_1",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_attach_bipod",
+        "name": "Bipod",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 4
+          },
+          {
+            "itemId": "copper_ore",
+            "count": 2
+          },
+          {
+            "itemId": "attach_bipod",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "attach_bipod",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_attach_grip",
+        "name": "Grip",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 2
+          },
+          {
+            "itemId": "leather",
+            "count": 1
+          },
+          {
+            "itemId": "attach_grip",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "attach_grip",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_sniper_5",
+        "name": "Sniper Rifle V",
+        "station": "anvil",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 18
+          },
+          {
+            "itemId": "copper_ore",
+            "count": 6
+          },
+          {
+            "itemId": "mineral_crystal",
+            "count": 2
+          },
+          {
+            "itemId": "sniper_5",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "sniper_5",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_sniper_6",
+        "name": "Rift-Hunter Sniper",
+        "station": "anvil",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 20
+          },
+          {
+            "itemId": "copper_ore",
+            "count": 6
+          },
+          {
+            "itemId": "crystal_of_x",
+            "count": 1
+          },
+          {
+            "itemId": "sniper_6",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "sniper_6",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_bow_golden",
+        "name": "Golden Bow",
+        "station": "anvil",
+        "inputs": [
+          {
+            "itemId": "gold",
+            "count": 6
+          },
+          {
+            "itemId": "wood_plank",
+            "count": 4
+          },
+          {
+            "itemId": "mineral_crystal",
+            "count": 2
+          },
+          {
+            "itemId": "bow_golden",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "bow_golden",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_assault_rifle2_4",
+        "name": "Assault Rifle (Rift-Spec)",
+        "station": "anvil",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 16
+          },
+          {
+            "itemId": "copper_ore",
+            "count": 6
+          },
+          {
+            "itemId": "crystal_of_x",
+            "count": 1
+          },
+          {
+            "itemId": "assault_rifle2_4",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "assault_rifle2_4",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_bullpup_3",
+        "name": "Bullpup (Rift-Spec)",
+        "station": "anvil",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 16
+          },
+          {
+            "itemId": "copper_ore",
+            "count": 6
+          },
+          {
+            "itemId": "crystal_of_x",
+            "count": 1
+          },
+          {
+            "itemId": "bullpup_3",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "bullpup_3",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_attach_silencer_long",
+        "name": "Silencer (Long)",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 5
+          },
+          {
+            "itemId": "copper_ore",
+            "count": 3
+          },
+          {
+            "itemId": "attach_silencer_long",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "attach_silencer_long",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_attach_scope_3",
+        "name": "Scope Mk III",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 4
+          },
+          {
+            "itemId": "copper_ore",
+            "count": 2
+          },
+          {
+            "itemId": "mineral_crystal",
+            "count": 2
+          },
+          {
+            "itemId": "attach_scope_3",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "attach_scope_3",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_attach_tripod",
+        "name": "Tripod",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 6
+          },
+          {
+            "itemId": "copper_ore",
+            "count": 3
+          },
+          {
+            "itemId": "attach_tripod",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "attach_tripod",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_gun_scifi_pistol",
+        "name": "Sci-Fi Pistol",
+        "station": "anvil",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 8
+          },
+          {
+            "itemId": "copper_ore",
+            "count": 4
+          },
+          {
+            "itemId": "crystal_of_x",
+            "count": 1
+          },
+          {
+            "itemId": "gun_scifi_pistol",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "gun_scifi_pistol",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_armour_peasant_chest",
+        "name": "Peasant Tunic",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "silk",
+            "count": 4
+          },
+          {
+            "itemId": "leather",
+            "count": 1
+          },
+          {
+            "itemId": "armour_peasant_chest",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "armour_peasant_chest",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_armour_peasant_legs",
+        "name": "Peasant Trousers",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "silk",
+            "count": 3
+          },
+          {
+            "itemId": "leather",
+            "count": 1
+          },
+          {
+            "itemId": "armour_peasant_legs",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "armour_peasant_legs",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_armour_peasant_feet",
+        "name": "Peasant Boots",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "leather",
+            "count": 3
+          },
+          {
+            "itemId": "armour_peasant_feet",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "armour_peasant_feet",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_armour_peasant_arms",
+        "name": "Peasant Sleeves",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "silk",
+            "count": 2
+          },
+          {
+            "itemId": "armour_peasant_arms",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "armour_peasant_arms",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_armour_leather_set",
+        "name": "Leather Armour Set",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "leather",
+            "count": 12
+          },
+          {
+            "itemId": "silk",
+            "count": 2
+          },
+          {
+            "itemId": "iron_ore",
+            "count": 2
+          },
+          {
+            "itemId": "armour_leather_set",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "armour_leather_set",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_helmet_open",
+        "name": "Open Helmet",
+        "station": "anvil",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 3
+          },
+          {
+            "itemId": "leather",
+            "count": 1
+          },
+          {
+            "itemId": "helmet_open",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "helmet_open",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_armour_mail_set",
+        "name": "Chain Mail Set",
+        "station": "anvil",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 16
+          },
+          {
+            "itemId": "leather",
+            "count": 4
+          },
+          {
+            "itemId": "armour_mail_set",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "armour_mail_set",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_shield_heater",
+        "name": "Heater Shield",
+        "station": "anvil",
+        "inputs": [
+          {
+            "itemId": "wood_plank",
+            "count": 4
+          },
+          {
+            "itemId": "iron_ore",
+            "count": 4
+          },
+          {
+            "itemId": "leather",
+            "count": 2
+          },
+          {
+            "itemId": "shield_heater",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "shield_heater",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_armour_plate_set",
+        "name": "Plate Armour Set",
+        "station": "anvil",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 24
+          },
+          {
+            "itemId": "leather",
+            "count": 4
+          },
+          {
+            "itemId": "silk",
+            "count": 2
+          },
+          {
+            "itemId": "armour_plate_set",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "armour_plate_set",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_shield_heater_2",
+        "name": "Heater Shield (Reinforced)",
+        "station": "anvil",
+        "inputs": [
+          {
+            "itemId": "wood_plank",
+            "count": 4
+          },
+          {
+            "itemId": "iron_ore",
+            "count": 6
+          },
+          {
+            "itemId": "leather",
+            "count": 2
+          },
+          {
+            "itemId": "shield_heater_2",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "shield_heater_2",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_helmet_full",
+        "name": "Great Helm",
+        "station": "anvil",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 6
+          },
+          {
+            "itemId": "leather",
+            "count": 2
+          },
+          {
+            "itemId": "helmet_full",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "helmet_full",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_armour_ranger_chest",
+        "name": "Ranger Cuirass",
+        "station": "anvil",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 8
+          },
+          {
+            "itemId": "leather",
+            "count": 6
+          },
+          {
+            "itemId": "mineral_crystal",
+            "count": 1
+          },
+          {
+            "itemId": "armour_ranger_chest",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "armour_ranger_chest",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_armour_ranger_legs",
+        "name": "Ranger Greaves",
+        "station": "anvil",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 6
+          },
+          {
+            "itemId": "leather",
+            "count": 4
+          },
+          {
+            "itemId": "armour_ranger_legs",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "armour_ranger_legs",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_armour_ranger_feet",
+        "name": "Ranger Boots",
+        "station": "anvil",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 4
+          },
+          {
+            "itemId": "leather",
+            "count": 4
+          },
+          {
+            "itemId": "armour_ranger_feet",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "armour_ranger_feet",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_armour_ranger_arms",
+        "name": "Ranger Bracers",
+        "station": "anvil",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 4
+          },
+          {
+            "itemId": "leather",
+            "count": 3
+          },
+          {
+            "itemId": "armour_ranger_arms",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "armour_ranger_arms",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_armour_ranger_head",
+        "name": "Ranger Hood",
+        "station": "anvil",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 3
+          },
+          {
+            "itemId": "leather",
+            "count": 3
+          },
+          {
+            "itemId": "silk",
+            "count": 2
+          },
+          {
+            "itemId": "armour_ranger_head",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "armour_ranger_head",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_armour_ranger_shoulders",
+        "name": "Ranger Pauldrons",
+        "station": "anvil",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 6
+          },
+          {
+            "itemId": "leather",
+            "count": 4
+          },
+          {
+            "itemId": "armour_ranger_shoulders",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "armour_ranger_shoulders",
+          "count": 1
+        }
+      },
+      {
+        "id": "build_floor_modular",
+        "name": "Floor (modular)",
+        "station": "hammer_tool",
+        "inputs": [
+          {
+            "itemId": "wood_plank",
+            "count": 4
+          },
+          {
+            "itemId": "rock_2",
+            "count": 2
+          },
+          {
+            "itemId": "floor_modular",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "floor_modular",
+          "count": 1
+        }
+      },
+      {
+        "id": "build_wall_modular",
+        "name": "Wall (modular)",
+        "station": "hammer_tool",
+        "inputs": [
+          {
+            "itemId": "wood_plank",
+            "count": 6
+          },
+          {
+            "itemId": "rock_2",
+            "count": 3
+          },
+          {
+            "itemId": "wall_modular",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "wall_modular",
+          "count": 1
+        }
+      },
+      {
+        "id": "build_door_round",
+        "name": "Door (round)",
+        "station": "hammer_tool",
+        "inputs": [
+          {
+            "itemId": "wood_plank",
+            "count": 4
+          },
+          {
+            "itemId": "iron_ore",
+            "count": 2
+          },
+          {
+            "itemId": "door_round",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "door_round",
+          "count": 1
+        }
+      },
+      {
+        "id": "build_floor_brick",
+        "name": "Floor (brick)",
+        "station": "hammer_tool",
+        "inputs": [
+          {
+            "itemId": "rock_2",
+            "count": 6
+          },
+          {
+            "itemId": "wood_plank",
+            "count": 2
+          },
+          {
+            "itemId": "floor_brick",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "floor_brick",
+          "count": 1
+        }
+      },
+      {
+        "id": "build_floor_wood_dark",
+        "name": "Floor (dark wood)",
+        "station": "hammer_tool",
+        "inputs": [
+          {
+            "itemId": "wood_plank",
+            "count": 6
+          },
+          {
+            "itemId": "floor_wood_dark",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "floor_wood_dark",
+          "count": 1
+        }
+      },
+      {
+        "id": "build_window",
+        "name": "Window",
+        "station": "hammer_tool",
+        "inputs": [
+          {
+            "itemId": "wood_plank",
+            "count": 3
+          },
+          {
+            "itemId": "rock_2",
+            "count": 2
+          },
+          {
+            "itemId": "window",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "window",
+          "count": 1
+        }
+      },
+      {
+        "id": "build_window_shutters",
+        "name": "Window Shutters",
+        "station": "hammer_tool",
+        "inputs": [
+          {
+            "itemId": "wood_plank",
+            "count": 4
+          },
+          {
+            "itemId": "iron_ore",
+            "count": 1
+          },
+          {
+            "itemId": "window_shutters",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "window_shutters",
+          "count": 1
+        }
+      },
+      {
+        "id": "build_doorframe_round",
+        "name": "Door Frame (round)",
+        "station": "hammer_tool",
+        "inputs": [
+          {
+            "itemId": "wood_plank",
+            "count": 3
+          },
+          {
+            "itemId": "rock_2",
+            "count": 3
+          },
+          {
+            "itemId": "doorframe_round",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "doorframe_round",
+          "count": 1
+        }
+      },
+      {
+        "id": "build_roof_tile",
+        "name": "Roof Tile (round)",
+        "station": "hammer_tool",
+        "inputs": [
+          {
+            "itemId": "rock_2",
+            "count": 8
+          },
+          {
+            "itemId": "wood_plank",
+            "count": 3
+          },
+          {
+            "itemId": "roof_tile",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "roof_tile",
+          "count": 1
+        }
+      },
+      {
+        "id": "build_overhang_plaster",
+        "name": "Overhang (plaster)",
+        "station": "hammer_tool",
+        "inputs": [
+          {
+            "itemId": "wood_plank",
+            "count": 4
+          },
+          {
+            "itemId": "rock_2",
+            "count": 2
+          },
+          {
+            "itemId": "overhang_plaster",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "overhang_plaster",
+          "count": 1
+        }
+      },
+      {
+        "id": "build_balcony_simple",
+        "name": "Balcony (simple)",
+        "station": "hammer_tool",
+        "inputs": [
+          {
+            "itemId": "wood_plank",
+            "count": 6
+          },
+          {
+            "itemId": "iron_ore",
+            "count": 2
+          },
+          {
+            "itemId": "balcony_simple",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "balcony_simple",
+          "count": 1
+        }
+      },
+      {
+        "id": "build_stairs_modular",
+        "name": "Stairs (modular)",
+        "station": "hammer_tool",
+        "inputs": [
+          {
+            "itemId": "wood_plank",
+            "count": 6
+          },
+          {
+            "itemId": "rock_2",
+            "count": 4
+          },
+          {
+            "itemId": "stairs_modular",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "stairs_modular",
+          "count": 1
+        }
+      },
+      {
+        "id": "build_workbench_drawers",
+        "name": "Workbench (Drawers)",
+        "station": "hammer_tool",
+        "inputs": [
+          {
+            "itemId": "wood_plank",
+            "count": 12
+          },
+          {
+            "itemId": "iron_ore",
+            "count": 6
+          },
+          {
+            "itemId": "workbench_drawers",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "workbench_drawers",
+          "count": 1
+        }
+      },
+      {
+        "id": "build_armory_chest",
+        "name": "Armoury Chest",
+        "station": "hammer_tool",
+        "inputs": [
+          {
+            "itemId": "wood_plank",
+            "count": 8
+          },
+          {
+            "itemId": "iron_ore",
+            "count": 6
+          },
+          {
+            "itemId": "armory_chest",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "armory_chest",
+          "count": 1
+        }
+      },
+      {
+        "id": "build_metal_fence",
+        "name": "Metal Fence",
+        "station": "hammer_tool",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 6
+          },
+          {
+            "itemId": "wood_plank",
+            "count": 2
+          },
+          {
+            "itemId": "metal_fence",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "metal_fence",
+          "count": 1
+        }
+      },
+      {
+        "id": "build_overhang_uneven_brick",
+        "name": "Overhang (uneven brick)",
+        "station": "hammer_tool",
+        "inputs": [
+          {
+            "itemId": "rock_2",
+            "count": 8
+          },
+          {
+            "itemId": "wood_plank",
+            "count": 3
+          },
+          {
+            "itemId": "overhang_uneven_brick",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "overhang_uneven_brick",
+          "count": 1
+        }
+      },
+      {
+        "id": "build_balcony_cross",
+        "name": "Balcony (cross)",
+        "station": "hammer_tool",
+        "inputs": [
+          {
+            "itemId": "wood_plank",
+            "count": 8
+          },
+          {
+            "itemId": "iron_ore",
+            "count": 4
+          },
+          {
+            "itemId": "balcony_cross",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "balcony_cross",
+          "count": 1
+        }
+      },
+      {
+        "id": "build_keep_chimney",
+        "name": "Chimney",
+        "station": "hammer_tool",
+        "inputs": [
+          {
+            "itemId": "rock_2",
+            "count": 12
+          },
+          {
+            "itemId": "iron_ore",
+            "count": 2
+          },
+          {
+            "itemId": "keep_chimney",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "keep_chimney",
+          "count": 1
+        }
+      },
+      {
+        "id": "build_market_complex",
+        "name": "Market Complex",
+        "station": "hammer_tool",
+        "inputs": [
+          {
+            "itemId": "wood_plank",
+            "count": 16
+          },
+          {
+            "itemId": "rock_2",
+            "count": 12
+          },
+          {
+            "itemId": "iron_ore",
+            "count": 6
+          },
+          {
+            "itemId": "market_complex",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "market_complex",
+          "count": 1
+        }
+      },
+      {
+        "id": "build_banner",
+        "name": "Camp Banner",
+        "station": "hammer_tool",
+        "inputs": [
+          {
+            "itemId": "silk",
+            "count": 4
+          },
+          {
+            "itemId": "wood_plank",
+            "count": 2
+          },
+          {
+            "itemId": "banner",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "banner",
+          "count": 1
+        }
+      },
+      {
+        "id": "build_recruit_post",
+        "name": "Recruit Post",
+        "station": "hammer_tool",
+        "inputs": [
+          {
+            "itemId": "wood_plank",
+            "count": 6
+          },
+          {
+            "itemId": "iron_ore",
+            "count": 2
+          },
+          {
+            "itemId": "recruit_post",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "recruit_post",
+          "count": 1
+        }
+      },
+      {
+        "id": "build_banner_2",
+        "name": "Decorated Banner",
+        "station": "hammer_tool",
+        "inputs": [
+          {
+            "itemId": "silk",
+            "count": 6
+          },
+          {
+            "itemId": "wood_plank",
+            "count": 3
+          },
+          {
+            "itemId": "gold",
+            "count": 1
+          },
+          {
+            "itemId": "banner_2",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "banner_2",
+          "count": 1
+        }
+      },
+      {
+        "id": "build_market_stall",
+        "name": "Market Stall",
+        "station": "hammer_tool",
+        "inputs": [
+          {
+            "itemId": "wood_plank",
+            "count": 8
+          },
+          {
+            "itemId": "silk",
+            "count": 3
+          },
+          {
+            "itemId": "market_stall",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "market_stall",
+          "count": 1
+        }
+      },
+      {
+        "id": "build_war_banner",
+        "name": "War Banner",
+        "station": "hammer_tool",
+        "inputs": [
+          {
+            "itemId": "silk",
+            "count": 8
+          },
+          {
+            "itemId": "wood_plank",
+            "count": 4
+          },
+          {
+            "itemId": "gold",
+            "count": 2
+          },
+          {
+            "itemId": "war_banner",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "war_banner",
+          "count": 1
+        }
+      },
+      {
+        "id": "build_command_tent",
+        "name": "Command Tent",
+        "station": "hammer_tool",
+        "inputs": [
+          {
+            "itemId": "wood_plank",
+            "count": 12
+          },
+          {
+            "itemId": "silk",
+            "count": 8
+          },
+          {
+            "itemId": "iron_ore",
+            "count": 4
+          },
+          {
+            "itemId": "command_tent",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "command_tent",
+          "count": 1
+        }
+      },
+      {
+        "id": "cook_meat",
+        "name": "Cook Meat",
+        "station": "campfire",
+        "inputs": [
+          {
+            "itemId": "meat_raw",
+            "count": 1
+          },
+          {
+            "itemId": "meat_cooked",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "meat_cooked",
+          "count": 1
+        }
+      },
+      {
+        "id": "cook_fish",
+        "name": "Cook Fish",
+        "station": "campfire",
+        "inputs": [
+          {
+            "itemId": "fish_raw",
+            "count": 1
+          },
+          {
+            "itemId": "fish_cooked",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "fish_cooked",
+          "count": 1
+        }
+      },
+      {
+        "id": "cook_berry_jam",
+        "name": "Berry Jam",
+        "station": "cooking_rack",
+        "inputs": [
+          {
+            "itemId": "berries",
+            "count": 4
+          },
+          {
+            "itemId": "bottle_empty",
+            "count": 1
+          },
+          {
+            "itemId": "berry_jam",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "berry_jam",
+          "count": 1
+        }
+      },
+      {
+        "id": "cook_stew",
+        "name": "Hearty Stew",
+        "station": "cooking_rack",
+        "inputs": [
+          {
+            "itemId": "meat_raw",
+            "count": 2
+          },
+          {
+            "itemId": "herb_common",
+            "count": 2
+          },
+          {
+            "itemId": "mushroom_a",
+            "count": 1
+          },
+          {
+            "itemId": "stew",
+            "count": 2
+          }
+        ],
+        "output": {
+          "itemId": "stew",
+          "count": 2
+        }
+      },
+      {
+        "id": "cook_grain_porridge",
+        "name": "Grain Porridge",
+        "station": "cooking_rack",
+        "inputs": [
+          {
+            "itemId": "grain",
+            "count": 3
+          },
+          {
+            "itemId": "ice_water",
+            "count": 1
+          },
+          {
+            "itemId": "grain_porridge",
+            "count": 2
+          }
+        ],
+        "output": {
+          "itemId": "grain_porridge",
+          "count": 2
+        }
+      },
+      {
+        "id": "cook_roast_corn",
+        "name": "Roast Corn",
+        "station": "campfire",
+        "inputs": [
+          {
+            "itemId": "corn",
+            "count": 2
+          },
+          {
+            "itemId": "roast_corn",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "roast_corn",
+          "count": 1
+        }
+      },
+      {
+        "id": "cook_roast_meat",
+        "name": "Roast Meat",
+        "station": "cooking_rack",
+        "inputs": [
+          {
+            "itemId": "meat_raw",
+            "count": 3
+          },
+          {
+            "itemId": "herb_common",
+            "count": 1
+          },
+          {
+            "itemId": "roast_meat",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "roast_meat",
+          "count": 1
+        }
+      },
+      {
+        "id": "cook_fish_filet_grilled",
+        "name": "Grilled Fish Filet",
+        "station": "cooking_rack",
+        "inputs": [
+          {
+            "itemId": "fish_filet",
+            "count": 2
+          },
+          {
+            "itemId": "herb_common",
+            "count": 1
+          },
+          {
+            "itemId": "fish_filet_grilled",
+            "count": 2
+          }
+        ],
+        "output": {
+          "itemId": "fish_filet_grilled",
+          "count": 2
+        }
+      },
+      {
+        "id": "cook_mushroom_skewer",
+        "name": "Mushroom Skewer",
+        "station": "campfire",
+        "inputs": [
+          {
+            "itemId": "mushroom_a",
+            "count": 2
+          },
+          {
+            "itemId": "mushroom_b",
+            "count": 1
+          },
+          {
+            "itemId": "branch_a",
+            "count": 1
+          },
+          {
+            "itemId": "mushroom_skewer",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "mushroom_skewer",
+          "count": 1
+        }
+      },
+      {
+        "id": "cook_hunters_pie",
+        "name": "Hunter\\",
+        "station": "cooking_rack",
+        "inputs": [
+          {
+            "itemId": "meat_raw",
+            "count": 3
+          },
+          {
+            "itemId": "grain",
+            "count": 3
+          },
+          {
+            "itemId": "mushroom_b",
+            "count": 2
+          },
+          {
+            "itemId": "hunters_pie",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "hunters_pie",
+          "count": 1
+        }
+      },
+      {
+        "id": "cook_camp_feast",
+        "name": "Camp Feast",
+        "station": "cooking_rack",
+        "inputs": [
+          {
+            "itemId": "meat_raw",
+            "count": 6
+          },
+          {
+            "itemId": "fish_raw",
+            "count": 3
+          },
+          {
+            "itemId": "grain",
+            "count": 4
+          },
+          {
+            "itemId": "herb_rare",
+            "count": 2
+          },
+          {
+            "itemId": "camp_feast",
+            "count": 4
+          }
+        ],
+        "output": {
+          "itemId": "camp_feast",
+          "count": 4
+        }
+      },
+      {
+        "id": "cook_kings_table",
+        "name": "King\\",
+        "station": "cooking_rack",
+        "inputs": [
+          {
+            "itemId": "meat_raw",
+            "count": 8
+          },
+          {
+            "itemId": "fish_raw",
+            "count": 4
+          },
+          {
+            "itemId": "grain",
+            "count": 6
+          },
+          {
+            "itemId": "fruit",
+            "count": 4
+          },
+          {
+            "itemId": "herb_rare",
+            "count": 4
+          },
+          {
+            "itemId": "kings_table",
+            "count": 6
+          }
+        ],
+        "output": {
+          "itemId": "kings_table",
+          "count": 6
+        }
+      },
+      {
+        "id": "cook_stratocolony_ration",
+        "name": "Stratocolony Ration",
+        "station": "cooking_rack",
+        "inputs": [
+          {
+            "itemId": "meat_raw",
+            "count": 4
+          },
+          {
+            "itemId": "mineral_crystal",
+            "count": 1
+          },
+          {
+            "itemId": "herb_rare",
+            "count": 2
+          },
+          {
+            "itemId": "stratocolony_ration",
+            "count": 4
+          }
+        ],
+        "output": {
+          "itemId": "stratocolony_ration",
+          "count": 4
+        }
+      },
+      {
+        "id": "brew_minor_health",
+        "name": "Minor Health Potion",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "herb_common",
+            "count": 2
+          },
+          {
+            "itemId": "ice_water",
+            "count": 1
+          },
+          {
+            "itemId": "bottle_empty",
+            "count": 1
+          },
+          {
+            "itemId": "minor_health",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "minor_health",
+          "count": 1
+        }
+      },
+      {
+        "id": "brew_water_purified",
+        "name": "Purified Water",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "ice_water",
+            "count": 1
+          },
+          {
+            "itemId": "herb_common",
+            "count": 1
+          },
+          {
+            "itemId": "bottle_empty",
+            "count": 1
+          },
+          {
+            "itemId": "water_purified",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "water_purified",
+          "count": 1
+        }
+      },
+      {
+        "id": "brew_stamina_potion",
+        "name": "Stamina Potion",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "herb_common",
+            "count": 3
+          },
+          {
+            "itemId": "fang",
+            "count": 1
+          },
+          {
+            "itemId": "bottle_empty",
+            "count": 1
+          },
+          {
+            "itemId": "stamina_potion",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "stamina_potion",
+          "count": 1
+        }
+      },
+      {
+        "id": "brew_minor_antidote",
+        "name": "Minor Antidote",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "herb_rare",
+            "count": 1
+          },
+          {
+            "itemId": "snake_skin",
+            "count": 1
+          },
+          {
+            "itemId": "bottle_empty",
+            "count": 1
+          },
+          {
+            "itemId": "minor_antidote",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "minor_antidote",
+          "count": 1
+        }
+      },
+      {
+        "id": "brew_poison_vial",
+        "name": "Poison Vial",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "venom",
+            "count": 1
+          },
+          {
+            "itemId": "herb_rare",
+            "count": 1
+          },
+          {
+            "itemId": "bottle_empty",
+            "count": 1
+          },
+          {
+            "itemId": "poison_vial",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "poison_vial",
+          "count": 1
+        }
+      },
+      {
+        "id": "brew_health_potion",
+        "name": "Health Potion",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "herb_rare",
+            "count": 2
+          },
+          {
+            "itemId": "ice_water",
+            "count": 1
+          },
+          {
+            "itemId": "bottle_empty",
+            "count": 1
+          },
+          {
+            "itemId": "health_potion",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "health_potion",
+          "count": 1
+        }
+      },
+      {
+        "id": "brew_speed_tonic",
+        "name": "Speed Tonic",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "wax",
+            "count": 2
+          },
+          {
+            "itemId": "herb_rare",
+            "count": 2
+          },
+          {
+            "itemId": "bottle_empty",
+            "count": 1
+          },
+          {
+            "itemId": "speed_tonic",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "speed_tonic",
+          "count": 1
+        }
+      },
+      {
+        "id": "brew_greater_health",
+        "name": "Greater Health Potion",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "herb_rare",
+            "count": 4
+          },
+          {
+            "itemId": "mineral_crystal",
+            "count": 1
+          },
+          {
+            "itemId": "bottle_empty",
+            "count": 1
+          },
+          {
+            "itemId": "greater_health",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "greater_health",
+          "count": 1
+        }
+      },
+      {
+        "id": "brew_radiation_resist",
+        "name": "Radiation Resist",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "mineral_crystal",
+            "count": 2
+          },
+          {
+            "itemId": "herb_rare",
+            "count": 2
+          },
+          {
+            "itemId": "bottle_empty",
+            "count": 1
+          },
+          {
+            "itemId": "radiation_resist",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "radiation_resist",
+          "count": 1
+        }
+      },
+      {
+        "id": "brew_invisibility_draught",
+        "name": "Invisibility Draught",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "silk",
+            "count": 4
+          },
+          {
+            "itemId": "herb_rare",
+            "count": 3
+          },
+          {
+            "itemId": "mineral_crystal",
+            "count": 1
+          },
+          {
+            "itemId": "bottle_empty",
+            "count": 1
+          },
+          {
+            "itemId": "invisibility_draught",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "invisibility_draught",
+          "count": 1
+        }
+      },
+      {
+        "id": "brew_elixir_eternity",
+        "name": "Elixir of Eternity",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "crystal_of_x",
+            "count": 1
+          },
+          {
+            "itemId": "herb_rare",
+            "count": 6
+          },
+          {
+            "itemId": "mineral_crystal",
+            "count": 2
+          },
+          {
+            "itemId": "bottle_empty",
+            "count": 1
+          },
+          {
+            "itemId": "elixir_eternity",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "elixir_eternity",
+          "count": 1
+        }
+      },
+      {
+        "id": "brew_crystal_x_essence",
+        "name": "Crystal-X Essence",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "crystal_of_x",
+            "count": 2
+          },
+          {
+            "itemId": "ice_water",
+            "count": 4
+          },
+          {
+            "itemId": "bottle_empty",
+            "count": 1
+          },
+          {
+            "itemId": "crystal_x_essence",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "crystal_x_essence",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_legendary_trophy",
+        "name": "Apex Trophy",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "taxidermy_kit",
+            "count": 2
+          },
+          {
+            "itemId": "bone",
+            "count": 8
+          },
+          {
+            "itemId": "wood_plank",
+            "count": 6
+          },
+          {
+            "itemId": "gold",
+            "count": 2
+          },
+          {
+            "itemId": "legendary_trophy",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "legendary_trophy",
+          "count": 1
+        }
+      },
+      {
+        "id": "build_campfire",
+        "name": "Campfire",
+        "station": "hammer_tool",
+        "inputs": [
+          {
+            "itemId": "branch_a",
+            "count": 4
+          },
+          {
+            "itemId": "rock_2",
+            "count": 3
+          },
+          {
+            "itemId": "campfire",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "campfire",
+          "count": 1
+        }
+      },
+      {
+        "id": "build_tent_personal",
+        "name": "Personal Tent",
+        "station": "hammer_tool",
+        "inputs": [
+          {
+            "itemId": "silk",
+            "count": 3
+          },
+          {
+            "itemId": "branch_a",
+            "count": 4
+          },
+          {
+            "itemId": "leather",
+            "count": 1
+          },
+          {
+            "itemId": "tent_personal",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "tent_personal",
+          "count": 1
+        }
+      },
+      {
+        "id": "build_storage_crate",
+        "name": "Storage Crate",
+        "station": "hammer_tool",
+        "inputs": [
+          {
+            "itemId": "wood_plank",
+            "count": 4
+          },
+          {
+            "itemId": "storage_crate",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "storage_crate",
+          "count": 1
+        }
+      },
+      {
+        "id": "craft_claim_flag",
+        "name": "Claim Flag",
+        "station": "workbench",
+        "inputs": [
+          {
+            "itemId": "silk",
+            "count": 4
+          },
+          {
+            "itemId": "wood_plank",
+            "count": 2
+          },
+          {
+            "itemId": "dye_a",
+            "count": 1
+          },
+          {
+            "itemId": "claim_flag",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "claim_flag",
+          "count": 1
+        }
+      },
+      {
+        "id": "build_logging_camp",
+        "name": "Logging Camp",
+        "station": "hammer_tool",
+        "inputs": [
+          {
+            "itemId": "wood_plank",
+            "count": 10
+          },
+          {
+            "itemId": "rock_2",
+            "count": 4
+          },
+          {
+            "itemId": "iron_ore",
+            "count": 2
+          },
+          {
+            "itemId": "logging_camp",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "logging_camp",
+          "count": 1
+        }
+      },
+      {
+        "id": "build_mining_outpost",
+        "name": "Mining Outpost",
+        "station": "hammer_tool",
+        "inputs": [
+          {
+            "itemId": "wood_plank",
+            "count": 10
+          },
+          {
+            "itemId": "rock_2",
+            "count": 8
+          },
+          {
+            "itemId": "iron_ore",
+            "count": 4
+          },
+          {
+            "itemId": "mining_outpost",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "mining_outpost",
+          "count": 1
+        }
+      },
+      {
+        "id": "build_field",
+        "name": "Tilled Field",
+        "station": "hammer_tool",
+        "inputs": [
+          {
+            "itemId": "wood_plank",
+            "count": 4
+          },
+          {
+            "itemId": "rock_2",
+            "count": 2
+          },
+          {
+            "itemId": "herb_common",
+            "count": 2
+          },
+          {
+            "itemId": "field",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "field",
+          "count": 1
+        }
+      },
+      {
+        "id": "build_caravan_cart",
+        "name": "Caravan Cart",
+        "station": "hammer_tool",
+        "inputs": [
+          {
+            "itemId": "wood_plank",
+            "count": 12
+          },
+          {
+            "itemId": "iron_ore",
+            "count": 4
+          },
+          {
+            "itemId": "leather",
+            "count": 2
+          },
+          {
+            "itemId": "caravan_cart",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "caravan_cart",
+          "count": 1
+        }
+      },
+      {
+        "id": "build_grand_bazaar",
+        "name": "Grand Bazaar",
+        "station": "hammer_tool",
+        "inputs": [
+          {
+            "itemId": "wood_plank",
+            "count": 20
+          },
+          {
+            "itemId": "rock_2",
+            "count": 12
+          },
+          {
+            "itemId": "silk",
+            "count": 8
+          },
+          {
+            "itemId": "iron_ore",
+            "count": 6
+          },
+          {
+            "itemId": "grand_bazaar",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "grand_bazaar",
+          "count": 1
+        }
+      },
+      {
+        "id": "build_watchtower",
+        "name": "Watchtower",
+        "station": "hammer_tool",
+        "inputs": [
+          {
+            "itemId": "wood_plank",
+            "count": 12
+          },
+          {
+            "itemId": "rock_2",
+            "count": 6
+          },
+          {
+            "itemId": "iron_ore",
+            "count": 2
+          },
+          {
+            "itemId": "watchtower",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "watchtower",
+          "count": 1
+        }
+      },
+      {
+        "id": "build_palisade",
+        "name": "Palisade",
+        "station": "hammer_tool",
+        "inputs": [
+          {
+            "itemId": "wood_plank",
+            "count": 8
+          },
+          {
+            "itemId": "rock_2",
+            "count": 2
+          },
+          {
+            "itemId": "palisade",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "palisade",
+          "count": 1
+        }
+      },
+      {
+        "id": "build_gate_iron",
+        "name": "Iron Gate",
+        "station": "hammer_tool",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 8
+          },
+          {
+            "itemId": "wood_plank",
+            "count": 4
+          },
+          {
+            "itemId": "gate_iron",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "gate_iron",
+          "count": 1
+        }
+      },
+      {
+        "id": "build_turret_basic",
+        "name": "Auto-Turret",
+        "station": "hammer_tool",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 12
+          },
+          {
+            "itemId": "copper_ore",
+            "count": 4
+          },
+          {
+            "itemId": "wood_plank",
+            "count": 4
+          },
+          {
+            "itemId": "turret_basic",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "turret_basic",
+          "count": 1
+        }
+      },
+      {
+        "id": "build_turret_heavy",
+        "name": "Heavy Turret",
+        "station": "hammer_tool",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 18
+          },
+          {
+            "itemId": "copper_ore",
+            "count": 6
+          },
+          {
+            "itemId": "wood_plank",
+            "count": 6
+          },
+          {
+            "itemId": "turret_heavy",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "turret_heavy",
+          "count": 1
+        }
+      },
+      {
+        "id": "build_embassy",
+        "name": "Embassy",
+        "station": "hammer_tool",
+        "inputs": [
+          {
+            "itemId": "wood_plank",
+            "count": 14
+          },
+          {
+            "itemId": "silk",
+            "count": 6
+          },
+          {
+            "itemId": "rock_2",
+            "count": 6
+          },
+          {
+            "itemId": "iron_ore",
+            "count": 4
+          },
+          {
+            "itemId": "embassy",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "embassy",
+          "count": 1
+        }
+      },
+      {
+        "id": "build_workbench_station",
+        "name": "Camp Workbench",
+        "station": "hammer_tool",
+        "inputs": [
+          {
+            "itemId": "wood_plank",
+            "count": 8
+          },
+          {
+            "itemId": "iron_ore",
+            "count": 4
+          },
+          {
+            "itemId": "workbench",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "workbench",
+          "count": 1
+        }
+      },
+      {
+        "id": "build_anvil_station",
+        "name": "Camp Anvil",
+        "station": "hammer_tool",
+        "inputs": [
+          {
+            "itemId": "iron_ore",
+            "count": 12
+          },
+          {
+            "itemId": "rock_2",
+            "count": 4
+          },
+          {
+            "itemId": "anvil",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "anvil",
+          "count": 1
+        }
+      },
+      {
+        "id": "build_keep_fortress",
+        "name": "Fortress Keep",
+        "station": "hammer_tool",
+        "inputs": [
+          {
+            "itemId": "rock_2",
+            "count": 24
+          },
+          {
+            "itemId": "wood_plank",
+            "count": 16
+          },
+          {
+            "itemId": "iron_ore",
+            "count": 12
+          },
+          {
+            "itemId": "keep_fortress",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "keep_fortress",
+          "count": 1
+        }
+      },
+      {
+        "id": "fillet_fish",
+        "name": "Fillet Fish",
+        "station": "none",
+        "inputs": [
+          {
+            "itemId": "fish_raw",
+            "count": 1
+          },
+          {
+            "itemId": "knife",
+            "count": 0
+          },
+          {
+            "itemId": "fish_filet",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "fish_filet",
+          "count": 1
+        }
+      },
+      {
+        "id": "open_can",
+        "name": "Open Can",
+        "station": "none",
+        "inputs": [
+          {
+            "itemId": "food_can",
+            "count": 1
+          },
+          {
+            "itemId": "knife",
+            "count": 0
+          },
+          {
+            "itemId": "food_can_open",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "food_can_open",
+          "count": 1
+        }
+      },
+      {
+        "id": "boil_water",
+        "name": "Boiled Water",
+        "station": "campfire",
+        "inputs": [
+          {
+            "itemId": "bottle_empty",
+            "count": 1
+          },
+          {
+            "itemId": "bottle_full",
+            "count": 1
+          }
+        ],
+        "output": {
+          "itemId": "bottle_full",
+          "count": 1
+        }
+      }
+    ],
+    "tiers": [
+      {
+        "tier": 1,
+        "label": "Scrap",
+        "color": "#8b7355"
+      },
+      {
+        "tier": 2,
+        "label": "Salvaged",
+        "color": "#a8a8a8"
+      },
+      {
+        "tier": 3,
+        "label": "Refined",
+        "color": "#4a9eff"
+      },
+      {
+        "tier": 4,
+        "label": "Forged",
+        "color": "#9d4dff"
+      },
+      {
+        "tier": 5,
+        "label": "Relic",
+        "color": "#ff4d4d"
+      },
+      {
+        "tier": 6,
+        "label": "Ascendant",
+        "color": "#ffaa00"
+      },
+      {
+        "tier": 7,
+        "label": "Ancient",
+        "color": "#d4a84b"
+      },
+      {
+        "tier": 8,
+        "label": "Legendary",
+        "color": "#f0d890"
+      }
+    ],
+    "enhancements": [
+      {
+        "id": "enchant_oil",
+        "name": "Enchanting Oil",
+        "station": "alchemy",
+        "desc": "Temporary weapon enchant"
+      },
+      {
+        "id": "rune_socket",
+        "name": "Rune Socket",
+        "station": "enchanting",
+        "desc": "Permanent gear socket"
+      },
+      {
+        "id": "repair_kit",
+        "name": "Repair Kit",
+        "station": "workbench",
+        "desc": "Restore durability (ENT affinity)"
+      },
+      {
+        "id": "quality_up",
+        "name": "Quality Hone",
+        "station": "forge",
+        "desc": "Craft quality bonus (SYN)"
+      }
+    ]
+  },
+  "professions": {
+    "list": [
+      {
+        "id": "gathering",
+        "label": "Gathering",
+        "blurb": "Forestry, mining, salvage, permafrost, rift crystals — every node has a yield curve you can bend.",
+        "color": "#6ec96e",
+        "icon": "/icons/perks/maker/15.png"
+      },
+      {
+        "id": "hunting",
+        "label": "Hunting",
+        "blurb": "Fishing, beasts, bounty contracts, trail-craft, traps. The wild and what it leaves behind.",
+        "color": "#c5703a",
+        "icon": "/icons/perks/hero/5.png"
+      },
+      {
+        "id": "crafting",
+        "label": "Crafting",
+        "blurb": "Equipment, blades, guns, armour, tinkering. Turn raw ore into a reason to keep going.",
+        "color": "#c5a059",
+        "icon": "/icons/perks/warrior/15.png"
+      },
+      {
+        "id": "township",
+        "label": "Township",
+        "blurb": "Leadership, building, trade, diplomacy, defenses. A camp prosperous enough to outlast the rift.",
+        "color": "#d8a93a",
+        "icon": "/icons/perks/hero/26.png"
+      },
+      {
+        "id": "survival",
+        "label": "Survival",
+        "blurb": "Combat training, resolve, endurance, biome lore, veterancy. The half-second between a knockdown and a kill.",
+        "color": "#5a9ad8",
+        "icon": "/icons/perks/smarts/24.png"
+      },
+      {
+        "id": "chemistry",
+        "label": "Chemistry",
+        "blurb": "Cooking, potions, explosives, toxins, refining. Every brew, blast and meal that buys you another wave.",
+        "color": "#9a6ecf",
+        "icon": "/icons/perks/maker/14.png"
+      },
+      {
+        "id": "combat",
+        "label": "Combat",
+        "blurb": "Pistols, rifles, blades, hammers, theft. The mastery profile of a working killer.",
+        "color": "#d05050",
+        "icon": "/icons/perks/warrior/25.png"
+      }
+    ],
+    "branches": {
+      "gathering": [],
+      "hunting": [],
+      "crafting": [],
+      "township": [],
+      "survival": [],
+      "chemistry": [],
+      "combat": []
+    },
+    "note": "7 professions × 5 branches × ranks + Master = 147 skills. XP per profession, independent of level skillPoints."
+  },
+  "township": {
+    "tiers": [
+      {
+        "id": "camp",
+        "name": "Camp",
+        "allies": "1–4",
+        "unlocks": "Workbench, chest, bed. Manual harvest."
+      },
+      {
+        "id": "tribe",
+        "name": "Tribe",
+        "allies": "5+",
+        "unlocks": "Cooking pot, morale aura, +50 township XP."
+      },
+      {
+        "id": "village",
+        "name": "Village",
+        "allies": "10+",
+        "unlocks": "Trade Post, tier-2 schematics, +80 XP."
+      },
+      {
+        "id": "town",
+        "name": "Town",
+        "allies": "20+",
+        "unlocks": "Bazaar, keep, turret, gate, Town Banner, +120 XP."
+      },
+      {
+        "id": "stronghold",
+        "name": "Stronghold",
+        "allies": "30+",
+        "unlocks": "Full fortress kit, multi-banner claim."
+      }
+    ],
+    "buildables": [
+      {
+        "id": "foundation",
+        "name": "Foundation",
+        "tier": "Camp",
+        "station": "build",
+        "desc": "1 m modular floor slab"
+      },
+      {
+        "id": "wall",
+        "name": "Wall",
+        "tier": "Camp",
+        "station": "build",
+        "desc": "Palisade / wall section"
+      },
+      {
+        "id": "door",
+        "name": "Door",
+        "tier": "Camp",
+        "station": "build",
+        "desc": "Entry with latch"
+      },
+      {
+        "id": "window",
+        "name": "Window",
+        "tier": "Camp",
+        "station": "build",
+        "desc": "Open wall module"
+      },
+      {
+        "id": "stairs",
+        "name": "Stairs",
+        "tier": "Camp",
+        "station": "build",
+        "desc": "Vertical access"
+      },
+      {
+        "id": "roof",
+        "name": "Roof",
+        "tier": "Camp",
+        "station": "build",
+        "desc": "Weather cover"
+      },
+      {
+        "id": "workbench_place",
+        "name": "Workbench",
+        "tier": "Camp",
+        "station": "build",
+        "desc": "Crafting station placeable"
+      },
+      {
+        "id": "chest",
+        "name": "Storage Chest",
+        "tier": "Camp",
+        "station": "build",
+        "desc": "Camp inventory"
+      },
+      {
+        "id": "bed",
+        "name": "Bed",
+        "tier": "Camp",
+        "station": "build",
+        "desc": "Respawn anchor"
+      },
+      {
+        "id": "banner",
+        "name": "Banner",
+        "tier": "Tribe",
+        "station": "build",
+        "desc": "Morale aura"
+      },
+      {
+        "id": "recruit_post",
+        "name": "Recruit Post",
+        "tier": "Tribe",
+        "station": "build",
+        "desc": "Hire NPCs"
+      },
+      {
+        "id": "cooking_pot",
+        "name": "Shared Cooking Pot",
+        "tier": "Tribe",
+        "station": "build",
+        "desc": "Passive food regen"
+      },
+      {
+        "id": "trade_post",
+        "name": "Trade Post",
+        "tier": "Village",
+        "station": "build",
+        "desc": "Caravan gold / day"
+      },
+      {
+        "id": "embassy",
+        "name": "Embassy",
+        "tier": "Village",
+        "station": "build",
+        "desc": "Faction diplomacy"
+      },
+      {
+        "id": "palisade",
+        "name": "Palisade",
+        "tier": "Village",
+        "station": "build",
+        "desc": "Tier-2 wall"
+      },
+      {
+        "id": "watchtower",
+        "name": "Watchtower",
+        "tier": "Village",
+        "station": "build",
+        "desc": "Defense + vision"
+      },
+      {
+        "id": "bazaar",
+        "name": "Bazaar",
+        "tier": "Town",
+        "station": "build",
+        "desc": "3 rare vendor slots"
+      },
+      {
+        "id": "keep",
+        "name": "Fortress Keep",
+        "tier": "Town",
+        "station": "build",
+        "desc": "Tier-3 core"
+      },
+      {
+        "id": "auto_turret",
+        "name": "Auto-Turret",
+        "tier": "Town",
+        "station": "build",
+        "desc": "Deployed defense"
+      },
+      {
+        "id": "gate",
+        "name": "Gate",
+        "tier": "Town",
+        "station": "build",
+        "desc": "Controlled entry"
+      }
+    ],
+    "campDoc": "/info.html#camp",
+    "note": "Settlement “allies” = recruit population, not a crafting filter. Fighters = combat allies."
+  },
+  "combatPower": {
+    "note": "Crafting feeds weapons/armor into this loop. Allies that fight use fighter roles, not craft stations.",
+    "pillars": [
+      {
+        "id": "weapons",
+        "label": "Weapons",
+        "systems": [
+          "WEAPONS catalog",
+          "weapon combos",
+          "WeaponAttachment sockets",
+          "SlashWave residual"
+        ],
+        "files": [
+          "constants.ts WEAPONS",
+          "AnimationRegistry combos",
+          "WeaponAttachment.ts",
+          "SlashWaveField"
+        ]
+      },
+      {
+        "id": "upgrades",
+        "label": "Upgrades",
+        "systems": [
+          "BIO…GRA milestones",
+          "hero/warrior/smarts/maker tracks",
+          "gear tiers T1–T8"
+        ],
+        "files": [
+          "CharacterConfig milestones",
+          "StatPerkChoices",
+          "crafting tiers"
+        ]
+      },
+      {
+        "id": "mobility",
+        "label": "Mobility",
+        "systems": [
+          "roll/dodge",
+          "slide",
+          "sprint",
+          "climb",
+          "swim",
+          "focus strafe"
+        ],
+        "files": [
+          "PlayerController",
+          "ClimbController",
+          "SwimController"
+        ]
+      },
+      {
+        "id": "effects",
+        "label": "Effects / VFX",
+        "systems": [
+          "AbilitySystem projectiles",
+          "CombatVfxBridge",
+          "noise spheres",
+          "ice/fire flares"
+        ],
+        "files": [
+          "AbilitySystem.ts",
+          "CombatVfxBridge.ts"
+        ]
+      },
+      {
+        "id": "procs",
+        "label": "Procs",
+        "systems": [
+          "profession passives (crit, damage, gadget crit)",
+          "milestone effect bags"
+        ],
+        "files": [
+          "ProfessionsService",
+          "@workspace/game-systems perks"
+        ]
+      },
+      {
+        "id": "defensives",
+        "label": "Defensives",
+        "systems": [
+          "block/parry by weapon",
+          "roll i-frames",
+          "BIO/ENT survivability",
+          "armor crafts"
+        ],
+        "files": [
+          "PlayerController block",
+          "AnimationRegistry block clips"
+        ]
+      },
+      {
+        "id": "allies_combat",
+        "label": "Allies (combat)",
+        "systems": [
+          "mercenary",
+          "captain",
+          "sentry",
+          "gate_guard",
+          "gunner"
+        ],
+        "files": [
+          "TownshipSystem NPC_ROLES family fighter",
+          "CitySpawner.assignRole"
+        ]
+      }
+    ],
+    "allyFamilies": {
+      "fighter": [
+        "sentry",
+        "gate_guard",
+        "gunner",
+        "captain",
+        "mercenary"
+      ],
+      "harvester": [
+        "woodcutter",
+        "miner",
+        "farmer",
+        "forager",
+        "trapper"
+      ],
+      "vendor": [
+        "stall",
+        "caravan_master",
+        "fence",
+        "bazaar_merchant"
+      ],
+      "diplomacy": [
+        "diplomat"
+      ]
+    },
+    "abilitiesHotkeys": [
+      "1–5 classic AbilitySystem",
+      "6–0 linear skillshots (frost/storm/cinder/nova/snare)",
+      "[ ] cycle linear variant",
+      "LMB attack combo",
+      "RMB focus toggle",
+      "block key",
+      "roll/slide"
+    ],
+    "linearCasts": {
+      "source": "https://github.com/MolochDaGod/LinearAbiltyCastingThreeJS",
+      "doc": "docs/VOXEL_LINEAR_CAST_SSOT.md",
+      "ids": [
+        "frost_lance",
+        "storm_lance",
+        "cinder_fall",
+        "nova_beam",
+        "voltaic_snare"
+      ],
+      "destruction": "PinataDebrisField + BreakableWallSystem"
+    },
+    "doc": "docs/COMBAT_POWER_SSOT.md"
+  },
+  "aiWorker": {
+    "deploy": {
+      "project": "survival (grudgenexus)",
+      "urls": [
+        "grudges.grudge-studio.com (canonical)",
+        "survival.grudge-studio.com (301 → grudges)",
+        "survival-grudgenexus.vercel.app (preview alias)"
+      ],
+      "command": "pnpm run export:systems && pnpm run build:website && pnpm run build:game && node scripts/vercel-prebuilt.mjs && vercel deploy --prebuilt --prod --yes",
+      "smoke": "node scripts/smoke-grudges-prod.mjs",
+      "output": ".vercel/output/static (website + /arpg-game)",
+      "api": "Railway survival-api-production (not redeployed by Vercel client ship)",
+      "eras": {
+        "voxel": "Grudges = LEAD voxel-era MMO (era=voxel characters). Mine-Loader/GRUDOX support the same era — tools/launcher, not a competing main title.",
+        "nexus_deferred": "Separate nexus product/era — undecided; do not default Grudges here",
+        "warlords": "Separate brand — never mix into Grudges play roster"
+      }
+    },
+    "bestPractices": [
+      "Grudges product era is voxel only (docs/PRODUCT_ERA_VOXEL.md + docs/PRODUCTION_SSOT.md)",
+      "Characters: era=voxel in config — not warlords; not era=nexus until owner reopens it",
+      "R2 prefix grudge-nexus = CDN path only; do not invent grudge-voxel/ parallel keys",
+      "D1 = asset index; Railway Postgres = player accounts/characters/bag",
+      "Never invent parallel inventory — createInventoryItem / MainPanel bag",
+      "Attribute SSOT: @workspace/game-systems nexusDerived (BIO…GRA names stay)",
+      "Perks art: use /icons/perks packs + stat-tiers — export writes iconPath",
+      "HUD: CraftPix unit-frames + MainPanel C — skill craftpix-rpg-mmo-ui",
+      "Faction identity: /icons/factions/banners + FactionBannerFlag",
+      "Camp/build: info.html#camp settlement tiers + township profession",
+      "Deploy: always build:website + build:game before prebuilt; API is Railway separate",
+      "Owl Form = leathern_drake land mount, not bird mesh"
+    ]
+  }
+}

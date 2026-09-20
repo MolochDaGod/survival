@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Grudges — Professions, Buildables &amp; Camp</title>
+<meta name="description" content="Seven professions, township buildables, settlement tiers, and camp systems for Grudges voxel / nexus survival MMO." />
+<link rel="canonical" href="https://grudges.grudge-studio.com/professions" />
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=EB+Garamond:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap" />
+<link rel="stylesheet" href="/systems-pages.css" />
+</head>
+<body>
+<nav class="site">
+  <div class="inner">
+    <a href="./" class="brand"><img src="grudges-logo.png" alt="" /> GRUDGES</a>
+    <ul>
+      <li><a href="info.html">Gameplay</a></li>
+      <li><a href="info.html#camp">Camp</a></li>
+      <li><a href="perks.html">Perks</a></li>
+      <li><a href="crafting.html">Crafting</a></li>
+      <li><a href="professions.html" class="active">Professions</a></li>
+      <li><a href="main-panel.html">Main panel</a></li>
+    </ul>
+    <a href="/arpg-game/" class="play">▶ Play</a>
+  </div>
+</nav>
+
+<header class="page-hero">
+  <div class="bg-camp" aria-hidden="true"></div>
+  <div class="inner">
+    <div class="eyebrow">Township · Work · Defend</div>
+    <h1>Professions &amp; Buildables</h1>
+    <p>Seven profession trees (147 skills), camp settlement tiers, and placeable structures — the backbone of Grudges, the <strong>voxel-era lead</strong> survival MMO.</p>
+    <div class="links">
+      <a href="info.html#camp">Camp handbook</a>
+      <a href="info.html#tiers">Settlement tiers</a>
+      <a href="crafting.html">Crafting stations</a>
+      <a href="main-panel.html">Main Panel · Professions tab</a>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <div class="hero-camp-strip">
+    <div class="camp-shot" role="img" aria-label="Camp settlement concept"></div>
+    <div class="camp-copy">
+      <h2>Camp first</h2>
+      <p class="lead" style="margin:0">Build the wall before the bed. Population ranks your settlement; schematics unlock with tier.</p>
+      <ul>
+        <li>Place foundations, walls, stations, beds</li>
+        <li>Hire allies → Tribe → Village → Town</li>
+        <li>Township profession XP from builds &amp; defense</li>
+        <li>See full doctrine: <a href="info.html#camp">info.html#camp</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <section class="section">
+    <h2>Seven professions</h2>
+    <p class="lead" id="profNote">Independent XP per profession — separate from level skill points and perk tracks.</p>
+    <div class="grid" id="profGrid"><div class="loading">Loading…</div></div>
+  </section>
+
+  <section class="section">
+    <h2>Settlement tiers</h2>
+    <div class="grid" id="tierGrid"></div>
+  </section>
+
+  <section class="section">
+    <h2>Buildables</h2>
+    <div class="filters" id="tierFilters"></div>
+    <div style="overflow-x:auto">
+      <table class="data">
+        <thead><tr><th>Structure</th><th>Tier</th><th>Station</th><th>Role</th></tr></thead>
+        <tbody id="buildBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>AI worker · deploy &amp; best practices</h2>
+    <div class="card" id="aiBox">
+      <p class="loading">Loading…</p>
+    </div>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="links">
+    <a href="./">Home</a>
+    <a href="info.html#camp">Camp</a>
+    <a href="crafting.html">Crafting</a>
+    <a href="perks.html">Perks</a>
+    <a href="/arpg-game/">Play</a>
+  </div>
+  <p style="margin-top:1rem">147 skills · professions.csv / Professions.ts · camp SSOT info.html</p>
+</footer>
+
+<script>
+(async function () {
+  let data;
+  try {
+    data = await (await fetch('/data/grudges-systems.json')).json();
+  } catch (e) {
+    document.getElementById('profGrid').innerHTML = '<p class="loading">Catalog missing.</p>';
+    return;
+  }
+
+  const profs = (data.professions && data.professions.list) || [];
+  const branches = (data.professions && data.professions.branches) || {};
+  document.getElementById('profNote').textContent =
+    (data.professions && data.professions.note) || document.getElementById('profNote').textContent;
+
+  document.getElementById('profGrid').innerHTML = profs.map((p) => {
+    const br = branches[p.id] || [];
+    const brHtml = br.length
+      ? '<p style="margin-top:.5rem">' + br.map((b) => '<span class="badge" style="margin:2px">' + b.label + '</span>').join(' ') + '</p>'
+      : '';
+    return (
+      '<article class="card" style="border-left:3px solid ' + (p.color || 'var(--gold)') + '">' +
+        '<div class="tier">' + p.id + '</div>' +
+        '<h3 style="text-transform:none;letter-spacing:.03em;color:var(--ink)">' + p.label + '</h3>' +
+        '<p>' + (p.blurb || '') + '</p>' + brHtml +
+      '</article>'
+    );
+  }).join('') || '<p class="loading">No professions in export.</p>';
+
+  const tiers = (data.township && data.township.tiers) || [];
+  document.getElementById('tierGrid').innerHTML = tiers.map((t) =>
+    '<article class="card"><div class="tier">' + t.allies + ' allies</div><h3 style="text-transform:none;color:var(--ink)">' + t.name + '</h3><p>' + t.unlocks + '</p></article>'
+  ).join('');
+
+  const buildables = (data.township && data.township.buildables) || [];
+  let filter = 'all';
+  const tierNames = [...new Set(buildables.map((b) => b.tier))];
+  const filters = document.getElementById('tierFilters');
+  filters.innerHTML =
+    '<button type="button" class="stat-pill active" data-t="all">All</button>' +
+    tierNames.map((t) => '<button type="button" class="stat-pill" data-t="' + t + '">' + t + '</button>').join('');
+
+  function renderBuild() {
+    const list = filter === 'all' ? buildables : buildables.filter((b) => b.tier === filter);
+    document.getElementById('buildBody').innerHTML = list.map((b) =>
+      '<tr><td><strong>' + b.name + '</strong><div class="muted">' + b.id + '</div></td><td>' + b.tier + '</td><td>' + b.station + '</td><td class="muted">' + b.desc + '</td></tr>'
+    ).join('');
+  }
+  filters.addEventListener('click', (e) => {
+    const b = e.target.closest('[data-t]');
+    if (!b) return;
+    filter = b.getAttribute('data-t');
+    filters.querySelectorAll('.stat-pill').forEach((x) => x.classList.toggle('active', x === b));
+    renderBuild();
+  });
+  renderBuild();
+
+  const ai = data.aiWorker || {};
+  const dep = ai.deploy || {};
+  const bp = ai.bestPractices || [];
+  document.getElementById('aiBox').innerHTML =
+    '<h3 style="text-transform:none;color:var(--ink)">Deploy scripting (Grudges + voxel)</h3>' +
+    '<p class="muted">Project <strong>' + (dep.project || 'survival') + '</strong> · ' +
+    (dep.urls || []).map((u) => '<a href="https://' + u + '">' + u + '</a>').join(' · ') + '</p>' +
+    '<p><code style="color:var(--gold-bright);font-size:.85rem">' + (dep.command || '') + '</code></p>' +
+    '<p class="muted">Era: <strong>voxel</strong> only for Grudges (lead voxel MMO). Mine-Loader / GRUDOX support the same era. Nexus product era deferred.</p>' +
+    '<h3 style="margin-top:1rem;text-transform:none;color:var(--ink)">Best practices</h3>' +
+    '<ul style="margin:.4rem 0 0;padding-left:1.2rem;color:var(--muted)">' +
+    bp.map((x) => '<li>' + x + '</li>').join('') +
+    '</ul>' +
+    '<p style="margin-top:1rem"><a href="/data/grudges-systems.json">Machine-readable catalog (JSON)</a> for AI workers.</p>';
+})();
+</script>
+</body>
+</html>

@@ -19,8 +19,10 @@
     "db:generate": "pnpm --filter @workspace/db run generate",
     "db:migrate": "pnpm --filter @workspace/db run migrate",
     "deploy:preview": "vercel deploy --yes --archive=tgz",
-    "gen:game-catalog": "pnpm exec tsx scripts/gen-game-catalog.mjs",
-    "deploy:prod": "pnpm run build:website && pnpm run build:game && pnpm run gen:game-catalog && node scripts/vercel-prebuilt.mjs && vercel deploy --prebuilt --prod --yes",
+    "gen:recipes": "node scripts/gen-recipes-from-csv.mjs",
+    "export:systems": "pnpm run gen:recipes && node scripts/export-grudges-systems.mjs",
+    "smoke:prod": "node scripts/smoke-grudges-prod.mjs",
+    "deploy:prod": "pnpm run export:systems && pnpm run build:website && pnpm run build:game && node scripts/vercel-prebuilt.mjs && vercel deploy --prebuilt --prod --yes && pnpm run smoke:prod",
     "test": "vitest run",
     "test:watch": "vitest"
   },

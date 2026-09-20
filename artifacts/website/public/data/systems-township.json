@@ -1,0 +1,182 @@
+{
+  "explain": "Settlement tiers Camp → Tribe → Village → Town → Stronghold scale with recruit population. Buildables unlock by tier.",
+  "docs": {
+    "page": "/info.html#camp"
+  },
+  "tiers": [
+    {
+      "id": "camp",
+      "name": "Camp",
+      "allies": "1–4",
+      "unlocks": "Workbench, chest, bed. Manual harvest."
+    },
+    {
+      "id": "tribe",
+      "name": "Tribe",
+      "allies": "5+",
+      "unlocks": "Cooking pot, morale aura, +50 township XP."
+    },
+    {
+      "id": "village",
+      "name": "Village",
+      "allies": "10+",
+      "unlocks": "Trade Post, tier-2 schematics, +80 XP."
+    },
+    {
+      "id": "town",
+      "name": "Town",
+      "allies": "20+",
+      "unlocks": "Bazaar, keep, turret, gate, Town Banner, +120 XP."
+    },
+    {
+      "id": "stronghold",
+      "name": "Stronghold",
+      "allies": "30+",
+      "unlocks": "Full fortress kit, multi-banner claim."
+    }
+  ],
+  "buildables": [
+    {
+      "id": "foundation",
+      "name": "Foundation",
+      "tier": "Camp",
+      "station": "build",
+      "desc": "1 m modular floor slab"
+    },
+    {
+      "id": "wall",
+      "name": "Wall",
+      "tier": "Camp",
+      "station": "build",
+      "desc": "Palisade / wall section"
+    },
+    {
+      "id": "door",
+      "name": "Door",
+      "tier": "Camp",
+      "station": "build",
+      "desc": "Entry with latch"
+    },
+    {
+      "id": "window",
+      "name": "Window",
+      "tier": "Camp",
+      "station": "build",
+      "desc": "Open wall module"
+    },
+    {
+      "id": "stairs",
+      "name": "Stairs",
+      "tier": "Camp",
+      "station": "build",
+      "desc": "Vertical access"
+    },
+    {
+      "id": "roof",
+      "name": "Roof",
+      "tier": "Camp",
+      "station": "build",
+      "desc": "Weather cover"
+    },
+    {
+      "id": "workbench_place",
+      "name": "Workbench",
+      "tier": "Camp",
+      "station": "build",
+      "desc": "Crafting station placeable"
+    },
+    {
+      "id": "chest",
+      "name": "Storage Chest",
+      "tier": "Camp",
+      "station": "build",
+      "desc": "Camp inventory"
+    },
+    {
+      "id": "bed",
+      "name": "Bed",
+      "tier": "Camp",
+      "station": "build",
+      "desc": "Respawn anchor"
+    },
+    {
+      "id": "banner",
+      "name": "Banner",
+      "tier": "Tribe",
+      "station": "build",
+      "desc": "Morale aura"
+    },
+    {
+      "id": "recruit_post",
+      "name": "Recruit Post",
+      "tier": "Tribe",
+      "station": "build",
+      "desc": "Hire NPCs"
+    },
+    {
+      "id": "cooking_pot",
+      "name": "Shared Cooking Pot",
+      "tier": "Tribe",
+      "station": "build",
+      "desc": "Passive food regen"
+    },
+    {
+      "id": "trade_post",
+      "name": "Trade Post",
+      "tier": "Village",
+      "station": "build",
+      "desc": "Caravan gold / day"
+    },
+    {
+      "id": "embassy",
+      "name": "Embassy",
+      "tier": "Village",
+      "station": "build",
+      "desc": "Faction diplomacy"
+    },
+    {
+      "id": "palisade",
+      "name": "Palisade",
+      "tier": "Village",
+      "station": "build",
+      "desc": "Tier-2 wall"
+    },
+    {
+      "id": "watchtower",
+      "name": "Watchtower",
+      "tier": "Village",
+      "station": "build",
+      "desc": "Defense + vision"
+    },
+    {
+      "id": "bazaar",
+      "name": "Bazaar",
+      "tier": "Town",
+      "station": "build",
+      "desc": "3 rare vendor slots"
+    },
+    {
+      "id": "keep",
+      "name": "Fortress Keep",
+      "tier": "Town",
+      "station": "build",
+      "desc": "Tier-3 core"
+    },
+    {
+      "id": "auto_turret",
+      "name": "Auto-Turret",
+      "tier": "Town",
+      "station": "build",
+      "desc": "Deployed defense"
+    },
+    {
+      "id": "gate",
+      "name": "Gate",
+      "tier": "Town",
+      "station": "build",
+      "desc": "Controlled entry"
+    }
+  ],
+  "campDoc": "/info.html#camp",
+  "note": "Settlement “allies” = recruit population, not a crafting filter. Fighters = combat allies."
+}

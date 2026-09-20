@@ -1,0 +1,1036 @@
+{
+  "explain": "build_* recipes for camp + NPC hire buildings. Place via ModularBuilding when placeable.",
+  "docs": {
+    "page": "/professions",
+    "npcHires": "docs/inventory/npc-hires.csv"
+  },
+  "count": 42,
+  "recipes": [
+    {
+      "id": "build_floor_modular",
+      "name": "Floor (modular)",
+      "station": "hammer_tool",
+      "inputs": [
+        {
+          "itemId": "wood_plank",
+          "count": 4
+        },
+        {
+          "itemId": "rock_2",
+          "count": 2
+        },
+        {
+          "itemId": "floor_modular",
+          "count": 1
+        }
+      ],
+      "output": {
+        "itemId": "floor_modular",
+        "count": 1
+      }
+    },
+    {
+      "id": "build_wall_modular",
+      "name": "Wall (modular)",
+      "station": "hammer_tool",
+      "inputs": [
+        {
+          "itemId": "wood_plank",
+          "count": 6
+        },
+        {
+          "itemId": "rock_2",
+          "count": 3
+        },
+        {
+          "itemId": "wall_modular",
+          "count": 1
+        }
+      ],
+      "output": {
+        "itemId": "wall_modular",
+        "count": 1
+      }
+    },
+    {
+      "id": "build_door_round",
+      "name": "Door (round)",
+      "station": "hammer_tool",
+      "inputs": [
+        {
+          "itemId": "wood_plank",
+          "count": 4
+        },
+        {
+          "itemId": "iron_ore",
+          "count": 2
+        },
+        {
+          "itemId": "door_round",
+          "count": 1
+        }
+      ],
+      "output": {
+        "itemId": "door_round",
+        "count": 1
+      }
+    },
+    {
+      "id": "build_floor_brick",
+      "name": "Floor (brick)",
+      "station": "hammer_tool",
+      "inputs": [
+        {
+          "itemId": "rock_2",
+          "count": 6
+        },
+        {
+          "itemId": "wood_plank",
+          "count": 2
+        },
+        {
+          "itemId": "floor_brick",
+          "count": 1
+        }
+      ],
+      "output": {
+        "itemId": "floor_brick",
+        "count": 1
+      }
+    },
+    {
+      "id": "build_floor_wood_dark",
+      "name": "Floor (dark wood)",
+      "station": "hammer_tool",
+      "inputs": [
+        {
+          "itemId": "wood_plank",
+          "count": 6
+        },
+        {
+          "itemId": "floor_wood_dark",
+          "count": 1
+        }
+      ],
+      "output": {
+        "itemId": "floor_wood_dark",
+        "count": 1
+      }
+    },
+    {
+      "id": "build_window",
+      "name": "Window",
+      "station": "hammer_tool",
+      "inputs": [
+        {
+          "itemId": "wood_plank",
+          "count": 3
+        },
+        {
+          "itemId": "rock_2",
+          "count": 2
+        },
+        {
+          "itemId": "window",
+          "count": 1
+        }
+      ],
+      "output": {
+        "itemId": "window",
+        "count": 1
+      }
+    },
+    {
+      "id": "build_window_shutters",
+      "name": "Window Shutters",
+      "station": "hammer_tool",
+      "inputs": [
+        {
+          "itemId": "wood_plank",
+          "count": 4
+        },
+        {
+          "itemId": "iron_ore",
+          "count": 1
+        },
+        {
+          "itemId": "window_shutters",
+          "count": 1
+        }
+      ],
+      "output": {
+        "itemId": "window_shutters",
+        "count": 1
+      }
+    },
+    {
+      "id": "build_doorframe_round",
+      "name": "Door Frame (round)",
+      "station": "hammer_tool",
+      "inputs": [
+        {
+          "itemId": "wood_plank",
+          "count": 3
+        },
+        {
+          "itemId": "rock_2",
+          "count": 3
+        },
+        {
+          "itemId": "doorframe_round",
+          "count": 1
+        }
+      ],
+      "output": {
+        "itemId": "doorframe_round",
+        "count": 1
+      }
+    },
+    {
+      "id": "build_roof_tile",
+      "name": "Roof Tile (round)",
+      "station": "hammer_tool",
+      "inputs": [
+        {
+          "itemId": "rock_2",
+          "count": 8
+        },
+        {
+          "itemId": "wood_plank",
+          "count": 3
+        },
+        {
+          "itemId": "roof_tile",
+          "count": 1
+        }
+      ],
+      "output": {
+        "itemId": "roof_tile",
+        "count": 1
+      }
+    },
+    {
+      "id": "build_overhang_plaster",
+      "name": "Overhang (plaster)",
+      "station": "hammer_tool",
+      "inputs": [
+        {
+          "itemId": "wood_plank",
+          "count": 4
+        },
+        {
+          "itemId": "rock_2",
+          "count": 2
+        },
+        {
+          "itemId": "overhang_plaster",
+          "count": 1
+        }
+      ],
+      "output": {
+        "itemId": "overhang_plaster",
+        "count": 1
+      }
+    },
+    {
+      "id": "build_balcony_simple",
+      "name": "Balcony (simple)",
+      "station": "hammer_tool",
+      "inputs": [
+        {
+          "itemId": "wood_plank",
+          "count": 6
+        },
+        {
+          "itemId": "iron_ore",
+          "count": 2
+        },
+        {
+          "itemId": "balcony_simple",
+          "count": 1
+        }
+      ],
+      "output": {
+        "itemId": "balcony_simple",
+        "count": 1
+      }
+    },
+    {
+      "id": "build_stairs_modular",
+      "name": "Stairs (modular)",
+      "station": "hammer_tool",
+      "inputs": [
+        {
+          "itemId": "wood_plank",
+          "count": 6
+        },
+        {
+          "itemId": "rock_2",
+          "count": 4
+        },
+        {
+          "itemId": "stairs_modular",
+          "count": 1
+        }
+      ],
+      "output": {
+        "itemId": "stairs_modular",
+        "count": 1
+      }
+    },
+    {
+      "id": "build_workbench_drawers",
+      "name": "Workbench (Drawers)",
+      "station": "hammer_tool",
+      "inputs": [
+        {
+          "itemId": "wood_plank",
+          "count": 12
+        },
+        {
+          "itemId": "iron_ore",
+          "count": 6
+        },
+        {
+          "itemId": "workbench_drawers",
+          "count": 1
+        }
+      ],
+      "output": {
+        "itemId": "workbench_drawers",
+        "count": 1
+      }
+    },
+    {
+      "id": "build_armory_chest",
+      "name": "Armoury Chest",
+      "station": "hammer_tool",
+      "inputs": [
+        {
+          "itemId": "wood_plank",
+          "count": 8
+        },
+        {
+          "itemId": "iron_ore",
+          "count": 6
+        },
+        {
+          "itemId": "armory_chest",
+          "count": 1
+        }
+      ],
+      "output": {
+        "itemId": "armory_chest",
+        "count": 1
+      }
+    },
+    {
+      "id": "build_metal_fence",
+      "name": "Metal Fence",
+      "station": "hammer_tool",
+      "inputs": [
+        {
+          "itemId": "iron_ore",
+          "count": 6
+        },
+        {
+          "itemId": "wood_plank",
+          "count": 2
+        },
+        {
+          "itemId": "metal_fence",
+          "count": 1
+        }
+      ],
+      "output": {
+        "itemId": "metal_fence",
+        "count": 1
+      }
+    },
+    {
+      "id": "build_overhang_uneven_brick",
+      "name": "Overhang (uneven brick)",
+      "station": "hammer_tool",
+      "inputs": [
+        {
+          "itemId": "rock_2",
+          "count": 8
+        },
+        {
+          "itemId": "wood_plank",
+          "count": 3
+        },
+        {
+          "itemId": "overhang_uneven_brick",
+          "count": 1
+        }
+      ],
+      "output": {
+        "itemId": "overhang_uneven_brick",
+        "count": 1
+      }
+    },
+    {
+      "id": "build_balcony_cross",
+      "name": "Balcony (cross)",
+      "station": "hammer_tool",
+      "inputs": [
+        {
+          "itemId": "wood_plank",
+          "count": 8
+        },
+        {
+          "itemId": "iron_ore",
+          "count": 4
+        },
+        {
+          "itemId": "balcony_cross",
+          "count": 1
+        }
+      ],
+      "output": {
+        "itemId": "balcony_cross",
+        "count": 1
+      }
+    },
+    {
+      "id": "build_keep_chimney",
+      "name": "Chimney",
+      "station": "hammer_tool",
+      "inputs": [
+        {
+          "itemId": "rock_2",
+          "count": 12
+        },
+        {
+          "itemId": "iron_ore",
+          "count": 2
+        },
+        {
+          "itemId": "keep_chimney",
+          "count": 1
+        }
+      ],
+      "output": {
+        "itemId": "keep_chimney",
+        "count": 1
+      }
+    },
+    {
+      "id": "build_market_complex",
+      "name": "Market Complex",
+      "station": "hammer_tool",
+      "inputs": [
+        {
+          "itemId": "wood_plank",
+          "count": 16
+        },
+        {
+          "itemId": "rock_2",
+          "count": 12
+        },
+        {
+          "itemId": "iron_ore",
+          "count": 6
+        },
+        {
+          "itemId": "market_complex",
+          "count": 1
+        }
+      ],
+      "output": {
+        "itemId": "market_complex",
+        "count": 1
+      }
+    },
+    {
+      "id": "build_banner",
+      "name": "Camp Banner",
+      "station": "hammer_tool",
+      "inputs": [
+        {
+          "itemId": "silk",
+          "count": 4
+        },
+        {
+          "itemId": "wood_plank",
+          "count": 2
+        },
+        {
+          "itemId": "banner",
+          "count": 1
+        }
+      ],
+      "output": {
+        "itemId": "banner",
+        "count": 1
+      }
+    },
+    {
+      "id": "build_recruit_post",
+      "name": "Recruit Post",
+      "station": "hammer_tool",
+      "inputs": [
+        {
+          "itemId": "wood_plank",
+          "count": 6
+        },
+        {
+          "itemId": "iron_ore",
+          "count": 2
+        },
+        {
+          "itemId": "recruit_post",
+          "count": 1
+        }
+      ],
+      "output": {
+        "itemId": "recruit_post",
+        "count": 1
+      }
+    },
+    {
+      "id": "build_banner_2",
+      "name": "Decorated Banner",
+      "station": "hammer_tool",
+      "inputs": [
+        {
+          "itemId": "silk",
+          "count": 6
+        },
+        {
+          "itemId": "wood_plank",
+          "count": 3
+        },
+        {
+          "itemId": "gold",
+          "count": 1
+        },
+        {
+          "itemId": "banner_2",
+          "count": 1
+        }
+      ],
+      "output": {
+        "itemId": "banner_2",
+        "count": 1
+      }
+    },
+    {
+      "id": "build_market_stall",
+      "name": "Market Stall",
+      "station": "hammer_tool",
+      "inputs": [
+        {
+          "itemId": "wood_plank",
+          "count": 8
+        },
+        {
+          "itemId": "silk",
+          "count": 3
+        },
+        {
+          "itemId": "market_stall",
+          "count": 1
+        }
+      ],
+      "output": {
+        "itemId": "market_stall",
+        "count": 1
+      }
+    },
+    {
+      "id": "build_war_banner",
+      "name": "War Banner",
+      "station": "hammer_tool",
+      "inputs": [
+        {
+          "itemId": "silk",
+          "count": 8
+        },
+        {
+          "itemId": "wood_plank",
+          "count": 4
+        },
+        {
+          "itemId": "gold",
+          "count": 2
+        },
+        {
+          "itemId": "war_banner",
+          "count": 1
+        }
+      ],
+      "output": {
+        "itemId": "war_banner",
+        "count": 1
+      }
+    },
+    {
+      "id": "build_command_tent",
+      "name": "Command Tent",
+      "station": "hammer_tool",
+      "inputs": [
+        {
+          "itemId": "wood_plank",
+          "count": 12
+        },
+        {
+          "itemId": "silk",
+          "count": 8
+        },
+        {
+          "itemId": "iron_ore",
+          "count": 4
+        },
+        {
+          "itemId": "command_tent",
+          "count": 1
+        }
+      ],
+      "output": {
+        "itemId": "command_tent",
+        "count": 1
+      }
+    },
+    {
+      "id": "build_campfire",
+      "name": "Campfire",
+      "station": "hammer_tool",
+      "inputs": [
+        {
+          "itemId": "branch_a",
+          "count": 4
+        },
+        {
+          "itemId": "rock_2",
+          "count": 3
+        },
+        {
+          "itemId": "campfire",
+          "count": 1
+        }
+      ],
+      "output": {
+        "itemId": "campfire",
+        "count": 1
+      }
+    },
+    {
+      "id": "build_tent_personal",
+      "name": "Personal Tent",
+      "station": "hammer_tool",
+      "inputs": [
+        {
+          "itemId": "silk",
+          "count": 3
+        },
+        {
+          "itemId": "branch_a",
+          "count": 4
+        },
+        {
+          "itemId": "leather",
+          "count": 1
+        },
+        {
+          "itemId": "tent_personal",
+          "count": 1
+        }
+      ],
+      "output": {
+        "itemId": "tent_personal",
+        "count": 1
+      }
+    },
+    {
+      "id": "build_storage_crate",
+      "name": "Storage Crate",
+      "station": "hammer_tool",
+      "inputs": [
+        {
+          "itemId": "wood_plank",
+          "count": 4
+        },
+        {
+          "itemId": "storage_crate",
+          "count": 1
+        }
+      ],
+      "output": {
+        "itemId": "storage_crate",
+        "count": 1
+      }
+    },
+    {
+      "id": "build_logging_camp",
+      "name": "Logging Camp",
+      "station": "hammer_tool",
+      "inputs": [
+        {
+          "itemId": "wood_plank",
+          "count": 10
+        },
+        {
+          "itemId": "rock_2",
+          "count": 4
+        },
+        {
+          "itemId": "iron_ore",
+          "count": 2
+        },
+        {
+          "itemId": "logging_camp",
+          "count": 1
+        }
+      ],
+      "output": {
+        "itemId": "logging_camp",
+        "count": 1
+      }
+    },
+    {
+      "id": "build_mining_outpost",
+      "name": "Mining Outpost",
+      "station": "hammer_tool",
+      "inputs": [
+        {
+          "itemId": "wood_plank",
+          "count": 10
+        },
+        {
+          "itemId": "rock_2",
+          "count": 8
+        },
+        {
+          "itemId": "iron_ore",
+          "count": 4
+        },
+        {
+          "itemId": "mining_outpost",
+          "count": 1
+        }
+      ],
+      "output": {
+        "itemId": "mining_outpost",
+        "count": 1
+      }
+    },
+    {
+      "id": "build_field",
+      "name": "Tilled Field",
+      "station": "hammer_tool",
+      "inputs": [
+        {
+          "itemId": "wood_plank",
+          "count": 4
+        },
+        {
+          "itemId": "rock_2",
+          "count": 2
+        },
+        {
+          "itemId": "herb_common",
+          "count": 2
+        },
+        {
+          "itemId": "field",
+          "count": 1
+        }
+      ],
+      "output": {
+        "itemId": "field",
+        "count": 1
+      }
+    },
+    {
+      "id": "build_caravan_cart",
+      "name": "Caravan Cart",
+      "station": "hammer_tool",
+      "inputs": [
+        {
+          "itemId": "wood_plank",
+          "count": 12
+        },
+        {
+          "itemId": "iron_ore",
+          "count": 4
+        },
+        {
+          "itemId": "leather",
+          "count": 2
+        },
+        {
+          "itemId": "caravan_cart",
+          "count": 1
+        }
+      ],
+      "output": {
+        "itemId": "caravan_cart",
+        "count": 1
+      }
+    },
+    {
+      "id": "build_grand_bazaar",
+      "name": "Grand Bazaar",
+      "station": "hammer_tool",
+      "inputs": [
+        {
+          "itemId": "wood_plank",
+          "count": 20
+        },
+        {
+          "itemId": "rock_2",
+          "count": 12
+        },
+        {
+          "itemId": "silk",
+          "count": 8
+        },
+        {
+          "itemId": "iron_ore",
+          "count": 6
+        },
+        {
+          "itemId": "grand_bazaar",
+          "count": 1
+        }
+      ],
+      "output": {
+        "itemId": "grand_bazaar",
+        "count": 1
+      }
+    },
+    {
+      "id": "build_watchtower",
+      "name": "Watchtower",
+      "station": "hammer_tool",
+      "inputs": [
+        {
+          "itemId": "wood_plank",
+          "count": 12
+        },
+        {
+          "itemId": "rock_2",
+          "count": 6
+        },
+        {
+          "itemId": "iron_ore",
+          "count": 2
+        },
+        {
+          "itemId": "watchtower",
+          "count": 1
+        }
+      ],
+      "output": {
+        "itemId": "watchtower",
+        "count": 1
+      }
+    },
+    {
+      "id": "build_palisade",
+      "name": "Palisade",
+      "station": "hammer_tool",
+      "inputs": [
+        {
+          "itemId": "wood_plank",
+          "count": 8
+        },
+        {
+          "itemId": "rock_2",
+          "count": 2
+        },
+        {
+          "itemId": "palisade",
+          "count": 1
+        }
+      ],
+      "output": {
+        "itemId": "palisade",
+        "count": 1
+      }
+    },
+    {
+      "id": "build_gate_iron",
+      "name": "Iron Gate",
+      "station": "hammer_tool",
+      "inputs": [
+        {
+          "itemId": "iron_ore",
+          "count": 8
+        },
+        {
+          "itemId": "wood_plank",
+          "count": 4
+        },
+        {
+          "itemId": "gate_iron",
+          "count": 1
+        }
+      ],
+      "output": {
+        "itemId": "gate_iron",
+        "count": 1
+      }
+    },
+    {
+      "id": "build_turret_basic",
+      "name": "Auto-Turret",
+      "station": "hammer_tool",
+      "inputs": [
+        {
+          "itemId": "iron_ore",
+          "count": 12
+        },
+        {
+          "itemId": "copper_ore",
+          "count": 4
+        },
+        {
+          "itemId": "wood_plank",
+          "count": 4
+        },
+        {
+          "itemId": "turret_basic",
+          "count": 1
+        }
+      ],
+      "output": {
+        "itemId": "turret_basic",
+        "count": 1
+      }
+    },
+    {
+      "id": "build_turret_heavy",
+      "name": "Heavy Turret",
+      "station": "hammer_tool",
+      "inputs": [
+        {
+          "itemId": "iron_ore",
+          "count": 18
+        },
+        {
+          "itemId": "copper_ore",
+          "count": 6
+        },
+        {
+          "itemId": "wood_plank",
+          "count": 6
+        },
+        {
+          "itemId": "turret_heavy",
+          "count": 1
+        }
+      ],
+      "output": {
+        "itemId": "turret_heavy",
+        "count": 1
+      }
+    },
+    {
+      "id": "build_embassy",
+      "name": "Embassy",
+      "station": "hammer_tool",
+      "inputs": [
+        {
+          "itemId": "wood_plank",
+          "count": 14
+        },
+        {
+          "itemId": "silk",
+          "count": 6
+        },
+        {
+          "itemId": "rock_2",
+          "count": 6
+        },
+        {
+          "itemId": "iron_ore",
+          "count": 4
+        },
+        {
+          "itemId": "embassy",
+          "count": 1
+        }
+      ],
+      "output": {
+        "itemId": "embassy",
+        "count": 1
+      }
+    },
+    {
+      "id": "build_workbench_station",
+      "name": "Camp Workbench",
+      "station": "hammer_tool",
+      "inputs": [
+        {
+          "itemId": "wood_plank",
+          "count": 8
+        },
+        {
+          "itemId": "iron_ore",
+          "count": 4
+        },
+        {
+          "itemId": "workbench",
+          "count": 1
+        }
+      ],
+      "output": {
+        "itemId": "workbench",
+        "count": 1
+      }
+    },
+    {
+      "id": "build_anvil_station",
+      "name": "Camp Anvil",
+      "station": "hammer_tool",
+      "inputs": [
+        {
+          "itemId": "iron_ore",
+          "count": 12
+        },
+        {
+          "itemId": "rock_2",
+          "count": 4
+        },
+        {
+          "itemId": "anvil",
+          "count": 1
+        }
+      ],
+      "output": {
+        "itemId": "anvil",
+        "count": 1
+      }
+    },
+    {
+      "id": "build_keep_fortress",
+      "name": "Fortress Keep",
+      "station": "hammer_tool",
+      "inputs": [
+        {
+          "itemId": "rock_2",
+          "count": 24
+        },
+        {
+          "itemId": "wood_plank",
+          "count": 16
+        },
+        {
+          "itemId": "iron_ore",
+          "count": 12
+        },
+        {
+          "itemId": "keep_fortress",
+          "count": 1
+        }
+      ],
+      "output": {
+        "itemId": "keep_fortress",
+        "count": 1
+      }
+    }
+  ]
+}

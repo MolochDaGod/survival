@@ -1,0 +1,67 @@
+{
+  "explain": "Seven professions (gathering, hunting, crafting, township, survival, chemistry, combat). Five branches each plus Master — 147 skills. Profession XP is independent of level skillPoints / PerksBook.",
+  "docs": {
+    "page": "/professions"
+  },
+  "list": [
+    {
+      "id": "gathering",
+      "label": "Gathering",
+      "blurb": "Forestry, mining, salvage, permafrost, rift crystals — every node has a yield curve you can bend.",
+      "color": "#6ec96e",
+      "icon": "/icons/perks/maker/15.png"
+    },
+    {
+      "id": "hunting",
+      "label": "Hunting",
+      "blurb": "Fishing, beasts, bounty contracts, trail-craft, traps. The wild and what it leaves behind.",
+      "color": "#c5703a",
+      "icon": "/icons/perks/hero/5.png"
+    },
+    {
+      "id": "crafting",
+      "label": "Crafting",
+      "blurb": "Equipment, blades, guns, armour, tinkering. Turn raw ore into a reason to keep going.",
+      "color": "#c5a059",
+      "icon": "/icons/perks/warrior/15.png"
+    },
+    {
+      "id": "township",
+      "label": "Township",
+      "blurb": "Leadership, building, trade, diplomacy, defenses. A camp prosperous enough to outlast the rift.",
+      "color": "#d8a93a",
+      "icon": "/icons/perks/hero/26.png"
+    },
+    {
+      "id": "survival",
+      "label": "Survival",
+      "blurb": "Combat training, resolve, endurance, biome lore, veterancy. The half-second between a knockdown and a kill.",
+      "color": "#5a9ad8",
+      "icon": "/icons/perks/smarts/24.png"
+    },
+    {
+      "id": "chemistry",
+      "label": "Chemistry",
+      "blurb": "Cooking, potions, explosives, toxins, refining. Every brew, blast and meal that buys you another wave.",
+      "color": "#9a6ecf",
+      "icon": "/icons/perks/maker/14.png"
+    },
+    {
+      "id": "combat",
+      "label": "Combat",
+      "blurb": "Pistols, rifles, blades, hammers, theft. The mastery profile of a working killer.",
+      "color": "#d05050",
+      "icon": "/icons/perks/warrior/25.png"
+    }
+  ],
+  "branches": {
+    "gathering": [],
+    "hunting": [],
+    "crafting": [],
+    "township": [],
+    "survival": [],
+    "chemistry": [],
+    "combat": []
+  },
+  "note": "7 professions × 5 branches × ranks + Master = 147 skills. XP per profession, independent of level skillPoints."
+}

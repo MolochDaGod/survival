@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Grudges — Main Panel · Stats &amp; Equipment</title>
+<meta name="description" content="Grudges Main Panel: 8 Nexus attributes (BIO–GRA), derived vitals, and voxel-era equipment paper doll. Mirrors in-game C-key hub." />
+<link rel="canonical" href="https://grudges.grudge-studio.com/main-panel" />
+<meta property="og:title" content="Grudges — Main Panel" />
+<meta property="og:description" content="Stats, attributes, and voxel-era equipment — the Grudges character hub." />
+<meta property="og:image" content="opengraph.jpg" />
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+<link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=EB+Garamond:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap" />
+<style>
+  :root {
+    --bg:#0a0705; --panel:#1a120c; --panel-2:#221810; --panel-3:#2a1c12;
+    --gold:#d4a400; --gold-bright:#f0d088; --gold-border:#c9950a;
+    --ink:#e8d8a8; --muted:#9a8870; --ember:#d4602a; --green:#50b848;
+    --rule:rgba(201,149,10,0.28); --rule-strong:rgba(201,149,10,0.55);
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+    --display:'Cinzel',serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:'EB Garamond',Georgia,serif;line-height:1.5;-webkit-font-smoothing:antialiased}
+  a{color:var(--gold-bright);text-decoration:none}a:hover{color:var(--ember)}
+  h1,h2,h3{font-family:var(--display);color:var(--gold-bright);letter-spacing:.04em;margin:0 0 .5rem;line-height:1.2}
+  h1{font-size:clamp(1.5rem,2.5vw,2rem);font-weight:900}
+  h2{font-size:1.05rem;font-weight:700;color:var(--gold)}
+  h3{font-size:.85rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.12em}
+
+  nav.site{position:sticky;top:0;z-index:50;background:linear-gradient(to bottom,rgba(10,7,5,.97),rgba(10,7,5,.88));border-bottom:1px solid var(--rule);backdrop-filter:blur(8px)}
+  nav.site .inner{display:flex;align-items:center;justify-content:space-between;padding:.7rem 1.25rem;max-width:1280px;margin:0 auto;gap:1rem}
+  nav.site .brand{display:flex;align-items:center;gap:.55rem;font-family:var(--display);font-weight:700;font-size:1.1rem;color:var(--gold-bright)}
+  nav.site .brand img{width:30px;height:30px}
+  nav.site ul{list-style:none;display:flex;gap:1.1rem;margin:0;padding:0;flex-wrap:wrap}
+  nav.site ul a{color:var(--ink);font-family:var(--display);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase}
+  nav.site ul a.active{color:var(--gold-bright)}
+  nav.site .play{background:linear-gradient(to bottom,var(--gold),#8a6a30);color:#1a120c;font-family:var(--display);font-weight:700;padding:.5rem 1rem;border-radius:2px;letter-spacing:.12em;text-transform:uppercase;font-size:.75rem;border:1px solid var(--gold-bright)}
+
+  .page-hero{padding:1.8rem 1.25rem 1.2rem;text-align:center;border-bottom:1px solid var(--rule);background:radial-gradient(ellipse at 50% 0%,rgba(212,164,0,.08),transparent 60%)}
+  .page-hero .eyebrow{font-family:var(--display);color:var(--ember);letter-spacing:.22em;text-transform:uppercase;font-size:.75rem}
+  .page-hero p{max-width:720px;margin:.5rem auto 0;color:var(--muted);font-size:.98rem}
+  .page-hero .links{margin-top:.85rem;display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;font-family:var(--display);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase}
+  .page-hero .links a{border:1px solid var(--rule);padding:.4rem .75rem;border-radius:2px;background:var(--panel)}
+
+  .shell{max-width:1280px;margin:0 auto;padding:1rem 1rem 2.5rem}
+
+  /* Main panel frame — mirrors in-game C hub */
+  .mp{
+    display:grid;grid-template-columns:220px 1fr 240px;gap:0;
+    min-height:min(78vh,820px);border:1px solid var(--gold-border);
+    border-radius:4px;overflow:hidden;background:var(--panel);
+    box-shadow:0 16px 48px rgba(0,0,0,.55),inset 0 0 0 1px rgba(212,164,0,.08);
+  }
+  @media(max-width:980px){.mp{grid-template-columns:1fr;min-height:auto}}
+
+  .mp-side{background:var(--panel-2);border-right:1px solid var(--rule);padding:.9rem .85rem;display:flex;flex-direction:column;gap:.75rem}
+  .mp-side.right{border-right:0;border-left:1px solid var(--rule)}
+  @media(max-width:980px){
+    .mp-side{border-right:0;border-bottom:1px solid var(--rule)}
+    .mp-side.right{border-left:0;border-top:1px solid var(--rule)}
+  }
+
+  .mp-char{
+    aspect-ratio:3/4;max-height:200px;background:
+      linear-gradient(180deg,rgba(40,28,16,.9),rgba(20,14,8,.95)),
+      repeating-linear-gradient(0deg,transparent,transparent 7px,rgba(201,149,10,.04) 8px);
+    border:1px solid var(--rule);border-radius:3px;display:flex;align-items:center;justify-content:center;
+    position:relative;overflow:hidden;
+  }
+  .mp-char .sil{width:42%;height:72%;background:linear-gradient(180deg,#3a2a18,#1e1610);border-radius:40% 40% 18% 18%;box-shadow:inset 0 0 20px rgba(0,0,0,.5),0 0 24px rgba(212,164,0,.12);position:relative}
+  .mp-char .sil::before{content:'';position:absolute;top:-18%;left:50%;transform:translateX(-50%);width:38%;height:22%;background:#2a2014;border-radius:50%}
+  .mp-char .tag{position:absolute;bottom:6px;left:0;right:0;text-align:center;font-family:var(--display);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+
+  .bars{display:flex;flex-direction:column;gap:.35rem}
+  .bar{height:10px;background:#0a0604;border:1px solid var(--rule);border-radius:2px;overflow:hidden;position:relative}
+  .bar > i{display:block;height:100%;border-radius:1px}
+  .bar.hp > i{background:linear-gradient(90deg,#8a2020,#d4602a);width:78%}
+  .bar.mp > i{background:linear-gradient(90deg,#1a4a7a,#3a90d0);width:62%}
+  .bar.st > i{background:linear-gradient(90deg,#6a5a20,#d4a400);width:88%}
+  .bar-lbl{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.65rem;color:var(--muted)}
+
+  .pool{font-family:var(--mono);font-size:.78rem;color:var(--gold-bright);background:rgba(212,164,0,.08);border:1px solid var(--rule);padding:.45rem .55rem;border-radius:2px;text-align:center}
+  .pool b{display:block;font-size:1.15rem;color:var(--gold-bright)}
+
+  .stat-list{display:flex;flex-direction:column;gap:.3rem}
+  .stat-row{display:flex;align-items:center;gap:.4rem;padding:.28rem .35rem;border:1px solid transparent;border-radius:2px;cursor:default}
+  .stat-row:hover{background:rgba(212,164,0,.06);border-color:var(--rule)}
+  .stat-row .dot{width:1.35rem;height:1.35rem;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:.55rem;font-weight:900;color:#fff8e7;flex:0 0 auto}
+  .stat-row .nm{flex:1;font-size:.82rem}
+  .stat-row .val{font-family:var(--mono);font-size:.8rem;color:var(--gold-bright);min-width:1.5rem;text-align:right}
+  .stat-row button{font-family:var(--mono);font-size:.7rem;padding:0 .35rem;height:1.35rem;border:1px solid var(--rule);background:var(--panel-3);color:var(--gold-bright);cursor:pointer;border-radius:2px}
+  .stat-row button:hover{border-color:var(--gold);background:rgba(212,164,0,.15)}
+  .stat-row button:disabled{opacity:.35;cursor:not-allowed}
+
+  .mp-main{display:flex;flex-direction:column;min-height:0;background:linear-gradient(180deg,var(--panel),var(--panel-2))}
+  .mp-tabs{display:flex;flex-wrap:wrap;gap:0;border-bottom:1px solid var(--rule);background:var(--panel-3)}
+  .mp-tab{
+    flex:1 1 auto;min-width:5.5rem;padding:.65rem .5rem;border:0;border-right:1px solid var(--rule);
+    background:transparent;color:var(--muted);font-family:var(--display);font-size:.68rem;letter-spacing:.1em;
+    text-transform:uppercase;cursor:pointer;transition:background .12s,color .12s;
+  }
+  .mp-tab:hover{color:var(--ink);background:rgba(212,164,0,.06)}
+  .mp-tab.active{color:var(--gold-bright);background:rgba(212,164,0,.12);box-shadow:inset 0 -2px 0 var(--gold)}
+  .mp-body{flex:1;padding:1rem;overflow:auto;min-height:360px}
+
+  .pane{display:none}.pane.active{display:block}
+  .pane-lead{color:var(--muted);font-size:.9rem;margin:0 0 1rem}
+
+  .attr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.65rem}
+  .attr-card{background:var(--panel);border:1px solid var(--rule);border-left:3px solid var(--gold);border-radius:0 3px 3px 0;padding:.75rem .8rem}
+  .attr-card .hd{display:flex;align-items:center;gap:.45rem;margin-bottom:.25rem}
+  .attr-card .hd .dot{width:1.5rem;height:1.5rem;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:.6rem;font-weight:900;color:#fff}
+  .attr-card h3{margin:0;font-size:.95rem;text-transform:none;letter-spacing:.03em;color:var(--ink)}
+  .attr-card .arch{font-family:var(--display);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:.35rem}
+  .attr-card p{margin:0;font-size:.82rem;color:var(--muted);line-height:1.4}
+  .attr-card .lvl{font-family:var(--mono);font-size:.85rem;color:var(--gold-bright);margin-top:.4rem}
+
+  /* Equipment paper doll */
+  .equip-layout{display:grid;grid-template-columns:1fr 1.1fr 1fr;gap:.85rem;align-items:start}
+  @media(max-width:720px){.equip-layout{grid-template-columns:1fr}}
+  .slot-col{display:flex;flex-direction:column;gap:.45rem}
+  .eq-slot{
+    border:1px solid var(--rule);background:rgba(0,0,0,.35);border-radius:3px;min-height:3.2rem;
+    padding:.45rem .5rem;cursor:pointer;transition:border-color .12s,background .12s;
+    display:flex;align-items:center;gap:.5rem;
+  }
+  .eq-slot:hover,.eq-slot.sel{border-color:var(--gold);background:rgba(212,164,0,.08)}
+  .eq-slot .ico{width:2.2rem;height:2.2rem;border:1px solid var(--rule);border-radius:2px;background:var(--panel-3);display:flex;align-items:center;justify-content:center;font-size:1rem;flex:0 0 auto}
+  .eq-slot .meta{flex:1;min-width:0}
+  .eq-slot .meta .lab{font-family:var(--display);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .eq-slot .meta .itm{font-size:.88rem;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .eq-slot.empty .meta .itm{color:var(--muted);font-style:italic;font-size:.8rem}
+  .eq-slot .rarity{font-family:var(--mono);font-size:.62rem}
+
+  .doll{
+    border:1px solid var(--rule-strong);border-radius:4px;background:
+      radial-gradient(ellipse at 50% 40%,rgba(212,164,0,.07),transparent 55%),
+      linear-gradient(180deg,#1c140e,#120e0a);
+    min-height:280px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1rem;position:relative;
+  }
+  .doll .title{position:absolute;top:.6rem;left:0;right:0;text-align:center;font-family:var(--display);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
+  .doll-body{width:100px;height:180px;position:relative;margin-top:.8rem}
+  .doll-body .p{position:absolute;background:linear-gradient(180deg,#4a3824,#2a2014);border:1px solid rgba(201,149,10,.35);border-radius:4px}
+  .doll-body .head{width:36px;height:36px;left:32px;top:0;border-radius:50%}
+  .doll-body .torso{width:52px;height:58px;left:24px;top:38px;border-radius:8px}
+  .doll-body .arm-l{width:16px;height:54px;left:6px;top:40px}
+  .doll-body .arm-r{width:16px;height:54px;left:78px;top:40px}
+  .doll-body .leg-l{width:20px;height:62px;left:28px;top:98px}
+  .doll-body .leg-r{width:20px;height:62px;left:52px;top:98px}
+  .doll-body .p.on{box-shadow:0 0 10px rgba(212,164,0,.35);border-color:var(--gold)}
+  .doll .era{margin-top:1rem;font-family:var(--display);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-align:center}
+  .doll .era b{color:var(--gold);display:block;margin-bottom:.2rem}
+
+  .bag{margin-top:1rem}
+  .bag h3{margin-bottom:.5rem}
+  .bag-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:.4rem}
+  .bag-cell{
+    aspect-ratio:1;border:1px solid var(--rule);background:rgba(0,0,0,.4);border-radius:2px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;padding:.25rem;cursor:pointer;
+    font-size:.7rem;text-align:center;color:var(--muted);
+  }
+  .bag-cell.has{color:var(--ink);border-color:var(--rule-strong)}
+  .bag-cell.has:hover{border-color:var(--gold)}
+  .bag-cell .ic{font-size:1.1rem;margin-bottom:.15rem}
+
+  .vitals{display:grid;grid-template-columns:repeat(2,1fr);gap:.4rem;font-size:.8rem}
+  .vitals div{background:rgba(0,0,0,.3);border:1px solid var(--rule);padding:.4rem .5rem;border-radius:2px}
+  .vitals span{display:block;font-family:var(--display);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .vitals b{font-family:var(--mono);color:var(--gold-bright);font-weight:600}
+
+  .ssot{margin-top:1.25rem;padding:.75rem .9rem;border:1px solid var(--rule);border-left:3px solid var(--ember);background:rgba(0,0,0,.3);font-size:.85rem;color:var(--muted)}
+  .ssot code{color:var(--gold-bright);font-size:.8em}
+
+  footer{padding:2rem 1rem;text-align:center;color:var(--muted);font-size:.82rem;border-top:1px solid var(--rule)}
+  footer .links a{margin:0 .6rem;font-family:var(--display);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase}
+
+  .note-pill{display:inline-block;font-family:var(--display);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;padding:2px 8px;border:1px solid var(--rule);border-radius:2px;color:var(--gold);margin-left:.4rem}
+</style>
+</head>
+<body>
+
+<nav class="site">
+  <div class="inner">
+    <a href="./" class="brand"><img src="grudges-logo.png" alt="" /> GRUDGES</a>
+    <ul>
+      <li><a href="./">Home</a></li>
+      <li><a href="info.html">Gameplay</a></li>
+      <li><a href="lore.html">Lore</a></li>
+      <li><a href="stats-guide.html">Stats guide</a></li>
+      <li><a href="main-panel.html" class="active">Main panel</a></li>
+      <li><a href="bestiary.html">Bestiary</a></li>
+    </ul>
+    <a href="/arpg-game/" class="play">▶ Play · press C</a>
+  </div>
+</nav>
+
+<header class="page-hero">
+  <div class="eyebrow">In-game hub · C key</div>
+  <h1>Main Panel · Stats &amp; Equipment</h1>
+  <p>
+    Interactive preview of the Grudges character hub (voxel-era lead MMO): <strong>8 attributes</strong> (BIO–GRA system),
+    live vitals, and the <strong>voxel equipment</strong> paper doll. Same tab layout as the client MainPanel.
+  </p>
+  <div class="links">
+    <a href="stats-guide.html">Full stats reference</a>
+    <a href="stats-guide.html#attributes">8 primary attributes</a>
+    <a href="/arpg-game/">Open play (allocate for real)</a>
+    <a href="lore.html#hub">Lore · tools hub</a>
+  </div>
+</header>
+
+<div class="shell">
+  <div class="mp" id="mainPanel" role="application" aria-label="Grudges Main Panel">
+    <!-- LEFT: character + primary stats -->
+    <aside class="mp-side">
+      <div class="mp-char">
+        <div class="sil" aria-hidden="true"></div>
+        <div class="tag">Voxel-era survivor</div>
+      </div>
+      <div class="bars">
+        <div class="bar-lbl"><span>HP</span><span id="hpLbl">780 / 1000</span></div>
+        <div class="bar hp"><i id="hpBar"></i></div>
+        <div class="bar-lbl"><span>MP</span><span id="mpLbl">310 / 500</span></div>
+        <div class="bar mp"><i id="mpBar"></i></div>
+        <div class="bar-lbl"><span>Stamina</span><span id="stLbl">440 / 500</span></div>
+        <div class="bar st"><i id="stBar"></i></div>
+      </div>
+      <div class="pool">Unspent points <b id="poolPts">24</b></div>
+      <h3>Nexus attributes</h3>
+      <div class="stat-list" id="sidebarStats"></div>
+      <p style="margin:0;font-size:.75rem;color:var(--muted)">Costs: 1·2·4·8·16·20 to tiers 1–6 · max 6</p>
+    </aside>
+
+    <!-- CENTER: tabs -->
+    <div class="mp-main">
+      <nav class="mp-tabs" id="tabs" aria-label="Main panel tabs">
+        <button type="button" class="mp-tab active" data-tab="stats">Stats</button>
+        <button type="button" class="mp-tab" data-tab="equipment">Equipment</button>
+        <button type="button" class="mp-tab" data-tab="professions">Professions</button>
+        <button type="button" class="mp-tab" data-tab="skills">Skills / Perks</button>
+        <button type="button" class="mp-tab" data-tab="crafting">Crafting</button>
+        <button type="button" class="mp-tab" data-tab="medical">Medical</button>
+      </nav>
+      <div class="mp-body">
+        <div class="pane active" id="pane-stats">
+          <p class="pane-lead">Primary stats drive every affinity, perk, and derived combat number.
+            <a href="stats-guide.html">Open full guide →</a>
+            <span class="note-pill">SSOT · /api/stats</span>
+          </p>
+          <div class="attr-grid" id="attrGrid"><div style="color:var(--muted);font-style:italic">Loading attributes…</div></div>
+        </div>
+
+        <div class="pane" id="pane-equipment">
+          <p class="pane-lead">
+            <strong>Voxel-era equipment</strong> — modular slots on a single skinned body (mesh visibility / gear overlays), not full-body GLB swaps.
+            Demo loadout; in play use bag → equip.
+          </p>
+          <div class="equip-layout">
+            <div class="slot-col" id="equipLeft"></div>
+            <div class="doll">
+              <div class="title">Paper doll</div>
+              <div class="doll-body" id="dollBody" aria-hidden="true">
+                <div class="p head" data-part="helm"></div>
+                <div class="p torso" data-part="chest"></div>
+                <div class="p arm-l" data-part="offhand"></div>
+                <div class="p arm-r" data-part="mainhand"></div>
+                <div class="p leg-l" data-part="legs"></div>
+                <div class="p leg-r" data-part="boots"></div>
+              </div>
+              <div class="era"><b>Voxel era</b> Equip = slot mesh_ids · SI human ~1.8–2.0 m</div>
+            </div>
+            <div class="slot-col" id="equipRight"></div>
+          </div>
+          <div class="bag">
+            <h3>Bag <span style="font-weight:400;color:var(--muted);text-transform:none;letter-spacing:0;font-family:serif;font-size:.85rem">· click to equip / unequip</span></h3>
+            <div class="bag-grid" id="bagGrid"></div>
+          </div>
+        </div>
+
+        <div class="pane" id="pane-professions">
+          <p class="pane-lead">Seven professions · 35 branches · 147 skills — full tree in play (ProfessionsService).</p>
+          <div class="attr-grid" id="profGrid"></div>
+        </div>
+
+        <div class="pane" id="pane-skills">
+          <p class="pane-lead">Perk tracks: Hero · Warrior · Smarts · Maker. Milestone perks unlock per attribute tier (1–6).</p>
+          <div class="attr-grid" id="perkGrid"></div>
+        </div>
+
+        <div class="pane" id="pane-crafting">
+          <p class="pane-lead">Station recipes (workbench, forge, campfire…) fold into this tab in-game. Demo only.</p>
+          <ul style="margin:0;padding-left:1.2rem;color:var(--muted)">
+            <li>Iron blade · scrap metal ×4 · leather strip ×1</li>
+            <li>Field bandage · cloth ×2 · herb ×1</li>
+            <li>Scrap plate · iron plate ×3 · rivets ×6</li>
+            <li>Ration pack · dried meat ×2 · rootstock ×1</li>
+          </ul>
+        </div>
+
+        <div class="pane" id="pane-medical">
+          <p class="pane-lead">BIO-driven healing, toxin resist, implant slots. Survival stacks apply here in play.</p>
+          <div class="vitals" id="medVitals"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: derived vitals -->
+    <aside class="mp-side right">
+      <h3>Derived vitals</h3>
+      <div class="vitals" id="derivedVitals"></div>
+      <h3 style="margin-top:.85rem">Gear totals</h3>
+      <div class="vitals" id="gearTotals"></div>
+      <div class="ssot">
+        <strong style="color:var(--gold-bright)">Source of truth</strong><br />
+        Baked: <code>@workspace/game-systems</code> <code>nexusDerived</code> (BIO…GRA → 37 derived)<br />
+        Defaults: <code>VOXEL_ERA_STARTER_STATS</code> (BIO/NEU/KIN=1) · budget 24<br />
+        Guide: <a href="stats-guide.html">stats-guide.html</a> · Play: <code>MainPanel.tsx</code> (C)
+      </div>
+    </aside>
+  </div>
+</div>
+
+<footer>
+  <div class="links">
+    <a href="./">Home</a>
+    <a href="stats-guide.html">Stats guide</a>
+    <a href="info.html">Gameplay</a>
+    <a href="lore.html">Lore</a>
+    <a href="/arpg-game/">Play</a>
+  </div>
+  <p style="margin-top:1rem">Bind a grudge. Bear it forward. · Main panel preview</p>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  var STAT_COST = [0, 1, 2, 4, 8, 16, 20];
+  var STAT_MAX = 6;
+  var START_BUDGET = 24;
+  var STORAGE_KEY = 'grudges.mainPanel.stats.v2';
+  var EQUIP_KEY = 'grudges.mainPanel.equip.v1';
+
+  /** Voxel-era starter = BIO/NEU/KIN 1 (SSOT game-systems VOXEL_ERA_STARTER_STATS) */
+  var VOXEL_STARTER = { bio: 1, neu: 1, kin: 1, qnt: 0, syn: 0, chr: 0, ent: 0, gra: 0 };
+
+  var FALLBACK_PRIMARY = [
+    { key: 'bio', abbr: 'BIO', label: 'Biomass', color: '#4caf50', description: 'Max health, healing, toxin resist, harvest yields.', archetype: 'Survivor / Medic' },
+    { key: 'neu', abbr: 'NEU', label: 'Neural Integrity', color: '#00bcd4', description: 'Sanity, gadgets, stealth, perception.', archetype: 'Hacker / Scout' },
+    { key: 'kin', abbr: 'KIN', label: 'Kinetic Efficiency', color: '#ff9800', description: 'Melee damage, stamina, movement.', archetype: 'Bladesman / Sprinter' },
+    { key: 'qnt', abbr: 'QNT', label: 'Quantum Aptitude', color: '#9c27b0', description: 'Salvage, rare drops, anomaly tech.', archetype: 'Salvager' },
+    { key: 'syn', abbr: 'SYN', label: 'Synthetic Affinity', color: '#2196f3', description: 'Turrets, builds, drones, hires.', archetype: 'Architect' },
+    { key: 'chr', abbr: 'CHR', label: 'Chronal Stability', color: '#c9a000', description: 'Time-slip, echo strike, causality.', archetype: 'Chrono-Op' },
+    { key: 'ent', abbr: 'ENT', label: 'Entropic Resistance', color: '#f44336', description: 'Durability, decay, salvage quality.', archetype: 'Reclaimer' },
+    { key: 'gra', abbr: 'GRA', label: 'Gravitic Harmony', color: '#009688', description: 'Fall resist, wall-run, zero-G.', archetype: 'Orbital' }
+  ];
+
+  var PROF_LIST = [
+    { id: 'gathering', name: 'Gathering', desc: 'Forestry, mining, salvage nodes' },
+    { id: 'hunting', name: 'Hunting', desc: 'Skinning, tracking, bait' },
+    { id: 'crafting', name: 'Crafting', desc: 'Weapons, armor, gadgets' },
+    { id: 'township', name: 'Township', desc: 'Camp → Stronghold build ladder' },
+    { id: 'survival', name: 'Survival', desc: 'Cooking, camping, cold/heat' },
+    { id: 'chemistry', name: 'Chemistry', desc: 'Potions, distill, explosives' },
+    { id: 'combat', name: 'Combat', desc: 'Weapon trees and stances' }
+  ];
+
+  var RARITY = { common: '#9a9a9a', uncommon: '#4caf50', rare: '#4a9ee0', epic: '#bb95ff', legendary: '#d4a400' };
+
+  /** Voxel-era starter kit (demo) */
+  var BAG_ITEMS = [
+    { id: 'scrap_helm', name: 'Scrap Helm', slot: 'helm', rarity: 'common', icon: '🪖', def: 4 },
+    { id: 'rivet_chest', name: 'Rivet Chest', slot: 'chest', rarity: 'uncommon', icon: '🥋', def: 12 },
+    { id: 'patch_legs', name: 'Patch Legs', slot: 'legs', rarity: 'common', icon: '👖', def: 6 },
+    { id: 'trek_boots', name: 'Trek Boots', slot: 'boots', rarity: 'common', icon: '🥾', def: 3 },
+    { id: 'signal_amulet', name: 'Signal Amulet', slot: 'amulet', rarity: 'rare', icon: '📡', neu: 1 },
+    { id: 'scrap_ring', name: 'Scrap Ring', slot: 'ring', rarity: 'common', icon: '💍', kin: 0 },
+    { id: 'iron_blade', name: 'Iron Blade', slot: 'mainhand', rarity: 'uncommon', icon: '⚔', dmg: 14 },
+    { id: 'plank_shield', name: 'Plank Shield', slot: 'offhand', rarity: 'common', icon: '🛡', block: 8 },
+    { id: 'field_bandage', name: 'Field Bandage', slot: null, rarity: 'common', icon: '🩹', heal: 40 },
+    { id: 'ration', name: 'Ration Pack', slot: null, rarity: 'common', icon: '🍖', food: 1 }
+  ];
+
+  var SLOT_DEFS = [
+    { slot: 'helm', label: 'Helmet', side: 'left' },
+    { slot: 'chest', label: 'Chest', side: 'left' },
+    { slot: 'legs', label: 'Legs', side: 'left' },
+    { slot: 'boots', label: 'Boots', side: 'left' },
+    { slot: 'amulet', label: 'Amulet', side: 'right' },
+    { slot: 'ring', label: 'Ring', side: 'right' },
+    { slot: 'mainhand', label: 'Main hand', side: 'right' },
+    { slot: 'offhand', label: 'Off-hand', side: 'right' }
+  ];
+
+  function costToReach(level) {
+    var t = 0;
+    for (var i = 1; i <= level; i++) t += STAT_COST[i] || 0;
+    return t;
+  }
+  function costForNext(cur) {
+    if (cur >= STAT_MAX) return Infinity;
+    return STAT_COST[cur + 1];
+  }
+  function spentPoints(stats) {
+    return Object.keys(stats).reduce(function (s, k) { return s + costToReach(stats[k] || 0); }, 0);
+  }
+
+  function loadStats() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) return JSON.parse(raw);
+    } catch (e) {}
+    return Object.assign({}, VOXEL_STARTER);
+  }
+  function saveStats(s) {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); } catch (e) {}
+  }
+  function loadEquip() {
+    try {
+      var raw = localStorage.getItem(EQUIP_KEY);
+      if (raw) return JSON.parse(raw);
+    } catch (e) {}
+    return {
+      helm: 'scrap_helm',
+      chest: 'rivet_chest',
+      legs: 'patch_legs',
+      boots: 'trek_boots',
+      mainhand: 'iron_blade',
+      offhand: 'plank_shield'
+    };
+  }
+  function saveEquip(e) {
+    try { localStorage.setItem(EQUIP_KEY, JSON.stringify(e)); } catch (err) {}
+  }
+
+  var primaryMeta = FALLBACK_PRIMARY.slice();
+  var stats = loadStats();
+  var equipped = loadEquip();
+
+  function remaining() {
+    return START_BUDGET - spentPoints(stats);
+  }
+
+  /** Mirrors game-systems computeDerivedFromNexus (voxel-era bake). */
+  function deriveVitals() {
+    var B = stats.bio || 0, N = stats.neu || 0, K = stats.kin || 0, Q = stats.qnt || 0;
+    var S = stats.syn || 0, C = stats.chr || 0, E = stats.ent || 0, G = stats.gra || 0;
+    var hp = Math.floor(100 + B * 80 + E * 20 + K * 10);
+    var mp = Math.floor(50 + N * 45 + Q * 10 + C * 8);
+    var st = Math.floor(100 + K * 40 + G * 15 + E * 10);
+    var dmg = Math.floor(8 + K * 6 + B * 1 + Q * 0.5) + (itemBonus('dmg') || 0);
+    var def = Math.floor(5 + E * 8 + B * 3 + K * 2) + (itemBonus('def') || 0);
+    var crit = Math.min(75, 5 + N * 1.2 + K * 1.5 + Q * 0.8);
+    var move = (1 + (K * 2 + G * 1.5) / 100).toFixed(2);
+    return { hp: hp, mp: mp, st: st, dmg: dmg, def: def, move: move, crit: crit };
+  }
+
+  function itemById(id) {
+    return BAG_ITEMS.find(function (x) { return x.id === id; });
+  }
+  function itemBonus(kind) {
+    var n = 0;
+    Object.keys(equipped).forEach(function (slot) {
+      var it = itemById(equipped[slot]);
+      if (!it) return;
+      if (kind === 'dmg' && it.dmg) n += it.dmg;
+      if (kind === 'def' && it.def) n += it.def;
+      if (kind === 'block' && it.block) n += it.block;
+    });
+    return n;
+  }
+
+  function renderSidebar() {
+    var el = document.getElementById('sidebarStats');
+    var pool = remaining();
+    document.getElementById('poolPts').textContent = pool;
+    el.innerHTML = primaryMeta.map(function (m) {
+      var v = stats[m.key] || 0;
+      var next = costForNext(v);
+      var canUp = v < STAT_MAX && pool >= next;
+      var canDn = v > 0;
+      return (
+        '<div class="stat-row" title="' + m.label + '">' +
+          '<span class="dot" style="background:' + m.color + '">' + m.abbr + '</span>' +
+          '<span class="nm">' + m.abbr + '</span>' +
+          '<span class="val">' + v + '</span>' +
+          '<button type="button" data-act="dec" data-k="' + m.key + '"' + (canDn ? '' : ' disabled') + '>−</button>' +
+          '<button type="button" data-act="inc" data-k="' + m.key + '"' + (canUp ? '' : ' disabled') + '>+' + (next === Infinity ? '—' : next) + '</button>' +
+        '</div>'
+      );
+    }).join('');
+
+    var vit = deriveVitals();
+    document.getElementById('hpLbl').textContent = Math.round(vit.hp * 0.78) + ' / ' + vit.hp;
+    document.getElementById('mpLbl').textContent = Math.round(vit.mp * 0.62) + ' / ' + vit.mp;
+    document.getElementById('stLbl').textContent = Math.round(vit.st * 0.88) + ' / ' + vit.st;
+    document.getElementById('hpBar').style.width = '78%';
+    document.getElementById('mpBar').style.width = '62%';
+    document.getElementById('stBar').style.width = '88%';
+
+    document.getElementById('derivedVitals').innerHTML =
+      '<div><span>Max HP</span><b>' + vit.hp + '</b></div>' +
+      '<div><span>Max MP</span><b>' + vit.mp + '</b></div>' +
+      '<div><span>Stamina</span><b>' + vit.st + '</b></div>' +
+      '<div><span>Move ×</span><b>' + vit.move + '</b></div>' +
+      '<div><span>Crit %</span><b>' + (vit.crit || 0).toFixed(1) + '</b></div>' +
+      '<div><span>Budget</span><b>' + remaining() + ' / ' + START_BUDGET + '</b></div>';
+
+    document.getElementById('gearTotals').innerHTML =
+      '<div><span>Weapon dmg</span><b>+' + vit.dmg + '</b></div>' +
+      '<div><span>Armor def</span><b>+' + vit.def + '</b></div>' +
+      '<div><span>Block</span><b>+' + itemBonus('block') + '</b></div>' +
+      '<div><span>Bake SSOT</span><b>Nexus</b></div>';
+
+    document.getElementById('medVitals').innerHTML =
+      document.getElementById('derivedVitals').innerHTML;
+  }
+
+  function renderAttrGrid() {
+    document.getElementById('attrGrid').innerHTML = primaryMeta.map(function (m) {
+      var v = stats[m.key] || 0;
+      return (
+        '<div class="attr-card" style="border-left-color:' + m.color + '">' +
+          '<div class="hd"><span class="dot" style="background:' + m.color + '">' + m.abbr + '</span><h3>' + m.label + '</h3></div>' +
+          '<div class="arch">' + (m.archetype || '') + '</div>' +
+          '<p>' + (m.description || '') + '</p>' +
+          '<div class="lvl">Allocated: ' + v + ' / ' + STAT_MAX + '</div>' +
+        '</div>'
+      );
+    }).join('');
+  }
+
+  function renderEquip() {
+    function slotHtml(def) {
+      var id = equipped[def.slot];
+      var it = id ? itemById(id) : null;
+      var empty = !it;
+      return (
+        '<div class="eq-slot' + (empty ? ' empty' : '') + '" data-slot="' + def.slot + '">' +
+          '<div class="ico">' + (it ? it.icon : '·') + '</div>' +
+          '<div class="meta"><div class="lab">' + def.label + '</div>' +
+          '<div class="itm">' + (it ? it.name : 'Empty') + '</div></div>' +
+          (it ? '<span class="rarity" style="color:' + (RARITY[it.rarity] || '#aaa') + '">' + it.rarity + '</span>' : '') +
+        '</div>'
+      );
+    }
+    document.getElementById('equipLeft').innerHTML = SLOT_DEFS.filter(function (s) { return s.side === 'left'; }).map(slotHtml).join('');
+    document.getElementById('equipRight').innerHTML = SLOT_DEFS.filter(function (s) { return s.side === 'right'; }).map(slotHtml).join('');
+
+    // doll highlights
+    document.querySelectorAll('#dollBody .p').forEach(function (p) {
+      var part = p.getAttribute('data-part');
+      p.classList.toggle('on', !!equipped[part]);
+    });
+
+    var worn = {};
+    Object.keys(equipped).forEach(function (s) { if (equipped[s]) worn[equipped[s]] = s; });
+    document.getElementById('bagGrid').innerHTML = BAG_ITEMS.map(function (it) {
+      var eqSlot = worn[it.id];
+      return (
+        '<div class="bag-cell has" data-id="' + it.id + '" title="' + it.name + (eqSlot ? ' (equipped ' + eqSlot + ')' : '') + '">' +
+          '<span class="ic">' + it.icon + '</span>' +
+          (eqSlot ? 'EQ' : it.name.split(' ')[0]) +
+        '</div>'
+      );
+    }).join('');
+  }
+
+  function renderProf() {
+    document.getElementById('profGrid').innerHTML = PROF_LIST.map(function (p) {
+      return '<div class="attr-card"><div class="hd"><h3>' + p.name + '</h3></div><p>' + p.desc + '</p><div class="lvl">Lv 1 demo</div></div>';
+    }).join('');
+  }
+
+  function renderPerks() {
+    document.getElementById('perkGrid').innerHTML = primaryMeta.map(function (m) {
+      var v = stats[m.key] || 0;
+      return (
+        '<div class="attr-card" style="border-left-color:' + m.color + '">' +
+          '<div class="hd"><span class="dot" style="background:' + m.color + '">' + m.abbr + '</span><h3>' + m.label + ' milestones</h3></div>' +
+          '<p>Tier ' + v + ' unlocked in play. See stats guide for affinity effects.</p>' +
+          '<div class="lvl"><a href="stats-guide.html#attributes">Affinity list →</a></div>' +
+        '</div>'
+      );
+    }).join('');
+  }
+
+  function refresh() {
+    renderSidebar();
+    renderAttrGrid();
+    renderEquip();
+    renderProf();
+    renderPerks();
+  }
+
+  // Tabs
+  document.getElementById('tabs').addEventListener('click', function (e) {
+    var btn = e.target.closest('.mp-tab');
+    if (!btn) return;
+    var id = btn.getAttribute('data-tab');
+    document.querySelectorAll('.mp-tab').forEach(function (b) { b.classList.toggle('active', b === btn); });
+    document.querySelectorAll('.pane').forEach(function (p) { p.classList.toggle('active', p.id === 'pane-' + id); });
+  });
+
+  // Stat allocate
+  document.getElementById('sidebarStats').addEventListener('click', function (e) {
+    var btn = e.target.closest('button[data-act]');
+    if (!btn || btn.disabled) return;
+    var k = btn.getAttribute('data-k');
+    var act = btn.getAttribute('data-act');
+    if (act === 'inc') {
+      var c = costForNext(stats[k] || 0);
+      if ((stats[k] || 0) < STAT_MAX && remaining() >= c) stats[k] = (stats[k] || 0) + 1;
+    } else if (act === 'dec' && (stats[k] || 0) > 0) {
+      stats[k] -= 1;
+    }
+    saveStats(stats);
+    refresh();
+  });
+
+  // Equip / unequip from bag
+  document.getElementById('bagGrid').addEventListener('click', function (e) {
+    var cell = e.target.closest('[data-id]');
+    if (!cell) return;
+    var id = cell.getAttribute('data-id');
+    var it = itemById(id);
+    if (!it || !it.slot) return;
+    if (equipped[it.slot] === id) delete equipped[it.slot];
+    else equipped[it.slot] = id;
+    saveEquip(equipped);
+    refresh();
+  });
+  document.getElementById('equipLeft').addEventListener('click', unequipClick);
+  document.getElementById('equipRight').addEventListener('click', unequipClick);
+  function unequipClick(e) {
+    var slot = e.target.closest('[data-slot]');
+    if (!slot) return;
+    var s = slot.getAttribute('data-slot');
+    if (equipped[s]) {
+      delete equipped[s];
+      saveEquip(equipped);
+      refresh();
+    }
+  }
+
+  async function loadPrimary() {
+    try {
+      if (location.protocol === 'file:') return;
+      var r = await fetch('/api/stats/primary');
+      if (!r.ok) r = await fetch('/api/stats/catalog');
+      if (!r.ok) return;
+      var j = await r.json();
+      var list = j.primaryStats || (j.primary && j.primary.primaryStats);
+      if (list && list.length) primaryMeta = list;
+    } catch (e) { /* keep fallback */ }
+  }
+
+  loadPrimary().then(refresh);
+  refresh();
+})();
+</script>
+</body>
+</html>

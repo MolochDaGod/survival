@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Grudges — Perks &amp; Upgrades</title>
+<meta name="description" content="Nexus milestone perks for BIO…GRA — every upgrade path in Grudges survival MMO." />
+<link rel="canonical" href="https://grudges.grudge-studio.com/perks" />
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=EB+Garamond:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap" />
+<link rel="stylesheet" href="/systems-pages.css" />
+</head>
+<body>
+<nav class="site">
+  <div class="inner">
+    <a href="./" class="brand"><img src="grudges-logo.png" alt="" /> GRUDGES</a>
+    <ul>
+      <li><a href="info.html">Gameplay</a></li>
+      <li><a href="lore.html">Lore</a></li>
+      <li><a href="stats-guide.html">Stats</a></li>
+      <li><a href="perks.html" class="active">Perks</a></li>
+      <li><a href="crafting.html">Crafting</a></li>
+      <li><a href="professions.html">Professions</a></li>
+      <li><a href="main-panel.html">Main panel</a></li>
+    </ul>
+    <a href="/arpg-game/" class="play">▶ Play</a>
+  </div>
+</nav>
+
+<header class="page-hero">
+  <div class="bg-camp" aria-hidden="true"></div>
+  <div class="inner">
+    <div class="eyebrow">Progression · Voxel MMO · BIO…GRA</div>
+    <h1>Perks &amp; Upgrades</h1>
+    <p>Six milestone upgrades on each of the eight attributes. Allocate ranks on the Main Panel (C) — perks unlock as you climb BIO…GRA. Icons from production perk packs + tier badges.</p>
+    <div class="links">
+      <a href="stats-guide.html">Stats guide</a>
+      <a href="main-panel.html">Allocate on Main Panel</a>
+      <a href="info.html#camp">Camp &amp; settlement</a>
+      <a href="professions.html">Profession skills</a>
+      <a href="/arpg-game/">Play client</a>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <div class="filters" id="statFilters"></div>
+  <p class="lead" id="statLead">Loading perks…</p>
+  <div class="grid" id="perkGrid"><div class="loading">Loading…</div></div>
+</main>
+
+<footer class="site">
+  <div class="links">
+    <a href="./">Home</a>
+    <a href="stats-guide.html">Stats</a>
+    <a href="crafting.html">Crafting</a>
+    <a href="professions.html">Professions</a>
+    <a href="/arpg-game/">Play</a>
+  </div>
+  <p style="margin-top:1rem">SSOT: <code style="color:var(--gold-bright)">@workspace/game-systems</code> · CharacterConfig milestones</p>
+</footer>
+
+<script>
+(async function () {
+  let data;
+  try {
+    data = await (await fetch('/data/grudges-systems.json')).json();
+  } catch (e) {
+    document.getElementById('perkGrid').innerHTML = '<p class="loading">Could not load catalog.</p>';
+    return;
+  }
+  const stats = data.stats || [];
+  const byStat = (data.perks && data.perks.byStat) || {};
+  let active = 'all';
+
+  const filters = document.getElementById('statFilters');
+  filters.innerHTML =
+    '<button type="button" class="stat-pill active" data-k="all"><span class="dot" style="background:var(--gold)"></span>All</button>' +
+    stats.map((s) =>
+      '<button type="button" class="stat-pill" data-k="' + s.key + '"><span class="dot" style="background:' + s.color + '"></span>' + s.abbr + '</button>'
+    ).join('');
+
+  function render() {
+    const keys = active === 'all' ? stats.map((s) => s.key) : [active];
+    const meta = Object.fromEntries(stats.map((s) => [s.key, s]));
+    const cards = [];
+    for (const k of keys) {
+      const list = byStat[k] || [];
+      const m = meta[k] || { abbr: k.toUpperCase(), color: '#888', label: k, archetype: '' };
+      list.forEach((p) => {
+        const art = p.iconPath
+          ? '<div class="icon icon-art"><img src="' + p.iconPath + '" alt="" width="48" height="48" loading="lazy" /></div>'
+          : '<div class="icon">' + (p.icon || '◆') + '</div>';
+        const badge = p.tierBadge
+          ? '<img class="tier-badge" src="' + p.tierBadge + '" alt="T' + (p.tier || '') + '" width="28" height="28" loading="lazy" />'
+          : '';
+        cards.push(
+          '<article class="card card-perk" style="border-left:3px solid ' + m.color + '">' +
+            '<div class="tier">' + badge + ' T' + (p.tier || '?') + ' · ' + m.abbr + ' · ' + (m.archetype || '') + '</div>' +
+            art +
+            '<h3 style="text-transform:none;letter-spacing:.03em;color:var(--ink)">' + p.name + '</h3>' +
+            '<p>' + p.desc + '</p>' +
+          '</article>'
+        );
+      });
+    }
+    document.getElementById('statLead').textContent =
+      active === 'all'
+        ? 'All milestone perks across BIO…GRA (' + cards.length + ' upgrades).'
+        : (meta[active]?.label || active) + ' — ' + (byStat[active] || []).length + ' milestone ranks.';
+    document.getElementById('perkGrid').innerHTML = cards.join('') || '<p class="loading">No perks for this filter.</p>';
+  }
+
+  filters.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-k]');
+    if (!btn) return;
+    active = btn.getAttribute('data-k');
+    filters.querySelectorAll('.stat-pill').forEach((b) => b.classList.toggle('active', b === btn));
+    render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>

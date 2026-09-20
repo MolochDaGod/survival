@@ -9,11 +9,11 @@ import { prefabsRouter } from "./prefabs";
 import { spawnRulesRouter } from "./spawnRules";
 import { adminRouter } from "./admin";
 import statsRouter from "./stats";
+import systemsRouter from "./systems";
 import { engineRouter } from "./engine";
 import { masksRouter } from "./masks";
 import { assistantRouter } from "./assistant";
 import { worldRouter } from "./world";
-import gameRouter from "./game";
 
 const router: IRouter = Router();
 
@@ -27,11 +27,10 @@ router.use("/prefabs", prefabsRouter);
 router.use("/spawn-rules", spawnRulesRouter);
 router.use("/admin", adminRouter);
 router.use("/stats", statsRouter);
+router.use("/systems", systemsRouter);
 router.use("/engine", engineRouter);
 router.use("/masks", masksRouter);
 router.use("/assistant", assistantRouter);
 router.use("/world", worldRouter);
-/** Static game catalogs (crafting, items, deployables) — always online. */
-router.use("/game", gameRouter);
 
 export default router;

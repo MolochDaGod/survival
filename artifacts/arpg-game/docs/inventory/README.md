@@ -3,6 +3,8 @@
 This folder is the **single source of truth** for all design tables and asset registries in Grudges.
 Nothing here is loaded by runtime code yet (zero `*.csv` references in `src/`); it is consumed by **humans and AI agents** during development.
 
+**Progression style:** Star Wars Galaxies–*style* profession XP trees (earn XP → spend into branches → unlock recipes / passives / abilities). **Content is Grudges** — factions, Nexus BIO…GRA, Diablo loot, Grudges weapons/abilities. Do **not** copy SWG skill names or lore. Runtime bridge: `src/game/progression/GrudgeProgressionBridge.ts`.
+
 **When asked to add or change game content, read this file first.** Then open the specific CSV(s) listed below. Every CSV uses comma separation, a single header row, and quotes any cell containing a comma.
 
 ---
@@ -13,7 +15,7 @@ Nothing here is loaded by runtime code yet (zero `*.csv` references in `src/`); 
 |---|---:|---|---|---|
 | `professions.csv` | 147 | **Design table** — all 7 professions × 5 branches × 4 ranks + Master capstones | `Skill ID` (e.g. `combat.blades.3`) | Adding/editing perks, ranks, signature items, or skill point costs. |
 | `perks.csv` | 147 | **Derived view** of `professions.csv` — perk name, how to unlock it, what it does, recipes granted, signature item. Read-only spreadsheet for designers and players. | `Skill ID` | Browsing/exporting all perks. **Do not edit directly — regenerate from `professions.csv`.** |
-| `recipes.csv` | 150 | **Design table** — every craftable: weapons, armour, ammo, food, potions, building parts | `Recipe ID` (e.g. `craft_iron_sword`) | Adding/editing recipes, station requirements, recipe unlock gating. |
+| `recipes.csv` | 168+ | **Design table** — every craftable + buildable (weapons, armour, ammo, food, potions, camp/NPC buildings) | `Recipe ID` (e.g. `craft_iron_sword`) | Adding/editing recipes. **Runtime:** `pnpm run gen:recipes` → `Recipes.generated.ts` + `SurvivalItems.generated.ts`. |
 | `xp-sources.csv` | 36 | **Design table** — every XP-granting trigger and the profession it feeds | `Activity` (free-text label) | Adding/editing XP rewards, balancing progression speed, wiring NPC XP. |
 | `npc-hires.csv` | 15 | **Design table** — recruitable NPC roles (Woodcutter, Sentry, Captain, etc.) | `Hire ID` (e.g. `hire_woodcutter`) | Adding hire archetypes, dialog requirements, behaviors. |
 | `factions.csv` | 5 | **Design table** — the five surface factions: territory, alliance matrix, AI doctrine, signature gear | `Faction ID` (e.g. `keepers`) | Adding/editing faction relations, territorial AI behavior, signature gear, pledge rewards. |

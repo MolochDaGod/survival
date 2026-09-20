@@ -4,7 +4,12 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Grudges — Lore &amp; the Five Factions</title>
-<meta name="description" content="The world of Grudges. The colonies left. We didn't. Five factions claw for the surface. Choose one, oppose four." />
+<meta name="description" content="The world of Grudges. The colonies left. We didn't. Five factions claw for the surface. Choose one, oppose four. Sector map, biomes, and fleet tools." />
+<link rel="canonical" href="https://grudges.grudge-studio.com/lore.html" />
+<meta property="og:title" content="Grudges — Lore &amp; the Five Factions" />
+<meta property="og:description" content="Five banners. One surface. Sector map, biomes, and the tools that wire Grudges together." />
+<meta property="og:image" content="opengraph.jpg" />
+<meta property="og:type" content="website" />
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
 <link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png" />
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
@@ -95,7 +100,7 @@
     display:flex;align-items:center;justify-content:center;
     background:rgba(0,0,0,0.4);
   }
-  .crest-circle img{width:64px;height:64px;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.6))}
+  .crest-circle img{width:56px;height:72px;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.6));image-rendering:pixelated}
   .faction-head .titles h2{margin:0 0 .2rem;font-size:1.6rem}
   .faction-head .titles .subtitle{font-family:'Cinzel',serif;letter-spacing:.18em;text-transform:uppercase;font-size:.78rem;opacity:.75}
 
@@ -139,6 +144,37 @@
   footer.site .brand-row img{width:36px;height:36px}
   footer.site .brand-row span{font-family:'Cinzel',serif;font-weight:700;color:var(--gold);letter-spacing:.15em}
   footer.site .links a{color:var(--parchment);margin:0 .8rem;font-family:'Cinzel',serif;font-size:.8rem;letter-spacing:.12em;text-transform:uppercase}
+
+  /* Hub / atlas */
+  .hub{padding:2.5rem 0 1rem;background:var(--bg-deep);border-bottom:1px solid var(--rule)}
+  .hub-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.85rem}
+  .hub-card{
+    display:block;background:var(--panel);border:1px solid var(--rule);border-radius:4px;
+    padding:1rem 1.1rem;color:var(--parchment);transition:border-color .15s,transform .12s;
+  }
+  .hub-card:hover{border-color:var(--gold);color:var(--parchment);transform:translateY(-1px)}
+  .hub-card .k{font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin:0 0 .35rem}
+  .hub-card .t{font-family:'Cinzel',serif;font-size:1rem;color:var(--gold-bright);margin:0 0 .35rem}
+  .hub-card p{margin:0;font-size:.92rem;opacity:.88;line-height:1.45}
+
+  .atlas{padding:3.5rem 0;background:var(--bg)}
+  .atlas h2{text-align:center;margin-bottom:.4rem}
+  .atlas .lead{text-align:center;max-width:720px;margin:0 auto 2rem;opacity:.9;font-size:1.05rem}
+  .biome-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.65rem;margin:1.5rem 0 2rem}
+  .biome-pill{
+    background:rgba(0,0,0,.35);border:1px solid var(--rule);border-radius:3px;
+    padding:.55rem .75rem;font-size:.88rem;text-align:center;
+  }
+  .biome-pill strong{display:block;font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:.2rem}
+  .struct-table{width:100%;border-collapse:collapse;font-size:.95rem;margin:1rem 0 0}
+  .struct-table th,.struct-table td{border:1px solid var(--rule);padding:.55rem .75rem;text-align:left;vertical-align:top}
+  .struct-table th{font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);background:rgba(0,0,0,.35)}
+  .struct-table a{color:var(--gold-bright)}
+  .ssot-note{
+    margin:1.5rem auto 0;max-width:760px;padding:.85rem 1rem;border:1px solid var(--rule);
+    border-left:3px solid var(--ember);background:rgba(0,0,0,.3);font-size:.9rem;opacity:.95;
+  }
+  .ssot-note code{color:var(--gold-bright);font-size:.85em}
 </style>
 </head>
 <body>
@@ -152,20 +188,84 @@
       <li><a href="lore.html" class="active">Lore &amp; Factions</a></li>
       <li><a href="bestiary.html">Bestiary</a></li>
       <li><a href="stats-guide.html">Stats</a></li>
+      <li><a href="perks.html">Perks</a></li>
+      <li><a href="crafting.html">Crafting</a></li>
+      <li><a href="professions.html">Professions</a></li>
+      <li><a href="#surface-atlas">Atlas</a></li>
+      <li><a href="#hub">Tools</a></li>
     </ul>
-    <a href="/arpg-game/" class="play">▶ Play Now</a>
+    <a href="/arpg-game/" class="play">▶ Play Grudges</a>
   </div>
 </nav>
 
 <header class="page-hero">
   <div class="container">
-    <span class="eyebrow">The World</span>
+    <span class="eyebrow">Lore SSOT · Website</span>
     <h1>The Way Left. We Didn't.</h1>
     <p class="lead">
       A century after the colonial mining consortium sealed the orbital elevators, the surface remembers everything. Five factions hold what's left. Choose one. The rest become enemies.
     </p>
   </div>
 </header>
+
+<!-- Source-of-truth hub: Grudges website only (not unrelated fleet games) -->
+<section class="hub" id="hub">
+  <div class="container">
+    <div class="hub-grid">
+      <a class="hub-card" href="#surface-atlas">
+        <div class="k">Sector · map</div>
+        <div class="t">Surface atlas</div>
+        <p>6.4 km² world, biomes, towns, camps, and where banners hold ground.</p>
+      </a>
+      <a class="hub-card" href="info.html">
+        <div class="k">Structure</div>
+        <div class="t">How Grudges plays</div>
+        <p>Combat, camp tiers, professions, diplomacy — full gameplay structure.</p>
+      </a>
+      <a class="hub-card" href="stats-guide.html">
+        <div class="k">Systems</div>
+        <div class="t">Nexus stats</div>
+        <p>BIO…GRA attributes, derived stats, perk tiers for survivors.</p>
+      </a>
+      <a class="hub-card" href="main-panel.html">
+        <div class="k">HUD · C key</div>
+        <div class="t">Main panel</div>
+        <p>Allocate attributes, voxel-era equipment doll, professions tabs.</p>
+      </a>
+      <a class="hub-card" href="bestiary.html">
+        <div class="k">Threats</div>
+        <div class="t">Bestiary</div>
+        <p>Surface hostiles and creatures tied to lore biomes.</p>
+      </a>
+      <a class="hub-card" href="info.html#nexus-api">
+        <div class="k">API</div>
+        <div class="t">Nexus API</div>
+        <p>Characters, catalog, and fleet endpoints Grudges uses.</p>
+      </a>
+      <a class="hub-card" href="/arpg-game/">
+        <div class="k">Play</div>
+        <div class="t">Enter the surface</div>
+        <p>Grudges client only — survival ARPG, not other fleet titles.</p>
+      </a>
+      <a class="hub-card" href="/admin/">
+        <div class="k">Tools</div>
+        <div class="t">Admin / spawn</div>
+        <p>Prefabs, spawn rules, and world catalog controls.</p>
+      </a>
+      <a class="hub-card" href="/asset-studio/">
+        <div class="k">Tools</div>
+        <div class="t">Asset studio</div>
+        <p>Browse and pipeline meshes used by Grudges content.</p>
+      </a>
+    </div>
+    <p class="ssot-note">
+      <strong>Lore source of truth:</strong> this page lives in the Grudges <code>artifacts/website</code> package
+      (<code>lore.html</code>). It is <em>not</em> the ARPG client package and is not shared with unrelated games
+      (e.g. GRIM Armada). Canonical hosts: <code>grudges.grudge-studio.com</code> · <code>survival.grudge-studio.com</code>
+      · Vercel project <code>survival</code> / <code>grudges-survival.vercel.app</code>.
+    </p>
+  </div>
+</section>
 
 <section class="world">
   <div class="container">
@@ -199,6 +299,86 @@
   </div>
 </section>
 
+<section class="atlas" id="surface-atlas">
+  <div class="container">
+    <h2>Surface atlas · sector map</h2>
+    <p class="lead">
+      Grudges is one continuous open world — <strong>6,400 m × 6,400 m</strong> of procedural terrain.
+      Factions do not live in separate maps; they claim <em>territories, routes, and shafts</em> inside this surface.
+      Enter play to walk the seed; use the structure docs and tools below to place content and spawn rules.
+    </p>
+
+    <h3 style="text-align:center;margin-top:0">Biomes (terrain columns)</h3>
+    <div class="biome-grid">
+      <div class="biome-pill"><strong>Deep ocean</strong> Far coast, cold current</div>
+      <div class="biome-pill"><strong>Ocean</strong> Open water</div>
+      <div class="biome-pill"><strong>Shallow sea</strong> Reef &amp; wrecks</div>
+      <div class="biome-pill"><strong>Beach</strong> Landfall strip</div>
+      <div class="biome-pill"><strong>Grassland</strong> Caravan country</div>
+      <div class="biome-pill"><strong>Forest</strong> Keeper ground</div>
+      <div class="biome-pill"><strong>Highland</strong> Rock scatter</div>
+      <div class="biome-pill"><strong>Mountain</strong> Shaft approaches</div>
+      <div class="biome-pill"><strong>Snow peak</strong> Permafrost edge</div>
+    </div>
+
+    <h3 style="text-align:center">Lore biomes (spawn story)</h3>
+    <div class="biome-grid">
+      <div class="biome-pill"><strong>Permafrost</strong> Frozen wounds of The Way</div>
+      <div class="biome-pill"><strong>Glasslands</strong> Blast-fused plains</div>
+      <div class="biome-pill"><strong>Derelict sprawl</strong> Scavenger markets</div>
+      <div class="biome-pill"><strong>Anomaly field</strong> Network black sites</div>
+      <div class="biome-pill"><strong>Cinder wastes</strong> Hollow Lord raids</div>
+    </div>
+
+    <table class="struct-table">
+      <thead>
+        <tr>
+          <th>Layer</th>
+          <th>What it is</th>
+          <th>Where to go</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>World seed</strong></td>
+          <td>One numeric seed drives terrain, towns (8), camps (4), caves (4), outposts (4).</td>
+          <td><a href="/arpg-game/">Play Grudges</a> · create / join world</td>
+        </tr>
+        <tr>
+          <td><strong>Faction claim</strong></td>
+          <td>Banner reputation, territory vendors, contracts — not a separate map file.</td>
+          <td><a href="#keepers">Five banners</a> below · <a href="info.html#guild">Gameplay · factions</a></td>
+        </tr>
+        <tr>
+          <td><strong>Camp / township</strong></td>
+          <td>Camp → Tribe → Village → Town → Stronghold build ladder on claimed ground.</td>
+          <td><a href="info.html#camp">Camp building</a> · <a href="info.html#tiers">Settlement tiers</a></td>
+        </tr>
+        <tr>
+          <td><strong>Stats &amp; gear</strong></td>
+          <td>Nexus attributes (BIO…GRA) and professions that make survival maths real.</td>
+          <td><a href="stats-guide.html">Stats guide</a> · <a href="info.html#combat">Combat &amp; professions</a></td>
+        </tr>
+        <tr>
+          <td><strong>Creatures</strong></td>
+          <td>Biome-weighted hostiles; bestiary art for surface threats.</td>
+          <td><a href="bestiary.html">Bestiary</a></td>
+        </tr>
+        <tr>
+          <td><strong>Author tools</strong></td>
+          <td>Prefab / spawn catalog and asset pipeline for Grudges content only.</td>
+          <td><a href="/admin/">Admin</a> · <a href="/asset-studio/">Asset studio</a></td>
+        </tr>
+        <tr>
+          <td><strong>Fleet maps (other products)</strong></td>
+          <td>Open library and Mine-Loader voxels are <em>sibling</em> products — not this lore page’s source, and not Grudges play body.</td>
+          <td><a href="https://open.grudge-studio.com/" rel="noopener">open.grudge-studio.com</a> · <a href="https://mineloader.grudge-studio.com/" rel="noopener">Mine-Loader</a> · <a href="https://forge.grudge-studio.com/" rel="noopener">Forge</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
 <section class="factions-band">
   <div class="container">
     <h2>The Five Banners</h2>
@@ -214,7 +394,7 @@
 
     <article class="faction keepers" id="keepers">
       <div class="faction-head">
-        <div class="crest-circle"><img src="icons/factions/keepers.png" alt="" /></div>
+        <div class="crest-circle"><img src="icons/factions/banners/keepers.png" alt="Keepers banner" /></div>
         <div class="titles">
           <h2 class="accent">The Keepers of the Old Faith</h2>
           <div class="subtitle">Heal the land</div>
@@ -268,7 +448,7 @@
 
     <article class="faction scavs" id="scavengers">
       <div class="faction-head">
-        <div class="crest-circle"><img src="icons/factions/scavengers.png" alt="" /></div>
+        <div class="crest-circle"><img src="icons/factions/banners/tech_scavengers.png" alt="Tech-Scavengers banner" /></div>
         <div class="titles">
           <h2 class="accent">The Tech-Scavengers</h2>
           <div class="subtitle">The ruins are a market</div>
@@ -321,7 +501,7 @@
 
     <article class="faction hollow" id="hollow">
       <div class="faction-head">
-        <div class="crest-circle"><img src="icons/factions/hollow.png" alt="" /></div>
+        <div class="crest-circle"><img src="icons/factions/banners/hollow_lords.png" alt="Hollow Lords banner" /></div>
         <div class="titles">
           <h2 class="accent">The Hollow Lords</h2>
           <div class="subtitle">Shelter is the only currency</div>
@@ -376,7 +556,7 @@
 
     <article class="faction network" id="network">
       <div class="faction-head">
-        <div class="crest-circle"><img src="icons/factions/network.png" alt="" /></div>
+        <div class="crest-circle"><img src="icons/factions/banners/network.png" alt="Network banner" /></div>
         <div class="titles">
           <h2 class="accent">The Network</h2>
           <div class="subtitle">The closest thing to law</div>
@@ -431,7 +611,7 @@
 
     <article class="faction forgotten" id="forgotten">
       <div class="faction-head">
-        <div class="crest-circle"><img src="icons/factions/forgotten.png" alt="" /></div>
+        <div class="crest-circle"><img src="icons/factions/banners/forgotten.png" alt="Forgotten banner" /></div>
         <div class="titles">
           <h2 class="accent">The Forgotten</h2>
           <div class="subtitle">Their gods do not answer to ours</div>
@@ -493,7 +673,11 @@
     <p>
       You don't have to pledge on day one. The surface will let you wander. But sooner or later every camp flies a colour, every raid arrives under a name, and every grudge you carry comes from a banner you can point to.
     </p>
-    <a href="/arpg-game/" class="btn btn-primary">▶ Enter the Surface</a>
+    <div style="display:flex;gap:.85rem;justify-content:center;flex-wrap:wrap">
+      <a href="/arpg-game/" class="btn btn-primary">▶ Enter the Surface</a>
+      <a href="info.html" class="btn" style="background:transparent;color:var(--gold-bright)">Gameplay structure</a>
+      <a href="#surface-atlas" class="btn" style="background:transparent;color:var(--gold-bright)">Surface atlas</a>
+    </div>
   </div>
 </section>
 
@@ -506,12 +690,15 @@
     <div class="links">
       <a href="./">Home</a>
       <a href="info.html">Gameplay</a>
-      <a href="lore.html">Lore &amp; Factions</a>
+      <a href="lore.html">Lore</a>
       <a href="bestiary.html">Bestiary</a>
       <a href="stats-guide.html">Stats</a>
-      <a href="/arpg-game/">Play</a>
+      <a href="#surface-atlas">Atlas</a>
+      <a href="/admin/">Admin</a>
+      <a href="/asset-studio/">Assets</a>
+      <a href="/arpg-game/">Play Grudges</a>
     </div>
-    <p>Bind a grudge. Bear it forward.</p>
+    <p>Bind a grudge. Bear it forward. · Lore SSOT: website <code style="color:var(--gold)">lore.html</code></p>
   </div>
 </footer>
 

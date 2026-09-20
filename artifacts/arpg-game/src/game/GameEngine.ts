@@ -3,6 +3,11 @@ import { SceneBuilder } from './SceneBuilder';
 import { PlayerController } from './PlayerController';
 import { EnemyManager } from './EnemyManager';
 import { AbilitySystem } from './AbilitySystem';
+import {
+  getLinearProfile,
+  isLinearAbilityId,
+  type LinearAbilityId,
+} from './abilities/linearAbilityCatalog';
 import { AssetManager } from './AssetManager';
 import { installBVH, buildBVHsForScene, collectOccluders } from './BVHRaycast';
 import { setGroundScene } from './GroundSampler';
@@ -10,6 +15,7 @@ import { PerfMonitor } from './PerfMonitor';
 import { PortraitRenderer } from './PortraitRenderer';
 import { PlayerStats, GameState } from './types';
 import { INITIAL_PLAYER_STATS, KEYBINDS, ABILITIES } from './constants';
+import { applyNexusToPlayerStats } from '@workspace/game-systems';
 import { Inventory } from './Inventory';
 import { LootManager } from './LootManager';
 import { ItemDef } from './Items';
@@ -27,6 +33,7 @@ import { RainSystem } from './world/RainSystem';
 import { WeatherSystem } from './world/WeatherSystem';
 import { getFogOfWar } from './world/FogOfWar';
 import { getResourceSystem } from './world/ResourceSystem';
+import { PlayerHarvest } from './world/PlayerHarvest';
 import { getNPCManager } from './ai/NPCManager';
 import { getSaveGameService } from './SaveGameService';
 import { ProfessionsService } from './progression/ProfessionsService';
@@ -50,24 +57,27 @@ import { MuzzleFlash } from './vfx/MuzzleFlash';
 import { ImpactSparks } from './vfx/ImpactSparks';
 import { SlashVFX } from './vfx/SlashVFX';
 import { ShockwaveVFX } from './vfx/ShockwaveVFX';
+import { TelegraphField } from './vfx/TelegraphField';
+import { SplineProjectileField } from './vfx/SplineProjectileField';
+import { SlashWaveField } from './vfx/SlashWaveField';
+import { SectorDeployment } from './world/SectorDeployment';
+import type { CombatVfxBridge } from './CombatVfxBridge';
 import { SurvivorSpawner, type SurvivorSpawnerSnapshot } from './township/SurvivorSpawner';
 import { getQuestSystem } from './quest/QuestSystem';
 import { createIntroQuest, createSectorQuests, ENCAMPMENT_NPCS } from './quest/EncampmentIntro';
 import { EnemyCampSystem } from './world/EnemyCampSystem';
+import {
+  applyOutdoorEnvironment,
+  loadPolyHavenEnvironment,
+} from './world/polyhaven/PolyHavenEnvironment';
 import { getMilestoneEffects, mergeEffectBags, readEffect, type MilestoneEffectBag } from '@workspace/game-systems/perks';
 import { sumPassives, getUnlockedPerks, getUnlockedCombos, type StatTrack } from './progression/PerkSystem';
-
-export type GameEngineOptions = {
-  /** GRUDGES grid sector spawn (world XZ). Overrides starter-map spawn when set. */
-  spawnXZ?: { x: number; z: number } | null;
-};
+import { syncAbilitiesFromProfessions } from './progression/GrudgeProgressionBridge';
 
 export class GameEngine {
   renderer: THREE.WebGLRenderer;
   scene: THREE.Scene;
   camera: THREE.PerspectiveCamera;
-  /** Optional sector drop-in from Nexus hub. */
-  private spawnXZ: { x: number; z: number } | null = null;
 
   assetManager: AssetManager;
   sceneBuilder!: SceneBuilder;
@@ -132,6 +142,9 @@ export class GameEngine {
   private climbController: ClimbController | null = null;
   private fishingSystem: FishingSystem | null = null;
   private boatSystem: BoatSystem | null = null;
+  /** RMB approach + harvest swing on ResourceSystem nodes. */
+  private playerHarvest: PlayerHarvest = new PlayerHarvest();
+  private _lastHarvestLabel: string | null = null;
   /** Survival provider passed into ModularBuilding; UI swaps it in via setSurvivalProvider. */
   private survivalProvider: SurvivalProvider = {
     getCount: () => 0,
@@ -173,6 +186,11 @@ export class GameEngine {
   private impactSparks!: ImpactSparks;
   private slashVFX!: SlashVFX;
   private shockwaveVFX!: ShockwaveVFX;
+  private telegraphField!: TelegraphField;
+  private splineField!: SplineProjectileField;
+  private slashWaveField!: SlashWaveField;
+  private sectorDeployment = new SectorDeployment();
+  private sectorBeatTimer = 0;
   private bulletTemplate: THREE.Object3D | null = null;
   assetsLoaded: boolean = false;
 
@@ -198,14 +216,13 @@ export class GameEngine {
   /** Set true for one frame when the player presses interact near a quest NPC. */
   private _questInteractPressed = false;
 
-  constructor(
-    canvas: HTMLCanvasElement,
-    characterConfig: CharacterConfig = DEFAULT_CHARACTER_CONFIG,
-    options: GameEngineOptions = {},
-  ) {
+  constructor(canvas: HTMLCanvasElement, characterConfig: CharacterConfig = DEFAULT_CHARACTER_CONFIG) {
     this.characterConfig = characterConfig;
-    this.spawnXZ = options.spawnXZ ?? null;
-    this.playerStats = { ...INITIAL_PLAYER_STATS };
+    // Bake combat sheet from Nexus BIO…GRA (voxel-era SSOT)
+    this.playerStats = applyNexusToPlayerStats(
+      { ...INITIAL_PLAYER_STATS },
+      characterConfig.stats,
+    );
     this.gameState = {
       paused: false,
       mainMenuOpen: true,
@@ -285,6 +302,17 @@ export class GameEngine {
       }
       ProfessionsService.gainXp(prof, amount);
     };
+    // Player harvest loop: loot → survival stacks / bag
+    this.playerHarvest.onLoot = (itemId, count) => {
+      this.onSurvivalLootDrop?.(itemId, count);
+      this.audio.play('pickup');
+    };
+    this.playerHarvest.onPrompt = (label) => {
+      this._lastHarvestLabel = label;
+    };
+    this.playerHarvest.onSwingFx = () => {
+      this.audio.play('attack');
+    };
     // Initialise the NPC manager's player-position array.
     getNPCManager().playerPositions = [];
     // Far plane extended for open-world terrain (7×7 chunks, ~900 m radius).
@@ -338,6 +366,8 @@ export class GameEngine {
     // active tool and the player is looking at water, the click drives the
     // fishing minigame instead of a weapon swing.
     document.addEventListener('mousedown', this.handleFishingClick, true);
+    // RMB harvest: approach node + Farm_Harvest / chop anim (before ADS aim).
+    document.addEventListener('mousedown', this.handleHarvestRmb, true);
 
     this.assetManager.loadAll((fraction) => {
       this.onLoadProgress?.(fraction);
@@ -366,6 +396,13 @@ export class GameEngine {
       // gameplay starts. GLB progress is reported via assetManager.onProgress.
       await this.sceneBuilder.buildEnvironment();
 
+      const outdoor = await loadPolyHavenEnvironment(this.renderer);
+      if (outdoor) {
+        applyOutdoorEnvironment(this.scene, outdoor, { backgroundBlend: 0.5 });
+        this.assetManager.envMap = outdoor.envMap;
+        console.info('[GameEngine] Poly Haven outdoor HDR IBL active');
+      }
+
       // With both the map and the physics world ready, bake static trimesh
       // colliders against every mesh in the loaded starter map root. This
       // is what makes "ground", "wall", "tree" actually mean something to
@@ -384,6 +421,20 @@ export class GameEngine {
       this.impactSparks = new ImpactSparks(this.scene);
       this.slashVFX = new SlashVFX(this.scene);
       this.shockwaveVFX = new ShockwaveVFX(this.scene);
+      this.telegraphField = new TelegraphField(this.scene);
+      this.splineField = new SplineProjectileField(this.scene);
+      this.slashWaveField = new SlashWaveField(this.scene, (pos, color, scale) => {
+        this.impactSparks?.burst(pos, null, color, scale);
+      });
+      this.sectorDeployment.attachFog(this.fogSystem);
+      this.sectorDeployment.onSectorEnter = (beat) => {
+        this.gameState.sectorTitle = beat.title;
+        this.gameState.sectorObjective = beat.objective;
+        this.sectorBeatTimer = 5.5;
+        this.onGameStateUpdate?.({ ...this.gameState });
+      };
+      this.abilitySystem.vfxBridge = this._buildCombatVfxBridge();
+      this.abilitySystem.bindShockwave(this.shockwaveVFX);
       getBulletTemplate().then(tmpl => { this.bulletTemplate = tmpl; }).catch(() => { });
       this.debugPanel = new DebugPanel({
         scene: this.scene,
@@ -443,44 +494,24 @@ export class GameEngine {
         this.physics,
       );
 
-      // If the handcrafted starter map is active, teleport the player to the
-      // marker baked into the source GLB (`player` node). We lift them a
-      // couple of metres so they drop onto the actual ground via the next
-      // physics step (or GroundSampler tick on the legacy path), regardless
-      // of where in Y the marker was placed.
-      const starterSpawn = this.sceneBuilder.getStarterSpawn();
-      // Hub sector travel wins over starter-map marker when provided.
-      if (this.spawnXZ) {
-        this.teleportToWorldXZ(this.spawnXZ.x, this.spawnXZ.z);
-        this._pendingSpawnAnchor = new THREE.Vector3(
-          this.spawnXZ.x,
-          groundY(this.spawnXZ.x, this.spawnXZ.z),
-          this.spawnXZ.z,
-        );
-      } else if (starterSpawn) {
-        const spawnPos = new THREE.Vector3(
-          starterSpawn.x,
-          starterSpawn.y + 2,
-          starterSpawn.z,
-        );
-        // teleportTo handles both the position write AND the kinematic
-        // body sync when physics is wired in. Falls back to a plain
-        // position set when there's no Rapier body.
-        if (this.physics) {
-          this.player.teleportTo(spawnPos);
-        } else {
-          this.player.position.copy(spawnPos);
-        }
-        this._pendingSpawnAnchor = starterSpawn.clone();
+      // Player spawn (world metres): home hub marker → arena origin fallback.
+      // Lift slightly so Rapier / GroundSampler settle feet on mesh next frame.
+      // Character model is auto-fit to 1.8 m in PlayerController + feet at y=0.
+      const homeSpawn = this.sceneBuilder.getHomeSpawn();
+      const spawnPos = homeSpawn
+        ? new THREE.Vector3(homeSpawn.x, homeSpawn.y + 1.5, homeSpawn.z)
+        : new THREE.Vector3(0, groundY(0, 0) + 2.5, 0);
+      if (this.physics) {
+        this.player.teleportTo(spawnPos);
       } else {
-        // Tell the enemy manager where the player landed so it can carve a
-        // safe zone around the encampment (no spawns within ~22m of this
-        // anchor, even later in the run). Set BEFORE startGameplay() since
-        // that is what kicks off the first wave.
-        // (enemyManager is constructed a few lines below — anchor is applied
-        // there once it exists.)
-        this._pendingSpawnAnchor = null;
+        this.player.position.copy(spawnPos);
       }
+      // Re-ground feet once terrain/BVH is live (avoids float/sink on first frame).
+      this.player.snapToGround();
+
+      // Convergence Hub safe zone: no wave enemies within SPAWN_SAFE_RADIUS (80 m).
+      // Open-world production entry — not pure arena survival.
+      this._pendingSpawnAnchor = spawnPos.clone();
 
       // BVH-backed occluders for camera dolly + wall-climb probes.
       const occluders = collectOccluders(this.scene);
@@ -535,10 +566,22 @@ export class GameEngine {
         this.resolveInteractionPrompt();
       };
       this.boatSystem.attach();
+      const deployBoat = this.sceneBuilder.getDeployGateBoatSpawn();
+      const basePath = import.meta.env.BASE_URL;
+      this.boatSystem.preload(basePath).then(() => {
+        if (deployBoat) {
+          this.boatSystem?.spawn({
+            id: 'deploy-gate-boat',
+            position: deployBoat,
+            yaw: Math.PI,
+            color: 0x5a4030,
+            hasCabin: false,
+          });
+        }
+      });
 
       this.enemyManager = new EnemyManager(this.scene, this.assetManager);
-      // Apply the spawn anchor we captured earlier — the encampment hub
-      // becomes a permanent no-spawn zone of ~22m radius.
+      // Apply spawn anchor — permanent hub safe ring for wave enemies
       if (this._pendingSpawnAnchor) {
         this.enemyManager.setSpawnAnchor(this._pendingSpawnAnchor);
       }
@@ -571,13 +614,17 @@ export class GameEngine {
         // SWG-style Hunting XP. Bosses are big-game, electives a step up.
         const baseHuntXp = tier === 'boss' ? 50 : tier === 'elite' ? 15 : 5;
         const huntXpBonus = ProfessionsService.getEffect('bountyXpBonus');
-        ProfessionsService.gainXp('hunting', Math.round(baseHuntXp * (1 + huntXpBonus)));
+        const activeType = this.player.equippedWeapons[this.player.activeWeaponIndex]?.type ?? 'unarmed';
+        // CSV SIGNATURE WEAPON RULE — hunting bow/crossbow +25% when trained.
+        const huntSig = ProfessionsService.isSignatureHuntingWeapon(activeType) ? 1.25 : 1;
+        ProfessionsService.gainXp(
+          'hunting',
+          Math.round(baseHuntXp * (1 + huntXpBonus) * huntSig),
+        );
         // Survival XP — staying alive long enough to make a kill counts.
         ProfessionsService.gainXp('survival', Math.max(1, Math.round(baseHuntXp * 0.4)));
-        // Combat XP — credited per kill. Signature weapon (matches a learned
-        // Combat branch) earns the spec's +25% bonus.
+        // Combat XP — signature weapon (learned Combat branch) earns +25%.
         const baseCombatXp = tier === 'boss' ? 40 : tier === 'elite' ? 12 : 4;
-        const activeType = this.player.equippedWeapons[this.player.activeWeaponIndex]?.type ?? 'unarmed';
         const isSignature = ProfessionsService.isSignatureCombatWeapon(activeType);
         ProfessionsService.gainXp('combat', Math.round(baseCombatXp * (isSignature ? 1.25 : 1)));
         // Weapon XP — each kill feeds the unallocated pool that the player
@@ -687,11 +734,9 @@ export class GameEngine {
             cityCentre.y,
             cityCentre.z + npcDef.offset.z,
           );
-          // Vendors = friendly; town guards = neutral (no aggro unless attacked)
-          const isGuard = npcDef.role === 'guard';
           const brain = getNPCManager().spawn({
             id: npcDef.id,
-            faction: (isGuard ? 'neutral' : 'friendly') as any,
+            faction: 'friendly' as any,
             walkSpeed: 0.4,
             runSpeed: 2,
             visionRange: 20,
@@ -752,6 +797,10 @@ export class GameEngine {
         // E (interact) near a quest NPC — flag for quest system check this frame
         if (e.code === KEYBINDS.INTERACT && !e.repeat && this.gameState.gameStarted && !this.gameState.paused) {
           this._questInteractPressed = true;
+          // Prefer harvest if a node is nearby (same key as quest talk)
+          if (this.player && this.playerHarvest.tryBeginNearest(this.player)) {
+            // harvest job owns the prompt; still allow quest if no node
+          }
         }
       });
 
@@ -788,15 +837,29 @@ export class GameEngine {
 
   handleAbilityKey = (e: KeyboardEvent) => {
     if (!this.gameState.gameStarted || this.gameState.paused || !this.player) return;
+    // 1–5 classic · 6–0 Linear skillshots (LinearAbiltyCastingThreeJS → voxel)
+    // Bracket keys cycle linear variants for the last cast family.
+    if (e.code === 'BracketLeft' || e.code === 'BracketRight') {
+      this._cycleLinearVariant(e.code === 'BracketRight' ? 1 : -1);
+      return;
+    }
     const abilityKeys: Record<string, string> = {
       'Digit1': 'whirlwind',
       'Digit2': 'fireball',
       'Digit3': 'shield_bash',
       'Digit4': 'berserker_rage',
       'Digit5': 'lightning_strike',
+      'Digit6': 'frost_lance',
+      'Digit7': 'storm_lance',
+      'Digit8': 'cinder_fall',
+      'Digit9': 'nova_beam',
+      'Digit0': 'voltaic_snare',
     };
     const abilityId = abilityKeys[e.code];
     if (!abilityId) return;
+
+    // Ensure linear set is unlocked for voxel-era play
+    this.abilitySystem.unlockAbility(abilityId);
 
     const fwd = this.player.getForwardDir();
 
@@ -808,7 +871,21 @@ export class GameEngine {
       fwd,
       this.playerStats.mana,
       (damage, isAoe) => {
-        this.enemyManager.checkPlayerAttack(this.player.position, fwd, 10, damage, isAoe);
+        // Linear casts use their profile range; classic stay ~10 m
+        const range =
+          abilityId === 'frost_lance' || abilityId === 'storm_lance' || abilityId === 'nova_beam'
+            ? 16
+            : abilityId === 'cinder_fall' || abilityId === 'voltaic_snare'
+              ? 14
+              : 10;
+        this.enemyManager.checkPlayerAttack(this.player.position, fwd, range, damage, isAoe);
+        // Ability impacts also damage breakable walls in range (destructible pinata props)
+        this.breakableWallSystem?.checkHit(
+          this.player.position,
+          fwd,
+          range,
+          damage * (isAoe ? 0.85 : 1),
+        );
       },
       (mana) => {
         this.playerStats.mana = Math.max(0, this.playerStats.mana - mana);
@@ -818,7 +895,24 @@ export class GameEngine {
         this.player.activateBerserker();
       }
     );
+    this._lastLinearAbilityId = abilityId;
   };
+
+  /** Last linear ability id for [ ] variant cycling. */
+  private _lastLinearAbilityId: string | null = null;
+
+  private _cycleLinearVariant(dir: number): void {
+    const id = this._lastLinearAbilityId;
+    if (!id || !isLinearAbilityId(id)) return;
+    const profile = getLinearProfile(id);
+    if (!profile || profile.variants.length === 0) return;
+    const cur =
+      this.abilitySystem.linearCasts.getVariant(profile.id) ?? profile.defaultVariant;
+    const idx = Math.max(0, profile.variants.findIndex((v) => v.id === cur));
+    const next = profile.variants[(idx + dir + profile.variants.length) % profile.variants.length];
+    this.abilitySystem.setLinearVariant(profile.id as LinearAbilityId, next.id);
+    console.info(`[abilities] ${profile.name} variant → ${next.label} (${next.id})`);
+  }
 
   handleMenuKey = (e: KeyboardEvent) => {
     if (!this.player) return;
@@ -852,21 +946,6 @@ export class GameEngine {
     }
   };
 
-  /**
-   * Fast-travel / hub drop-in for GRUDGES grid sectors.
-   * Samples ground height then kinematic-teleports the player capsule.
-   */
-  teleportToWorldXZ(x: number, z: number): void {
-    if (!this.player) return;
-    const y = groundY(x, z) + 2;
-    const pos = new THREE.Vector3(x, y, z);
-    if (this.physics) {
-      this.player.teleportTo(pos);
-    } else {
-      this.player.position.copy(pos);
-    }
-  }
-
   startGame() {
     this.gameState.mainMenuOpen = false;
     this.gameState.gameStarted = true;
@@ -882,16 +961,30 @@ export class GameEngine {
       }, 3000);
     }
 
-    // Begin cloud save auto-save loop, and hydrate any persisted SWG-style
-    // profession state. This is additive on top of the existing engine
-    // bootstrap — the rest of the snapshot (wave/score/inventory) is left
-    // alone since this codebase doesn't restore those at runtime today.
+    // Profession XP: bind localStorage for the active character FIRST so
+    // harvest/kill grants persist even if cloud load is slow. Cloud/local
+    // save then MERGES in (never regresses XP / learned skills).
+    ProfessionsService.ensureLoaded();
+    StatProgressionService.reset(); // re-bind weapon XP / free points for this char
+    // Grudges hotbar abilities unlock from profession skills (SWG-style gates).
+    this.syncProfessionAbilities();
+    ProfessionsService.subscribe(() => this.syncProfessionAbilities());
     const saveSvc = getSaveGameService();
     saveSvc.onLoaded = (data) => {
       ProfessionsService.hydrate(data?.professions);
+      this.syncProfessionAbilities();
     };
-    saveSvc.load().catch(() => { /* no save yet — fresh start */ });
+    saveSvc.load().catch(() => { /* no save yet — local professions already loaded */ });
     saveSvc.startAutoSave(() => this._collectSaveData());
+  }
+
+  /** Map learned Grudges profession skills → AbilitySystem unlock flags. */
+  private syncProfessionAbilities(): void {
+    if (!this.abilitySystem) return;
+    syncAbilitiesFromProfessions(
+      (id) => this.abilitySystem.unlockAbility(id),
+      (id, unlocked) => this.abilitySystem.setAbilityUnlocked(id, unlocked),
+    );
   }
 
   startGameplay() {
@@ -907,17 +1000,21 @@ export class GameEngine {
     if (!this.player) return;
     const weapon = this.player.equippedWeapons[this.player.activeWeaponIndex];
     const isShotgun = weapon.id === 'hellfire_shotgun';
-    const dir = this.player.getForwardDir();
+    // Spawn from weapon muzzle socket (after skeleton + SpineIK this frame)
+    // and fly along true 3D aim — not chest-forward hip fire.
+    const muzzle = this.player.getMuzzleSpawn();
+    const dir = muzzle.direction.clone();
     if (spread > 0) {
       dir.x += (Math.random() - 0.5) * spread;
+      dir.y += (Math.random() - 0.5) * spread * 0.5;
       dir.z += (Math.random() - 0.5) * spread;
       dir.normalize();
     }
 
-    const origin = this.player.position.clone().add(new THREE.Vector3(0, 1.1, 0))
-      .add(dir.clone().multiplyScalar(0.8));
+    const origin = muzzle.position.clone();
     const speed = isShotgun ? 28 : 45;
-    const damage = weapon.damage;
+    // Diablo gear affixes + Nexus/SWG passives — never raw weapon.damage alone.
+    const damage = this.player.getAttackDamage();
 
     // Procedural muzzle flash (billboard + ring + sparks) — no GLB required.
     this.muzzleFlash?.spawn(origin, dir, isShotgun);
@@ -970,6 +1067,47 @@ export class GameEngine {
 
   updateBullets(dt: number) {
     this.projectileSystem.update(dt, this.camera);
+    this.telegraphField?.update(dt);
+    const splineImpacts = this.splineField?.update(dt, this.camera) ?? [];
+    for (const imp of splineImpacts) {
+      this.shockwaveVFX?.fire(imp.point, {
+        radius: imp.radius,
+        color: this.sectorDeployment.getVfxPalette().impact,
+      });
+      this.combatFX.shake(0.12, 0.14);
+      if (imp.owner === 'player' && this.enemyManager) {
+        for (const enemy of this.enemyManager.enemies) {
+          if (enemy.state === 'dead') continue;
+          const d = enemy.mesh.position.distanceTo(imp.point);
+          if (d <= imp.radius + 1.2) {
+            enemy.health -= imp.damage;
+            this.damageNumbers?.spawn(enemy.mesh.position, imp.damage);
+            if (enemy.health <= 0) this.enemyManager.killEnemy(enemy);
+          }
+        }
+      }
+    }
+    const waveHits = this.slashWaveField?.update(
+      dt,
+      this.enemyManager
+        ? this.enemyManager.enemies
+            .filter(e => e.state !== 'dead')
+            .map((e, i) => ({
+              id: `e_${i}`,
+              position: e.mesh.position,
+              alive: true,
+            }))
+        : [],
+    ) ?? [];
+    for (const wh of waveHits) {
+      if (!this.enemyManager) continue;
+      const idx = parseInt(wh.enemyId.replace('e_', ''), 10);
+      const enemy = this.enemyManager.enemies[idx];
+      if (!enemy || enemy.state === 'dead') continue;
+      enemy.health -= wh.damage;
+      this.damageNumbers?.spawn(enemy.mesh.position, wh.damage);
+      if (enemy.health <= 0) this.enemyManager.killEnemy(enemy);
+    }
     this.muzzleFlash?.update(dt);
     this.impactSparks?.update(dt);
   }
@@ -1064,6 +1202,16 @@ export class GameEngine {
     // ── Fog aura + gloom ─────────────────────────────────────────────────────
     this.fogSystem.update(dt, this.player.position, this.camera.position, nowSec);
 
+    // ── 9-sector deployment — fog palette, VFX colors, UI beats ─────────────
+    this.sectorDeployment.update(this.player.position.x, this.player.position.z);
+    if (this.sectorBeatTimer > 0) {
+      this.sectorBeatTimer = Math.max(0, this.sectorBeatTimer - dt);
+      this.gameState.sectorBeatAge = this.sectorBeatTimer;
+      if (this.sectorBeatTimer === 0) {
+        this.gameState.sectorBeatAge = 0;
+      }
+    }
+
     // ── Rain (early-outs when WeatherSystem currently has it disabled) ──────
     this.rainSystem.update(dt, this.camera.position, this.player.position.y);
 
@@ -1074,6 +1222,10 @@ export class GameEngine {
     getResourceSystem().update(
       this.player.position.x, this.player.position.z, Date.now(),
     );
+    // ── RMB harvest: walk to node → Farm_Harvest / chop → loot ───────────────
+    if (this.gameState.gameStarted && !this.gameState.paused) {
+      this.playerHarvest.update(dt, this.player);
+    }
 
     // ── Enemy camps — procedural raid nodes 200–500 m from player ───────────
     this.enemyCampSystem?.update(
@@ -1258,11 +1410,14 @@ export class GameEngine {
         const combo = this.player.getComboParams();
         const isHeavy = activeWeapon.type === 'axe' || activeWeapon.type === 'mace' || activeWeapon.range >= 3;
         const knockback = (isHeavy ? 7 : 3) * (combo.isFinisher ? 1.6 : 1);
-        // Use weapon bone world position as sweep origin if available, else player position.
+        // Blade segment (base→tip sockets) when equipped; else hand bone / body.
+        const bladeSeg = this.player.getBladeSegment();
         const weaponBone = this.player.weaponAttachment?.getAttached('mainhand')?.bone;
-        const sweepOrigin = weaponBone
-          ? weaponBone.getWorldPosition(new THREE.Vector3())
-          : this.player.position;
+        const sweepOrigin = bladeSeg
+          ? bladeSeg.base
+          : weaponBone
+            ? weaponBone.getWorldPosition(new THREE.Vector3())
+            : this.player.position;
         const hits = this.enemyManager.checkPlayerAttack(
           sweepOrigin, fwd,
           this.player.getAttackRange() * combo.rangeMul,
@@ -1270,6 +1425,9 @@ export class GameEngine {
           false,
           knockback,
           combo.arcDot,
+          bladeSeg
+            ? { base: bladeSeg.base, tip: bladeSeg.tip, radius: isHeavy ? 0.55 : 0.4 }
+            : null,
         );
         if (hits > 0) {
           // Only consume the swing on a hit so an enemy sliding into range
@@ -1278,13 +1436,23 @@ export class GameEngine {
           // within one frame.
           this.player.meleeHitPending = false;
 
-          // ── Slash VFX at the weapon bone position (annihilate SwordBlink) ─
+          // ── Slash VFX at the blade tip (weapon-true contact) ─
           if (this.slashVFX) {
-            const slashPos = weaponBone
-              ? weaponBone.getWorldPosition(new THREE.Vector3())
-              : this.player.position.clone().add(fwd.clone().multiplyScalar(1.5));
-            const slashColor = isHeavy ? 0xff6600 : combo.isFinisher ? 0xffcc00 : 0xffffff;
+            const slashPos = bladeSeg
+              ? bladeSeg.tip.clone()
+              : weaponBone
+                ? weaponBone.getWorldPosition(new THREE.Vector3())
+                : this.player.position.clone().add(fwd.clone().multiplyScalar(1.5));
+            const pal = this.sectorDeployment.getVfxPalette();
+            const slashColor = isHeavy ? pal.meleeSlash : combo.isFinisher ? pal.impact : pal.meleeSlash;
             this.slashVFX.fire(slashPos, slashColor, isHeavy ? 1.4 : 1.0);
+            if (combo.isFinisher && this.slashWaveField) {
+              this.slashWaveField.spawn(slashPos, fwd, {
+                damage: this.player.getAttackDamage() * combo.damageMul * 0.65,
+                color: pal.meleeSlash,
+                range: this.player.getAttackRange() * 2.2,
+              });
+            }
           }
 
           // Hitstop only on heavy weapons or the finisher of the combo —
@@ -1483,6 +1651,22 @@ export class GameEngine {
     e.stopImmediatePropagation();
   };
 
+  /**
+   * Capture-phase RMB: if a harvest node is under reticle / in front,
+   * start approach + harvest (suppress ADS aim).
+   */
+  handleHarvestRmb = (e: MouseEvent) => {
+    if (e.button !== 2) return;
+    if (!this.player || !this.gameState.gameStarted || this.gameState.paused) return;
+    if (this.modularBuilding?.hasActiveBlueprint()) return;
+    if (this.playerHarvest.tryBeginFromRmb(this.player, this.camera)) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      // Ensure ADS is not held from a prior frame
+      this.player.clearFocus();
+    }
+  };
+
   handleBuildPlaceClick = (e: MouseEvent) => {
     if (e.button !== 0) return;
     if (!this.modularBuilding?.hasActiveBlueprint()) return;
@@ -1532,6 +1716,7 @@ export class GameEngine {
       ?? this._lastDoorLabel
       ?? this._lastBoatLabel
       ?? this._lastFishLabel
+      ?? this._lastHarvestLabel
       ?? this._lastCampLabel
       ?? this._lastPrefabLabel
       ?? this._lastNpcLabel
@@ -1553,40 +1738,89 @@ export class GameEngine {
   private refreshPerkEffects(): void {
     if (!this.player) return;
 
-    // Nexus milestone effects from the 8-stat system
-    const nexusStats = this.characterConfig.stats;
-    const milestoneEffects = nexusStats ? getMilestoneEffects(nexusStats) : {};
-
-    // 4-track perk tree effects (hero/warrior/smarts/maker)
-    const trackPoints: Record<StatTrack, number> = {
-      hero: 0, warrior: 0, smarts: 0, maker: 0,
+    // Effective Nexus ranks = creation + StatProgressionService bonus pips
+    // (weapon XP / free points). Milestones unlock from these ranks.
+    const creation = this.characterConfig.stats;
+    const nexusStats = {
+      bio: StatProgressionService.effective(creation, 'bio'),
+      neu: StatProgressionService.effective(creation, 'neu'),
+      kin: StatProgressionService.effective(creation, 'kin'),
+      qnt: StatProgressionService.effective(creation, 'qnt'),
+      syn: StatProgressionService.effective(creation, 'syn'),
+      chr: StatProgressionService.effective(creation, 'chr'),
+      ent: StatProgressionService.effective(creation, 'ent'),
+      gra: StatProgressionService.effective(creation, 'gra'),
     };
-    // Track points come from the StatPerkChoices allocation — for now we derive
-    // them from the Nexus stats mapping: BIO+VIT → hero, KIN+STR → warrior,
-    // NEU+INT → smarts, SYN+ENT → maker. This keeps both systems in sync.
-    if (nexusStats) {
-      trackPoints.hero    = (nexusStats.bio ?? 0) + (nexusStats.gra ?? 0);
-      trackPoints.warrior = (nexusStats.kin ?? 0);
-      trackPoints.smarts  = (nexusStats.neu ?? 0) + (nexusStats.qnt ?? 0);
-      trackPoints.maker   = (nexusStats.syn ?? 0) + (nexusStats.ent ?? 0);
-    }
+    const milestoneEffects = getMilestoneEffects(nexusStats);
+
+    // 4-track perk tree — derived from effective Nexus ranks
+    const trackPoints: Record<StatTrack, number> = {
+      hero: nexusStats.bio + nexusStats.gra,
+      warrior: nexusStats.kin,
+      smarts: nexusStats.neu + nexusStats.qnt,
+      maker: nexusStats.syn + nexusStats.ent,
+    };
     const perks = getUnlockedPerks(trackPoints);
     const combos = getUnlockedCombos(trackPoints);
     const trackEffects = sumPassives([...perks, ...combos]);
 
-    // Merge into a single bag
-    this.perkEffects = mergeEffectBags(milestoneEffects, trackEffects);
+    // SWG profession passives (harvestYield, gunsmithDamageBonus, …)
+    const professionEffects = ProfessionsService.getAllEffects() as MilestoneEffectBag;
 
-    // Apply key effects to PlayerStats
+    this.perkEffects = mergeEffectBags(
+      mergeEffectBags(milestoneEffects, trackEffects),
+      professionEffects,
+    );
+
+    // Feed live bag into combat (meleeDamage, gunsmith, crit, damageTaken)
+    this.player.combatMods = { ...this.perkEffects };
+
     const pe = this.perkEffects;
     const base = this.playerStats;
-    base.maxHealth  = this.player['baseMaxHealth']  + readEffect(pe, 'maxHp');
-    base.maxStamina = (base.maxStamina > 0 ? 100 : 0) + readEffect(pe, 'maxStamina');
-    base.maxMana    = this.player['baseMaxMana'] + readEffect(pe, 'maxMana');
+    const gearHp = this.inventory?.getTotalStats().health ?? 0;
+    const gearMana = this.inventory?.getTotalStats().mana ?? 0;
+    base.maxHealth =
+      this.player['baseMaxHealth'] + readEffect(pe, 'maxHp') + gearHp;
+    base.maxStamina = 100 + readEffect(pe, 'maxStamina');
+    base.maxMana =
+      this.player['baseMaxMana'] + readEffect(pe, 'maxMana') + gearMana;
+    base.health = Math.min(base.health, base.maxHealth);
+    base.mana = Math.min(base.mana, base.maxMana);
 
-    // Movement speed bonus (applied as multiplier in PlayerController)
     const speedBonus = readEffect(pe, 'moveSpeed');
-    this.player.moveSpeed = this.player['baseMoveSpeed'] * (1 + speedBonus);
+    const gearSpeed = (this.inventory?.getTotalStats().moveSpeed ?? 0) / 100;
+    this.player.moveSpeed =
+      this.player['baseMoveSpeed'] * (1 + speedBonus + gearSpeed);
+  }
+
+  private _buildCombatVfxBridge(): CombatVfxBridge {
+    const engine = this;
+    return {
+      getTelegraphColor: () => engine.sectorDeployment.getVfxPalette().telegraph,
+      getMagicColor: () => engine.sectorDeployment.getVfxPalette().magicCore,
+      getArcScale: () => engine.sectorDeployment.getVfxPalette().arcScale,
+      showCircleTelegraph(origin, radius, duration) {
+        engine.telegraphField?.showCircle(
+          origin,
+          radius,
+          duration,
+          engine.sectorDeployment.getVfxPalette().telegraph,
+        );
+      },
+      spawnSplineSpell(origin, target, opts) {
+        const pal = engine.sectorDeployment.getVfxPalette();
+        engine.splineField?.spawn({
+          origin,
+          target,
+          color: opts.color ?? pal.magicCore,
+          speed: opts.speed ?? 22,
+          damage: opts.damage,
+          arcScale: pal.arcScale,
+          owner: 'player',
+          scale: 1,
+        });
+      },
+    };
   }
 
   dispose() {
@@ -1601,6 +1835,8 @@ export class GameEngine {
     document.removeEventListener('keydown', this.handleBuildRotateKey);
     document.removeEventListener('mousedown', this.handleBuildPlaceClick, true);
     document.removeEventListener('mousedown', this.handleFishingClick, true);
+    document.removeEventListener('mousedown', this.handleHarvestRmb, true);
+    this.playerHarvest.clear(this.player);
     if (this.boatSystem) { this.boatSystem.dispose(); this.boatSystem = null; }
     if (this.fishingSystem) { this.fishingSystem.dispose(); this.fishingSystem = null; }
     this.swimController = null;
@@ -1613,6 +1849,9 @@ export class GameEngine {
     if (this.mapColliders) { this.mapColliders.dispose(); this.mapColliders = null; }
     if (this.physics) { this.physics.dispose(); this.physics = null; }
     this.abilitySystem.dispose();
+    this.telegraphField?.dispose();
+    this.splineField?.dispose();
+    this.slashWaveField?.dispose();
     if (this.enemyManager) this.enemyManager.dispose();
     if (this.lootManager) this.lootManager.dispose();
     if (this.damageNumbers) this.damageNumbers.dispose();

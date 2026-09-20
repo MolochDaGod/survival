@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Grudges — Combat Power</title>
+<meta name="description" content="Weapons, upgrades, mobility, effects, procs, defensives, and fighter allies — the real power systems in Grudges." />
+<link rel="canonical" href="https://grudges.grudge-studio.com/combat" />
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=EB+Garamond:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap" />
+<link rel="stylesheet" href="/systems-pages.css" />
+</head>
+<body>
+<nav class="site">
+  <div class="inner">
+    <a href="./" class="brand"><img src="grudges-logo.png" alt="" /> GRUDGES</a>
+    <ul>
+      <li><a href="info.html">Gameplay</a></li>
+      <li><a href="perks.html">Perks</a></li>
+      <li><a href="combat.html" class="active">Combat</a></li>
+      <li><a href="crafting.html">Crafting</a></li>
+      <li><a href="professions.html">Professions</a></li>
+      <li><a href="main-panel.html">Main panel</a></li>
+    </ul>
+    <a href="/arpg-game/" class="play">▶ Play</a>
+  </div>
+</nav>
+
+<header class="page-hero">
+  <div class="bg-camp" aria-hidden="true"></div>
+  <div class="inner">
+    <div class="eyebrow">Systems · Power fantasy</div>
+    <h1>Combat Power</h1>
+    <p>Upgrades, mobility, weapons, effects, procs, defensives — and fighter allies. Crafting is the <em>economy that feeds</em> this loop, not a filter that turns allies into crafters.</p>
+    <div class="links">
+      <a href="perks.html">Attribute perks</a>
+      <a href="crafting.html">Stations → gear</a>
+      <a href="info.html#camp">Camp / hires</a>
+      <a href="/arpg-game/">Play client</a>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <p class="lead" id="lead">Loading combat catalog…</p>
+  <div class="grid" id="pillars"><div class="loading">Loading…</div></div>
+
+  <section class="section" style="margin-top:2rem">
+    <h2>Ally families</h2>
+    <p class="lead">Recruit roles split by job. Only the <strong>fighter</strong> family is party combat power.</p>
+    <div class="grid" id="allies"></div>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="links">
+    <a href="./">Home</a>
+    <a href="crafting.html">Crafting</a>
+    <a href="perks.html">Perks</a>
+    <a href="/arpg-game/">Play</a>
+  </div>
+  <p style="margin-top:1rem">SSOT: <code style="color:var(--gold-bright)">docs/COMBAT_POWER_SSOT.md</code></p>
+</footer>
+
+<script>
+(async function () {
+  let data;
+  try {
+    data = await (await fetch('/data/grudges-systems.json')).json();
+  } catch (e) {
+    document.getElementById('pillars').innerHTML = '<p class="loading">Catalog missing.</p>';
+    return;
+  }
+  const cp = data.combatPower || {};
+  document.getElementById('lead').textContent = cp.note || '';
+
+  const colors = {
+    weapons: '#c87060',
+    upgrades: '#d4b870',
+    mobility: '#3d7eb8',
+    effects: '#9d4dff',
+    procs: '#ff4d4d',
+    defensives: '#4caf50',
+    allies_combat: '#e06030',
+  };
+
+  document.getElementById('pillars').innerHTML = (cp.pillars || []).map((p) => {
+    const c = colors[p.id] || 'var(--gold)';
+    const systems = (p.systems || []).map((s) => '<li>' + s + '</li>').join('');
+    return (
+      '<article class="card" style="border-left:3px solid ' + c + '">' +
+        '<div class="tier">' + p.id + '</div>' +
+        '<h3 style="text-transform:none;letter-spacing:.03em;color:var(--ink)">' + p.label + '</h3>' +
+        '<ul style="margin:.5rem 0 0;padding-left:1.1rem;color:var(--muted);font-size:.95rem">' + systems + '</ul>' +
+      '</article>'
+    );
+  }).join('') || '<p class="loading">No combatPower in catalog — re-export systems.</p>';
+
+  const fam = cp.allyFamilies || {};
+  const famLabels = {
+    fighter: 'Fighter — combat companions',
+    harvester: 'Harvester — gather (not craft filter)',
+    vendor: 'Vendor — economy',
+    diplomacy: 'Diplomacy — faction rep',
+  };
+  document.getElementById('allies').innerHTML = Object.keys(fam).map((k) => {
+    const roles = (fam[k] || []).join(', ');
+    const border = k === 'fighter' ? '#e06030' : 'var(--rule)';
+    return (
+      '<article class="card" style="border-left:3px solid ' + border + '">' +
+        '<div class="tier">' + k + '</div>' +
+        '<h3 style="text-transform:none;color:var(--ink)">' + (famLabels[k] || k) + '</h3>' +
+        '<p>' + roles + '</p>' +
+      '</article>'
+    );
+  }).join('');
+})();
+</script>
+</body>
+</html>

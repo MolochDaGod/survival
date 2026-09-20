@@ -7,6 +7,16 @@ import { SpellFlare, FlareType } from './vfx/SpellFlare';
 import { IceShardVFX } from './vfx/IceShardVFX';
 import { FireBillboardVFX } from './vfx/FireBillboardVFX';
 import type { CombatVfxBridge } from './CombatVfxBridge';
+import { PinataDebrisField } from './vfx/PinataDebrisField';
+import { LinearCastRuntime } from './abilities/LinearCastRuntime';
+import {
+  isLinearAbilityId,
+  linearProfilesAsAbilityDefs,
+  type LinearAbilityId,
+  type LinearVariantId,
+  resolveLinearProfile,
+} from './abilities/linearAbilityCatalog';
+import type { ShockwaveVFX } from './vfx/ShockwaveVFX';
 
 export class AbilitySystem {
   scene: THREE.Scene;
@@ -20,6 +30,12 @@ export class AbilitySystem {
   spellFlare: SpellFlare;
   iceShards: IceShardVFX;
   fireBillboards: FireBillboardVFX;
+  /** Voxel-era pinata / destructive debris (Valheim-style, not ConvexObjectBreaker). */
+  pinata: PinataDebrisField;
+  /** Linear skillshots from LinearAbiltyCastingThreeJS profiles. */
+  linearCasts: LinearCastRuntime;
+  /** Optional shockwave ring — set by GameEngine after boot. */
+  shockwave: ShockwaveVFX | null = null;
   /** Maps fireball projectile mesh → its fire billboard mesh for cleanup. */
   private _fireballBillboards = new Map<THREE.Mesh, THREE.Mesh>();
 
@@ -30,13 +46,40 @@ export class AbilitySystem {
   constructor(scene: THREE.Scene, camera: THREE.Camera) {
     this.scene  = scene;
     this.camera = camera;
-    this.abilities = ABILITIES.map(a => ({ ...a }));
+    // Classic abilities + Linear skillshot set (voxel era).
+    this.abilities = [
+      ...ABILITIES.map(a => ({ ...a })),
+      ...linearProfilesAsAbilityDefs(),
+    ];
     this.abilities.forEach(a => { this.cooldowns[a.id] = 0; });
     this.explosions = new ExplosionVFX(scene);
     this.noiseSpheres = new NoiseSphereVFX(scene);
     this.spellFlare = new SpellFlare(scene);
     this.iceShards = new IceShardVFX(scene);
     this.fireBillboards = new FireBillboardVFX(scene);
+    this.pinata = new PinataDebrisField(scene);
+    this.linearCasts = new LinearCastRuntime({
+      scene,
+      pinata: this.pinata,
+      iceShards: this.iceShards,
+      noiseSpheres: this.noiseSpheres,
+      spellFlare: this.spellFlare,
+      explosions: this.explosions,
+      showZone: (origin, radius, duration, color) => {
+        this.vfxBridge?.showCircleTelegraph(origin, radius, duration);
+        void color;
+      },
+    });
+  }
+
+  /** Bind shockwave after GameEngine creates ShockwaveVFX. */
+  bindShockwave(shockwave: ShockwaveVFX | null): void {
+    this.shockwave = shockwave;
+    this.linearCasts.setShockwave(shockwave);
+  }
+
+  setLinearVariant(abilityId: LinearAbilityId, variantId: LinearVariantId): void {
+    this.linearCasts.setVariant(abilityId, variantId);
   }
 
   /**
@@ -70,6 +113,12 @@ export class AbilitySystem {
     if (ability) ability.unlocked = true;
   }
 
+  /** Lock or unlock a hotbar ability (Grudges profession bridge). */
+  setAbilityUnlocked(abilityId: string, unlocked: boolean) {
+    const ability = this.abilities.find(a => a.id === abilityId);
+    if (ability) ability.unlocked = unlocked;
+  }
+
   canUse(abilityId: string, mana: number): boolean {
     const ability = this.abilities.find(a => a.id === abilityId);
     if (!ability) return false;
@@ -89,9 +138,17 @@ export class AbilitySystem {
     const ability = this.abilities.find(a => a.id === abilityId);
     if (!ability) return;
 
-    onManaUse(ability.manaCost);
-    this.cooldowns[abilityId] = ability.cooldown;
-    this.onAbilityUsed?.(abilityId, ability.cooldown);
+    // Linear variants may raise mana/CD above AbilityDef base.
+    const linearResolved = isLinearAbilityId(abilityId)
+      ? resolveLinearProfile(abilityId, this.linearCasts.getVariant(abilityId))
+      : null;
+    const manaCost = linearResolved?.manaCost ?? ability.manaCost;
+    const cooldown = linearResolved?.cooldown ?? ability.cooldown;
+    if (currentMana < manaCost) return;
+
+    onManaUse(manaCost);
+    this.cooldowns[abilityId] = cooldown;
+    this.onAbilityUsed?.(abilityId, cooldown);
 
     // Lens flare on cast — colour keyed to ability type
     const flareMap: Record<string, FlareType> = {
@@ -101,11 +158,43 @@ export class AbilitySystem {
       berserker_rage: 'fire',
       whirlwind: 'arcane',
       shield_bash: 'default',
+      frost_lance: 'ice',
+      storm_lance: 'lightning',
+      cinder_fall: 'fire',
+      nova_beam: 'arcane',
+      voltaic_snare: 'lightning',
     };
     this.spellFlare.trigger(
       playerPos.clone().add(new THREE.Vector3(0, 1.4, 0)),
       flareMap[abilityId] ?? 'default',
     );
+
+    // Linear skillshot stack (LinearAbiltyCastingThreeJS profiles)
+    if (isLinearAbilityId(abilityId)) {
+      this.linearCasts.cast(
+        abilityId,
+        playerPos,
+        playerFwd,
+        (damage, isAoe, center, radius) => {
+          this.pinata.burst({
+            position: center,
+            count: isAoe ? 6 : 3,
+            impulse: 4 + radius * 0.5,
+            size: 0.12,
+            material:
+              abilityId === 'cinder_fall'
+                ? 'ember'
+                : abilityId === 'frost_lance'
+                  ? 'ice'
+                  : 'stone',
+          });
+          onDamage(damage, isAoe);
+          void center;
+          void radius;
+        },
+      );
+      return;
+    }
 
     switch (abilityId) {
       case 'whirlwind':
@@ -376,6 +465,8 @@ export class AbilitySystem {
     this.iceShards.update(dt);
     this.fireBillboards.update(dt, this.camera);
     this.spellFlare.update(dt, this.camera);
+    this.linearCasts.update(dt);
+    this.pinata.update(dt);
 
     // Update particles
     this.particles = this.particles.filter(p => {
