@@ -27,9 +27,12 @@ import { ALL_PERKS, type StatTrack, type Perk } from '../game/progression/PerkSy
 import {
   STAT_META, STAT_MAX, STAT_COST, STARTING_BUDGET,
   costForNext, computeSpentPoints, STAT_MILESTONE_PERKS,
-  type GrudgeStats, DEFAULT_STATS, VOXEL_ERA_STARTER_STATS,
-  computeDerivedFromNexus,
+  type GrudgeStats, DEFAULT_STATS,
 } from '../game/CharacterConfig';
+import {
+  VOXEL_ERA_STARTER_STATS,
+  computeDerivedFromNexus,
+} from '@workspace/game-systems';
 import { loadCharacter } from '../game/characterStorage';
 import { StatRadarChart } from './StatRadarChart';
 import {
