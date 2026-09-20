@@ -334,6 +334,8 @@ function synthesizeBestiaryEntry(c: CreatureDef): BestiaryEntry {
     abilities:      [],
     firstSighted:   'Unlogged.',
     accentColor:    ROLE_ACCENT[c.role],
+    /** Convention: website ships /bestiary/<enemyKey>.png for every entry. */
+    portrait:       `/bestiary/${c.key}.png`,
   };
 }
 

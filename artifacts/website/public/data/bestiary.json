@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-10T23:51:54.016Z",
+  "generatedAt": "2026-09-20T14:51:05.310Z",
   "source": "artifacts/arpg-game/src/data/{bestiary,creatures}.ts",
   "count": 61,
   "curatedCount": 10,
@@ -415,6 +415,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#7a8a4a",
+      "portrait": "/bestiary/frog.png",
       "role": "hostile-easy",
       "ai": "melee",
       "isCurated": false
@@ -441,6 +442,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#7a8a4a",
+      "portrait": "/bestiary/rat.png",
       "role": "hostile-easy",
       "ai": "ambush_swarm",
       "isCurated": false
@@ -467,6 +469,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#7a8a4a",
+      "portrait": "/bestiary/snake.png",
       "role": "hostile-easy",
       "ai": "melee",
       "isCurated": false
@@ -493,6 +496,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#7a8a4a",
+      "portrait": "/bestiary/snake_angry.png",
       "role": "hostile-easy",
       "ai": "melee",
       "isCurated": false
@@ -519,6 +523,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#7a8a4a",
+      "portrait": "/bestiary/spider.png",
       "role": "hostile-easy",
       "ai": "ambush_swarm",
       "isCurated": false
@@ -545,6 +550,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#7a8a4a",
+      "portrait": "/bestiary/wasp.png",
       "role": "hostile-easy",
       "ai": "hover_ranged",
       "isCurated": false
@@ -571,6 +577,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#ff5555",
+      "portrait": "/bestiary/enemy_eyedrone.png",
       "role": "hostile-scifi",
       "ai": "hover_ranged",
       "isCurated": false
@@ -597,6 +604,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#ff5555",
+      "portrait": "/bestiary/enemy_quadshell.png",
       "role": "hostile-scifi",
       "ai": "heavy_melee",
       "isCurated": false
@@ -623,6 +631,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#ff5555",
+      "portrait": "/bestiary/enemy_trilobite.png",
       "role": "hostile-scifi",
       "ai": "ambush_swarm",
       "isCurated": false
@@ -650,6 +659,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#8090a0",
+      "portrait": "/bestiary/mech_stan.png",
       "role": "hostile-mech",
       "ai": "heavy_melee",
       "isCurated": false
@@ -677,6 +687,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#8090a0",
+      "portrait": "/bestiary/mech_mike.png",
       "role": "hostile-mech",
       "ai": "heavy_melee",
       "isCurated": false
@@ -704,6 +715,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#8090a0",
+      "portrait": "/bestiary/mech_leela.png",
       "role": "hostile-mech",
       "ai": "ranged",
       "isCurated": false
@@ -731,6 +743,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#8090a0",
+      "portrait": "/bestiary/mech_george.png",
       "role": "hostile-mech",
       "ai": "heavy_melee",
       "isCurated": false
@@ -759,6 +772,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#8090a0",
+      "portrait": "/bestiary/robot_t1.png",
       "role": "hostile-mech",
       "ai": "heavy_melee",
       "isCurated": false
@@ -785,6 +799,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#aa6655",
+      "portrait": "/bestiary/bloody_monster.png",
       "role": "hostile-other",
       "ai": "melee",
       "isCurated": false
@@ -811,6 +826,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#aa6655",
+      "portrait": "/bestiary/hollow_enforcer.png",
       "role": "hostile-other",
       "ai": "heavy_melee",
       "isCurated": false
@@ -838,6 +854,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#aa6655",
+      "portrait": "/bestiary/shaft_guardian.png",
       "role": "hostile-other",
       "ai": "heavy_melee",
       "isCurated": false
@@ -865,6 +882,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#ff5555",
+      "portrait": "/bestiary/distortus_rex.png",
       "role": "hostile-scifi",
       "ai": "heavy_melee",
       "isCurated": false
@@ -892,6 +910,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#aa6655",
+      "portrait": "/bestiary/mire_warden.png",
       "role": "hostile-other",
       "ai": "melee",
       "isCurated": false
@@ -919,6 +938,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#aa6655",
+      "portrait": "/bestiary/glass_burrower.png",
       "role": "hostile-other",
       "ai": "ambush_swarm",
       "isCurated": false
@@ -945,6 +965,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#ff5555",
+      "portrait": "/bestiary/anomaly_hatchling.png",
       "role": "hostile-scifi",
       "ai": "ambush_swarm",
       "isCurated": false
@@ -972,6 +993,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#8090a0",
+      "portrait": "/bestiary/cinder_colossus.png",
       "role": "hostile-mech",
       "ai": "heavy_melee",
       "isCurated": false
@@ -1000,6 +1022,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#aa6655",
+      "portrait": "/bestiary/irradiated_ursine.png",
       "role": "hostile-other",
       "ai": "heavy_melee",
       "isCurated": false
@@ -1027,6 +1050,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#aa6655",
+      "portrait": "/bestiary/geode_golem.png",
       "role": "hostile-other",
       "ai": "heavy_melee",
       "isCurated": false
@@ -1053,6 +1077,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#aa6655",
+      "portrait": "/bestiary/shaft_revenant.png",
       "role": "hostile-other",
       "ai": "melee",
       "isCurated": false
@@ -1081,6 +1106,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#aa6655",
+      "portrait": "/bestiary/hollow_wight.png",
       "role": "hostile-other",
       "ai": "heavy_melee",
       "isCurated": false
@@ -1106,6 +1132,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#7a8a4a",
+      "portrait": "/bestiary/slime_creeper.png",
       "role": "hostile-easy",
       "ai": "melee",
       "isCurated": false
@@ -1132,6 +1159,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#7a8a4a",
+      "portrait": "/bestiary/venom_wyrm.png",
       "role": "hostile-easy",
       "ai": "melee",
       "isCurated": false
@@ -1159,6 +1187,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#ff5555",
+      "portrait": "/bestiary/phase_wasp.png",
       "role": "hostile-scifi",
       "ai": "hover_ranged",
       "isCurated": false
@@ -1186,6 +1215,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#7a8a4a",
+      "portrait": "/bestiary/glass_wolf.png",
       "role": "hostile-easy",
       "ai": "melee",
       "isCurated": false
@@ -1213,6 +1243,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#8090a0",
+      "portrait": "/bestiary/feral_engine.png",
       "role": "hostile-mech",
       "ai": "heavy_melee",
       "isCurated": false
@@ -1240,6 +1271,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#aa6655",
+      "portrait": "/bestiary/surface_troll.png",
       "role": "hostile-other",
       "ai": "heavy_melee",
       "isCurated": false
@@ -1266,6 +1298,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#7a8a4a",
+      "portrait": "/bestiary/shaft_spider.png",
       "role": "hostile-easy",
       "ai": "ambush_swarm",
       "isCurated": false
@@ -1293,6 +1326,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#aa6655",
+      "portrait": "/bestiary/estuary_croc.png",
       "role": "hostile-other",
       "ai": "aquatic_predator",
       "isCurated": false
@@ -1320,6 +1354,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#aa6655",
+      "portrait": "/bestiary/timber_bear.png",
       "role": "hostile-other",
       "ai": "heavy_melee",
       "isCurated": false
@@ -1348,6 +1383,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#3377cc",
+      "portrait": "/bestiary/luminous_leviathan.png",
       "role": "huntable-fish",
       "ai": "aquatic_passive",
       "isCurated": false
@@ -1373,6 +1409,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#b08060",
+      "portrait": "/bestiary/carrion_crow.png",
       "role": "huntable-farm",
       "ai": "passive_flee",
       "isCurated": false
@@ -1400,6 +1437,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#b08060",
+      "portrait": "/bestiary/cow.png",
       "role": "huntable-farm",
       "ai": "passive_flee",
       "isCurated": false
@@ -1427,6 +1465,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#b08060",
+      "portrait": "/bestiary/horse.png",
       "role": "huntable-farm",
       "ai": "passive_flee",
       "isCurated": false
@@ -1454,6 +1493,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#b08060",
+      "portrait": "/bestiary/llama.png",
       "role": "huntable-farm",
       "ai": "passive_flee",
       "isCurated": false
@@ -1481,6 +1521,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#b08060",
+      "portrait": "/bestiary/pig.png",
       "role": "huntable-farm",
       "ai": "passive_flee",
       "isCurated": false
@@ -1507,6 +1548,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#b08060",
+      "portrait": "/bestiary/pug.png",
       "role": "huntable-farm",
       "ai": "passive_flee",
       "isCurated": false
@@ -1535,6 +1577,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#b08060",
+      "portrait": "/bestiary/sheep.png",
       "role": "huntable-farm",
       "ai": "passive_flee",
       "isCurated": false
@@ -1562,6 +1605,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#b08060",
+      "portrait": "/bestiary/zebra.png",
       "role": "huntable-farm",
       "ai": "passive_flee",
       "isCurated": false
@@ -1588,6 +1632,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#3377cc",
+      "portrait": "/bestiary/dolphin.png",
       "role": "huntable-fish",
       "ai": "aquatic_passive",
       "isCurated": false
@@ -1613,6 +1658,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#3377cc",
+      "portrait": "/bestiary/fish1.png",
       "role": "huntable-fish",
       "ai": "aquatic_passive",
       "isCurated": false
@@ -1638,6 +1684,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#3377cc",
+      "portrait": "/bestiary/fish2.png",
       "role": "huntable-fish",
       "ai": "aquatic_passive",
       "isCurated": false
@@ -1663,6 +1710,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#3377cc",
+      "portrait": "/bestiary/fish3.png",
       "role": "huntable-fish",
       "ai": "aquatic_passive",
       "isCurated": false
@@ -1689,6 +1737,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#3377cc",
+      "portrait": "/bestiary/manta_ray.png",
       "role": "huntable-fish",
       "ai": "aquatic_passive",
       "isCurated": false
@@ -1716,6 +1765,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#3377cc",
+      "portrait": "/bestiary/shark.png",
       "role": "huntable-fish",
       "ai": "aquatic_predator",
       "isCurated": false
@@ -1743,6 +1793,7 @@
       "abilities": [],
       "firstSighted": "Unlogged.",
       "accentColor": "#3377cc",
+      "portrait": "/bestiary/whale.png",
       "role": "huntable-fish",
       "ai": "aquatic_passive",
       "isCurated": false
