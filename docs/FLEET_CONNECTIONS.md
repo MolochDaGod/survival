@@ -10,6 +10,8 @@
 | API | https://survival-api-production.up.railway.app |
 | Auth | https://id.grudge-studio.com |
 | Assets CDN | https://assets.grudge-studio.com |
+| Spawn world | https://www.spawn.co/@survival/grudges |
+| Spawn ↔ Grudges | `docs/SPAWN_CONNECTION.md` |
 | Disk graph | `D:\repos\FLEET-CONNECTIONS.md` |
 
 ### Related (not the same codebase)
