@@ -728,6 +728,13 @@ export interface CharacterConfig {
   backgroundId: string;
   /** Pick-1-of-3 selections from the level-up choice tree. Optional for backward compatibility. */
   perkChoices?: PerkChoices;
+  /** Grudges product lock — always voxel-era on create (docs/PRODUCT_ERA_VOXEL.md). */
+  era?: 'voxel';
+}
+
+/** Stamp era=voxel without inventing a second character type. */
+export function withVoxelEra(config: CharacterConfig): CharacterConfig {
+  return { ...config, era: 'voxel' };
 }
 
 /**
